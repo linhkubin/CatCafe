@@ -154,6 +154,43 @@ export class BaseLevel extends Phaser.Scene {
     this.tweens.add({ targets: s, x: x + 4, angle: 2, duration: 100, yoyo: true, onComplete: () => { s.x = x; s.angle = 0; } });
   }
 
+  // ---------- vật con (O2-18/19): vật nằm trên vật đỡ nhún, co giãn, xoay, nảy theo vật đỡ ----------
+  // Ghi vị trí của con so với điểm neo của vật đỡ lúc vật đỡ đứng yên; mỗi khung (followKids) khi vật đỡ đang động
+  // thì đặt con theo cùng điểm neo, cùng tỉ lệ co giãn và cùng góc. Vật đỡ đứng yên thì con tự do (có thể tự nhún).
+  attachTo(child, parent) {
+    this.detach(child);
+    if (!parent) return child;
+    if (parent.restX === undefined) { parent.restX = parent.x; parent.restY = parent.y; }
+    child.parentObj = parent;
+    child.rel = { x: child.x - parent.restX, y: child.y - parent.restY, a: child.angle };
+    (this.kids || (this.kids = [])).push(child);
+    return child;
+  }
+
+  detach(child) {
+    if (!child.parentObj) return;
+    child.parentObj = null;
+    child.driven = false;
+    this.kids = (this.kids || []).filter((c) => c !== child);
+  }
+
+  followKids() {
+    for (const c of this.kids || []) {
+      const p = c.parentObj;
+      if (!p || !p.active || !c.active) continue;
+      const sx = p.scaleX / p.base, sy = p.scaleY / (p.baseY || p.base), a = p.angle;
+      const dx = p.x - p.restX, dy = p.y - p.restY;
+      const moving = Math.abs(sx - 1) > 1e-3 || Math.abs(sy - 1) > 1e-3 || Math.abs(a) > 0.01 || Math.abs(dx) > 0.01 || Math.abs(dy) > 0.01;
+      if (!moving && !c.driven) continue;
+      const r = Phaser.Math.DegToRad(a), ox = c.rel.x * sx, oy = c.rel.y * sy;
+      c.x = p.x + ox * Math.cos(r) - oy * Math.sin(r);
+      c.y = p.y + ox * Math.sin(r) + oy * Math.cos(r);
+      c.setScale(c.base * sx, (c.baseY || c.base) * sy);
+      c.angle = c.rel.a + a;
+      c.driven = moving;
+    }
+  }
+
   // Đổi tạm gốc về tâm để xoay quanh tâm; trả về hàm khôi phục.
   centerOrigin(s) {
     const { originX: ox, originY: oy, x, y } = s;
@@ -334,6 +371,7 @@ export class BaseLevel extends Phaser.Scene {
 
   suaTap() {
     if (this.phase !== 'found' || this.ending) return;
+    this.sfx('sua_sfx_meow_cute'); // O2-20
     this.startEnding();
   }
 

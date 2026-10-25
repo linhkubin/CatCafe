@@ -223,12 +223,12 @@ Bố cục: hàng trên 6 chiếc tất bay đứng cạnh nhau, cùng tỉ lệ
 |---|---|---|---|---|---|---|---|
 | l2_bed_sheet | 0,40,1024,524 | l2_bed_blanket_flat | level2 | bed | đáy | rộng 580 | 5 |
 | l2_bed_sheet | 0,564,1024,520 | l2_bed_blanket_flipped | level2 | bed | đáy |  | 5 |
-| l2_bed_sheet | 0,1120,470,416 | l2_fur_rug_peek | level2 |  | đáy | rộng 120 | 7 |
-| l2_bed_sheet | 470,1120,554,416 | l2_fur_rug | level2 |  | đáy | rộng 260 | 6 |
+| l2_bed_sheet | 0,1120,440,416 | l2_fur_rug_peek | level2 |  | đáy | rộng 120 | 7 |
+| l2_bed_sheet | 440,1120,584,416 | l2_fur_rug | level2 |  | đáy | rộng 260 | 6 |
 
 **Chuẩn theo demo đã duyệt:** Giường nhìn ngang thân: đầu giường gỗ mật ong cao bên trái (trụ tròn núm), chân giường thấp bên phải; gối trắng ấm bên trái; chăn xanh trời nhạt, **một gò tròn**. Thảm lông trắng thò dưới gầm giường có **4 đệm ngón hồng nhạt** như bàn chân mèo.
 
-- `l2_bed_blanket_flat` 🎭: giường đơn gỗ caramel nằm ngang, **đầu giường tròn bên trái**, chân ngắn; chăn xanh da trời phủ kín, **giữa chăn MỘT gò tròn duy nhất, nổi rõ, cỡ Sữa cuộn tròn** (gối trắng nằm dưới); gầm giường là mảng tối tím oải hương, để trống (góc thảm lông là sprite riêng).
+- `l2_bed_blanket_flat` 🎭: giường đơn gỗ caramel nằm ngang, **đầu giường tròn bên trái**, chân ngắn; chăn xanh da trời phủ kín, **giữa chăn MỘT gò tròn duy nhất, nổi rõ, cỡ Sữa cuộn tròn** (gối trắng nằm dưới); **gầm giường trong suốt** (không bóng, không mảng tối; thấy sàn nền; góc thảm lông là sprite riêng). 4 chân thẳng đứng cùng phối cảnh khung (O2-12, O2-13).
 - `l2_bed_blanket_flipped`: cùng giường, chăn lật gập về phía chân giường, lộ **một chiếc gối trắng tròn** (chính là cục phồng). Không mèo.
 - `l2_fur_rug_peek` 🎭: chỉ **một góc tấm thảm lông trắng tròn** thò ra (cạnh trên phẳng để khuất dưới mép giường), trên mép có **4 túm lông tròn như 4 đệm ngón chân**, trông như bàn chân mèo trắng thò ra từ gầm giường.
 - `l2_fur_rug`: cả tấm thảm lông trắng nhỏ tròn hơi bầu dục nằm trên sàn, **một mép có 4 túm lông tròn như 4 đệm ngón chân mèo** (đúng góc thảm ở ô trái).
@@ -307,21 +307,16 @@ Không vẽ thanh treo (trong nền). Vệt nắng chiếu vào giỏ do code v�
 | l2_coat_hook | 619 | 232 | |
 | l2_beanie_white_idle | 586 | 250 | |
 | l2_beanie_white_floor | 180 | 1425 | |
-| l2_wardrobe_closed | 862 | 945 | |
+| l2_wardrobe_closed | 862 | 990 | |
 | l2_plush_cat | 401 | 650 | |
-| l2_plush_cat_fallen | 250 | 870 | |
+| l2_plush_cat_fallen | 185 | 872 | |
 | l2_bed_blanket_flat | 321 | 990 | |
 | l2_fur_rug_peek | 170 | 1030 | |
 | l2_fur_rug | 400 | 1150 | |
-| l2_chair | 881 | 1030 | |
+| l2_chair | 881 | 1060 | |
 | l2_slippers_cat_idle | 175 | 1330 | |
 | l2_sock_basket_full | 775 | 1320 | |
-| l2_sock_ball | 937 | 1338 | |
 | l2_curtain_closed | 260 | 226 | |
-| sock_target_1 | 75 | 735 | |
-| sock_target_4 | 900 | 700 | |
-| sock_target_5 | 530 | 625 | |
-| sock_target_6 | 490 | 336 | |
 | player_call | 500 | 1520 | đầu |
 
 ---

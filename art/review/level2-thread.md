@@ -276,3 +276,30 @@ Thứ tự: đặc tả → **demo level 2 mới cho chủ dự án duyệt** �
   - Tai trên hộp giày ngoài kem trong hồng, khác mũ hồng một chút.
 
 ---
+
+## Chủ dự án góp ý sau bản online 10 – O2-12…O2-21
+
+**Art 2D:**
+- **O2-12.** Chân giường loạn góc nhìn: vẽ lại giường (`_flat`, `_flipped`) đúng "Góc nhìn chung", 4 chân thẳng đứng cùng phối cảnh với khung giường.
+- **O2-13.** Bỏ bóng dưới giường (không đồ nào có bóng). Gầm giường để trống, sáng như sàn.
+
+**Dev:**
+- **O2-14.** Mèo bông rơi: xoay/rơi quanh **tâm** mèo bông; khi đáp xuống giường không giật hình (đổi ảnh đúng neo, đáp mượt).
+- **O2-15.** Bỏ hẳn cuộn tất trắng cạnh giỏ (`l2_sock_ball`) khỏi màn.
+- **O2-16.** Nút gợi ý (booster 💡) và bàn chân/tay gợi ý: dùng đúng hình của level 1, chung cho mọi level.
+- **O2-17.** Tủ quần áo và ghế dịch xuống cho chân chạm sàn như demo.
+- **O2-18.** Chạm tủ: hộp trên nóc tủ là vật con của tủ, nhún/scale cùng tủ.
+- **O2-19.** Tất bay ra: **nhỏ lại**, rơi theo vật lý, chỉ đáp ở chỗ đỡ được: sàn, kệ, mặt giường, mặt ghế (không treo lên cánh tủ, chao đèn, lưng ghế). Tất nằm trên vật nào là **vật con** của vật đó: vật nhún thì tất nhún theo.
+- **O2-20.** Chạm mèo (lúc sang cảnh bế, ở mọi level): một tiếng mèo kêu thật dễ thương.
+- **O2-21. Level 1:** tiếng bật nắp hộp pate như **mở lon nước ngọt** (tách khoen + xì hơi ngắn).
+
+---
+
+## Vòng 5b – Art 2D (O2-12, O2-13: giường)
+
+- Vẽ lại `l2_bed_sheet`: 1 lượt Codex, log có đủ "Nhắc lại quy tắc" và "Tự kiểm". Bản trước ở `art/out/_refs/l2_bed_sheet_v3.png`.
+- Giường đúng góc nhìn chung: trụ đầu giường, trụ chân giường và 4 chân thẳng đứng cùng phối cảnh khung.
+- **Gầm giường trong suốt**: không bóng, không mảng tím. Nền không có bóng giường nên không phải xoá gì.
+- Vẫn một gò chăn; hai tấm thảm lông giữ như cũ. Key, neo, cỡ hiển thị giữ nguyên; `anchors.json` đã cập nhật.
+
+---

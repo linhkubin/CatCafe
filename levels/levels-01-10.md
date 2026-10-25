@@ -115,7 +115,7 @@ Trước khi lộ hộp pate **không có gợi ý tự động** (G10).
 **Chạm Sữa → cảnh bế chung.** Bàn tay hướng dẫn chỉ vào Sữa (lần duy nhất trong game có hướng dẫn cho cảnh kết).
 
 **Ghi chú vẽ, hoạt hình, âm thanh:**
-- Tiếng "TÁCH!" là âm thanh quan trọng nhất của màn: phải giòn, rõ, giống thật. Âm (`sfx_pop_can`) và hình nổ (`fx_pop`) là đồ dùng chung, sẽ dùng lại ở level 10.
+- Tiếng "TÁCH!" là âm thanh quan trọng nhất của màn: phải giòn, rõ, giống thật, như **mở lon nước ngọt**: tách khoen kim loại + xì hơi ngắn (O2-21). Âm (`sfx_pop_can`) và hình nổ (`fx_pop`) là đồ dùng chung, sẽ dùng lại ở level 10.
 - Sữa cần: đuôi thò ra (`sua_tail_peek`), vụt chạy (`sua_run`), ngồi nhìn chằm chằm, ngẩng lên kêu meo, cúi đầu ăn (2 khung nhai). Cảnh bế dùng bộ hoạt hình chung.
 - Nhân vật: khum tay gọi (mở màn), gãi đầu (gối), nhún vai (hộp trống), ngạc nhiên (Sữa lộ diện). Mỗi lần phản ứng nhân vật trồi lên từ mép dưới khoảng 1 giây.
 - Key ảnh, trạng thái, toạ độ: `levels/states-01-10.md` mục Level 1 và `art/design-art-level1.md`.
@@ -139,7 +139,7 @@ Trước khi lộ hộp pate **không có gợi ý tự động** (G10).
 
 **Trạng thái mèo:** Sữa **Ẩn** (ngụy trang giữa đống tất trắng) cho tới khi chiếc tất thứ 6 bay ra. Mỗi lần chạm vào giỏ tất chỉ làm một chiếc tất bay ra. Sau chiếc thứ 6, Sữa **Lộ diện**: chạm là thắng.
 
-**Đồ ngụy trang giống mèo:** cả căn phòng rải rác **những thứ màu trắng, tròn tròn, trông y như một con mèo trắng đang cuộn tròn** (gối trắng dưới chăn, mèo nhồi bông trắng, mũ len trắng có hai quả bông như tai mèo, cuộn tất trắng, áo len trắng cuộn tròn, dép bông tai mèo). Người chơi chạm vào từng thứ, thứ nào cũng **hóa ra không phải**, nên giỏ tất (nơi Sữa thật nằm) cũng bị lẫn vào giữa những thứ đó. Mỗi đồ ngụy trang có một phản ứng buồn cười riêng để việc chạm nhầm thành niềm vui chứ không phải bực bội.
+**Đồ ngụy trang giống mèo:** cả căn phòng rải rác **những thứ màu trắng, tròn tròn, trông y như một con mèo trắng đang cuộn tròn** (gối trắng dưới chăn, mèo nhồi bông trắng, mũ len trắng có hai quả bông như tai mèo, áo len trắng cuộn tròn, dép bông tai mèo). Người chơi chạm vào từng thứ, thứ nào cũng **hóa ra không phải**, nên giỏ tất (nơi Sữa thật nằm) cũng bị lẫn vào giữa những thứ đó. Mỗi đồ ngụy trang có một phản ứng buồn cười riêng để việc chạm nhầm thành niềm vui chứ không phải bực bội.
 
 **Bố cục màn hình:**
 
@@ -179,7 +179,6 @@ Trước khi lộ hộp pate **không có gợi ý tự động** (G10).
 | 6 | Chao đèn trần | Trên giữa | ✨ | Chạm | Đèn đung đưa, bóng đổ lắc lư | "Kẽo kẹt" |
 | 7 | Giỏ tất | Dưới phải | 🔑 | Chạm ×3 | Mỗi lần một chiếc tất bay ra (xem luồng giải) | "Vèo" mỗi lần |
 | 8 | Mũ len trắng có hai quả bông (như hai tai mèo) trên móc | Trên trái | 🎭 | Chạm | Mũ rơi xuống, nhân vật đội thử lên đầu, hai quả bông ve vẩy như tai mèo | "Bụp" |
-| 9 | Cuộn tất trắng to, tròn như mèo con cuộn ngủ | Dưới phải, cạnh giỏ | 🎭 | Chạm | Cuộn tất bung ra thành một chiếc tất dài, lăn lông lốc ra giữa phòng | "Tưng" |
 | 10 | Đôi dép bông trắng có tai mèo | Dưới trái | 🎭 | Chạm | Dép kêu "chút chít", hai cái tai dép vểnh lên rồi cụp xuống | "Chút chít" |
 | 11 | Áo len trắng cuộn tròn trên ghế | Giữa phải | 🎭 | Chạm | Áo bung ra, hai tay áo rơi thõng xuống như hai chân trước | Sột soạt |
 
@@ -188,13 +187,13 @@ Trước khi lộ hộp pate **không có gợi ý tự động** (G10).
 | Giây | Người chơi làm | Game phản hồi |
 |---|---|---|
 | 0–4 | (xem) | Nhân vật bước vào gọi, bong bóng nhiệm vụ cạnh nhân vật. Sữa không xuất hiện (O2-4), chỉ nghe tiếng ngáy rất nhỏ |
-| 3–25 | Chạm đủ mọi chỗ, đặc biệt là **những thứ trắng tròn trông giống mèo**: chăn có cục phồng, mèo nhồi bông, mũ len, cuộn tất, áo len, dép bông | Thứ nào cũng hóa ra không phải mèo, mỗi thứ một phản ứng buồn cười |
-| 26–29 | Chạm **giỏ tất** lần 1 | Chiếc **tất kẻ sọc** bay vèo ra theo đường cong, rơi lên **đầu giường**. Giỏ khẽ nảy |
-| 30–32 | Chạm lần 2 | Chiếc **tất chấm bi** bay ra, mắc lên **vành chao đèn** (đèn đung đưa). Ảnh giỏ vơi đi (`_2`) |
-| 33–35 | Chạm lần 3 | Chiếc **tất trắng to** bay ra, vắt lên **núm tủ** |
-| 36–38 | Chạm lần 4 | Chiếc **tất ngôi sao** bay ra, vắt lên **lưng ghế**. Ảnh giỏ vơi tiếp (`_3`) |
-| 39–41 | Chạm lần 5 | Chiếc **tất em bé** bay ra, rơi lên **kệ cạnh mèo nhồi bông** |
-| 42–45 | Chạm lần 6 | Chiếc **tất dài** bay ra, vắt lên **thanh rèm**. Ảnh giỏ `_reveal`: lộ Sữa (xem Khoảnh khắc lộ diện) |
+| 3–25 | Chạm đủ mọi chỗ, đặc biệt là **những thứ trắng tròn trông giống mèo**: chăn có cục phồng, mèo nhồi bông, mũ len, áo len, dép bông | Thứ nào cũng hóa ra không phải mèo, mỗi thứ một phản ứng buồn cười |
+| 26–29 | Chạm **giỏ tất** lần 1 | Chiếc **tất kẻ sọc** bay vèo ra theo đường cong, rơi đáp nằm trên **mặt giường**, nảy nhẹ. Giỏ khẽ nảy |
+| 30–32 | Chạm lần 2 | Chiếc **tất chấm bi** bay ra, rơi xuống **sàn cạnh chân giường**. Ảnh giỏ vơi đi (`_2`) |
+| 33–35 | Chạm lần 3 | Chiếc **tất trắng to** bay ra, rơi xuống **thảm cạnh đôi dép** |
+| 36–38 | Chạm lần 4 | Chiếc **tất ngôi sao** bay ra, rơi lên **kệ** (bên trái, cạnh sách). Ảnh giỏ vơi tiếp (`_3`) |
+| 39–41 | Chạm lần 5 | Chiếc **tất em bé** bay ra, rơi lên **mặt ghế**, cạnh áo len |
+| 42–45 | Chạm lần 6 | Chiếc **tất dài** bay ra, rơi lên **kệ cạnh chậu cây**. Ảnh giỏ `_reveal`: lộ Sữa (xem Khoảnh khắc lộ diện) |
 | 46–50 | Chạm **Sữa** | Cảnh bế chung |
 
 **Chạm sai và làm khác thứ tự:**
@@ -213,7 +212,7 @@ Trước khi lộ hộp pate **không có gợi ý tự động** (G10).
 - **Quan trọng nhất:** trước khi lộ ra, Sữa phải vẽ **cùng màu, cùng nét, cùng bóng đổ** với đống tất trắng. Người tinh mắt nhìn kỹ có thể thấy một hình tròn hơi khác, nhưng người lướt qua thì không.
 - **Đồ ngụy trang (2, 4, 8, 9, 10, 11)** và **chỗ thò tai/chân/đuôi giả (1a, 3a, 5; G2-7)** vẽ cùng tông trắng, cùng độ tròn, cùng kích cỡ với Sữa khi cuộn tròn, để mắt người chơi không phân biệt được ngay. Giỏ tất và mọi đồ ngụy trang đều đứng yên (G2-8 bỏ nhịp thở); manh mối công bằng là tiếng ngáy to dần và việc chạm giỏ lần nào cũng có tất bay ra.
 - Đồ ngụy trang đã chạm thì giữ trạng thái sau khi chạm (mũ rơi, áo bung…), để người chơi biết mình đã thử chỗ nào.
-- 6 chiếc tất bay ra (G2-8) dừng lại ở 6 chỗ trong phòng (đầu giường, vành chao đèn, núm tủ, lưng ghế, kệ cạnh mèo nhồi bông, thanh rèm) và **ở nguyên đó** cho tới hết màn (căn phòng lộn xộn dần, vui mắt).
+- 6 chiếc tất bay ra (G2-8, O2-19: nhỏ cỡ thật, bay theo đường cong rồi rơi đáp, nảy nhẹ) nằm ở 6 chỗ đỡ được (mặt giường, sàn cạnh chân giường, thảm cạnh dép, kệ trái, mặt ghế, kệ cạnh chậu cây; không treo lên cánh tủ, chao đèn, lưng ghế) và **ở nguyên đó** cho tới hết màn (căn phòng lộn xộn dần, vui mắt).
 - Âm nền: tiếng ngáy rất nhỏ, dễ thương của Sữa (`sua_sfx_snore`, lặp), to dần theo 6 nấc, mỗi chiếc tất bay ra một nấc.
 
 **Thưởng:** 15 Cá khô · Sữa ♥ 2/4.

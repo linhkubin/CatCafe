@@ -52,7 +52,7 @@ export const KEYS = {
     ['l2_curtain_closed', 'level2'], ['l2_curtain_open', 'level2'],
     ['l2_plush_cat', 'level2'], ['l2_plush_cat_fallen', 'level2'],
     ['l2_ceiling_lamp', 'level2'], ['l2_coat_hook', 'level2'], ['l2_beanie_white_idle', 'level2'], ['l2_beanie_white_floor', 'level2'],
-    ['l2_sock_ball', 'level2'], ['l2_sock_unrolled', 'level2'],
+
     ['l2_slippers_cat_idle', 'level2'], ['l2_slippers_cat_after', 'level2'],
     ['l2_chair', 'level2'], ['l2_sweater_rolled', 'level2'], ['l2_sweater_unrolled', 'level2'],
     ['l2_sock_basket_one_eye', 'level2'], ['l2_sock_basket_yawn', 'level2'], ['player_wear_beanie', 'player'],
