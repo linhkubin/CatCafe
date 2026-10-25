@@ -1,5 +1,7 @@
-import { discover, phUrl } from './assets.js';
+import { discover, phUrl, KEYS } from './assets.js';
+import { finalizeEntries } from './base.js';
 import { Level1 } from './level1.js';
+import { Level2 } from './level2.js';
 
 const W = 1024, BASE_H = 1536, MAX_H = 2304;
 
@@ -11,12 +13,16 @@ export function gameHeight() {
   return Math.round(Math.min(MAX_H, Math.max(BASE_H, (W * vh) / vw)));
 }
 
+// Boot chỉ tải phần dùng chung (giao diện, cảnh bế, Sữa chạy, nhân vật); mỗi màn tự tải ảnh riêng khi vào màn.
 class Boot extends Phaser.Scene {
   constructor() { super('Boot'); }
 
   preload() {
     const A = this.registry.get('assets');
-    for (const [key, e] of Object.entries(A.entries)) this.load.image(key, e.url);
+    for (const [key] of KEYS.common) {
+      const e = A.entries[key];
+      if (e) this.load.image(key, e.url);
+    }
     for (const f of A.audio) {
       const m = f.match(/^([a-z0-9_]+)\.(mp3|ogg|wav)$/);
       if (m) this.load.audio(m[1], 'audio/' + f);
@@ -32,39 +38,25 @@ class Boot extends Phaser.Scene {
   }
 
   create() {
-    const A = this.registry.get('assets');
-    // Ảnh thật chưa có điểm neo trong anchors.json: suy neo từ cột Neo, tỉ lệ từ cột Hiển thị của design-art.
-    for (const [key, e] of Object.entries(A.entries)) {
-      if (!e.auto || !this.textures.exists(key)) continue;
-      const src = this.textures.get(key).getSourceImage();
-      if (key === 'l1_bg_living_room') {
-        Object.assign(e, { ax: 0, ay: 0, res: src.width / W });
-        continue;
-      }
-      const info = A.info[key] || {};
-      const neo = info.neo || 'đáy';
-      // Neo "x,y ..." chưa ghi tay: Sữa bế lấy nách ở 42% chiều cao, còn lại lấy giữa đáy.
-      const ox = 0.5, oy = neo.startsWith('đỉnh') ? 0 : neo.startsWith('tâm') ? 0.5 : key === 'sua_held' ? 0.42 : 1;
-      const d = info.display;
-      const res = d ? (d.dim === 'w' ? src.width / d.val : src.height / d.val) : 1.5;
-      Object.assign(e, { ax: src.width * ox, ay: src.height * oy, res });
-    }
-    this.scene.start('Level1');
+    finalizeEntries(this, KEYS.common.map(([k]) => k));
+    // ?level=2 để vào thẳng level 2 khi kiểm thử.
+    const lv = new URLSearchParams(location.search).get('level');
+    this.scene.start(lv === '2' ? 'Level2' : 'Level1');
   }
 }
 
 async function start() {
   const assets = await discover();
   const real = Object.entries(assets.entries).filter(([, e]) => e.real).map(([k]) => k);
-  console.info(`[Meo Level 1] ảnh thật: ${real.length ? real.join(', ') : '(chưa có)'}; còn lại dùng ảnh tạm.`);
+  console.info(`[Meo] ảnh thật: ${real.length}; còn lại dùng ảnh tạm.`);
   const game = new Phaser.Game({
     type: Phaser.AUTO,
     parent: 'game',
     backgroundColor: '#2b2420',
     scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH, width: W, height: gameHeight() },
     input: { activePointers: 2 },
-    scene: [Boot, Level1],
-    callbacks: { preBoot: (g) => g.registry.set('assets', assets) },
+    scene: [Boot, Level1, Level2],
+    callbacks: { preBoot: (g) => { g.registry.set('assets', assets); g.registry.set('hearts', 0); } },
   });
   window.addEventListener('resize', () => {
     const h = gameHeight();

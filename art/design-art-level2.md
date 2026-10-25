@@ -1,228 +1,296 @@
 # Design Art – Level 2: Giỏ tất
 
-> Đọc kèm `style.md`. Mọi ảnh theo đúng phong cách chung: bút chì màu, pastel nhạt, nét tay, cute, tối giản, **không chữ**.
+> Đọc kèm `style.md`. Bút chì màu, pastel tươi (O3), nét mảnh đậm nhạt (O5), cute, tối giản, **không chữ**.
 >
-> **Phòng:** Phòng ngủ. **Mèo:** Sữa. **Ý chính:** Sữa trắng ngủ lẫn trong giỏ tất trắng. Chạm giỏ 3 lần, mỗi lần một chiếc tất bay ra, lần thứ 3 lộ Sữa cuộn tròn ngủ.
+> **Phòng:** Phòng ngủ, buổi trưa. **Mèo:** Sữa (theo `cats/sua_ref.png`). **Ý chính:** Sữa trắng ngủ lẫn trong giỏ tất trắng; cả phòng rải rác đồ trắng tròn trông như mèo cuộn tròn. Chạm giỏ 3 lần, mỗi lần một chiếc tất bay ra, lần 3 lộ Sữa cuộn ngủ.
 
-Lưu ảnh vào `art/out/level2/`. Ảnh Sữa lưu `art/out/cats/`. **Tên file và key trong bảng là tên chính thức để dev dùng thẳng trong code, không đổi** (quy tắc ở `style.md` mục 4).
+Áp dụng mọi quy tắc đã chốt ở Level 1 (`art/review/level1-thread.md`, `art/design-art-level1.md`): vẽ theo tờ (bảng tờ V14), đặt tên V23, cột Nét theo công thức cuối, vùng chạm ≥ 115px (code nới vùng chạm nếu hình nhỏ hơn), neo theo công cụ, `anchors.json`. Chuẩn art: tranh demo `demo/l2_demo_start.png`, `demo/l2_demo_reveal.png` (sau khi chủ dự án duyệt) và tranh level 1.
 
 ---
 
-## 1. Danh sách ảnh cần vẽ
+## 1. Danh sách key
 
-| # | File (trong art/out/) | Key trong code | Kích thước | Nền | Loại |
+Hiển thị = cỡ trong game trên khung 1024x1536. TS = trong suốt.
+
+| Key | Thư mục | Hiển thị | Nền | Neo | Tờ (nhóm) |
 |---|---|---|---|---|---|
-| 1 | `level2/l2_bg_bedroom.png` | `l2_bg_bedroom` | 1024x1536 | Có nền | Nền phòng |
-| 2 | `level2/l2_sock_basket_full.png` | `l2_sock_basket_full` | 1024x1024 | Trong suốt | 🔑 Giỏ tất đầy (Sữa lẫn bên trong) |
-| 3 | `level2/l2_sock_basket_2.png` | `l2_sock_basket_2` | 1024x1024 | Trong suốt | 🔑 Giỏ sau lần chạm 1 |
-| 4 | `level2/l2_sock_basket_3.png` | `l2_sock_basket_3` | 1024x1024 | Trong suốt | 🔑 Giỏ sau lần chạm 2 |
-| 5 | `level2/l2_sock_basket_reveal.png` | `l2_sock_basket_reveal` | 1024x1024 | Trong suốt | 🔑 Giỏ lộ Sữa ngủ |
-| 6 | `level2/l2_sock_striped.png` | `l2_sock_striped` | 1024x1024 | Trong suốt | Tất kẻ sọc (bay ra lần 1) |
-| 7 | `level2/l2_sock_dotted.png` | `l2_sock_dotted` | 1024x1024 | Trong suốt | Tất chấm bi (bay ra lần 2) |
-| 8 | `level2/l2_sock_white_big.png` | `l2_sock_white_big` | 1024x1024 | Trong suốt | Tất trắng to (bay ra lần 3) |
-| 9 | `level2/l2_bed_blanket_flat.png` | `l2_bed_blanket_flat` | 1536x1024 | Trong suốt | 🎭 Giường, chăn phủ có cục phồng |
-| 10 | `level2/l2_bed_blanket_flipped.png` | `l2_bed_blanket_flipped` | 1536x1024 | Trong suốt | 🎭 Giường, chăn lật lộ gối |
-| 11 | `level2/l2_slipper.png` | `l2_slipper` | 1024x1024 | Trong suốt | ✨ Chiếc dép trượt ra gầm giường |
-| 12 | `level2/l2_wardrobe_closed.png` | `l2_wardrobe_closed` | 1024x1536 | Trong suốt | ✨ Tủ quần áo đóng |
-| 13 | `level2/l2_wardrobe_open.png` | `l2_wardrobe_open` | 1024x1536 | Trong suốt | ✨ Tủ quần áo mở |
-| 14 | `level2/l2_shoebox.png` | `l2_shoebox` | 1024x1024 | Trong suốt | ✨ Hộp giày trên nóc tủ |
-| 15 | `level2/l2_curtain_closed.png` | `l2_curtain_closed` | 1024x1536 | Trong suốt | ✨ Rèm đóng |
-| 16 | `level2/l2_curtain_open.png` | `l2_curtain_open` | 1024x1536 | Trong suốt | ✨ Rèm mở, có nắng |
-| 17 | `level2/l2_plush_cat.png` | `l2_plush_cat` | 1024x1024 | Trong suốt | 🎭 Mèo nhồi bông trên kệ |
-| 18 | `cats/sua_run.png` | `sua_run` | 1536x1024 | Trong suốt | Sữa chạy vụt (mở màn) |
-| 19 | `cats/sua_one_eye_open.png` | `sua_one_eye_open` | 1024x1024 | Trong suốt | Sữa cuộn tròn, hé một mắt |
-| 20 | `cats/sua_yawn.png` | `sua_yawn` | 1024x1024 | Trong suốt | Sữa cuộn tròn ngáp |
-| 21 | `level2/l2_ceiling_lamp.png` | `l2_ceiling_lamp` | 1024x1536 | Trong suốt | ✨ Đèn trần có chao (tách khỏi nền) |
-| 22 | `level2/l2_plush_cat_fallen.png` | `l2_plush_cat_fallen` | 1024x1024 | Trong suốt | 🎭 Mèo nhồi bông nằm ngửa dưới sàn |
-| 23 | `level2/l2_coat_hook.png` | `l2_coat_hook` | 1024x1024 | Trong suốt | ✨ Móc treo tường |
-| 24 | `level2/l2_beanie_white_idle.png` | `l2_beanie_white_idle` | 1024x1024 | Trong suốt | 🎭 Mũ len trắng treo móc (giống mèo) |
-| 25 | `level2/l2_beanie_white_floor.png` | `l2_beanie_white_floor` | 1024x1024 | Trong suốt | 🎭 Mũ len trắng rơi dưới sàn |
-| 26 | `player/player_wear_beanie.png` | `player_wear_beanie` | 1024x1536 | Trong suốt | Nhân vật đội thử mũ len |
-| 27 | `level2/l2_sock_ball.png` | `l2_sock_ball` | 1024x1024 | Trong suốt | 🎭 Cuộn tất trắng tròn (giống mèo con) |
-| 28 | `level2/l2_sock_unrolled.png` | `l2_sock_unrolled` | 1536x1024 | Trong suốt | 🎭 Chiếc tất dài nằm dưới sàn |
-| 29 | `level2/l2_slippers_cat_idle.png` | `l2_slippers_cat_idle` | 1024x1024 | Trong suốt | 🎭 Đôi dép bông trắng tai mèo |
-| 30 | `level2/l2_slippers_cat_after.png` | `l2_slippers_cat_after` | 1024x1024 | Trong suốt | 🎭 Đôi dép tai mèo, một chiếc lật nghiêng |
-| 31 | `level2/l2_chair.png` | `l2_chair` | 1024x1536 | Trong suốt | ✨ Ghế gỗ nhỏ |
-| 32 | `level2/l2_sweater_rolled.png` | `l2_sweater_rolled` | 1024x1024 | Trong suốt | 🎭 Áo len trắng cuộn tròn (giống mèo) |
-| 33 | `level2/l2_sweater_unrolled.png` | `l2_sweater_unrolled` | 1024x1024 | Trong suốt | 🎭 Áo len trắng bung ra trên ghế |
+| `l2_bg_bedroom` | level2 | 1024x1536 | Có nền | góc trên trái | ảnh lẻ (mục 4) |
+| `l2_sock_basket_full` | level2 | rộng 260 | TS | đáy | `l2_basket_sheet` (basket) |
+| `l2_sock_basket_2` | level2 | theo nhóm | TS | đáy | `l2_basket_sheet` (basket) |
+| `l2_sock_basket_3` | level2 | theo nhóm | TS | đáy | `l2_basket_sheet` (basket) |
+| `l2_sock_basket_reveal` | level2 | theo nhóm | TS | đáy | `l2_basket_sheet` (basket) |
+| `l2_sock_basket_one_eye` | level2 | theo nhóm | TS | đáy | `l2_basket_sheet` (basket), thay `sua_one_eye_open` |
+| `l2_sock_basket_yawn` | level2 | theo nhóm | TS | đáy | `l2_basket_sheet` (basket), thay `sua_yawn` |
+| `l2_sock_striped` | level2 | rộng 120 | TS | tâm | `l2_socks_sheet` |
+| `l2_sock_dotted` | level2 | rộng 120 | TS | tâm | `l2_socks_sheet` |
+| `l2_sock_white_big` | level2 | rộng 170 | TS | tâm | `l2_socks_sheet` |
+| `l2_sock_star` | level2 | rộng 120 | TS | tâm | `l2_socks_sheet` (G2-8) |
+| `l2_sock_baby` | level2 | rộng 80 | TS | tâm | `l2_socks_sheet` (G2-8) |
+| `l2_sock_long` | level2 | cao 200 | TS | tâm | `l2_socks_sheet` (G2-8) |
+| `l2_sock_ball` | level2 | rộng 180 | TS | đáy | `l2_socks_sheet` |
+| `l2_sock_unrolled` | level2 | rộng 320 | TS | đáy | `l2_socks_sheet` |
+| `l2_plush_cat` | level2 | cao 170 | TS | đáy | `l2_decoy_sheet` |
+| `l2_plush_cat_fallen` | level2 | rộng 200 | TS | đáy | `l2_decoy_sheet` |
+| `l2_coat_hook` | level2 | rộng 170 | TS | đỉnh | `l2_decoy_sheet` |
+| `l2_beanie_white_idle` | level2 | rộng 170 | TS | đỉnh | `l2_decoy_sheet` |
+| `l2_beanie_white_floor` | level2 | rộng 180 | TS | đáy | `l2_decoy_sheet` |
+| `l2_chair` | level2 | rộng 200 | TS | đáy | `l2_chair_sheet` |
+| `l2_sweater_rolled` | level2 | rộng 190 | TS | đáy | `l2_chair_sheet` |
+| `l2_sweater_unrolled` | level2 | rộng 210 | TS | đỉnh (mép đặt lên mặt ghế) | `l2_chair_sheet` |
+| `l2_slippers_cat_idle` | level2 | rộng 220 | TS | đáy | `l2_chair_sheet` (slippers) |
+| `l2_slippers_cat_after` | level2 | theo nhóm | TS | đáy | `l2_chair_sheet` (slippers) |
+| `l2_bed_blanket_flat` | level2 | rộng 580 | TS | đáy | `l2_bed_sheet` (bed) |
+| `l2_bed_blanket_flipped` | level2 | theo nhóm | TS | đáy | `l2_bed_sheet` (bed) |
+| `l2_fur_rug_peek` | level2 | rộng 120 | TS | đáy | `l2_bed_sheet` (G2-7) |
+| `l2_fur_rug` | level2 | rộng 260 | TS | đáy | `l2_bed_sheet` (G2-7) |
+| `l2_wardrobe_closed` | level2 | rộng 330 | TS | đáy | `l2_wardrobe_sheet` (wardrobe) |
+| `l2_wardrobe_open` | level2 | theo nhóm | TS | đáy | `l2_wardrobe_sheet` (wardrobe) |
+| `l2_shoebox_ears` | level2 | rộng 170 | TS | đáy | `l2_props_sheet` (shoebox, G2-7) |
+| `l2_shoebox_open` | level2 | theo nhóm | TS | đáy | `l2_props_sheet` (shoebox, G2-7) |
+| `l2_beanie_pink_cat` | level2 | rộng 120 | TS | đáy | `l2_props_sheet` (G2-7) |
+| `l2_curtain_tie` | level2 | cao 150 | TS | đỉnh | `l2_props_sheet` (G2-7) |
+| `l2_ceiling_lamp` | level2 | cao 330 | TS | đỉnh (đầu dây) | `l2_wardrobe_sheet` |
+| `l2_curtain_closed` | level2 | rộng 470 | TS | đỉnh | `l2_curtain_sheet` (curtain) |
+| `l2_curtain_open` | level2 | theo nhóm | TS | đỉnh | `l2_curtain_sheet` (curtain) |
+| `player_wear_beanie` | player | cao 700 (gồm mũ và quai; người cao ~580) | TS | đáy | `player_beanie_sheet` (một ô) |
 
-Dùng thêm đồ chung trong `style.md` mục 5: bàn tay hướng dẫn, lấp lánh, cá khô, trái tim, chân mèo gợi ý. Đồ chung vẽ ở level 1: `sua_held`, `sua_face_icon`, `player_hands_lift`, `ui_speech_bubble`, `ui_cat_head_dark`.
+**Dùng lại, không vẽ:** `sua_run`, `sua_face_icon`, `sua_held`, `player_hands_lift`, `player_call`, `player_scratch_head`, `player_surprised`, `player_shrug`, mọi `ui_*`, `fx_pop`, `prop_butterfly` (nếu cần). Không cần `sua_tail_peek`.
 
-**Đồ ngụy trang trắng (#17, #24, #27, #29, #32 và cục phồng trong chăn #9):** phải **trắng ấm cùng tông với Sữa** (`#FFFDF8`), dáng tròn, **cỡ bằng Sữa khi cuộn tròn**, để người chơi nhìn lướt dễ nhầm. Nhìn kỹ thì phải nhận ra là đồ vật (có đường may, cúc, quả bông, cổ tay áo…). Mỗi món nên vẽ khi đã có ảnh tham chiếu Sữa trong Project để so cỡ và màu.
+**G2-7 (thêm đánh lừa):** gầm giường thò `l2_fur_rug_peek` (góc thảm lông trông như bàn chân mèo) → kéo ra `l2_fur_rug` (thay dép hồng `l2_slipper`, đã bỏ); hộp giày `l2_shoebox_ears` (hai tai mèo thò lên) → `l2_shoebox_open` + `l2_beanie_pink_cat` nảy lên rồi rơi lại vào hộp; dây buộc rèm `l2_curtain_tie` thò xuống như đuôi mèo; chăn lật không có gì (chỉ gối trắng); tủ mở chỉ thấy quần áo gấp.
 
-**Thứ tự nên vẽ:** nền (#1) → tất (#6–#8) → giỏ tất (#2–#5, vẽ liền nhau trong cùng cuộc chat để giữ giống nhau) → đồ khác (#9–#17, #21, #23, #31) → đồ ngụy trang trắng (#22, #24–#25, #27–#30, #32–#33, vẽ liền nhau để cùng tông) → Sữa (#18–#20) → nhân vật (#26).
+**Đổi tên so với states cũ:** `sua_one_eye_open` → `l2_sock_basket_one_eye`, `sua_yawn` → `l2_sock_basket_yawn`: Sữa cuộn trong giỏ vẽ liền với giỏ (cùng khung với `_reveal`), đổi ảnh không giật.
+
+**Đồ ngụy trang trắng** (`l2_plush_cat`, `l2_beanie_white_idle`, `l2_sock_ball`, `l2_slippers_cat_idle`, `l2_sweater_rolled`, cục phồng trong `l2_bed_blanket_flat`): **trắng ấm cùng tông lông Sữa** (#FFFAF0, vân chì như `sua_ref`), tròn mập, **cùng cỡ với Sữa cuộn tròn** (khoảng 180–200 hiển thị), cùng chất nét lông xù. Nhìn kỹ mới thấy là đồ vật (cúc áo, đường khâu, quả bông, cổ tất, cổ tay áo). Sữa trong giỏ (`_full`, `_2`, `_3`) vẽ **cùng màu, cùng nét với tất**, chỉ lộ rất mờ đường cong lưng và một tai.
 
 ---
 
-## 2. Bố cục phòng
-
-Màn hình dọc. Chia theo chiều cao:
+## 2. Bố cục phòng (theo `levels-01-10.md` Level 2)
 
 ```
-┌──────────────────────────┐
-│ [hộp giày]   [cửa sổ]    │  1/3 trên: tủ quần áo cao bên trái (hộp giày trên nóc),
-│ ┌──────┐ [móc](rèm ở đây)│  cửa sổ bên phải, đèn trần có chao treo giữa (ảnh riêng #21),
-│ │ TỦ   │ +mũ [đèn chao]  │  móc treo tường giữa tủ và cửa sổ (#23, treo mũ len #24)
-│ │      │  [kệ: mèo bông] │  kệ treo tường nhỏ bên phải, dưới cửa sổ
-│ └──────┘[giỏ][cuộn tất]  │  1/3 giữa: giỏ tất sát chân tủ, cuộn tất #27 cạnh giỏ;
-│      [ghế + áo len]      │  ghế #31 có áo len #32 bên phải, cạnh đầu giường
-│    ┌──────────────┐      │  1/3 dưới: giường đơn nằm ngang, đầu giường bên phải,
-│    │   GIƯỜNG     │      │  gầm giường tối nhẹ (dép hồng #11 trượt ra từ đây)
-│  [dép tai mèo]           │  đôi dép tai mèo #29 trên thảm trước giường
-└──────────────────────────┘
+┌──────────────────────────────┐  y 0–130: giao diện
+│ ♥Sữa ●○○○                ⏸  │
+│ [MÓC+MŨ LEN]  [CHAO ĐÈN]     │  móc (150,175), chao đèn treo từ trần (512,0)
+│ ┌────────┐      ┌hộp giày┐   │
+│ │ RÈM    │      ┌────────┐   │  rèm trên trái: mép trên (240,330); tủ phải: đáy (815,960)
+│ │cửa sổ  │      │  TỦ    │   │  hộp giày trên nóc tủ (815,315)
+│ └────────┘      │ QUẦN ÁO│   │
+│ [KỆ: mèo bông]  │        │   │  kệ trong nền, mèo bông đáy ở (200,820)
+│ ┌───────────┐   └────────┘   │  chân tường y≈960
+│ │ GIƯỜNG    │   [GHẾ+áo len] │  giường dưới trái: đáy (310,1250); ghế (820,1220)
+│ └───────────┘                │
+│ [DÉP tai mèo]  [GIỎ][CUỘN]   │  dép (170,1390); giỏ (640,1395); cuộn tất (880,1330)
+│                          💡  │  x>880, y>1400: nút 💡
+└──────────────────────────────┘
 ```
 
-Đồ nào người chơi chạm vào có phản ứng đều là **ảnh riêng**, không vẽ vào nền: tủ, hộp giày, đèn chao, móc + mũ, kệ + mèo bông (kệ vẽ trong nền, mèo bông riêng), giỏ tất, cuộn tất, ghế + áo len, giường, dép.
+- Camera chung: chính diện, nhìn xuống ~15°, sáng từ cửa sổ trên trái, nét chì đổ bóng bên phải đồ vật. Không bóng sàn (code vẽ).
+- Đầu giường ở **bên trái** (sát tường trái); gầm giường tối nhẹ tím oải hương.
+- 8% trên cùng tường trơn, 8% dưới cùng sàn trơn.
 
 ---
 
-## 3. Đặc tả chi tiết từng ảnh
+## 3. Quy tắc tờ
 
-### #1 `l2_bg_bedroom.png` — Nền phòng ngủ
-- Phòng ngủ nhỏ, buổi sáng dịu, nhìn thẳng hơi từ trên xuống. **Không người, không mèo.**
-- **Tường:** hồng phấn rất nhạt, phẳng, không hoa văn.
-- **Cửa sổ** bên phải phía trên: khung gỗ trắng kem, kính xanh da trời nhạt. **Không vẽ rèm.**
-- **Không vẽ đèn trần** (đèn là ảnh riêng #21). Chỉ vẽ một **móc nhỏ trên trần** ở giữa phía trên để treo đèn.
-- **Kệ treo tường** nhỏ dưới cửa sổ: tấm gỗ caramel, trên có 2 cuốn sách gáy trơn (không chữ) và **chỗ trống** cho mèo bông.
-- **Sàn:** gỗ caramel nhạt, vài nét chì ngang. Một tấm thảm chữ nhật xanh bạc hà trước giường.
-- **Để trống** vị trí của tủ (trái), móc treo (tường giữa tủ và cửa sổ), giỏ tất và cuộn tất (cạnh chân tủ), ghế (phải, cạnh đầu giường), giường (dưới), dép tai mèo (trên thảm): các thứ đó là ảnh riêng.
-
-### #2 `l2_sock_basket_full.png` — Giỏ tất đầy
-- Giỏ mây tròn thấp màu caramel nhạt, đan bằng vài đường chéo đơn giản (không đan chi tiết), có 2 quai nhỏ.
-- **Đầy ụ tất**, chủ yếu tất trắng ấm, xen 1 chiếc **kẻ sọc** và 1 chiếc **chấm bi** nằm trên cùng.
-- **Quan trọng:** giữa đống tất trắng có **Sữa đang cuộn tròn ngủ, vẽ cùng màu và cùng nét với tất**, gần như không phân biệt được. Chỉ lộ rất mờ **một cái tai tròn** và đường cong lưng. Người chơi nhìn lướt chỉ thấy tất.
-
-### #3 `l2_sock_basket_2.png` — Giỏ sau lần chạm 1
-- Giống hệt #2 nhưng **không còn chiếc tất kẻ sọc**. Đống tất thấp xuống một chút.
-- Sữa vẫn lẫn trong tất như #2.
-
-### #4 `l2_sock_basket_3.png` — Giỏ sau lần chạm 2
-- Giống #3 nhưng **không còn chiếc tất chấm bi**. Chỉ còn tất trắng.
-- Hình Sữa vẫn lẫn, nhưng **rõ hơn một chút**: thấy được 2 tai và đuôi.
-
-### #5 `l2_sock_basket_reveal.png` — Giỏ lộ Sữa
-- Cùng giỏ, chiếc tất trắng to phía trên đã bay đi. **Sữa lộ rõ, cuộn tròn ngủ say** giữa vài chiếc tất trắng còn lại.
-- Mắt nhắm thành 2 đường cong, mũi hồng, má hồng, đuôi quấn quanh mũi. Một chân trước duỗi ra mép giỏ.
-- Từ đây Sữa có màu và nét viền rõ ràng hơn tất (để người chơi thấy "à, là mèo!").
-
-### #6 `l2_sock_striped.png` — Tất kẻ sọc
-- Một chiếc tất cổ ngắn, **sọc ngang to: 4 sọc hồng đào xen kem**. Mũi và gót màu hồng đào.
-- Hơi cong như đang bay.
-
-### #7 `l2_sock_dotted.png` — Tất chấm bi
-- Một chiếc tất cổ cao màu xanh da trời nhạt, **6 chấm tròn to màu trắng**.
-- Hơi cong như đang bay.
-
-### #8 `l2_sock_white_big.png` — Tất trắng to
-- Một chiếc tất len trắng ấm **to bất thường** (gấp đôi tất thường), cổ xù, nhìn mềm.
-- Vài nét chì thể hiện len, không vẽ mắt len chi tiết.
-
-### #9 `l2_bed_blanket_flat.png` — Giường, chăn phủ
-- Giường đơn gỗ caramel nằm ngang, đầu giường tròn bên phải, chân giường ngắn.
-- Chăn màu xanh da trời nhạt phủ kín, **giữa chăn có một cục phồng tròn** trông như mèo đang nằm dưới chăn.
-- Gầm giường là một mảng tối nhẹ màu tím oải hương.
-
-### #10 `l2_bed_blanket_flipped.png` — Giường, chăn lật
-- Cùng giường ở #9, chăn **lật gập về phía chân giường**, lộ ra **một chiếc gối trắng tròn** (là cục phồng lúc nãy). Không có mèo.
-
-### #11 `l2_slipper.png` — Dép bông
-- Một chiếc dép bông lê màu hồng phấn, mũi tròn có **hai tai thỏ nhỏ**, nằm nghiêng như vừa trượt ra.
-
-### #12 `l2_wardrobe_closed.png` — Tủ quần áo đóng
-- Tủ gỗ 2 cánh cao, màu kem với viền caramel, nóc phẳng, 2 núm cửa tròn.
-- Tủ hơi phình mập như đồ chơi. Không hoa văn.
-
-### #13 `l2_wardrobe_open.png` — Tủ quần áo mở
-- Cùng tủ ở #12, **2 cánh mở rộng**. Bên trong: thanh treo, 3 chiếc móc treo áo đơn giản (áo vàng bơ, áo hồng, áo xanh bạc hà). Không có mèo.
-
-### #14 `l2_shoebox.png` — Hộp giày
-- Hộp giày chữ nhật thấp màu xanh bạc hà, nắp màu kem, hơi nhích lệch ra.
-- Trên nắp vẽ **hình chiếc giày đơn giản**, không chữ.
-
-### #15 `l2_curtain_closed.png` — Rèm đóng
-- Hai tấm rèm màu vàng bơ nhạt treo thanh gỗ trắng, kéo kín. Vài nếp cong dọc đơn giản.
-
-### #16 `l2_curtain_open.png` — Rèm mở, có nắng
-- Cùng rèm ở #15, kéo dạt hai bên, buộc dải vải trắng.
-- Giữa có **vệt nắng** màu vàng bơ trong suốt nhạt, chiếu xiên xuống dưới bên trái (về phía giỏ tất). Bệ cửa sổ trống.
-
-### #17 `l2_plush_cat.png` — Mèo nhồi bông (đánh lừa)
-- Mèo nhồi bông ngồi, **trông giống Sữa** (trắng, tròn) để đánh lừa, nhưng rõ là đồ chơi:
-  - mắt là **2 cúc áo tròn màu nâu**,
-  - có **đường khâu chỉ** chạy dọc giữa bụng và quanh cổ,
-  - một miếng vá hình trái tim hồng trên chân.
-
-### #18 `sua_run.png` — Sữa chạy vụt
-- Sữa nhìn nghiêng, **chạy sang phải**, 4 chân duỗi, tai cụp ra sau, đuôi duỗi thẳng.
-- Phía sau có 3 vệt gió cong và 2 cục bụi tròn nhỏ.
-
-### #19 `sua_one_eye_open.png` — Sữa hé một mắt
-- Sữa cuộn tròn như #5 (vẽ kèm giỏ tất và vài chiếc tất trắng), **mở hé một mắt** nhìn ra, mắt kia vẫn nhắm. Vẻ mặt lười biếng.
-
-### #20 `sua_yawn.png` — Sữa ngáp
-- Cùng tư thế #19, **miệng há to ngáp**, thấy lưỡi hồng nhỏ, mắt nhắm chặt, một chân trước duỗi ra.
-
-### #21 `l2_ceiling_lamp.png` — Đèn trần
-- Dây treo mảnh từ mép trên khung xuống, cuối dây là **chao đèn hình chuông màu vàng bơ**, bóng đèn tròn ló dưới chao.
-- Đỉnh dây nằm sát mép trên khung (để khớp móc trần trong nền). Treo thẳng đứng (code sẽ đung đưa quanh điểm treo).
-- Tất chấm bi sẽ mắc lên chao này, nên vành chao để rộng, rõ.
-
-### #22 `l2_plush_cat_fallen.png` — Mèo nhồi bông nằm ngửa
-- **Cùng con mèo bông ở #17**, giờ **nằm ngửa dưới sàn**, bốn chân giơ lên, hai mắt cúc áo nhìn lên trên.
-- Thấy rõ đường khâu giữa bụng và miếng vá trái tim.
-
-### #23 `l2_coat_hook.png` — Móc treo tường
-- Một thanh gỗ nhỏ màu caramel gắn tường, có **2 móc tròn** nhô ra. Không treo gì.
-
-### #24 `l2_beanie_white_idle.png` — Mũ len trắng treo móc (đánh lừa)
-- Mũ len trắng ấm treo trên móc, nhìn từ phía trước.
-- **Cố ý trông giống đầu mèo trắng**: mũ tròn trịa, trên đỉnh có **2 quả bông len nhỏ** cách nhau như hai tai mèo. Mép mũ gấp lên một vòng.
-- Nhìn kỹ thì rõ là mũ: có vành gấp, vân len vài nét chì, không mặt.
-- Vẽ mũ ở đúng vị trí treo trên móc #23 (khung hình khớp với #23 khi xếp chồng).
-
-### #25 `l2_beanie_white_floor.png` — Mũ len rơi dưới sàn
-- **Cùng chiếc mũ ở #24**, giờ nằm nghiêng dưới sàn, hơi xẹp xuống, hai quả bông rủ sang một bên.
-
-### #26 `player_wear_beanie.png` — Nhân vật đội thử mũ len
-- Nhân vật chính (theo ảnh tham chiếu) đứng, **đội chiếc mũ len trắng #24**, hai quả bông trên đỉnh trông như tai mèo.
-- Hai tay chống hông, cười tinh nghịch, mắt nhắm một bên như đang làm mèo.
-
-### #27 `l2_sock_ball.png` — Cuộn tất trắng (đánh lừa)
-- Một **cuộn tất trắng ấm cuộn tròn thành quả bóng**, to bằng Sữa khi cuộn tròn.
-- **Cố ý trông như mèo con trắng cuộn ngủ**: tròn, mềm, có một đầu cổ tất thò ra như cái đuôi ngắn.
-- Nhìn kỹ thì thấy nếp gấp cổ tất, gót tất. Không mặt.
-
-### #28 `l2_sock_unrolled.png` — Chiếc tất dài
-- **Cùng chiếc tất ở #27** giờ đã bung ra thành **một chiếc tất dài thượt** nằm ngang trên sàn, hơi uốn cong như vừa lăn.
-
-### #29 `l2_slippers_cat_idle.png` — Đôi dép bông tai mèo (đánh lừa)
-- **Đôi dép bông trắng ấm** đặt sát nhau, mũi dép tròn mập.
-- Mỗi chiếc có **hai tai mèo nhỏ** nhọn tròn đầu (trong tai hồng đào) và hai chấm mắt thêu nhỏ màu nâu.
-- Đặt sát nhau nhìn lướt như **một con mèo trắng đang nằm**. Nhìn kỹ thì rõ là dép (thấy đế dép, lỗ xỏ chân).
-
-### #30 `l2_slippers_cat_after.png` — Dép tai mèo, một chiếc lật
-- **Cùng đôi dép ở #29**, cùng khung hình. Một chiếc vẫn đứng yên, **chiếc kia lật nghiêng** sang bên, thấy đế dép, hai tai cụp xuống.
-
-### #31 `l2_chair.png` — Ghế gỗ nhỏ
-- Ghế gỗ caramel nhạt có lưng tựa thấp bo tròn, 4 chân ngắn. Mặt ghế trống, phẳng (áo len là ảnh riêng).
-
-### #32 `l2_sweater_rolled.png` — Áo len trắng cuộn tròn (đánh lừa)
-- Áo len trắng ấm **cuộn tròn thành một khối** đặt trên mặt ghế #31, to bằng Sữa khi cuộn tròn.
-- **Cố ý trông như mèo trắng đang ngủ cuộn tròn**: hai cổ tay áo gập lại nhô lên như hai tai.
-- Nhìn kỹ thì thấy cổ áo, gấu áo có bo len. Không mặt.
-- Vẽ đúng vị trí trên mặt ghế (khung hình khớp với #31 khi xếp chồng).
-
-### #33 `l2_sweater_unrolled.png` — Áo len bung ra
-- **Cùng chiếc áo ở #32**, cùng khung hình. Áo **bung ra vắt trên ghế**, hai tay áo **thõng xuống mép ghế** như hai chân trước, cổ áo rủ ra trước.
+Như `design-art-level1.md` mục 3: tờ 1536x1024 (hoặc 1024x1536), nền trong suốt, mỗi ô một thứ, cách mép ô ≥ 40px, cùng tỉ lệ thật trong tờ, trạng thái cùng nhóm giống hệt phần không đổi và cùng đường đáy. **Cột Nét** = viền ngoài ở chỗ đậm nhất (px trong tờ), phần lớn viền ~60%, đầu nét nhọn; Nét = 3k với đồ vật/UI, 2,5k với mèo/nhân vật, không dưới 2k. Giao việc kèm `--stroke-ref art/out/cats/sua_ref.png=<0,6 × Nét ÷ 5>` và ảnh cắt cận từ tranh demo đã duyệt (đính kèm bằng `-i`). AI hay vẽ to hơn ô: vẽ xong đo khung, sửa ô cho khớp rồi cắt lại.
 
 ---
 
-## 4. Ghi chú cho lập trình (không cần đưa ChatGPT)
+## 4. Ảnh lẻ
 
-- Giỏ tất đổi ảnh #2 → #3 → #4 → #5 theo từng lần chạm. Tất #6, #7, #8 bay theo đường cong bằng code, rơi tại đầu giường, chao đèn, tay nắm tủ (xoay sprite cho hợp).
-- Giỏ phập phồng theo nhịp thở, tai giật, chăn lật, cánh tủ, hộp giày nhích: làm bằng code (scale, xoay, đổi ảnh), không cần vẽ khung hình riêng.
-- Mèo bông kêu "chít": chỉ là âm thanh + nảy sprite.
-- Trạng thái, điều kiện chuyển, hiệu ứng và âm thanh của từng ảnh: xem `levels/states-01-10.md` mục Level 2.
-- Đèn #21 tách khỏi nền để đung đưa; tất chấm bi #7 mắc lên chao đèn thì đung đưa theo đèn (gắn vào cùng nhóm).
-- Đồ ngụy trang đổi trạng thái rồi **giữ nguyên tới hết màn**: mèo bông #17 → #22, mũ #24 → #25 (kèm nhân vật #26 1,2 giây), cuộn tất #27 → #28 (lăn ra giữa phòng), dép #29 → #30, áo len #32 → #33.
-- Các đồ ngụy trang **không có nhịp thở**. Chỉ giỏ tất có hiệu ứng thở ở gợi ý mức 1.
+| File (trong art/out/) | Key | Kích thước | Nền | Mô tả |
+|---|---|---|---|---|
+| `level2/l2_bg_bedroom.png` | `l2_bg_bedroom` | 1024x1536 | Có nền | Nền phòng ngủ (mô tả dưới) |
+
+### `l2_bg_bedroom` — Nền phòng ngủ
+- Sửa từ tranh `demo/l2_demo_start.png` (như nền level 1): giữ phòng, xoá mọi đồ là sprite riêng và mọi UI, vẽ liền phần bị che. **Không người, không mèo.**
+- **Tường** hồng phấn nhạt trơn. **Cửa sổ dời xuống** (so với tranh demo) để có chỗ cho móc mũ len ở y≈270: cửa sổ trên trái x≈60–500, y≈450–780, khung gỗ trắng kem, kính xanh trời có mây, bệ trống; thanh treo rèm gỗ ở y≈430. Không rèm, không móc mũ.
+- **Trần:** một móc nhỏ ở (512, 0) để treo đèn; không vẽ đèn.
+- **Kệ treo tường** gỗ caramel dưới cửa sổ (x≈200–600, y≈850), trên có 2 cuốn sách gáy trơn, một chậu cây leo nhỏ và chỗ trống cho mèo bông.
+- **Sàn** gỗ mật ong từ chân tường y≈960, vài nét ván ngang; một **thảm chữ nhật xanh bạc hà** trước giường.
+- Để trống chỗ của: móc + mũ, tủ + hộp giày, giường, ghế, giỏ, cuộn tất, dép (đều là sprite).
+
+---
+
+## 5. Các tờ và mô tả từng ảnh
+
+### 5.1 Tờ `l2_basket_sheet` — Giỏ tất (1536x1024, tham chiếu `sua_ref`)
+
+| Tờ | Ô | Key | Thư mục | Nhóm | Neo | Hiển thị | Nét |
+|---|---|---|---|---|---|---|---|
+| l2_basket_sheet | 0,0,519,512 | l2_sock_basket_full | level2 | basket | đáy | rộng 260 | 5 |
+| l2_basket_sheet | 519,0,499,512 | l2_sock_basket_2 | level2 | basket | đáy |  | 5 |
+| l2_basket_sheet | 1018,0,518,512 | l2_sock_basket_3 | level2 | basket | đáy |  | 5 |
+| l2_basket_sheet | 0,512,519,512 | l2_sock_basket_reveal | level2 | basket | đáy |  | 5 |
+| l2_basket_sheet | 519,512,499,512 | l2_sock_basket_one_eye | level2 | basket | đáy |  | 5 |
+| l2_basket_sheet | 1018,512,518,512 | l2_sock_basket_yawn | level2 | basket | đáy |  | 5 |
+
+Lưới 3x2, cùng một giỏ ở cùng chỗ trong ô. Giỏ mây tròn thấp caramel, đan vài đường chéo đơn giản, 2 quai nhỏ.
+- `_full`: **đầy ụ** tất, chủ yếu tất trắng ấm cuộn tròn, trên cùng lộ vài chiếc màu: sọc hồng, chấm bi xanh, vàng ngôi sao, sọc tím dài. Giữa đống tất trắng là **Sữa cuộn tròn ngủ, lẫn hẳn vào tất**: KHÔNG thấy mặt, mắt, tai rõ; nhìn kỹ chỉ thấy một khối tròn trắng hơi to hơn các cuộn tất, cùng màu cùng nét.
+- `_2` (sau lần chạm 2): đống tất thấp xuống một chút, **mất chiếc sọc hồng và chiếc chấm bi**; Sữa vẫn lẫn hẳn.
+- `_3` (sau lần chạm 4): thấp hơn nữa, **mất thêm chiếc vàng ngôi sao và chiếc sọc tím**; chỉ còn tất trắng, khối tròn Sữa rõ hơn một chút (thấy mờ 2 tai và đuôi, vẫn không thấy mặt).
+- `_reveal` (sau lần chạm 6): chiếc tất trắng to phía trên đã bay đi; **Sữa lộ rõ** (đúng `sua_ref`), cuộn tròn ngủ say giữa vài chiếc tất trắng: mắt nhắm cong, mũi hồng, má hồng, đuôi bông quấn quanh mũi, một chân trước duỗi ra mép giỏ.
+- `_one_eye`: y hệt `_reveal`, chỉ **hé một mắt** (xanh, lòng đen to) nhìn ra, mắt kia nhắm, vẻ lười.
+- `_yawn`: y hệt `_reveal`, **miệng há to ngáp** thấy lưỡi hồng, mắt nhắm chặt, chân trước duỗi.
+
+### 5.2 Tờ `l2_socks_sheet` — Tất (1536x1024, G2-8)
+
+| Tờ | Ô | Key | Thư mục | Nhóm | Neo | Hiển thị | Nét |
+|---|---|---|---|---|---|---|---|
+| l2_socks_sheet | 0,180,270,400 | l2_sock_striped | level2 |  | tâm | rộng 120 | 8 |
+| l2_socks_sheet | 270,160,262,420 | l2_sock_dotted | level2 |  | tâm | rộng 120 | 8 |
+| l2_socks_sheet | 532,70,306,545 | l2_sock_white_big | level2 |  | tâm | rộng 170 | 7 |
+| l2_socks_sheet | 838,170,282,420 | l2_sock_star | level2 |  | tâm | rộng 120 | 8 |
+| l2_socks_sheet | 1120,350,176,240 | l2_sock_baby | level2 |  | tâm | rộng 80 | 9 |
+| l2_socks_sheet | 1296,30,240,600 | l2_sock_long | level2 |  | tâm | cao 200 | 8 |
+| l2_socks_sheet | 0,592,560,432 | l2_sock_ball | level2 |  | đáy | rộng 180 | 7 |
+| l2_socks_sheet | 560,636,976,388 | l2_sock_unrolled | level2 |  | đáy | rộng 320 | 8 |
+
+Bố cục: hàng trên 6 chiếc tất bay đứng cạnh nhau, cùng tỉ lệ thật (tất em bé nhỏ xíu, tất trắng to gấp đôi, tất dài dài gấp rưỡi); hàng dưới cuộn tất trắng và chiếc tất bung dài.
+- `l2_sock_striped`: tất cổ ngắn, 4 sọc ngang to hồng đào xen kem, mũi và gót hồng đào, hơi cong như đang bay.
+- `l2_sock_dotted`: tất cổ cao xanh da trời, 6 chấm tròn trắng to, hơi cong.
+- `l2_sock_white_big`: tất len trắng ấm to gấp đôi, cổ xù, mềm, vắt cong (để vắt lên núm tủ).
+- `l2_sock_star`: tất vàng bơ, giữa thân có một **ngôi sao** trắng kem to, mũi gót vàng đậm hơn.
+- `l2_sock_baby`: tất em bé **nhỏ xíu** màu xanh bạc hà, cổ bo, mũi tròn.
+- `l2_sock_long`: tất **dài** đến gối, sọc ngang **tím oải hương** xen kem, cong mềm.
+- `l2_sock_ball` 🎭: cuộn tất trắng ấm tròn như mèo con cuộn ngủ, cỡ bằng Sữa cuộn tròn; một đầu cổ tất thò ra như đuôi ngắn; nhìn kỹ thấy nếp gấp cổ tất, gót tất. Không mặt.
+- `l2_sock_unrolled`: cùng chiếc tất bung ra thành một chiếc tất dài thượt nằm ngang, hơi uốn cong.
+
+### 5.3 Tờ `l2_decoy_sheet` — Mèo bông, móc, mũ len (1536x1024)
+
+| Tờ | Ô | Key | Thư mục | Nhóm | Neo | Hiển thị | Nét |
+|---|---|---|---|---|---|---|---|
+| l2_decoy_sheet | 0,0,560,564 | l2_plush_cat | level2 |  | đáy | cao 170 | 8 |
+| l2_decoy_sheet | 0,564,560,460 | l2_plush_cat_fallen | level2 |  | đáy | rộng 200 | 8 |
+| l2_decoy_sheet | 560,100,560,320 | l2_coat_hook | level2 |  | đỉnh | rộng 170 | 7 |
+| l2_decoy_sheet | 560,420,470,604 | l2_beanie_white_idle | level2 |  | đỉnh | rộng 170 | 7 |
+| l2_decoy_sheet | 1030,560,506,464 | l2_beanie_white_floor | level2 |  | đáy | rộng 180 | 7 |
+
+- `l2_plush_cat` 🎭: mèo nhồi bông trắng ấm ngồi, tròn như Sữa, nhưng rõ là đồ chơi: mắt là 2 cúc áo nâu, đường khâu chỉ dọc bụng và quanh cổ, miếng vá trái tim hồng trên chân.
+- `l2_plush_cat_fallen`: cùng con mèo bông nằm ngửa dưới sàn, bốn chân giơ lên, mắt cúc nhìn lên.
+- `l2_coat_hook`: thanh gỗ caramel nhỏ gắn tường, 2 móc tròn nhô ra; mép trên thẳng (neo).
+- `l2_beanie_white_idle` 🎭: mũ len trắng ấm treo (đỉnh mũ ở trên, móc treo khuất), tròn trịa, **2 quả bông len nhỏ trên đỉnh như hai tai mèo**, vành gấp một vòng, vài nét len; không mặt.
+- `l2_beanie_white_floor`: cùng chiếc mũ nằm nghiêng dưới sàn, hơi xẹp, hai quả bông rủ sang một bên.
+
+### 5.4 Tờ `l2_chair_sheet` — Ghế, áo len, dép tai mèo (1536x1024)
+
+| Tờ | Ô | Key | Thư mục | Nhóm | Neo | Hiển thị | Nét |
+|---|---|---|---|---|---|---|---|
+| l2_chair_sheet | 0,0,512,1024 | l2_chair | level2 |  | đáy | rộng 200 | 6 |
+| l2_chair_sheet | 512,0,488,512 | l2_sweater_rolled | level2 |  | đáy | rộng 190 | 7 |
+| l2_chair_sheet | 500,512,500,512 | l2_sweater_unrolled | level2 |  | đỉnh | rộng 210 | 7 |
+| l2_chair_sheet | 1000,0,536,512 | l2_slippers_cat_idle | level2 | slippers | đáy | rộng 220 | 6 |
+| l2_chair_sheet | 1000,512,536,512 | l2_slippers_cat_after | level2 | slippers | đáy |  | 6 |
+
+- `l2_chair`: ghế gỗ nhỏ caramel, lưng tựa tròn, mặt ghế trống.
+- `l2_sweater_rolled` 🎭: áo len trắng ấm cuộn tròn như mèo cuộn ngủ (đặt trên mặt ghế), thấy cổ tay áo bo và vân len; không mặt.
+- `l2_sweater_unrolled`: cùng áo bung ra vắt trên mặt ghế, hai tay áo thõng xuống như hai chân trước; mép trên phẳng (neo, đặt lên mặt ghế).
+- `l2_slippers_cat_idle` 🎭: đôi dép bông trắng ấm sát nhau, mũi tròn mập, mỗi chiếc có 2 tai mèo nhọn bo đầu (trong hồng) và 2 chấm mắt thêu nâu.
+- `l2_slippers_cat_after`: cùng đôi dép, một chiếc lật nghiêng, tai cụp.
+
+### 5.5 Tờ `l2_bed_sheet` — Giường và dép hồng (1024x1536)
+
+| Tờ | Ô | Key | Thư mục | Nhóm | Neo | Hiển thị | Nét |
+|---|---|---|---|---|---|---|---|
+| l2_bed_sheet | 0,0,1024,598 | l2_bed_blanket_flat | level2 | bed | đáy | rộng 580 | 5 |
+| l2_bed_sheet | 0,598,1024,560 | l2_bed_blanket_flipped | level2 | bed | đáy |  | 5 |
+| l2_bed_sheet | 0,1158,490,378 | l2_fur_rug_peek | level2 |  | đáy | rộng 120 | 7 |
+| l2_bed_sheet | 490,1158,534,378 | l2_fur_rug | level2 |  | đáy | rộng 260 | 6 |
+
+- `l2_bed_blanket_flat` 🎭: giường đơn gỗ caramel nằm ngang, **đầu giường tròn bên trái**, chân ngắn; chăn xanh da trời phủ kín, **giữa chăn MỘT gò tròn duy nhất, nổi rõ, cỡ Sữa cuộn tròn** (gối trắng nằm dưới); gầm giường là mảng tối tím oải hương, để trống (góc thảm lông là sprite riêng).
+- `l2_bed_blanket_flipped`: cùng giường, chăn lật gập về phía chân giường, lộ **một chiếc gối trắng tròn** (chính là cục phồng). Không mèo.
+- `l2_fur_rug_peek` 🎭: chỉ **một góc tấm thảm lông trắng tròn** thò ra (cạnh trên phẳng để khuất dưới mép giường), trên mép có **4 túm lông tròn như 4 đệm ngón chân**, trông như bàn chân mèo trắng thò ra từ gầm giường.
+- `l2_fur_rug`: cả tấm thảm lông trắng nhỏ tròn hơi bầu dục nằm trên sàn, **một mép có 4 túm lông tròn như 4 đệm ngón chân mèo** (đúng góc thảm ở ô trái).
+
+### 5.6 Tờ `l2_wardrobe_sheet` — Tủ, đèn chao (1536x1024)
+
+| Tờ | Ô | Key | Thư mục | Nhóm | Neo | Hiển thị | Nét |
+|---|---|---|---|---|---|---|---|
+| l2_wardrobe_sheet | 0,0,538,1024 | l2_wardrobe_closed | level2 | wardrobe | đáy | rộng 330 | 4 |
+| l2_wardrobe_sheet | 538,0,628,1024 | l2_wardrobe_open | level2 | wardrobe | đáy |  | 4 |
+| l2_wardrobe_sheet | 1166,150,370,874 | l2_ceiling_lamp | level2 |  | đỉnh | cao 330 | 5 |
+
+- `l2_wardrobe_closed`: tủ 2 cánh cao, màu kem viền caramel, mập như đồ chơi, nóc phẳng, 2 núm tròn (tất trắng to sẽ vắt lên một núm).
+- `l2_wardrobe_open`: cùng tủ, 2 cánh mở rộng; bên trong **3–4 ngăn kệ, quần áo gấp vuông vức ngăn nắp** từng chồng (vàng bơ, hồng, bạc hà, xanh trời), không treo. Không mèo.
+- `l2_ceiling_lamp`: dây treo mảnh từ đỉnh (neo) xuống, cuối là **chao hình chuông vàng bơ**, bóng đèn tròn ló dưới; vành chao rộng, rõ (tất chấm bi sẽ mắc lên).
+
+### 5.6b Tờ `l2_props_sheet` — Hộp giày, mũ tai mèo hồng, dây buộc rèm (1536x1024, G2-7)
+
+| Tờ | Ô | Key | Thư mục | Nhóm | Neo | Hiển thị | Nét |
+|---|---|---|---|---|---|---|---|
+| l2_props_sheet | 0,0,542,512 | l2_shoebox_ears | level2 | shoebox | đáy | rộng 170 | 7 |
+| l2_props_sheet | 542,0,500,512 | l2_shoebox_open | level2 | shoebox | đáy |  | 7 |
+| l2_props_sheet | 1042,0,494,512 | l2_beanie_pink_cat | level2 |  | đáy | rộng 120 | 8 |
+| l2_props_sheet | 0,512,512,512 | l2_curtain_tie | level2 |  | đỉnh | cao 150 | 8 |
+
+- `l2_shoebox_ears` 🎭: hộp giày chữ nhật thấp bạc hà, nắp kem **hé lệch**, từ khe hở **hai tai mèo nhọn màu hồng nhạt** thò lên (là tai của chiếc mũ bên trong). Trên nắp hình chiếc giày đơn giản, không chữ.
+- `l2_shoebox_open`: cùng hộp, **nắp mở dựng phía sau**, lòng hộp trống (mũ là sprite riêng).
+- `l2_beanie_pink_cat`: chiếc mũ len **hồng nhạt có hai tai mèo** nhọn, vành gấp, vài nét len (khác hẳn mũ len trắng 2 quả bông).
+- `l2_curtain_tie` 🎭: một dây buộc rèm bông **trắng ấm, dài, xù, cong mềm** thò xuống như **đuôi mèo** (đầu dưới tròn bông); đầu trên là vòng dây phẳng (neo, buộc vào rèm đóng).
+
+### 5.7 Tờ `l2_curtain_sheet` — Rèm (1536x1024)
+
+| Tờ | Ô | Key | Thư mục | Nhóm | Neo | Hiển thị | Nét |
+|---|---|---|---|---|---|---|---|
+| l2_curtain_sheet | 0,0,768,1024 | l2_curtain_closed | level2 | curtain | đỉnh | rộng 470 | 5 |
+| l2_curtain_sheet | 768,0,768,1024 | l2_curtain_open | level2 | curtain | đỉnh |  | 5 |
+
+Không vẽ thanh treo (trong nền). Vệt nắng chiếu vào giỏ do code vẽ.
+- `l2_curtain_closed`: hai tấm rèm **vàng bơ** kéo kín, gặp nhau đúng giữa, 6–8 khoen tròn ở mép trên, vài nếp dọc.
+- `l2_curtain_open`: cùng rèm dồn hai bên, buộc dải vải trắng kem; giữa trống.
+
+### 5.8 Tờ `player_beanie_sheet` — Nhân vật đội mũ (1024x1536, tham chiếu `player_ref`)
+
+| Tờ | Ô | Key | Thư mục | Nhóm | Neo | Hiển thị | Nét |
+|---|---|---|---|---|---|---|---|
+| player_beanie_sheet | 0,0,1024,1536 | player_wear_beanie | player |  | đáy | cao 700 | 4 |
+
+- `player_wear_beanie`: đúng nhân vật `player_ref` (tóc xoăn bồng), **đội chiếc mũ len trắng** của `l2_beanie_white_idle` (2 quả bông như tai mèo, tóc xoăn lòi ra quanh vành), hai tay chống hông, cười tinh nghịch, nháy một mắt như đang làm mèo.
+
+---
+
+## 6. Ghi chú cho lập trình
+
+- **Thứ tự vẽ:** nền (sửa từ `l2_demo_start`) → giỏ → tất → mèo bông/mũ → ghế/áo/dép → giường + thảm lông → tủ/đèn → hộp giày/mũ hồng/dây rèm → rèm → nhân vật đội mũ. 10 lượt Codex.
+- **G2-7:** góc thảm lông `l2_fur_rug_peek` đặt dưới lớp giường ở mép gầm; chạm → `l2_fur_rug` trượt ra sàn. Hộp giày `_ears` → `_open` + `l2_beanie_pink_cat` `hop` lên rồi rơi lại vào hộp. Dây buộc rèm `l2_curtain_tie` treo trên rèm đóng, chạm → `swing`; khi rèm mở thì ẩn. Chăn lật: nhân vật `player_shrug`.
+- **Giỏ tất (G2-8):** chạm 6 lần, giỏ tĩnh (không thở). Ảnh đổi ở lần 2 (`_2`), lần 4 (`_3`), lần 6 (`_reveal`); lần lẻ chỉ tất bay ra + giỏ nảy nhẹ. Lộ diện: `_reveal` → `_one_eye` (0,8 giây) → `_yawn` (0,8 giây) → `_reveal` + `zzz` + `glow_outline`. Vùng chạm Sữa ở `_reveal`: vẽ tay đa giác quanh Sữa.
+- **6 chiếc tất bay ra** (`fly_arc`) và nằm yên: sọc hồng → đầu giường, chấm bi → vành chao đèn, trắng to → núm tủ, ngôi sao → lưng ghế, em bé → kệ cạnh mèo bông, sọc tím dài → thanh rèm (thứ tự theo states).
+- **Áo len:** `l2_sweater_rolled` (neo đáy) đặt trên mặt ghế; `_unrolled` neo đỉnh đặt đúng mép mặt ghế.
+- **Mũ len:** `l2_beanie_white_idle` neo đỉnh treo ngay dưới móc; rơi → `l2_beanie_white_floor`, nhân vật trồi lên với `player_wear_beanie` 1,2 giây.
+- **Đèn:** quả lắc như level 1: `swing` quanh đầu dây (neo đỉnh).
+- Không có `sua_one_eye_open` / `sua_yawn` riêng (đã gộp vào giỏ). Dev sửa states Level 2 theo key mục 1.
+
+**Bảng vị trí** (điểm neo trên khung 1024x1536, dòng trên nằm dưới; Dev đo lại theo ảnh thật và nền mới. `sock_target_N` là tâm chiếc tất thứ N khi đáp; rèm hiển thị rộng 387 trong game để kết thúc trên gáy sách):
+
+| Key | X | Y | Cảnh |
+|---|---|---|---|
+| l2_ceiling_lamp | 512 | 0 | |
+| l2_coat_hook | 300 | 150 | |
+| l2_beanie_white_idle | 300 | 175 | |
+| l2_beanie_white_floor | 250 | 1530 | |
+| l2_wardrobe_closed | 815 | 960 | |
+| l2_shoebox_ears | 800 | 444 | |
+| l2_plush_cat | 380 | 832 | |
+| l2_plush_cat_fallen | 210 | 1120 | |
+| l2_bed_blanket_flat | 310 | 1250 | |
+| l2_fur_rug_peek | 330 | 1258 | |
+| l2_fur_rug | 370 | 1345 | |
+| l2_chair | 820 | 1220 | |
+| l2_sweater_rolled | 820 | 1105 | |
+| l2_slippers_cat_idle | 170 | 1390 | |
+| l2_sock_basket_full | 640 | 1395 | |
+| l2_sock_ball | 880 | 1330 | |
+| l2_curtain_closed | 312 | 362 | |
+| sock_target_1 | 70 | 990 | |
+| sock_target_2 | 512 | 305 | |
+| sock_target_3 | 758 | 775 | |
+| sock_target_4 | 862 | 940 | |
+| sock_target_5 | 560 | 797 | |
+| sock_target_6 | 545 | 455 | |
+| player_call | 500 | 1520 | đầu |
+
+---
+
+## 7. Ảnh demo
+
+- `demo/l2_demo_start.png`: mọi đồ ở trạng thái đầu, nhân vật khum tay gọi ở dưới giữa, bong bóng nhiệm vụ (bóng đầu mèo tối, dấu hỏi trắng) cạnh nhân vật. Sữa lẫn trong giỏ tất (gần như không thấy).
+- `demo/l2_demo_reveal.png`: 3 chiếc tất đã bay ra nằm ở đầu giường / vành chao đèn / núm tủ; giỏ lộ Sữa cuộn ngủ hé một mắt; bong bóng nhỏ góc trên trái thành mặt Sữa.

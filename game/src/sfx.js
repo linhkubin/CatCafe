@@ -96,16 +96,21 @@ const RECIPES = {
   sfx_sparkle: (c) => { bell(c, 2093, 0, 0.04, 0.2); bell(c, 2637, 0.07, 0.035, 0.2); },
   sfx_win: (c) => [1047, 1319, 1568, 2093].forEach((f, i) => bell(c, f, i * 0.11, 0.09, 0.4)),
   sfx_pickup: (c) => note(c, { f: 1319, t: 0.08, vol: 0.06, glide: [[1760, 0.07]], vib: 0 }),
+  // Tiếng ngáy dễ thương của Sữa (VL2-4): hít vào "khò" trầm rồi thở ra "phì" cao, rất nhỏ; g = độ to (0..1).
+  sua_sfx_snore: (c, g = 0.3) => {
+    note(c, { type: 'triangle', f: 196, t: 0.7, vol: 0.06 * g, attack: 0.25, glide: [[220, 0.6]], vib: 9, vibDepth: 0.04 });
+    note(c, { f: 988, t: 0.35, vol: 0.035 * g, at: 0.85, attack: 0.08, glide: [[1319, 0.3]], vib: 0 });
+  },
 };
 
 export const SOUND_KEYS = Object.keys(RECIPES);
 
-export function playSfx(scene, key) {
+export function playSfx(scene, key, gain = 1) {
   if (scene && scene.cache.audio.exists(key)) {
-    scene.sound.play(key, { volume: MASTER });
+    scene.sound.play(key, { volume: MASTER * gain });
     return;
   }
   const c = audioCtx(scene);
   const r = RECIPES[key];
-  if (c && r) r(c);
+  if (c && r) r(c, gain);
 }
