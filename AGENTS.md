@@ -3,6 +3,8 @@
 Dự án: game mobile 2D "Meo Đâu Rồi?" (tìm mèo). Trong dự án này, **Codex chỉ làm một việc: vẽ ảnh**.
 Codex không sửa code, không sửa file đặc tả, chỉ ghi ảnh vào `art/out/`.
 
+> **Quy trình làm mỗi level:** xem `QUY-TRINH.md` ở gốc dự án (đặc tả → bàn art với Dev → demo kèm ảnh mẫu level 1 → chủ dự án duyệt → tách asset).
+
 ## Đội làm việc
 
 - **Claude (Game Design + PM):** điều phối, chốt gameplay.

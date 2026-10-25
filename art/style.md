@@ -4,6 +4,8 @@
 
 ---
 
+> **Quy trình làm mỗi level:** xem `QUY-TRINH.md` ở gốc dự án (đặc tả → bàn art với Dev → demo kèm ảnh mẫu level 1 → chủ dự án duyệt → tách asset).
+
 ## 1. Prompt phong cách (dán vào Instructions của Project)
 
 ```
