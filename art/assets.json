@@ -1,0 +1,47 @@
+{
+  "style": "Cute 2D casual mobile game art, soft rounded shapes, clean thick dark-brown outlines, flat colors with gentle soft shading, warm pastel palette (cream, peach, soft brown, mint), cozy and friendly mood. Absolutely no text, no letters, no numbers, no logos, no watermark.",
+
+  "defaults": {
+    "size": "1024x1024",
+    "quality": "medium",
+    "background": "transparent"
+  },
+
+  "assets": [
+    {
+      "name": "sua_ref",
+      "folder": "cats",
+      "prompt": "Character reference sheet of one small fluffy WHITE cat named Sua: round face, big round blue eyes, small pink nose, short legs, fluffy tail. Show the same cat in 3 poses side by side: sitting front view, side view walking, curled up sleeping.",
+      "size": "1536x1024"
+    },
+    {
+      "name": "mun_ref",
+      "folder": "cats",
+      "prompt": "Character reference sheet of one small shy BLACK cat named Mun: slim body, big round golden-yellow eyes, slightly flattened ears showing shyness, long thin tail. Show the same cat in 3 poses side by side: sitting front view, side view walking, curled up sleeping.",
+      "size": "1536x1024"
+    },
+    {
+      "name": "sua_sit",
+      "folder": "cats",
+      "prompt": "The white cat Sua from the reference image, sitting front view, happy expression, single character centered, full body.",
+      "ref": "cats/sua_ref.png"
+    },
+    {
+      "name": "item_pate_can",
+      "folder": "items",
+      "prompt": "A small round can of cat food (pate) with a pull-tab lid, picture of a fish on the label (no words), single object centered, game item icon."
+    },
+    {
+      "name": "item_cardboard_box",
+      "folder": "items",
+      "prompt": "An empty cardboard box with flaps open, slightly worn, single object centered, game item."
+    },
+    {
+      "name": "bg_living_room",
+      "folder": "backgrounds",
+      "prompt": "Cozy small living room interior seen from the front, portrait orientation, wooden floor, a sofa, a window with curtains, a shelf, a rug, a cardboard box on the floor. Empty of characters. Game background scene.",
+      "size": "1024x1536",
+      "background": "opaque"
+    }
+  ]
+}

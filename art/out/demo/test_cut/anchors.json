@@ -1,0 +1,26 @@
+{
+ "test_pate_can_closed": {
+  "ax": 73,
+  "ay": 170,
+  "file": "demo/test_cut/test_pate_can_closed.png",
+  "group": "test_pate_can",
+  "h": 178,
+  "ox": 0.5,
+  "oy": 0.9551,
+  "res": 1.5,
+  "sheet": "test_pate_can_sheet",
+  "w": 146
+ },
+ "test_pate_can_open": {
+  "ax": 73,
+  "ay": 170,
+  "file": "demo/test_cut/test_pate_can_open.png",
+  "group": "test_pate_can",
+  "h": 178,
+  "ox": 0.5,
+  "oy": 0.9551,
+  "res": 1.5,
+  "sheet": "test_pate_can_sheet",
+  "w": 146
+ }
+}

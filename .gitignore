@@ -1,0 +1,14 @@
+# Bản build web (tạo lại bằng: python game/tools/build_web.py)
+game/dist/
+# Ảnh tạm (tạo lại bằng: python game/tools/make_placeholders.py)
+game/placeholders/
+
+# Sinh ra khi cắt tờ / vẽ, không cần lưu
+art/out/_check/
+art/out/_logs/
+
+__pycache__/
+*.pyc
+node_modules/
+.DS_Store
+Thumbs.db
