@@ -308,7 +308,7 @@
   "ox": 0.5,
   "oy": 0.0157,
   "res": 1.5,
-  "sheet": "l2_wardrobe_sheet",
+  "sheet": "l2_lamp_sheet",
   "w": 308
  },
  "l2_chair": {
@@ -371,29 +371,29 @@
   "sheet": "l2_props_sheet",
   "w": 122
  },
- "l2_fur_rug": {
-  "ax": 203,
-  "ay": 220,
-  "file": "level2/l2_fur_rug.png",
-  "group": "l2_fur_rug",
-  "h": 227,
-  "ox": 0.5,
-  "oy": 0.9692,
+ "l2_duster": {
+  "ax": 296,
+  "ay": 93,
+  "file": "level2/l2_duster.png",
+  "group": "l2_duster",
+  "h": 100,
+  "ox": 0.7291,
+  "oy": 0.93,
   "res": 1.5,
-  "sheet": "l2_bed_sheet",
+  "sheet": "l2_wardrobe_sheet",
   "w": 406
  },
- "l2_fur_rug_peek": {
-  "ax": 98,
-  "ay": 87,
-  "file": "level2/l2_fur_rug_peek.png",
-  "group": "l2_fur_rug_peek",
-  "h": 95,
-  "ox": 0.5,
-  "oy": 0.9158,
+ "l2_duster_peek": {
+  "ax": 41,
+  "ay": 8,
+  "file": "level2/l2_duster_peek.png",
+  "group": "l2_duster_peek",
+  "h": 196,
+  "ox": 0.3565,
+  "oy": 0.0408,
   "res": 1.5,
-  "sheet": "l2_bed_sheet",
-  "w": 196
+  "sheet": "l2_wardrobe_sheet",
+  "w": 115
  },
  "l2_plush_cat": {
   "ax": 126,
@@ -660,28 +660,28 @@
   "w": 331
  },
  "l2_wardrobe_closed": {
-  "ax": 355,
-  "ay": 864,
+  "ax": 342,
+  "ay": 785,
   "file": "level2/l2_wardrobe_closed.png",
   "group": "wardrobe",
-  "h": 872,
-  "ox": 0.4986,
-  "oy": 0.9908,
+  "h": 794,
+  "ox": 0.4978,
+  "oy": 0.9887,
   "res": 1.5,
   "sheet": "l2_wardrobe_sheet",
-  "w": 712
+  "w": 687
  },
  "l2_wardrobe_open": {
-  "ax": 355,
-  "ay": 864,
+  "ax": 342,
+  "ay": 785,
   "file": "level2/l2_wardrobe_open.png",
   "group": "wardrobe",
-  "h": 872,
-  "ox": 0.4986,
-  "oy": 0.9908,
+  "h": 794,
+  "ox": 0.4978,
+  "oy": 0.9887,
   "res": 1.5,
   "sheet": "l2_wardrobe_sheet",
-  "w": 712
+  "w": 687
  },
  "player_call": {
   "ax": 282,

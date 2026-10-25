@@ -303,3 +303,26 @@ Thứ tự: đặc tả → **demo level 2 mới cho chủ dự án duyệt** �
 - Vẫn một gò chăn; hai tấm thảm lông giữ như cũ. Key, neo, cỡ hiển thị giữ nguyên; `anchors.json` đã cập nhật.
 
 ---
+
+## GD chốt (theo chủ dự án) – G2-9, O2-22
+
+**G2-9. Gầm giường: thay tấm thảm bằng chổi lông như đuôi mèo.** Dưới gầm giường thò ra một túm lông trắng dài, cong như đuôi mèo, thỉnh thoảng ve vẩy nhẹ. Chạm: nhân vật kéo ra, hoá ra là **cây chổi lông quét bụi** (cán gỗ, lông trắng bông), chổi nằm trên sàn cạnh giường; nhân vật gãi đầu. Key: `l2_duster_peek` (phần lông thò ra, gốc ở mép trên để khuất dưới giường), `l2_duster` (cả cây chổi nằm ngang trên sàn). Bỏ `l2_fur_rug`, `l2_fur_rug_peek`.
+**O2-22. Tủ đóng và tủ mở chưa khớp nhau.** Vẽ lại cặp `l2_wardrobe_closed` / `l2_wardrobe_open` **chung một tờ**: cùng khung, cùng góc nghiêng (thấy dải hông phải), cùng kích thước, cùng nóc, cùng chân; tủ mở chỉ khác ở hai cánh mở ra hai bên và lộ các ngăn quần áo gấp. Mô tả kỹ trong design-art. Hộp trên nóc tủ vẫn khớp nóc tủ.
+Mỗi lượt Codex đính kèm ảnh mẫu level 1 (`art/ref/owner_l1_style_ref.png`) và demo level 2, dán quy tắc style + góc nhìn, Codex nhắc lại và tự kiểm.
+
+---
+
+## Vòng 5c – Art 2D (G2-9 chổi lông, O2-22 cặp tủ)
+
+- **Một tờ `l2_wardrobe_sheet`, 1 lượt Codex** (log có đủ "Nhắc lại quy tắc" và "Tự kiểm"). Tờ gồm cặp tủ, `l2_duster_peek` và `l2_duster`.
+- Ảnh đính kèm: `owner_l1_style_ref`, demo level 2, tờ tủ cũ (giữ góc nghiêng), `sua_ref` (lông chổi giống đuôi Sữa), tờ giường.
+- **Cặp tủ:** cùng khung, nóc, chân và đường đáy; tủ mở có hai cánh mở ra hai bên, 4 ngăn quần áo gấp pastel. Ảnh chồng ở `art/out/_check/wardrobe.png`: thân hai tủ gần trùng.
+  - Lệch nhỏ đã chấp nhận: tủ mở không thấy rõ dải hông phải như tủ đóng, vì cánh phải mở che mất.
+- **Hộp giày trên nóc:** giữ ảnh cũ. Tủ đóng mới có cùng góc nghiêng và cùng dải hông như tủ cũ nên nóc vẫn khớp.
+- **Chổi lông:**
+  - `l2_duster_peek`: túm lông trắng kem cong như đuôi, gốc phẳng ở trên; neo đỉnh, cao 120.
+  - `l2_duster`: cán gỗ mật ong, đầu lông bông; neo đáy, rộng 260.
+- **Đèn chao:** chuyển sang tờ `l2_lamp_sheet`, là bản sao tờ tủ cũ, chỉ để cắt đèn, không vẽ lại.
+- **design-art:** đã bỏ `l2_fur_rug`, `l2_fur_rug_peek`; thêm 2 key chổi lông, mô tả cặp tủ, vị trí `l2_duster_peek` (170, 1000). `anchors.json` đã cập nhật. File cũ `l2_fur_rug*.png` và dòng của chúng trong `anchors.json` vẫn còn, Dev bỏ khi đổi key.
+
+---

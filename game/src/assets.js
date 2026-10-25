@@ -47,7 +47,7 @@ export const KEYS = {
     ['l2_bg_bedroom', 'level2'],
     ['l2_sock_basket_full', 'level2'], ['l2_sock_basket_2', 'level2'], ['l2_sock_basket_3', 'level2'], ['l2_sock_basket_reveal', 'level2'],
     ['l2_sock_striped', 'level2'], ['l2_sock_dotted', 'level2'], ['l2_sock_white_big', 'level2'], ['l2_sock_star', 'level2'], ['l2_sock_baby', 'level2'], ['l2_sock_long', 'level2'],
-    ['l2_bed_blanket_flat', 'level2'], ['l2_bed_blanket_flipped', 'level2'], ['l2_fur_rug', 'level2'], ['l2_fur_rug_peek', 'level2'],
+    ['l2_bed_blanket_flat', 'level2'], ['l2_bed_blanket_flipped', 'level2'], ['l2_duster_peek', 'level2'], ['l2_duster', 'level2'],
     ['l2_wardrobe_closed', 'level2'], ['l2_wardrobe_open', 'level2'], ['l2_shoebox_ears', 'level2'], ['l2_shoebox_open', 'level2'], ['l2_beanie_pink_cat', 'level2'], ['l2_curtain_tie', 'level2'],
     ['l2_curtain_closed', 'level2'], ['l2_curtain_open', 'level2'],
     ['l2_plush_cat', 'level2'], ['l2_plush_cat_fallen', 'level2'],

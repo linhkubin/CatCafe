@@ -175,7 +175,7 @@ Trước khi lộ hộp pate **không có gợi ý tự động** (G10).
 | 3 | Tủ quần áo | Phải | ✨ | Chạm | Cánh tủ mở: chỉ thấy **quần áo gấp ngăn nắp** từng ngăn; chạm lần nữa đóng lại | Bản lề "kẹt" |
 | 3a | Hộp giày trên nóc tủ: nắp hé, **hai tai mèo** thò lên (G2-7) | Trên phải | 🎭 | Chạm | Hộp bật nắp: hoá ra **mũ len tai mèo màu hồng nhạt**, mũ nảy lên rồi rơi lại vào hộp | "Cộc" |
 | 4 | Chăn trên giường (có một cục phồng rõ) | Dưới trái | 🎭 | Vuốt | Chăn lật ra: **không có gì** (chỉ gối trắng, nệm trống), nhân vật nhún vai | Sột soạt |
-| 5 | Gầm giường: thò ra một **"bàn chân mèo" trắng** (thật ra là góc tấm thảm lông, 4 túm lông như đệm chân; G2-7) | Đáy trái | 🎭 | Chạm | Kéo ra **tấm thảm lông trắng nhỏ**, trượt ra sàn; nhân vật gãi đầu | "Xẹt" |
+| 5 | Gầm giường: thò ra một **túm lông trắng dài, cong như đuôi mèo**, thỉnh thoảng ve vẩy nhẹ (G2-9) | Đáy trái | 🎭 | Chạm | Kéo ra hoá ra là **cây chổi lông quét bụi** (cán gỗ, lông trắng bông), nằm trên sàn cạnh giường; nhân vật gãi đầu | "Xẹt" |
 | 6 | Chao đèn trần | Trên giữa | ✨ | Chạm | Đèn đung đưa, bóng đổ lắc lư | "Kẽo kẹt" |
 | 7 | Giỏ tất | Dưới phải | 🔑 | Chạm ×3 | Mỗi lần một chiếc tất bay ra (xem luồng giải) | "Vèo" mỗi lần |
 | 8 | Mũ len trắng có hai quả bông (như hai tai mèo) trên móc | Trên trái | 🎭 | Chạm | Mũ rơi xuống, nhân vật đội thử lên đầu, hai quả bông ve vẩy như tai mèo | "Bụp" |

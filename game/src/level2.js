@@ -27,7 +27,6 @@ const SIZE_K = {
   l2_shoebox_ears: 1.14, l2_shoebox_open: 1.14,
   l2_plush_cat: 0.75, l2_plush_cat_fallen: 0.75,
   l2_bed_blanket_flat: 1.11, l2_bed_blanket_flipped: 1.11,
-  l2_fur_rug_peek: 1.6, l2_fur_rug: 1.2,
   l2_chair: 0.95,
   l2_slippers_cat_idle: 1.19, l2_slippers_cat_after: 1.19,
   l2_sock_basket_full: 1.39, l2_sock_basket_2: 1.39, l2_sock_basket_3: 1.39, l2_sock_basket_reveal: 1.39,
@@ -75,13 +74,16 @@ const FB = {
   l2_shoebox: [180, 90, 'đáy', (g, w, h) => { g.fillStyle(0xe7a98f).lineStyle(4, BROWN).fillRect(4, 14, w - 8, h - 18).strokeRect(4, 14, w - 8, h - 18); g.fillStyle(0xf1c0a8).fillRect(0, 4, w, 18).strokeRect(0, 4, w, 18); }],
   l2_bed_blanket_flat: [520, 300, 'đáy', (g, w, h) => bed(g, w, h, false)],
   l2_bed_blanket_flipped: [520, 300, 'đáy', (g, w, h) => bed(g, w, h, true)],
-  l2_fur_rug_peek: [120, 44, 'đáy', (g, w, h) => {
-    g.fillStyle(WHITE).lineStyle(3, BROWN).fillRect(4, 0, w - 8, h * 0.55);
-    for (let i = 0; i < 4; i++) { g.fillCircle(18 + i * 28, h * 0.62, 14); g.strokeCircle(18 + i * 28, h * 0.62, 14); }
+  // G2-9: túm lông trắng cong như đuôi mèo thò ra dưới gầm giường (gốc ở mép trên, khuất sau giường).
+  l2_duster_peek: [150, 110, 'đỉnh', (g, w, h) => {
+    g.fillStyle(WHITE).lineStyle(4, BROWN);
+    g.fillEllipse(w * 0.4, h * 0.3, w * 0.36, h * 0.6).strokeEllipse(w * 0.4, h * 0.3, w * 0.36, h * 0.6);
+    g.fillEllipse(w * 0.62, h * 0.72, w * 0.5, h * 0.4).strokeEllipse(w * 0.62, h * 0.72, w * 0.5, h * 0.4);
   }],
-  l2_fur_rug: [210, 80, 'đáy', (g, w, h) => {
-    blob(g, w / 2, h * 0.55, w * 0.47, h * 0.4);
-    for (const px of [0.2, 0.4, 0.6, 0.8]) g.fillStyle(WHITE).lineStyle(3, BROWN).fillCircle(w * px, h * 0.82, 13).strokeCircle(w * px, h * 0.82, 13);
+  // Cả cây chổi lông quét bụi nằm ngang trên sàn: cán gỗ, đầu lông trắng bông.
+  l2_duster: [300, 90, 'đáy', (g, w, h) => {
+    g.fillStyle(WOOD).lineStyle(4, BROWN).fillRect(8, h * 0.55, w * 0.5, 14).strokeRect(8, h * 0.55, w * 0.5, 14);
+    g.fillStyle(WHITE).fillEllipse(w * 0.74, h * 0.55, w * 0.5, h * 0.85).strokeEllipse(w * 0.74, h * 0.55, w * 0.5, h * 0.85);
   }],
   l2_shoebox_ears: [180, 120, 'đáy', (g, w, h) => shoebox(g, w, h, 'ears')],
   l2_shoebox_open: [180, 140, 'đáy', (g, w, h) => shoebox(g, w, h, 'open')],
@@ -297,11 +299,12 @@ export class Level2 extends BaseLevel {
     this.attachTo(this.shoebox, this.wardrobe); // O2-18: hộp nằm trên nóc tủ nhún theo tủ
     this.pinkBeanie = this.img('l2_beanie_pink_cat', this.shoebox.x, this.shoebox.y - 40, D.box).setVisible(false);
     this.bed = this.img('l2_bed_blanket_flat', ...P('l2_bed_blanket_flat'), D.cushion);
-    // G2-7: góc tấm thảm lông trắng thò ra dưới gầm giường như bàn chân mèo (lớp sau giường).
+    // G2-9: chổi lông thò ra dưới gầm giường như đuôi mèo (gốc khuất sau khung giường), ve vẩy nhẹ.
     const bdb0 = this.bed.getBounds();
-    const pk = this.pos('l2_fur_rug_peek') || [bdb0.left + bdb0.width * 0.5, bdb0.bottom - 10];
-    this.furPeek = this.img('l2_fur_rug_peek', ...pk, D.cushion + 1); // O2-5: trên lớp bóng gầm giường
-    this.furRug = this.img('l2_fur_rug', pk[0], pk[1], D.cushion - 1).setVisible(false);
+    const pk = this.pos('l2_duster_peek') || [bdb0.left + bdb0.width * 0.35, bdb0.bottom - 45];
+    this.dusterPeek = this.img('l2_duster_peek', ...pk, D.cushion - 1);
+    this.duster = this.img('l2_duster', pk[0], pk[1] + 40, D.cushion - 1).setVisible(false);
+    this.wagDuster();
     this.chair = this.img('l2_chair', ...P('l2_chair'), D.box);
     const chb = this.chair.getBounds();
     this.sweater = this.img('l2_sweater_rolled', ...(this.pos('l2_sweater_rolled') || [chb.left + chb.width * 0.48, chb.top + chb.height * 0.6]), D.box + 1); // O2-7: giữa mặt ghế
@@ -326,7 +329,7 @@ export class Level2 extends BaseLevel {
     this.zone('shoebox', this.shoebox.getBounds(), D.zone + 3);
     const bdb = this.bed.getBounds();
     this.zone('bed', new Phaser.Geom.Rectangle(bdb.x, bdb.y, bdb.width, bdb.height * 0.75), D.zone + 1);
-    this.zone('underbed', new Phaser.Geom.Rectangle(bdb.x + 60, bdb.bottom - 70, bdb.width - 120, 70), D.zone + 2);
+    this.zone('underbed', Phaser.Geom.Rectangle.Union(new Phaser.Geom.Rectangle(bdb.x + 60, bdb.bottom - 70, bdb.width - 120, 70), this.dusterPeek.getBounds()), D.zone + 2);
     this.zone('sweater', this.sweater.getBounds(), D.zone + 3);
     this.zone('slippersCat', this.slippersCat.getBounds(), D.zone + 3);
     this.zone('basket', this.basket.getBounds(), D.zone + 5);
@@ -514,17 +517,32 @@ export class Level2 extends BaseLevel {
     this.react('player_shrug', this.bed.x); // G2-7: lật ra không có gì
   }
 
-  // G2-7: chạm gầm giường: kéo ra tấm thảm lông trắng (góc thảm thò ra như bàn chân mèo).
+  // G2-9: túm lông ve vẩy như đuôi mèo: xoay ±8° quanh gốc, nhịp chậm; thỉnh thoảng giật nhẹ.
+  wagDuster() {
+    const s = this.dusterPeek;
+    s.angle = -8;
+    this.tweens.add({ targets: s, angle: 8, duration: 1300, yoyo: true, repeat: -1, ease: 'Sine.inOut' });
+    this.dusterTwitch = this.time.addEvent({ delay: 3600, loop: true, callback: () => {
+      if (!s.visible || Math.random() < 0.35) return;
+      const k = this.tweens.add({ targets: s, scaleY: s.baseY * 1.08, duration: 90, yoyo: true, repeat: 1 });
+      return k;
+    } });
+  }
+
+  // G2-9: chạm gầm giường: phần lông thò ra biến mất, cây chổi lông trượt ra nằm trên sàn cạnh giường; nhân vật gãi đầu.
   underBedTap() {
     this.underTaps++;
     if (this.underTaps === 1) {
       this.sfx('sfx_cloth');
-      const r = this.furRug, [tx, ty] = this.P('l2_fur_rug');
-      this.furPeek.setVisible(false);
+      const r = this.duster, [tx, ty] = this.P('l2_duster');
+      this.tweens.killTweensOf(this.dusterPeek);
+      if (this.dusterTwitch) this.dusterTwitch.remove();
+      this.dusterPeek.setVisible(false);
       r.setVisible(true);
       this.tweens.add({ targets: r, x: tx, y: ty, duration: 380, ease: 'Quad.out', onComplete: () => {
         r.setDepth(D.cushion + 1);
         this.dust(r.x, r.y);
+        this.zoneTo('underbed', r);
         this.react('player_scratch_head', r.x);
       } });
     } else { this.wiggle(this.bed, 1.5, 2, 200); this.sfx('sfx_tap'); }
