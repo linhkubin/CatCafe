@@ -50,6 +50,12 @@ Lời giao việc ghi "Vẽ TỜ `<tên tờ>`" thì làm như sau:
 - Tờ có tư thế mèo (`sua_`, `mun_`) hay nhân vật (`player_`) cũng theo quy tắc tham chiếu trên. Lời giao việc có thể kèm thêm ảnh tham chiếu (`--ref`): mở hết bằng `view_image` trước khi vẽ.
 - Các trạng thái của một đồ vật vẽ **chung một tờ**, không vẽ riêng từng ảnh. Chỉ khi lời giao việc ghi rõ "chỉnh sửa từ ảnh <đường dẫn>" mới vẽ dạng chỉnh sửa ảnh đó (giữ nguyên kích thước, vị trí, góc nhìn, màu, chỉ đổi phần trạng thái).
 
+## Quy tắc giao việc và tự kiểm (O2-11, bắt buộc)
+
+- **Lời giao việc** (do Art 2D viết) phải **dán thẳng** khối quy tắc phong cách (`art/style.md` mục 1) và khối góc nhìn (`art/style.md` mục 2b), không chỉ trỏ tới file.
+- **Trước khi gọi `image_gen`**, Codex viết ra (trong log) phần **"Nhắc lại quy tắc"**: tóm tắt bằng lời của mình các quy tắc phong cách, góc nhìn, màu, nét và yêu cầu riêng của asset. Thiếu phần này thì lượt vẽ bị coi là hỏng.
+- **Tin nhắn cuối** có phần **"Tự kiểm"**: liệt kê từng quy tắc (góc nhìn chung, nét, màu, không chữ, nền, bố cục/ô, nhân vật…) kèm **đạt / không đạt** và một câu lý do.
+
 ## Lưu file
 
 - Ảnh tạo ra nằm ở `$CODEX_HOME/generated_images/...`. Sau khi vẽ, **chép nguyên ảnh đã chọn vào** đường dẫn trong lời giao việc. Tạo thư mục con nếu chưa có.
@@ -66,7 +72,7 @@ Xem lại ảnh vừa vẽ: đúng đồ vật, đúng phong cách bút chì mà
 
 ## Báo cáo
 
-Tin nhắn cuối cùng, ngắn gọn, gồm:
+Tin nhắn cuối cùng, ngắn gọn, gồm (thêm phần "Tự kiểm" như mục Quy tắc giao việc và tự kiểm):
 - `SAVED: art/out/...` cho mỗi file đã lưu (hoặc `FAILED: <key> – <lý do>`).
 - Prompt cuối cùng đã gửi cho `image_gen`.
 - Một dòng tự nhận xét chỗ chưa ổn (nếu có).

@@ -208,3 +208,71 @@ Còn thiếu: không. Đã bỏ `l2_slipper` và `l2_shoebox` cũ.
   - Còn lại: chao đèn vàng hơi đậm hơn level 1.
 
 ---
+
+## Chủ dự án: góc nhìn đang loạn – PM ghi lại O2-10, O2-11
+
+**O2-10.** Mỗi đồ đang một góc chiếu khác nhau (ghế góc chéo, giường phẳng, tủ nghiêng nhẹ, hộp trên nóc 2D phẳng) nên nhìn loạn. Art 2D:
+1. Chốt **một góc nhìn chung cho cả game** (theo D3 ở level 1: nhìn **chính diện**, hơi từ trên xuống khoảng 15°; cạnh ngang luôn nằm ngang, cạnh đứng luôn thẳng đứng; mặt trên của đồ chỉ thấy một dải mỏng; **không** góc 3/4, không phối cảnh xiên, không đồ nào xoay chéo; ánh sáng từ trên trái). Ghi vào `art/style.md` thành mục riêng "Góc nhìn chung", có ví dụ đúng/sai.
+2. **Mô tả lại kỹ bối cảnh và từng đồ vật** level 2 trong `design-art-level2.md`: mỗi đồ ghi rõ góc nhìn, mặt nào thấy, tỉ lệ so với giường/tủ, chất liệu, màu, nét.
+
+**O2-11. Codex hay quên đặc tả.** Mọi lượt vẽ phải: dán thẳng khối quy tắc style + góc nhìn vào lời giao việc (không chỉ trỏ tới file), và yêu cầu Codex **nhắc lại các quy tắc bằng lời của nó trước khi vẽ**; tin nhắn cuối của Codex phải có phần tự kiểm từng quy tắc. Ghi quy định này vào `AGENTS.md`.
+Thứ tự: đặc tả → **demo level 2 mới cho chủ dự án duyệt** → mới vẽ lại asset.
+
+---
+
+## Vòng 4 – Art 2D (O2-10, O2-11: góc nhìn chung)
+
+- **`art/style.md`:** thêm mục **2b "Góc nhìn chung"**:
+  - Chính diện, nhìn xuống ~15°, cạnh ngang nằm ngang, cạnh đứng thẳng đứng, mặt trên là dải mỏng, không 3/4, không xoay chéo, sáng từ trên trái.
+  - Có bảng ví dụ đúng/sai cho ghế, giường, tủ, hộp, giỏ.
+  - Có khối CAMERA tiếng Anh để dán vào lời giao việc.
+- **`art/design-art-level2.md`:** thêm mục 2b "Bối cảnh và góc nhìn từng đồ": tường sau phẳng, không góc phòng. Bảng từng đồ ghi góc nhìn, mặt thấy được, tỉ lệ theo giường (580 rộng), chất liệu, màu.
+- **`AGENTS.md`:** thêm mục "Quy tắc giao việc và tự kiểm":
+  - Lời giao việc dán thẳng khối style + góc nhìn.
+  - Codex viết "Nhắc lại quy tắc" trước khi gọi image_gen.
+  - Tin nhắn cuối có "Tự kiểm" từng quy tắc đạt/không. Thiếu một trong hai phần thì lượt bị coi là hỏng.
+- **Demo `art/out/demo/l2_demo_start.png`** vẽ lại 1 lượt, không phải vẽ thêm. Bản trước ở `art/out/_refs/l2_demo_start_v2.png`.
+  - Log có đủ "Nhắc lại quy tắc" và "Tự kiểm".
+  - Mọi đồ cùng một camera: ghế nhìn thẳng mặt trước, giường nhìn ngang thân, tủ và hộp giày cùng góc chính diện, giỏ có miệng elip dẹt. Màu và nét theo level 1.
+  - Codex tự nhận "không đạt" ở 3 chỗ:
+    - mép nắp hộp hơi xiên;
+    - cửa sổ và kệ lệch so với nền đã duyệt;
+    - thảm lông dưới giường chưa rõ 4 túm.
+  - Tôi thấy chấp nhận được cho tranh duyệt. Chờ chủ dự án duyệt rồi mới vẽ lại asset.
+
+---
+
+## Vòng 4b – Art 2D (màu và nét nhạt theo `owner_l1_style_ref`)
+
+- Vẽ lại `art/out/demo/l2_demo_start.png`, 1 lượt Codex: chỉnh từ bản trước để giữ bố cục, lấy màu và nét theo `art/ref/owner_l1_style_ref.png`. Log có đủ "Nhắc lại quy tắc" và "Tự kiểm". Bản trước ở `art/out/_refs/l2_demo_start_v3.png`.
+- **Độ bão hoà trung bình** (HSV, thang 0–1, ảnh thu về 512x768):
+
+| Ảnh | Bão hoà TB | Phân vị 90 | Tỉ lệ điểm tối |
+|---|---|---|---|
+| Mẫu `owner_l1_style_ref` | 0,248 | 0,464 | 2,5% |
+| Demo trước | 0,339 | 0,587 | 5,4% |
+| Demo mới | 0,268 | 0,471 | 2,5% |
+
+- Ba lỗi đã sửa: chăn chỉ một gò, mép nắp hộp giày thẳng, thảm lông có 4 túm rõ.
+- Codex tự nhận vân chì còn rõ hơn mẫu một chút; chấp nhận.
+- Codex làm mất nút 💡: tôi dán lại nút từ bản trước bằng script (chỉ là UI của tranh demo).
+- `style.md` mục 2 ghi thêm: ảnh mẫu màu và nét chuẩn là `art/ref/owner_l1_style_ref.png`, độ bão hoà trung bình mục tiêu khoảng 0,25.
+
+---
+
+## Vòng 5 – Art 2D (tách lại asset theo demo đã duyệt)
+
+**10 lượt Codex** (nền + 9 tờ), không vẽ lại lượt nào, không gặp hết hạn mức. Bản cũ cất ở `art/out/_refs/l2_v2/`.
+- **Lời giao việc mỗi lượt** gồm:
+  - khối style và khối góc nhìn dán thẳng, bối cảnh level 2 (mục 2b) và đặc tả tờ;
+  - ảnh đính kèm: `l2_demo_start.png` (nguồn hình dạng: "vẽ tách riêng đúng từng đồ như trong tranh"), `owner_l1_style_ref.png` (màu và nét), ảnh cắt cận từng đồ trong tranh (`art/out/_refs/l2d_*.png`).
+  - Log cả 10 lượt đều có "Nhắc lại quy tắc" và "Tự kiểm".
+- **Nền:** sửa từ demo, bỏ hết đồ thành sprite. Độ bão hoà trung bình 0,234.
+- **Hộp giày:** vẽ sau tủ, đính kèm ảnh tủ mới và ghi "khớp đúng góc nhìn và độ nghiêng của tủ". Hộp giờ thấy mặt trước, một dải hông phải và nắp là dải mỏng như nóc tủ, không còn phẳng 2D. `style.md` mục 2b ghi thêm: đồ cao bên phải được thấy dải hông hẹp, đồ đặt trên nó theo cùng góc.
+- **design-art:** thêm dòng "Chuẩn theo demo đã duyệt" cho từng tờ, gồm thanh móc 3 núm, ghế 3 thanh dọc, thảm lông có 4 đệm ngón hồng… Ô các tờ đã sửa theo chỗ AI thực vẽ.
+- Giữ nguyên key, nhóm, neo, cỡ hiển thị. Đã cắt bằng công cụ; `anchors.json` đủ 38 sprite (nền không cần neo). Tất, ghế, áo len: đã xoá mảnh lạc của vật bên cạnh.
+- **Điểm nhỏ đã chấp nhận:**
+  - Dép tai mèo có thêm 2 chấm mắt.
+  - Tai trên hộp giày ngoài kem trong hồng, khác mũ hồng một chút.
+
+---

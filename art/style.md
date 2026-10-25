@@ -54,6 +54,8 @@ ABSOLUTE RULES
 | Họa tiết | Không có. Chỉ khi đặc tả yêu cầu (tất sọc, tất chấm bi) thì vẽ to, ít |
 | Chữ | **Tuyệt đối không có chữ, số, logo** |
 
+**Ảnh mẫu màu và nét chuẩn: `art/ref/owner_l1_style_ref.png`** (tranh level 1 chủ dự án chọn). Mọi tranh và asset phải nhạt, ít bão hoà, viền nâu mảnh nhạt, vân chì mịn như ảnh này; đo độ bão hoà trung bình gần ~0,25 (thang 0–1, HSV), không tăng tương phản.
+
 ### Bảng màu tham khảo
 
 | Màu | Mã gần đúng | Dùng cho |
@@ -71,6 +73,34 @@ ABSOLUTE RULES
 | Xanh da trời | `#B8DAF2` | Rèm, cửa sổ, chăn, mắt Sữa |
 | Tím oải hương | `#D8CCF0` | Bóng đổ nhẹ, đêm |
 | Đen than ấm | `#3E3838` | Riêng Mun (không dùng đen tuyền) |
+
+---
+
+## 2b. Góc nhìn chung (cho cả game, O2-10)
+
+Mọi nền và mọi đồ vật dùng **một camera duy nhất**, như nền và đồ vật level 1 (D3):
+- Nhìn **chính diện**, mắt hơi cao hơn đồ, nhìn xuống khoảng **15°**.
+- **Cạnh ngang luôn nằm ngang**, **cạnh đứng luôn thẳng đứng**. Không phối cảnh xiên, không điểm tụ, không góc ba phần tư, không đồ nào xoay chéo.
+- **Mặt trước** của đồ là mặt chính, thấy gần như trọn vẹn. **Mặt trên** chỉ là một dải mỏng (khoảng 1/5 chiều cao mặt trước), mặt tròn thành elip dẹt. Mặt hông chỉ thấy khi đồ có chiều sâu lớn, và chỉ là một dải hẹp bên phải.
+- Ánh sáng từ **trên trái**: vài nét chì đổ bóng ở **bên phải** và dưới đồ. Không bóng đổ dưới sàn (code vẽ).
+- Đồ đặt sát tường thì mặt trước song song với tường.
+- Đồ cao lớn đặt bên phải khung (như tủ quần áo) được thấy **một dải hông hẹp bên phải** và nóc là dải mỏng. **Đồ đặt trên hoặc sát nó** (hộp trên nóc tủ…) phải theo **đúng góc đó**: thấy mặt trước, dải hông phải cùng độ rộng tương đối, mặt trên song song với nóc.
+
+| Đồ | Đúng | Sai |
+|---|---|---|
+| Ghế | Nhìn thẳng mặt trước: lưng tựa là hình chữ nhật đứng, mặt ghế là dải ngang mỏng, 4 chân thẳng đứng (2 chân sau ngắn hơn, lấp sau chân trước) | Ghế xoay chéo 3/4, thấy mặt ghế hình thoi, chân xiên |
+| Giường | Nhìn ngang dọc thân giường: đầu giường một bên, chân giường bên kia, mặt nệm và chăn là dải dày nằm ngang, khung giường hình chữ nhật thẳng | Giường nhìn từ trên xuống thấy cả mặt nệm, hoặc giường xoay chéo vào trong phòng |
+| Tủ | Mặt trước chữ nhật thẳng đứng, 2 cánh song song; nóc là một dải mỏng; một dải hông hẹp bên phải | Tủ nghiêng, nóc thấy rộng, cạnh hông chụm về một điểm |
+| Hộp | Mặt trước chữ nhật, nắp là dải mỏng phía trên, hông là dải hẹp bên phải; cùng góc với đồ bên cạnh | Hộp vẽ phẳng 2D không có chiều sâu, hoặc xoay 3/4 |
+| Giỏ tròn | Thân giỏ nhìn ngang, miệng giỏ là elip dẹt (cao bằng ~1/5 bề ngang) | Miệng giỏ tròn vành vạnh như nhìn từ trên xuống |
+
+**Khối dán vào mọi lời giao việc** (O2-11):
+```
+CAMERA (one shared camera for the whole game): straight-on FRONT view, eye slightly above, looking down only about 15 degrees.
+Horizontal edges stay horizontal, vertical edges stay vertical. NO three-quarter view, NO oblique/diagonal perspective, NO vanishing points, nothing rotated diagonally.
+The front face is the main visible face; the top face is only a thin strip (about 1/5 of the front height); round tops are flat ellipses; a side face, if any, is only a narrow strip on the RIGHT.
+Light from the upper left: a few pencil shading strokes on the right/bottom of each object. No floor shadow.
+```
 
 ---
 

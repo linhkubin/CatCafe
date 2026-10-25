@@ -18,14 +18,25 @@ const DEF = {
   player_call: [470, 1445],
 };
 
-// Thu/phóng cỡ hiển thị trong game so với cỡ trong design-art (nhân vào cỡ ảnh, nên ảnh vẽ lại cùng cỡ vẫn đúng):
-// - rèm 470 → 415: kết thúc trên gáy sách (y≈765), vẫn phủ hết kính cửa sổ (nền vòng 3: thanh rèm y≈342);
-// - tủ ×0,85 (O2-8): chân tủ đứng trên sàn, tỉ lệ hợp phòng; đèn ×0,8 (O2-8).
+// Thu/phóng cỡ hiển thị trong game so với cỡ trong design-art (nhân vào cỡ ảnh, nên ảnh vẽ lại cùng cỡ vẫn đúng).
+// Đo theo tranh demo đã duyệt `l2_demo_start.png` (vòng 5): mỗi đồ hiển thị đúng bề rộng như trong tranh.
 const SIZE_K = {
-  l2_curtain_closed: 415 / 470, l2_curtain_open: 415 / 470,
-  l2_wardrobe_closed: 0.85, l2_wardrobe_open: 0.85,
-  l2_ceiling_lamp: 0.8,
+  l2_curtain_closed: 420 / 470, l2_curtain_open: 420 / 470,
+  l2_wardrobe_closed: 1.14, l2_wardrobe_open: 1.14,
+  l2_ceiling_lamp: 0.7,
+  l2_coat_hook: 1.14, l2_beanie_white_idle: 0.65, l2_beanie_white_floor: 0.65,
+  l2_shoebox_ears: 1.14, l2_shoebox_open: 1.14,
+  l2_plush_cat: 0.75, l2_plush_cat_fallen: 0.75,
+  l2_bed_blanket_flat: 1.11, l2_bed_blanket_flipped: 1.11,
+  l2_fur_rug_peek: 1.6, l2_fur_rug: 1.2,
+  l2_chair: 0.95,
+  l2_slippers_cat_idle: 1.19, l2_slippers_cat_after: 1.19,
+  l2_sock_basket_full: 1.39, l2_sock_basket_2: 1.39, l2_sock_basket_3: 1.39, l2_sock_basket_reveal: 1.39,
+  l2_sock_basket_one_eye: 1.39, l2_sock_basket_yawn: 1.39,
+  l2_sock_ball: 0.7, l2_sock_unrolled: 0.7,
 };
+// Nén chiều cao (rèm trong demo thấp và rộng: kết thúc trên gáy sách y≈570, không che sách trên kệ).
+const SIZE_Y = { l2_curtain_closed: 0.83, l2_curtain_open: 0.83 };
 // Góc nằm của từng chiếc tất sau khi đáp (tất em bé nằm ngang trên kệ).
 const SOCK_ANGLE = [-20, 0, 0, 12, -75, 0];
 const SOCKS = ['l2_sock_striped', 'l2_sock_dotted', 'l2_sock_white_big', 'l2_sock_star', 'l2_sock_baby', 'l2_sock_long'];
@@ -263,7 +274,8 @@ export class Level2 extends BaseLevel {
     this.curtainOpen = false;
     const bb = P('l2_sock_basket_full');
     this.beam = this.add.graphics().setDepth(D.beam).setAlpha(0).setBlendMode(Phaser.BlendModes.SCREEN);
-    this.beam.fillStyle(SUN, 0.35).fillPoints([{ x: 170, y: 740 }, { x: 490, y: 740 }, { x: bb[0] + 170, y: bb[1] }, { x: bb[0] - 170, y: bb[1] }], true);
+    const cw = this.curtain.getBounds();
+    this.beam.fillStyle(SUN, 0.35).fillPoints([{ x: cw.left + 40, y: cw.bottom }, { x: cw.right - 40, y: cw.bottom }, { x: bb[0] + 170, y: bb[1] }, { x: bb[0] - 170, y: bb[1] }], true);
 
     this.lamp = this.img('l2_ceiling_lamp', ...P('l2_ceiling_lamp'), D.clock);
     // Dây đèn nối từ mép trên màn hình (trần kéo dài khi máy dài) xuống đầu dây của ảnh đèn.
@@ -302,7 +314,7 @@ export class Level2 extends BaseLevel {
     this.zone('curtain', this.curtain.getBounds());
     // G2-7: dây buộc rèm bông trắng thò xuống như đuôi mèo.
     const cbb = this.curtain.getBounds();
-    this.tie = this.img('l2_curtain_tie', ...(this.pos('l2_curtain_tie') || [cbb.right + 5, cbb.top + cbb.height * 0.38]), D.curtain - 1); // O2-6: sau rèm
+    this.tie = this.img('l2_curtain_tie', ...(this.pos('l2_curtain_tie') || [cbb.left + 70, cbb.bottom - 100]), D.curtain - 1); // O2-6: sau rèm, thò ra dưới gấu rèm trái như demo
     this.zone('tie', this.tie.getBounds(), D.zone + 3);
     const lb = this.lamp.getBounds();
     this.zone('lamp', new Phaser.Geom.Rectangle(lb.x, lb.bottom - 140, lb.width, 140));
@@ -320,6 +332,13 @@ export class Level2 extends BaseLevel {
     this.zone('basket', this.basket.getBounds(), D.zone + 5);
   }
 
+  applyKey(s, key) {
+    super.applyKey(s, key);
+    const k = SIZE_Y[key];
+    if (k && this.textures.exists(key)) { s.baseY = s.base * k; s.setScale(s.base, s.baseY); }
+    return s;
+  }
+
   fitSizes() {
     for (const [k, f] of Object.entries(SIZE_K)) {
       const e = this.A.entries[k];
@@ -333,7 +352,7 @@ export class Level2 extends BaseLevel {
   sockTarget(n) {
     if (this.pos('sock_target_' + n)) return this.pos('sock_target_' + n);
     if (n === 1) { const b = this.bed.getBounds(); return [b.left + 45, b.top + 40]; }
-    if (n === 2) { const b = this.lamp.getBounds(); return [this.lamp.x, b.bottom - 25]; }
+    if (n === 2) { const b = this.lamp.getBounds(); return [this.lamp.x + b.width * 0.3, b.bottom + 10]; } // vắt trên vành phải chao đèn
     if (n === 3) { const b = this.wardrobe.getBounds(); return [b.left + b.width * 0.435 - 7, b.top + b.height * 0.484 + 87]; } // treo từ núm trái
     if (n === 4) { const b = this.chair.getBounds(); return [b.centerX, b.top + 30]; }
     if (n === 5) { const [px, py] = this.P('l2_plush_cat'); return [px + 160, py - 35]; }
