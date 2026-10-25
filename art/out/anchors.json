@@ -372,28 +372,28 @@
   "w": 122
  },
  "l2_duster": {
-  "ax": 296,
-  "ay": 93,
+  "ax": 300,
+  "ay": 89,
   "file": "level2/l2_duster.png",
   "group": "l2_duster",
-  "h": 100,
-  "ox": 0.7291,
-  "oy": 0.93,
+  "h": 97,
+  "ox": 0.7389,
+  "oy": 0.9175,
   "res": 1.5,
   "sheet": "l2_wardrobe_sheet",
   "w": 406
  },
  "l2_duster_peek": {
-  "ax": 41,
+  "ax": 40,
   "ay": 8,
   "file": "level2/l2_duster_peek.png",
   "group": "l2_duster_peek",
   "h": 196,
-  "ox": 0.3565,
+  "ox": 0.3636,
   "oy": 0.0408,
   "res": 1.5,
   "sheet": "l2_wardrobe_sheet",
-  "w": 115
+  "w": 110
  },
  "l2_plush_cat": {
   "ax": 126,
@@ -660,28 +660,28 @@
   "w": 331
  },
  "l2_wardrobe_closed": {
-  "ax": 342,
-  "ay": 785,
+  "ax": 328,
+  "ay": 763,
   "file": "level2/l2_wardrobe_closed.png",
   "group": "wardrobe",
-  "h": 794,
-  "ox": 0.4978,
-  "oy": 0.9887,
+  "h": 770,
+  "ox": 0.5031,
+  "oy": 0.9909,
   "res": 1.5,
   "sheet": "l2_wardrobe_sheet",
-  "w": 687
+  "w": 652
  },
  "l2_wardrobe_open": {
-  "ax": 342,
-  "ay": 785,
+  "ax": 328,
+  "ay": 763,
   "file": "level2/l2_wardrobe_open.png",
   "group": "wardrobe",
-  "h": 794,
-  "ox": 0.4978,
-  "oy": 0.9887,
+  "h": 770,
+  "ox": 0.5031,
+  "oy": 0.9909,
   "res": 1.5,
   "sheet": "l2_wardrobe_sheet",
-  "w": 687
+  "w": 652
  },
  "player_call": {
   "ax": 282,

@@ -326,3 +326,16 @@ Mỗi lượt Codex đính kèm ảnh mẫu level 1 (`art/ref/owner_l1_style_ref
 - **design-art:** đã bỏ `l2_fur_rug`, `l2_fur_rug_peek`; thêm 2 key chổi lông, mô tả cặp tủ, vị trí `l2_duster_peek` (170, 1000). `anchors.json` đã cập nhật. File cũ `l2_fur_rug*.png` và dòng của chúng trong `anchors.json` vẫn còn, Dev bỏ khi đổi key.
 
 ---
+
+## Vòng 5d – Art 2D (nóc tủ dày)
+
+- Vẽ lại `l2_wardrobe_sheet`, 1 lượt Codex. Log có đủ "Nhắc lại quy tắc" và "Tự kiểm". Bản trước ở `art/out/_refs/l2_wardrobe_sheet_v4.png`.
+- Nóc tủ giờ là tấm gỗ dày nhô ra khỏi thân, thấy mặt trên phẳng và cạnh trước dày, giống hệt nhau ở tủ đóng và tủ mở. Phần còn lại giữ như cũ. Chổi lông cũng nằm trên tờ này nên đã cắt lại.
+- Key, neo, cỡ giữ nguyên. Hai tủ cùng khung 652x770 px ảnh xuất, neo đáy (328, 763), `res` 1,5.
+- **Mặt trên nóc**, đo trong ảnh xuất `l2_wardrobe_closed.png`: y ≈ 12–42 px, x ≈ 95–564, tâm x ≈ 330.
+  - Quy ra cỡ hiển thị: mặt nóc nằm khoảng 481–501 px phía trên neo đáy tủ; tâm ngang trùng tâm neo (lệch +1 px).
+  - **Đặt hộp giày:** neo đáy của `l2_shoebox_ears`/`_open` ở (X_tủ + 1, Y_tủ − 487), tức đáy hộp nằm giữa mặt nóc.
+  - Ví dụ: tủ ở (862, 990) thì hộp ở (863, 503).
+- Đã ghép thử hộp lên nóc mới: góc nghiêng và dải hông phải của hộp khớp nóc, không cần vẽ lại hộp.
+
+---
