@@ -95,6 +95,51 @@ function hiss(c, { t = 0.2, vol = 0.05, at = 0, f = 3000, type = 'highpass', q =
 const meow = (c, len, base, at = 0) => note(c, { type: 'triangle', f: base, t: len, vol: 0.13, at, attack: 0.04, vib: 7, vibDepth: 0.02,
   glide: [[base * 1.45, len * 0.35], [base * 1.2, len * 0.75], [base * 0.95, len]] });
 
+// Tiếng "meooooo" dài: sawtooth + triangle trộn, qua lọc cho mềm.
+// "m": lowpass mở dần ~600 → 2500 Hz trong 0,12 giây; "e" cao ~900 Hz; "oooo" trượt xuống chậm ~900 → 600 Hz,
+// formant đóng dần ~2500 → 900 Hz (e → o); vibrato nhẹ tăng dần ở đuôi; tắt mờ dần.
+function longMeow(c, { at = 0, len = 1.2, vol = 0.16 } = {}) {
+  const t0 = c.currentTime + at, t1 = t0 + len;
+  const lp = c.createBiquadFilter();
+  lp.type = 'lowpass';
+  lp.Q.value = 2.5;
+  lp.frequency.setValueAtTime(600, t0);
+  lp.frequency.exponentialRampToValueAtTime(2500, t0 + 0.12);
+  lp.frequency.setValueAtTime(2500, t0 + 0.25);
+  lp.frequency.exponentialRampToValueAtTime(900, t0 + len * 0.85);
+  const g = c.createGain();
+  g.gain.setValueAtTime(0.0001, t0);
+  g.gain.exponentialRampToValueAtTime(vol, t0 + 0.1);
+  g.gain.setValueAtTime(vol, t0 + len * 0.45);
+  g.gain.exponentialRampToValueAtTime(vol * 0.5, t0 + len * 0.8);
+  g.gain.exponentialRampToValueAtTime(0.0001, t1);
+  // Vibrato: 6 Hz, độ sâu tăng dần ở nửa sau.
+  const lfo = c.createOscillator(), lg = c.createGain();
+  lfo.frequency.value = 6;
+  lg.gain.setValueAtTime(0.001, t0);
+  lg.gain.setValueAtTime(2, t0 + len * 0.4);
+  lg.gain.linearRampToValueAtTime(18, t1);
+  lfo.connect(lg);
+  const mix = [['sawtooth', 0.45], ['triangle', 0.8]].map(([type, v]) => {
+    const o = c.createOscillator(), og = c.createGain();
+    o.type = type;
+    o.frequency.setValueAtTime(820, t0);
+    o.frequency.exponentialRampToValueAtTime(900, t0 + 0.15);
+    o.frequency.setValueAtTime(900, t0 + 0.3);
+    o.frequency.exponentialRampToValueAtTime(600, t1);
+    lg.connect(o.frequency);
+    og.gain.value = v;
+    o.connect(og).connect(lp);
+    o.start(t0);
+    o.stop(t1 + 0.05);
+    return o;
+  });
+  lp.connect(g).connect(out(c));
+  lfo.start(t0);
+  lfo.stop(t1 + 0.05);
+  return mix;
+}
+
 const RECIPES = {
   sfx_tap: (c) => note(c, { f: 1568, t: 0.06, vol: 0.05, vib: 0, attack: 0.004 }),
   sfx_cloth: (c) => { rustle(c, { t: 0.22, vol: 0.035 }); note(c, { f: 988, t: 0.12, vol: 0.05, glide: [[1318, 0.1]] }); },
@@ -117,13 +162,8 @@ const RECIPES = {
   sfx_meow_question: (c) => meow(c, 0.28, 880),
   sua_sfx_meow_long: (c) => meow(c, 0.55, 800),
   sua_sfx_meow: (c) => meow(c, 0.25, 940),
-  // O2-20: meo thật dễ thương lúc chạm Sữa: cao, ngắn, hai nhịp "mi-ao", vibrato nhẹ, attack mềm.
-  sua_sfx_meow_cute: (c) => {
-    note(c, { type: 'triangle', f: 1180, t: 0.11, vol: 0.11, attack: 0.025, glide: [[1320, 0.09]], vib: 0 });
-    note(c, { type: 'triangle', f: 1260, t: 0.34, vol: 0.13, at: 0.12, attack: 0.04, vib: 7, vibDepth: 0.015,
-      glide: [[1560, 0.1], [1380, 0.2], [980, 0.34]] });
-    note(c, { f: 2520, t: 0.26, vol: 0.025, at: 0.13, attack: 0.04, vib: 7, vibDepth: 0.015, glide: [[3000, 0.1], [1960, 0.26]] });
-  },
+  // O2-20: chạm Sữa (mọi level): một tiếng "meooooo" dài ~1,2 giây, giọng mèo con mềm.
+  sua_sfx_meow_cute: (c) => longMeow(c),
   sfx_heart: (c) => { bell(c, 1319, 0, 0.09); bell(c, 1760, 0.09, 0.08); },
   sfx_sparkle: (c) => { bell(c, 2093, 0, 0.04, 0.2); bell(c, 2637, 0.07, 0.035, 0.2); },
   sfx_win: (c) => [1047, 1319, 1568, 2093].forEach((f, i) => bell(c, f, i * 0.11, 0.09, 0.4)),
