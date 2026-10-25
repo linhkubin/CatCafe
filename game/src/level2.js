@@ -11,16 +11,21 @@ const DEF = {
   l2_shelf: [170, 840], l2_plush_cat: [170, 842], l2_plush_cat_fallen: [210, 1120],
   l2_wardrobe_closed: [840, 1060], l2_shoebox: [840, 442],
   l2_bed_blanket_flat: [300, 1262], l2_slipper: [260, 1240],
-  l2_chair: [700, 1250], l2_sweater_rolled: [700, 1112],
+  l2_chair: [700, 1250], // áo len: tính theo mặt ghế (O2-7)
   l2_slippers_cat_idle: [200, 1440],
   l2_sock_basket_full: [600, 1450],
   l2_sock_ball: [860, 1360],
   player_call: [470, 1445],
 };
 
-// Rèm ảnh thật rộng 470 dài tới che cả kệ; nền mới (cửa sổ y 380–720, kệ y≈830) cần rèm kết thúc trên gáy sách (y≈748):
-// thu đều còn rộng 387 (vẫn phủ hết kính x 130–490).
-const CURTAIN_W = 387;
+// Thu/phóng cỡ hiển thị trong game so với cỡ trong design-art (nhân vào cỡ ảnh, nên ảnh vẽ lại cùng cỡ vẫn đúng):
+// - rèm 470 → 415: kết thúc trên gáy sách (y≈765), vẫn phủ hết kính cửa sổ (nền vòng 3: thanh rèm y≈342);
+// - tủ ×0,85 (O2-8): chân tủ đứng trên sàn, tỉ lệ hợp phòng; đèn ×0,8 (O2-8).
+const SIZE_K = {
+  l2_curtain_closed: 415 / 470, l2_curtain_open: 415 / 470,
+  l2_wardrobe_closed: 0.85, l2_wardrobe_open: 0.85,
+  l2_ceiling_lamp: 0.8,
+};
 // Góc nằm của từng chiếc tất sau khi đáp (tất em bé nằm ngang trên kệ).
 const SOCK_ANGLE = [-20, 0, 0, 12, -75, 0];
 const SOCKS = ['l2_sock_striped', 'l2_sock_dotted', 'l2_sock_white_big', 'l2_sock_star', 'l2_sock_baby', 'l2_sock_long'];
@@ -253,7 +258,7 @@ export class Level2 extends BaseLevel {
     const P = (k) => this.P(k);
 
     // Rèm + nắng chiếu đúng vào giỏ tất (gợi ý ngầm).
-    this.fitCurtain();
+    this.fitSizes();
     this.curtain = this.img('l2_curtain_closed', ...P('l2_curtain_closed'), D.curtain);
     this.curtainOpen = false;
     const bb = P('l2_sock_basket_full');
@@ -275,28 +280,29 @@ export class Level2 extends BaseLevel {
     this.plush = this.img('l2_plush_cat', ...P('l2_plush_cat'), D.curtain + 1);
     this.wardrobe = this.img('l2_wardrobe_closed', ...P('l2_wardrobe_closed'), D.box);
     // G2-7: hộp giày nắp hé, hai tai mèo thò lên (hoá ra mũ len hồng tai mèo).
-    this.shoebox = this.img('l2_shoebox_ears', ...(this.pos('l2_shoebox_ears') || P('l2_shoebox')), D.box + 1);
+    const wb0 = this.wardrobe.getBounds();
+    this.shoebox = this.img('l2_shoebox_ears', ...(this.pos('l2_shoebox_ears') || [wb0.left + wb0.width * 0.49, wb0.top + wb0.height * 0.03]), D.box + 1);
     this.pinkBeanie = this.img('l2_beanie_pink_cat', this.shoebox.x, this.shoebox.y - 40, D.box).setVisible(false);
     this.bed = this.img('l2_bed_blanket_flat', ...P('l2_bed_blanket_flat'), D.cushion);
     // G2-7: góc tấm thảm lông trắng thò ra dưới gầm giường như bàn chân mèo (lớp sau giường).
     const bdb0 = this.bed.getBounds();
     const pk = this.pos('l2_fur_rug_peek') || [bdb0.left + bdb0.width * 0.5, bdb0.bottom - 10];
-    this.furPeek = this.img('l2_fur_rug_peek', ...pk, D.cushion - 1);
+    this.furPeek = this.img('l2_fur_rug_peek', ...pk, D.cushion + 1); // O2-5: trên lớp bóng gầm giường
     this.furRug = this.img('l2_fur_rug', pk[0], pk[1], D.cushion - 1).setVisible(false);
     this.chair = this.img('l2_chair', ...P('l2_chair'), D.box);
-    this.sweater = this.img('l2_sweater_rolled', ...P('l2_sweater_rolled'), D.box + 1);
+    const chb = this.chair.getBounds();
+    this.sweater = this.img('l2_sweater_rolled', ...(this.pos('l2_sweater_rolled') || [chb.left + chb.width * 0.48, chb.top + chb.height * 0.6]), D.box + 1); // O2-7: giữa mặt ghế
     this.slippersCat = this.img('l2_slippers_cat_idle', ...P('l2_slippers_cat_idle'), D.pillow);
     this.sockBall = this.img('l2_sock_ball', ...P('l2_sock_ball'), D.pillow);
     this.basket = this.img('l2_sock_basket_full', ...bb, D.pillow + 1);
     // G2-8: giỏ tĩnh hoàn toàn (bỏ phập phồng của G2-2).
     this.player = this.img('player_call', ...P('player_call'), D.player).setVisible(false);
-    this.runner = this.img('sua_run', 0, 0, D.cushion - 1).setVisible(false);
 
     // Vùng chạm.
     this.zone('curtain', this.curtain.getBounds());
     // G2-7: dây buộc rèm bông trắng thò xuống như đuôi mèo.
     const cbb = this.curtain.getBounds();
-    this.tie = this.img('l2_curtain_tie', ...(this.pos('l2_curtain_tie') || [cbb.right - 26, cbb.top + cbb.height * 0.38]), D.curtain + 2);
+    this.tie = this.img('l2_curtain_tie', ...(this.pos('l2_curtain_tie') || [cbb.right + 5, cbb.top + cbb.height * 0.38]), D.curtain - 1); // O2-6: sau rèm
     this.zone('tie', this.tie.getBounds(), D.zone + 3);
     const lb = this.lamp.getBounds();
     this.zone('lamp', new Phaser.Geom.Rectangle(lb.x, lb.bottom - 140, lb.width, 140));
@@ -314,12 +320,12 @@ export class Level2 extends BaseLevel {
     this.zone('basket', this.basket.getBounds(), D.zone + 5);
   }
 
-  fitCurtain() {
-    for (const k of ['l2_curtain_closed', 'l2_curtain_open']) {
+  fitSizes() {
+    for (const [k, f] of Object.entries(SIZE_K)) {
       const e = this.A.entries[k];
-      if (!e || !e.real || e.fitW) continue;
-      e.res = (e.res || 1) * 470 / CURTAIN_W;
-      e.fitW = true;
+      if (!e || e.fitK) continue;
+      e.res = (e.res || 1) / f;
+      e.fitK = true;
     }
   }
 
@@ -328,7 +334,7 @@ export class Level2 extends BaseLevel {
     if (this.pos('sock_target_' + n)) return this.pos('sock_target_' + n);
     if (n === 1) { const b = this.bed.getBounds(); return [b.left + 45, b.top + 40]; }
     if (n === 2) { const b = this.lamp.getBounds(); return [this.lamp.x, b.bottom - 25]; }
-    if (n === 3) { const b = this.wardrobe.getBounds(); return [b.centerX, b.top + b.height * 0.48]; }
+    if (n === 3) { const b = this.wardrobe.getBounds(); return [b.left + b.width * 0.435 - 7, b.top + b.height * 0.484 + 87]; } // treo từ núm trái
     if (n === 4) { const b = this.chair.getBounds(); return [b.centerX, b.top + 30]; }
     if (n === 5) { const [px, py] = this.P('l2_plush_cat'); return [px + 160, py - 35]; }
     const b = this.curtain.getBounds(); return [b.right + 40, b.top + 95];
@@ -342,21 +348,8 @@ export class Level2 extends BaseLevel {
 
   // G2-3 / VL2-2: Sữa chạy vụt từ trái sang phải dọc phía sau phòng (quay mặt sang phải), khuất sau ghế (ghế ngay trên giỏ),
   // không hiện ra nữa; giỏ khẽ nhún một cái. Không cho thấy Sữa vào giỏ (sẽ lộ đáp án).
+  // O2-4: bỏ cảnh Sữa chạy lướt qua lúc mở màn; chỉ còn tiếng ngáy rất nhỏ.
   onIntro() {
-    const r = this.runner, cb = this.chair.getBounds();
-    const y = cb.bottom - 30;
-    this.time.delayedCall(700, () => {
-      this.applyKey(r, 'sua_run');
-      this.face(r, false);
-      r.setDepth(this.chair.depth - 1).setVisible(true).setPosition(-260, y);
-      this.sfx('sfx_cloth');
-      this.tweens.add({ targets: r, x: cb.centerX, duration: 750, ease: 'Quad.in', onComplete: () => {
-        r.setVisible(false);
-        this.time.delayedCall(250, () => {
-          this.tweens.add({ targets: this.basket, scaleY: this.basket.baseY * 0.95, duration: 110, yoyo: true });
-        });
-      } });
-    });
     // VL2-4: tiếng ngáy rất nhỏ, lặp, to dần sau mỗi chiếc tất bay ra.
     this.snore = this.time.addEvent({ delay: 2600, startAt: 400, loop: true, callback: () => {
       if (this.phase === 'ending' || this.phase === 'reward' || this.frozen) return;
@@ -504,7 +497,8 @@ export class Level2 extends BaseLevel {
     if (this.sweater.key === 'l2_sweater_unrolled' || this.busy.sweater) { this.wiggle(this.sweater, 2, 2, 200); return; }
     this.busy.sweater = true;
     this.sfx('sfx_cloth');
-    this.squash(this.sweater, () => this.swap(this.sweater, 'l2_sweater_unrolled', () => { this.busy.sweater = false; this.zoneTo('sweater', this.sweater); }));
+    // Áo bung vắt về phía phải mặt ghế, thõng xuống bên phải giỏ (không chạm giỏ).
+    this.squash(this.sweater, () => this.sweater.setPosition(this.sweater.x + 35, this.sweater.y - 20) && this.swap(this.sweater, 'l2_sweater_unrolled', () => { this.busy.sweater = false; this.zoneTo('sweater', this.sweater); }));
   }
 
   slippersTap() {
@@ -539,7 +533,7 @@ export class Level2 extends BaseLevel {
   // ---------- giỏ tất: chạm 3 lần, mỗi lần một chiếc tất bay ra; lần 3 lộ Sữa ----------
   // G2-8: chạm giỏ 6 lần, mỗi lần một chiếc tất bay tới một chỗ và nằm yên; ảnh giỏ đổi ở lần 2, 4, 6.
   basketTap() {
-    if (this.phase !== 'search') { this.wiggle(this.basket, 2, 2, 200); return; }
+    if (this.phase !== 'search') { this.hop(this.basket, 8, 200); return; } // sau lần 6: giỏ chỉ nảy nhẹ
     if (this.time.now - this.lastBasket < 400) return; // mỗi lần cách nhau ≥ 0,4 giây
     this.lastBasket = this.time.now;
     this.socks++;
@@ -568,7 +562,6 @@ export class Level2 extends BaseLevel {
     // Sữa "ảo" (không vẽ) để cảnh bế chung lấy chỗ và cỡ.
     this.sua = this.add.image(bb.centerX, bb.top + bb.height * 0.55, 'sua_face_icon').setVisible(false);
     this.fitWidth(this.sua, 200);
-    this.zone('sua', new Phaser.Geom.Rectangle(bb.x, bb.y - 40, bb.width, bb.height * 0.7), D.zone + 10);
     this.time.delayedCall(300, () => {
       if (this.renderer.type === Phaser.WEBGL && b.preFX) {
         this.glowFx = b.preFX.addGlow(SUN, 0, 0, false, 0.1, 14);
@@ -585,6 +578,8 @@ export class Level2 extends BaseLevel {
       if (sfx) this.sfx(sfx);
       this.time.delayedCall(dur, () => { if (this.phase === 'found') this.applyKey(b, 'l2_sock_basket_reveal'); });
     });
+    // Vùng chạm Sữa bật khi lộ diện xong (~1,5 giây), ôm sát thân Sữa trong miệng giỏ (không phủ cả giỏ).
+    this.time.delayedCall(1500, () => this.armSua(new Phaser.Geom.Rectangle(bb.x + bb.width * 0.15, bb.y, bb.width * 0.8, bb.height * 0.5)));
     pose('l2_sock_basket_one_eye', 1500, 800);
     pose('l2_sock_basket_yawn', 2300, 800, 'sua_sfx_meow');
     this.time.delayedCall(3100, () => { if (this.phase === 'found') this.startZzz(); });

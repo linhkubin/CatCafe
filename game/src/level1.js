@@ -356,6 +356,7 @@ export class Level1 extends BaseLevel {
   canTap() {
     if (this.phase === 'can') return this.canToCenter();
     if (this.phase === 'canCenter') return this.popCan();
+    if (this.phase === 'found') this.hop(this.can, 8, 200); // sau khi mở: hộp chỉ nảy nhẹ
   }
 
   // Chạm lần 1: hộp bay ra giữa màn hình, phóng to ~280px, lơ lửng nhún nhẹ, tay hướng dẫn chỉ vào.
@@ -424,6 +425,8 @@ export class Level1 extends BaseLevel {
       this.hop(this.sua, 22, 350);
       this.sfx('sua_sfx_meow_long');
     });
+    // Sữa xuất hiện và meo xong mới chạm được (tay hướng dẫn chỉ vào Sữa).
+    this.time.delayedCall(1800, () => this.armSua(this.suaRect));
     this.time.delayedCall(2200, () => { if (this.phase === 'found') this.startEating(); });
   }
 
@@ -446,9 +449,9 @@ export class Level1 extends BaseLevel {
   showSua() {
     const [x, y] = this.P('sua_sit_stare');
     this.sua = this.img('sua_sit_stare', x, y, D.sua);
-    // Vùng chạm to hơn mèo ~20% (leveldesign 6.1), tính theo cỡ mèo chứ không theo khung ảnh (ảnh tạm có lề rộng).
-    const w = Math.min(this.sua.displayWidth, 300) * 1.2, h = Math.min(this.sua.displayHeight, 320) * 1.2;
-    this.zone('sua', new Phaser.Geom.Rectangle(x - w / 2, y - h * 0.95, w, h), D.zone + 10);
+    // Vùng chạm ôm sát thân Sữa (không phủ hộp), tính theo cỡ mèo chứ không theo khung ảnh; bật sau khi Sữa meo (showSua → armSua).
+    const w = Math.min(this.sua.displayWidth, 300), h = Math.min(this.sua.displayHeight, 320);
+    this.suaRect = new Phaser.Geom.Rectangle(x - w / 2, y - h * 0.95, w, h);
   }
 
   startEating() {

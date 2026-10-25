@@ -187,7 +187,7 @@ Trước khi lộ hộp pate **không có gợi ý tự động** (G10).
 
 | Giây | Người chơi làm | Game phản hồi |
 |---|---|---|
-| 0–4 | (xem) | Nhân vật bước vào gọi, bong bóng nhiệm vụ cạnh nhân vật. Sữa chạy vụt từ trái sang phải dọc phía sau phòng, khuất sau ghế (ngay trên giỏ tất), không hiện ra nữa; giỏ khẽ nhún một cái |
+| 0–4 | (xem) | Nhân vật bước vào gọi, bong bóng nhiệm vụ cạnh nhân vật. Sữa không xuất hiện (O2-4), chỉ nghe tiếng ngáy rất nhỏ |
 | 3–25 | Chạm đủ mọi chỗ, đặc biệt là **những thứ trắng tròn trông giống mèo**: chăn có cục phồng, mèo nhồi bông, mũ len, cuộn tất, áo len, dép bông | Thứ nào cũng hóa ra không phải mèo, mỗi thứ một phản ứng buồn cười |
 | 26–29 | Chạm **giỏ tất** lần 1 | Chiếc **tất kẻ sọc** bay vèo ra theo đường cong, rơi lên **đầu giường**. Giỏ khẽ nảy |
 | 30–32 | Chạm lần 2 | Chiếc **tất chấm bi** bay ra, mắc lên **vành chao đèn** (đèn đung đưa). Ảnh giỏ vơi đi (`_2`) |

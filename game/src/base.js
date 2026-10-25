@@ -325,6 +325,13 @@ export class BaseLevel extends Phaser.Scene {
     return [s.x + (xl + 8 - s.originX * w) * s.scaleX, s.y + (py - s.originY * h) * s.scaleY];
   }
 
+  // Bật vùng chạm Sữa khi cảnh lộ diện xong (dùng chung 2 level); tay hướng dẫn chỉ vào Sữa tới lần chạm kế tiếp.
+  armSua(rect) {
+    if (this.phase !== 'found' || this.ending || !rect) return;
+    this.zone('sua', rect, D.zone + 10);
+    this.handTap(this.suaPoint(), 'hint');
+  }
+
   suaTap() {
     if (this.phase !== 'found' || this.ending) return;
     this.startEnding();

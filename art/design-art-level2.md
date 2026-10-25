@@ -136,14 +136,14 @@ Lưới 3x2, cùng một giỏ ở cùng chỗ trong ô. Giỏ mây tròn thấp
 
 | Tờ | Ô | Key | Thư mục | Nhóm | Neo | Hiển thị | Nét |
 |---|---|---|---|---|---|---|---|
-| l2_socks_sheet | 0,180,270,400 | l2_sock_striped | level2 |  | tâm | rộng 120 | 8 |
-| l2_socks_sheet | 270,160,262,420 | l2_sock_dotted | level2 |  | tâm | rộng 120 | 8 |
-| l2_socks_sheet | 532,70,306,545 | l2_sock_white_big | level2 |  | tâm | rộng 170 | 7 |
-| l2_socks_sheet | 838,170,282,420 | l2_sock_star | level2 |  | tâm | rộng 120 | 8 |
-| l2_socks_sheet | 1120,350,176,240 | l2_sock_baby | level2 |  | tâm | rộng 80 | 9 |
-| l2_socks_sheet | 1296,30,240,600 | l2_sock_long | level2 |  | tâm | cao 200 | 8 |
-| l2_socks_sheet | 0,592,560,432 | l2_sock_ball | level2 |  | đáy | rộng 180 | 7 |
-| l2_socks_sheet | 560,636,976,388 | l2_sock_unrolled | level2 |  | đáy | rộng 320 | 8 |
+| l2_socks_sheet | 0,150,274,450 | l2_sock_striped | level2 |  | tâm | rộng 120 | 8 |
+| l2_socks_sheet | 274,150,264,450 | l2_sock_dotted | level2 |  | tâm | rộng 120 | 8 |
+| l2_socks_sheet | 538,40,314,592 | l2_sock_white_big | level2 |  | tâm | rộng 170 | 7 |
+| l2_socks_sheet | 852,150,266,470 | l2_sock_star | level2 |  | tâm | rộng 120 | 8 |
+| l2_socks_sheet | 1118,330,172,290 | l2_sock_baby | level2 |  | tâm | rộng 80 | 9 |
+| l2_socks_sheet | 1290,0,246,650 | l2_sock_long | level2 |  | tâm | cao 200 | 8 |
+| l2_socks_sheet | 0,600,580,424 | l2_sock_ball | level2 |  | đáy | rộng 180 | 7 |
+| l2_socks_sheet | 580,646,956,378 | l2_sock_unrolled | level2 |  | đáy | rộng 320 | 8 |
 
 Bố cục: hàng trên 6 chiếc tất bay đứng cạnh nhau, cùng tỉ lệ thật (tất em bé nhỏ xíu, tất trắng to gấp đôi, tất dài dài gấp rưỡi); hàng dưới cuộn tất trắng và chiếc tất bung dài.
 - `l2_sock_striped`: tất cổ ngắn, 4 sọc ngang to hồng đào xen kem, mũi và gót hồng đào, hơi cong như đang bay.
@@ -175,11 +175,11 @@ Bố cục: hàng trên 6 chiếc tất bay đứng cạnh nhau, cùng tỉ lệ
 
 | Tờ | Ô | Key | Thư mục | Nhóm | Neo | Hiển thị | Nét |
 |---|---|---|---|---|---|---|---|
-| l2_chair_sheet | 0,0,512,1024 | l2_chair | level2 |  | đáy | rộng 200 | 6 |
-| l2_chair_sheet | 512,0,488,512 | l2_sweater_rolled | level2 |  | đáy | rộng 190 | 7 |
-| l2_chair_sheet | 500,512,500,512 | l2_sweater_unrolled | level2 |  | đỉnh | rộng 210 | 7 |
-| l2_chair_sheet | 1000,0,536,512 | l2_slippers_cat_idle | level2 | slippers | đáy | rộng 220 | 6 |
-| l2_chair_sheet | 1000,512,536,512 | l2_slippers_cat_after | level2 | slippers | đáy |  | 6 |
+| l2_chair_sheet | 0,0,490,1024 | l2_chair | level2 |  | đáy | rộng 200 | 6 |
+| l2_chair_sheet | 490,60,492,460 | l2_sweater_rolled | level2 |  | đáy | rộng 190 | 7 |
+| l2_chair_sheet | 490,520,492,504 | l2_sweater_unrolled | level2 |  | đỉnh | rộng 210 | 7 |
+| l2_chair_sheet | 982,100,554,450 | l2_slippers_cat_idle | level2 | slippers | đáy | rộng 220 | 6 |
+| l2_chair_sheet | 982,550,554,474 | l2_slippers_cat_after | level2 | slippers | đáy |  | 6 |
 
 - `l2_chair`: ghế gỗ nhỏ caramel, lưng tựa tròn, mặt ghế trống.
 - `l2_sweater_rolled` 🎭: áo len trắng ấm cuộn tròn như mèo cuộn ngủ (đặt trên mặt ghế), thấy cổ tay áo bo và vân len; không mặt.
@@ -217,10 +217,10 @@ Bố cục: hàng trên 6 chiếc tất bay đứng cạnh nhau, cùng tỉ lệ
 
 | Tờ | Ô | Key | Thư mục | Nhóm | Neo | Hiển thị | Nét |
 |---|---|---|---|---|---|---|---|
-| l2_props_sheet | 0,0,542,512 | l2_shoebox_ears | level2 | shoebox | đáy | rộng 170 | 7 |
+| l2_props_sheet | 0,0,542,496 | l2_shoebox_ears | level2 | shoebox | đáy | rộng 170 | 7 |
 | l2_props_sheet | 542,0,500,512 | l2_shoebox_open | level2 | shoebox | đáy |  | 7 |
 | l2_props_sheet | 1042,0,494,512 | l2_beanie_pink_cat | level2 |  | đáy | rộng 120 | 8 |
-| l2_props_sheet | 0,512,512,512 | l2_curtain_tie | level2 |  | đỉnh | cao 150 | 8 |
+| l2_props_sheet | 0,496,542,528 | l2_curtain_tie | level2 |  | đỉnh | cao 150 | 8 |
 
 - `l2_shoebox_ears` 🎭: hộp giày chữ nhật thấp bạc hà, nắp kem **hé lệch**, từ khe hở **hai tai mèo nhọn màu hồng nhạt** thò lên (là tai của chiếc mũ bên trong). Trên nắp hình chiếc giày đơn giản, không chữ.
 - `l2_shoebox_open`: cùng hộp, **nắp mở dựng phía sau**, lòng hộp trống (mũ là sprite riêng).
@@ -259,33 +259,29 @@ Không vẽ thanh treo (trong nền). Vệt nắng chiếu vào giỏ do code v�
 - **Đèn:** quả lắc như level 1: `swing` quanh đầu dây (neo đỉnh).
 - Không có `sua_one_eye_open` / `sua_yawn` riêng (đã gộp vào giỏ). Dev sửa states Level 2 theo key mục 1.
 
-**Bảng vị trí** (điểm neo trên khung 1024x1536, dòng trên nằm dưới; Dev đo lại theo ảnh thật và nền mới. `sock_target_N` là tâm chiếc tất thứ N khi đáp; rèm hiển thị rộng 387 trong game để kết thúc trên gáy sách):
+**Bảng vị trí** (điểm neo trên khung 1024x1536, dòng trên nằm dưới; Dev đo lại theo ảnh thật và nền mới. `sock_target_N` là tâm chiếc tất thứ N khi đáp. Không có dòng thì code tính theo ảnh: hộp giày trên nóc tủ, áo len giữa mặt ghế, tất 2 ở vành chao đèn, tất 3 treo núm tủ. Trong game thu cỡ: rèm 415 (kết thúc trên gáy sách), tủ ×0,85, đèn ×0,8 (O2-8)):
 
 | Key | X | Y | Cảnh |
 |---|---|---|---|
 | l2_ceiling_lamp | 512 | 0 | |
-| l2_coat_hook | 300 | 150 | |
-| l2_beanie_white_idle | 300 | 175 | |
+| l2_coat_hook | 300 | 135 | |
+| l2_beanie_white_idle | 300 | 160 | |
 | l2_beanie_white_floor | 250 | 1530 | |
-| l2_wardrobe_closed | 815 | 960 | |
-| l2_shoebox_ears | 800 | 444 | |
-| l2_plush_cat | 380 | 832 | |
-| l2_plush_cat_fallen | 210 | 1120 | |
-| l2_bed_blanket_flat | 310 | 1250 | |
-| l2_fur_rug_peek | 330 | 1258 | |
-| l2_fur_rug | 370 | 1345 | |
+| l2_wardrobe_closed | 815 | 1018 | |
+| l2_plush_cat | 380 | 843 | |
+| l2_plush_cat_fallen | 210 | 1085 | |
+| l2_bed_blanket_flat | 310 | 1215 | |
+| l2_fur_rug_peek | 330 | 1223 | |
+| l2_fur_rug | 325 | 1345 | |
 | l2_chair | 820 | 1220 | |
-| l2_sweater_rolled | 820 | 1105 | |
 | l2_slippers_cat_idle | 170 | 1390 | |
-| l2_sock_basket_full | 640 | 1395 | |
+| l2_sock_basket_full | 610 | 1395 | |
 | l2_sock_ball | 880 | 1330 | |
-| l2_curtain_closed | 312 | 362 | |
-| sock_target_1 | 70 | 990 | |
-| sock_target_2 | 512 | 305 | |
-| sock_target_3 | 758 | 775 | |
+| l2_curtain_closed | 305 | 344 | |
+| sock_target_1 | 70 | 955 | |
 | sock_target_4 | 862 | 940 | |
-| sock_target_5 | 560 | 797 | |
-| sock_target_6 | 545 | 455 | |
+| sock_target_5 | 560 | 808 | |
+| sock_target_6 | 540 | 445 | |
 | player_call | 500 | 1520 | đầu |
 
 ---

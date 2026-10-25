@@ -80,9 +80,11 @@
 | Trốn (né tránh có chủ ý, G10) | `sua_tail_peek` thò ra sau gối trái → gối phải → dưới mép rèm | Đuôi ve vẩy ±12°, 0,6 giây mỗi nhịp | Chạm đuôi: như chạm gối/rèm ở chỗ đó (Sữa bật ra 0,2 giây rồi vụt chạy) |
 | Chạy trốn | `sua_sit_stare` 0,2 giây → `sua_run` | Vụt chạy 0,4 giây, vệt bụi nhỏ | — |
 | Sau khi biến mất, trước khi mở hộp | Không có trên màn hình | — | — |
-| Vừa xuất hiện | `sua_sit_stare`: ngồi trên thảm, **bên trái** hộp pate (hộp đã rơi khỏi bệ và lăn tới trước sofa), mặt hướng sang phải nhìn xuống pate, cao khoảng 250 | **Hiện tức thì**, không tween vào | Thắng |
-| Kêu meo | `sua_meow_up` | `hop` nhỏ | Thắng |
+| Vừa xuất hiện | `sua_sit_stare`: ngồi trên thảm, **bên trái** hộp pate (hộp đã rơi khỏi bệ và lăn tới trước sofa), mặt hướng sang phải nhìn xuống pate, cao khoảng 250 | **Hiện tức thì**, không tween vào | Chưa chạm được (chạm hộp: hộp nảy nhẹ) |
+| Kêu meo | `sua_meow_up` | `hop` nhỏ | Chưa chạm được; meo xong (~1,8 giây sau khi hộp bật) mới bật vùng chạm Sữa, tay hướng dẫn chỉ vào Sữa |
 | Ăn | `sua_eat` ↔ `sua_eat_f2` | Đổi khung 0,25 giây mỗi nhịp, kèm gật đầu nhẹ; `glow_outline` | Thắng |
+
+**Vùng chạm Sữa (đoạn cuối, chung 2 level):** chỉ bật sau khi cảnh lộ diện xong, ôm sát thân Sữa (không phủ hộp pate); trước đó chạm hộp chỉ làm hộp nảy nhẹ. Chỉ chạm vào Sữa mới sang cảnh bế.
 
 ### Nhân vật
 
@@ -190,14 +192,14 @@ Toàn bộ đã có trong `art/design-art-level1.md` (vẽ theo tờ, cắt bằ
 
 | Giai đoạn | Tư thế | Chuyển động | Chạm Sữa |
 |---|---|---|---|
-| Mở màn | `sua_run` | Chạy vụt **từ trái sang phải** dọc phía sau phòng (quay mặt sang phải) 0,75 giây, **khuất sau ghế** (ngay trên giỏ), không hiện ra nữa; giỏ khẽ nhún một cái (VL2-2) | — |
+| Mở màn | Không có trên màn hình (O2-4: bỏ cảnh Sữa chạy lướt qua) | Chỉ có tiếng ngáy rất nhỏ | — |
 | Trong giỏ (tất 0–5) | Nằm sẵn trong ảnh giỏ, lẫn hẳn vào tất | Giỏ đứng yên (G2-8); tiếng ngáy `sua_sfx_snore` lặp, rất nhỏ, to dần 6 nấc theo số tất đã bay ra | Chạm vào giỏ = lật thêm 1 chiếc tất (Ẩn) |
-| Lộ ra | `l2_sock_basket_reveal` | `zzz` | Thắng |
-| Hé mắt | `l2_sock_basket_one_eye` | 0,8 giây | Thắng |
+| Lộ ra | `l2_sock_basket_reveal` | `zzz` | Chưa chạm được (chạm giỏ: giỏ nảy nhẹ) |
+| Hé mắt | `l2_sock_basket_one_eye` | 0,8 giây | Thắng (vùng chạm Sữa bật ~1,5 giây sau lần chạm giỏ thứ 6, tay hướng dẫn chỉ vào Sữa) |
 | Ngáp | `l2_sock_basket_yawn` | 0,8 giây | Thắng |
 | Ngủ tiếp | `l2_sock_basket_reveal` | `zzz` + `glow_outline` vùng Sữa | Thắng |
 
-**Vùng chạm Sữa** ở trạng thái reveal: chỉ phần thân Sữa trong giỏ (dev vẽ tay vùng đa giác).
+**Vùng chạm Sữa:** chỉ bật sau khi lộ diện xong (~1,5 giây), ôm sát thân Sữa ở miệng giỏ (không phủ cả giỏ); chạm phần dưới giỏ hay chạm trước lúc đó chỉ làm giỏ nảy nhẹ. Chỉ chạm vào Sữa mới sang cảnh bế.
 
 ### Kịch bản lộ diện (chạm giỏ lần 6)
 

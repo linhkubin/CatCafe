@@ -174,3 +174,37 @@ Còn thiếu: không. Đã bỏ `l2_slipper` và `l2_shoebox` cũ.
 - **Ô tờ:** đã sửa theo chỗ AI thực vẽ (như level 1), nên cắt lại từ design-art ra đúng.
 
 ---
+
+## Chủ dự án góp ý sau khi chơi level 2 online (PM ghi lại) – O2-1…O2-9
+
+**Art 2D:**
+- **O2-1. Màu và style level 2 đang lệch level 1.** Vẽ lại các asset level 2 (và nền) **đúng nét chì màu, độ tươi, chất giấy như level 1**: mỗi lượt Codex đính kèm ảnh level 1 làm mẫu (`art/out/demo/l1_demo_reveal.png`, `art/out/level1/l1_bg_living_room.png`, vài sprite level 1 như `l1_box_closed.png`, `l1_pillow_white_idle.png`) và ghi rõ "vẽ đúng nét chì màu và màu như ảnh mẫu".
+- **O2-2. Hộp trên nóc tủ** lệch góc nhìn và style với tủ: vẽ cùng góc nhìn chính diện hơi từ trên xuống như tủ, cùng nét.
+- **O2-3. Quần áo trong tủ** lệch style: vẽ lại cùng nét chì, màu pastel như phần còn lại.
+
+**Dev:**
+- **O2-4.** Bỏ cảnh Sữa chạy lướt qua lúc mở màn level 2.
+- **O2-5.** Tấm thảm lông dưới giường đang nằm dưới cả bóng gầm giường: đưa lên lớp trên bóng giường (vẫn trông như thò ra từ gầm).
+- **O2-6.** Dây buộc rèm (đuôi mèo ở cửa sổ) phải nằm **sau rèm**.
+- **O2-7.** Áo len đặt **giữa mặt ghế**.
+- **O2-8.** Tủ hơi cao so với nền: hạ/thu cho chân tủ đứng đúng sàn, tỉ lệ hợp phòng. Đèn **hơi to**: thu nhỏ. Giường **hơi thấp**: nâng lên.
+
+---
+
+## Vòng 3 – Art 2D (O2-1…O2-3: vẽ lại theo chất liệu level 1)
+
+**11 lượt Codex**, không gặp hết hạn mức. Bản cũ (tờ và nền) giữ ở `art/out/_refs/l2_v1/`.
+- **Nền: 2 lượt.**
+  - Lượt 1 sửa từ nền cũ: gần như không đổi (tường hồng vẫn đậm, vân ngoằn ngoèo), coi là hỏng.
+  - Lượt 2 vẽ mới theo chất liệu `l1_bg_living_room` (tường hồng rất nhạt gần kem, mịn, sàn và khung cửa gỗ mật ong như level 1), giữ bố cục cũ. Thanh rèm giờ ở y≈340 (x 43–568).
+- **Tờ thử trước:** `l2_wardrobe_sheet`, đặt cạnh nền level 1. Tủ gỗ mật ong, quần áo gấp cùng nét chì pastel (O2-3). Đạt, nên vẽ tiếp.
+- **8 tờ còn lại, mỗi tờ 1 lượt:** props, basket, socks, decoy, chair, bed, curtain, player_beanie.
+  - Mỗi lượt đính kèm tờ level 2 cũ (giữ hình dạng, bố cục), `l1_demo_reveal` và 1 sprite level 1 cùng loại (gối trắng, rèm, hộp, tư thế nhân vật). Ghi rõ "giữ hình dạng level 2, vẽ đúng nét chì màu và màu như mẫu level 1".
+  - Hộp giày (O2-2) giờ nhìn chính diện như tủ.
+- **Giữ nguyên** key, nhóm, neo, cỡ hiển thị. Chỉ sửa ô cho khớp chỗ AI vẽ ở `l2_props_sheet`, `l2_socks_sheet`, `l2_chair_sheet`.
+- **Tất và ghế:** AI vẽ sát nhau, nên sau khi cắt tôi xoá mảnh lạc của vật bên cạnh (giữ thành phần lớn nhất). `anchors.json` đã cập nhật.
+- **Ảnh so sánh** (level 1, nền level 2 cũ, level 2 mới ghép tạm): `C:\Users\ADMIN\AppData\Local\Temp\claude\D--WebGames-Cat3D\74bbc2ec-a62f-4e91-a629-50f0963f00d3\scratchpad\l2_style_compare.jpg`.
+  - Vị trí trong ảnh ghép lấy theo bảng vị trí tạm, chưa đúng game.
+  - Còn lại: chao đèn vàng hơi đậm hơn level 1.
+
+---
