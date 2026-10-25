@@ -339,3 +339,25 @@ Mỗi lượt Codex đính kèm ảnh mẫu level 1 (`art/ref/owner_l1_style_ref
 - Đã ghép thử hộp lên nóc mới: góc nghiêng và dải hông phải của hộp khớp nóc, không cần vẽ lại hộp.
 
 ---
+
+## Vòng 5e – Art 2D (cặp tủ đồng bộ)
+
+- **design-art mục 5.6:** mô tả chi tiết cặp tủ:
+  - tỉ lệ rộng 1 : cao 1,75 : sâu 0,35; nóc gỗ dày nhô ra, mặt trên là dải phẳng; dải hông phải hẹp ~1/10 bề ngang, giống nhau ở hai trạng thái; 4 chân; góc nhìn chung;
+  - tủ mở có 2 cánh mở đối xứng thành dải hẹp hình thang ở hai mép bản lề, 4 ngăn quần áo gấp nhìn chính diện.
+  - Hai tờ riêng `l2_wardrobe_closed_sheet`, `l2_wardrobe_open_sheet` (1024x1536). Tủ mở để trống cột Hiển thị để dùng chung tỉ lệ với tủ đóng.
+- **Lượt 1 (tủ đóng):** đạt. Log có "Nhắc lại quy tắc" và "Tự kiểm".
+- **Lượt 2 (tủ mở, Codex sửa từ ảnh tủ đóng):** hỏng rõ. Nóc, thân, chân đổi cỡ và vị trí; Codex tự kiểm "khung tủ mở trùng tủ đóng — không đạt".
+  - Không dùng lượt thứ 3 vì sửa ảnh bằng image_gen không giữ được khung (đã thấy từ thử nghiệm A3).
+  - Tôi **ghép bằng script từ ảnh tủ đóng**: giữ nguyên từng pixel khung, nóc, hông, chân; thay lòng cửa bằng phần ngăn quần áo gấp cắt từ ảnh Codex; hai cánh lấy từ ảnh Codex, nắn thành dải hẹp hình thang ở hai mép bản lề.
+  - Khung hai tủ trùng khít. Bản Codex gốc ở `art/out/_refs/l2_wardrobe_open_codex_raw.png`.
+- Ảnh so sánh đóng/mở cạnh nhau: scratchpad `l2_wardrobe_pair.jpg`.
+- Cắt xong, `anchors.json` cập nhật: hai tủ cùng khung 653x761, neo đáy (346, 754), `res` 1,5.
+- **Mặt trên nóc tủ** (ảnh xuất `l2_wardrobe_closed.png`): y 14–40 px, x 107–582, tâm lệch neo −1,5 px.
+  - Cỡ hiển thị gốc: 476–493 px phía trên neo đáy, giữa là 485.
+  - **Theo cỡ trong game (tủ ×1,14): 543–562 px phía trên neo đáy, giữa là 553.** Đặt neo đáy hộp giày ở (X_tủ − 1, Y_tủ − 553).
+  - Ví dụ: tủ ở (862, 990) thì hộp ở (861, 437).
+  - Đã ghép thử: hộp nằm trên nóc, góc nghiêng khớp, không cần vẽ lại hộp.
+- Lệch nhỏ đã chấp nhận: núm ở mép ngoài hai cánh mở bị cắt mất nửa.
+
+---

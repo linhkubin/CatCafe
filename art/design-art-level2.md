@@ -43,8 +43,8 @@ Hiển thị = cỡ trong game trên khung 1024x1536. TS = trong suốt.
 | `l2_bed_blanket_flipped` | level2 | theo nhóm | TS | đáy | `l2_bed_sheet` (bed) |
 | `l2_duster_peek` | level2 | cao 120 | TS | đỉnh (gốc lông) | `l2_wardrobe_sheet` (G2-9) |
 | `l2_duster` | level2 | rộng 260 | TS | đáy | `l2_wardrobe_sheet` (G2-9) |
-| `l2_wardrobe_closed` | level2 | rộng 330 | TS | đáy | `l2_wardrobe_sheet` (wardrobe) |
-| `l2_wardrobe_open` | level2 | theo nhóm | TS | đáy | `l2_wardrobe_sheet` (wardrobe) |
+| `l2_wardrobe_closed` | level2 | rộng 330 | TS | đáy | `l2_wardrobe_closed_sheet` (wardrobe) |
+| `l2_wardrobe_open` | level2 | theo nhóm | TS | đáy | `l2_wardrobe_open_sheet` (wardrobe), sửa từ ảnh tủ đóng |
 | `l2_shoebox_ears` | level2 | rộng 170 | TS | đáy | `l2_props_sheet` (shoebox, G2-7) |
 | `l2_shoebox_open` | level2 | theo nhóm | TS | đáy | `l2_props_sheet` (shoebox, G2-7) |
 | `l2_beanie_pink_cat` | level2 | rộng 120 | TS | đáy | `l2_props_sheet` (G2-7) |
@@ -229,12 +229,10 @@ Bố cục: hàng trên 6 chiếc tất bay đứng cạnh nhau, cùng tỉ lệ
 - `l2_bed_blanket_flat` 🎭: giường đơn gỗ caramel nằm ngang, **đầu giường tròn bên trái**, chân ngắn; chăn xanh da trời phủ kín, **giữa chăn MỘT gò tròn duy nhất, nổi rõ, cỡ Sữa cuộn tròn** (gối trắng nằm dưới); **gầm giường trong suốt** (không bóng, không mảng tối; thấy sàn nền; góc thảm lông là sprite riêng). 4 chân thẳng đứng cùng phối cảnh khung (O2-12, O2-13).
 - `l2_bed_blanket_flipped`: cùng giường, chăn lật gập về phía chân giường, lộ **một chiếc gối trắng tròn** (chính là cục phồng). Không mèo.
 
-### 5.6 Tờ `l2_wardrobe_sheet` — Cặp tủ quần áo và chổi lông (1536x1024, O2-22, G2-9)
+### 5.6 Tờ `l2_wardrobe_sheet` — Chổi lông (1536x1024, G2-9) và cặp tủ (tờ riêng)
 
 | Tờ | Ô | Key | Thư mục | Nhóm | Neo | Hiển thị | Nét |
 |---|---|---|---|---|---|---|---|
-| l2_wardrobe_sheet | 0,0,550,800 | l2_wardrobe_closed | level2 | wardrobe | đáy | rộng 330 | 4 |
-| l2_wardrobe_sheet | 550,0,670,800 | l2_wardrobe_open | level2 | wardrobe | đáy |  | 4 |
 | l2_wardrobe_sheet | 1220,0,316,800 | l2_duster_peek | level2 |  | đỉnh | cao 120 | 8 |
 | l2_wardrobe_sheet | 0,800,1536,224 | l2_duster | level2 |  | đáy | rộng 260 | 7 |
 
@@ -244,10 +242,25 @@ Bố cục: hàng trên 6 chiếc tất bay đứng cạnh nhau, cùng tỉ lệ
 
 Bố cục: hai tủ đứng cạnh nhau ở 3/4 trái (cùng cỡ, cùng đường đáy y≈760), túm lông thò ra ở cột phải, chổi lông nằm ngang ở dải dưới cùng. `l2_lamp_sheet` là ảnh tờ tủ cũ (chỉ lấy đèn), không vẽ lại.
 
-**Cặp tủ (O2-22) — hai ảnh là CÙNG MỘT tủ:** cùng khung, cùng cỡ, cùng góc hơi nghiêng ngang (mặt trước chữ nhật đứng + **một dải hông hẹp bên phải** + nóc là dải mỏng), cùng nóc, cùng 4 chân ngắn, cùng đường đáy.
-- `l2_wardrobe_closed`: khung gỗ mật ong nhạt, 2 cánh kem đóng sát nhau ở giữa, 2 núm gỗ tròn cạnh khe giữa; nóc dải mỏng gỗ; dải hông phải gỗ mật ong hơi sẫm hơn; 4 chân ngắn thẳng.
-- `l2_wardrobe_open`: **y hệt thân tủ đóng** (khung, nóc, dải hông, chân trùng khít vị trí), chỉ khác: **hai cánh mở ra hai bên** (mỗi cánh thấy mặt trong kem, núm ở mép ngoài, cánh mở nhìn hẹp lại vì xoay ra), lộ lòng tủ gỗ nhạt với **4 ngăn kệ ngang, quần áo gấp vuông vức** từng chồng màu pastel nhạt (vàng, hồng, bạc hà, xanh trời, kem). Không mèo.
-- Hộp giày trên nóc (`l2_props_sheet`) đã khớp góc nóc này: giữ nguyên góc nhìn tủ.
+**Cặp tủ (O2-22, vẽ lại lần 3) — hai tờ riêng, tủ mở sửa từ chính ảnh tủ đóng:**
+
+| Tờ | Ô | Key | Thư mục | Nhóm | Neo | Hiển thị | Nét |
+|---|---|---|---|---|---|---|---|
+| l2_wardrobe_closed_sheet | 0,0,1024,1536 | l2_wardrobe_closed | level2 | wardrobe | đáy | rộng 330 | 3 |
+| l2_wardrobe_open_sheet | 0,0,1024,1536 | l2_wardrobe_open | level2 | wardrobe | đáy |  | 3 |
+
+(`rộng 330` đo trên tủ đóng; tủ mở để trống cột Hiển thị nên dùng cùng tỉ lệ, khung trùng nhau.)
+
+Mô tả chung (giống hệt ở hai trạng thái):
+- **Góc nhìn chung** (style.md 2b): chính diện, nhìn xuống ~15°, cạnh ngang nằm ngang, cạnh đứng thẳng đứng. Tủ đặt sát tường sau, hơi lệch phải khung nên thấy **một dải hông bên phải hẹp** (rộng ~1/10 bề ngang mặt trước), cạnh trên/dưới của dải hông hơi chéo lên theo phối cảnh nhẹ, cạnh đứng thẳng.
+- **Tỉ lệ:** mặt trước rộng 1, cao ~1,75 (tính cả nóc và chân), sâu ~0,35 (chỉ thấy qua dải hông và mặt nóc).
+- **Nóc:** tấm gỗ mật ong dày (~1/18 chiều cao), nhô ra ~4% mỗi bên và phía trước; thấy **mặt trên nóc** là một dải phẳng sáng (cao ~1/8 bề ngang, đủ đặt hộp giày) và cạnh trước dày.
+- **Thân:** khung gỗ mật ong nhạt bo góc nhẹ, viền nâu ấm mảnh; **chân:** 4 chân gỗ ngắn tròn thẳng đứng (2 chân sau lấp một phần sau chân trước), cùng đường đáy.
+- Màu, nét như `owner_l1_style_ref.png`: nhạt, mịn, viền nâu mảnh.
+- Trong canvas 1024x1536: tủ đóng (kể cả hông) rộng ~430px, căn giữa ngang, đáy chân ở y≈1350, để hai bên còn chỗ cho cánh mở.
+
+- `l2_wardrobe_closed`: hai cánh kem đóng sát nhau ở giữa mặt trước, khe giữa thẳng đứng, 2 núm gỗ tròn hai bên khe, mỗi cánh có viền khung mảnh.
+- `l2_wardrobe_open`: **y hệt ảnh tủ đóng từng pixel** ở khung, nóc, dải hông phải, chân, đường đáy. Chỉ khác: **cả hai cánh mở ra hai bên đối xứng (~100°)**: mỗi cánh thành một **dải hẹp hình thang đứng** gắn đúng ở mép bản lề (cánh trái ở mép trái mặt trước, cánh phải ở mép phải), thấy **mặt trong cánh** màu kem nhạt hơn và núm ở mép ngoài; cạnh trên/dưới cánh hơi chéo theo phối cảnh, cạnh đứng thẳng. Lòng tủ: vách gỗ nhạt, **4 ngăn kệ ngang** nhìn chính diện, quần áo gấp vuông vức ngay ngắn từng chồng (vàng, hồng, bạc hà, xanh trời, kem), không bóng.
 
 **Chổi lông (G2-9):** lông chổi **giống đuôi Sữa**: trắng kem ấm, lông bông xù mềm, nét chì như đuôi trong `sua_ref`.
 - `l2_duster_peek` 🎭: chỉ **túm lông trắng dài, cong như đuôi mèo** thò ra, đầu túm tròn bông; **gốc cắt phẳng ở mép trên** (neo đỉnh, khuất dưới mép giường); không thấy cán.

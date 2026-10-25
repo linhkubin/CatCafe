@@ -660,28 +660,28 @@
   "w": 331
  },
  "l2_wardrobe_closed": {
-  "ax": 328,
-  "ay": 763,
+  "ax": 346,
+  "ay": 754,
   "file": "level2/l2_wardrobe_closed.png",
   "group": "wardrobe",
-  "h": 770,
-  "ox": 0.5031,
-  "oy": 0.9909,
+  "h": 761,
+  "ox": 0.5299,
+  "oy": 0.9908,
   "res": 1.5,
-  "sheet": "l2_wardrobe_sheet",
-  "w": 652
+  "sheet": "l2_wardrobe_closed_sheet",
+  "w": 653
  },
  "l2_wardrobe_open": {
-  "ax": 328,
-  "ay": 763,
+  "ax": 346,
+  "ay": 754,
   "file": "level2/l2_wardrobe_open.png",
   "group": "wardrobe",
-  "h": 770,
-  "ox": 0.5031,
-  "oy": 0.9909,
+  "h": 761,
+  "ox": 0.5299,
+  "oy": 0.9908,
   "res": 1.5,
-  "sheet": "l2_wardrobe_sheet",
-  "w": 652
+  "sheet": "l2_wardrobe_open_sheet",
+  "w": 653
  },
  "player_call": {
   "ax": 282,

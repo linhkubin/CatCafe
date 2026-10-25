@@ -295,7 +295,7 @@ export class Level2 extends BaseLevel {
     this.wardrobe = this.img('l2_wardrobe_closed', ...P('l2_wardrobe_closed'), D.box);
     // G2-7: hộp giày nắp hé, hai tai mèo thò lên (hoá ra mũ len hồng tai mèo).
     const wb0 = this.wardrobe.getBounds();
-    this.shoebox = this.img('l2_shoebox_ears', ...(this.pos('l2_shoebox_ears') || [this.wardrobe.x + SIZE_K.l2_wardrobe_closed, this.wardrobe.y - 487 * SIZE_K.l2_wardrobe_closed]) /* Vòng 5d: mặt nóc cách neo đáy 487px ở cỡ design-art, nhân hệ số cỡ tủ trong game */, D.box + 1);
+    this.shoebox = this.img('l2_shoebox_ears', ...(this.pos('l2_shoebox_ears') || [this.wardrobe.x - 1, this.wardrobe.y - 553 * this.wardrobe.scaleY / (1.14 / 1.5)]) /* Vòng 5e: mặt nóc 543–562px trên neo đáy tủ ở cỡ trong game (tủ ×1,14) */, D.box + 1);
     this.attachTo(this.shoebox, this.wardrobe); // O2-18: hộp nằm trên nóc tủ nhún theo tủ
     this.pinkBeanie = this.img('l2_beanie_pink_cat', this.shoebox.x, this.shoebox.y - 40, D.box).setVisible(false);
     this.bed = this.img('l2_bed_blanket_flat', ...P('l2_bed_blanket_flat'), D.cushion);
