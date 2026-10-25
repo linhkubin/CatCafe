@@ -238,7 +238,9 @@ function curledCat(g, w, h, mode, ox = 0, oy = 0) {
 }
 
 // Lớp của tất sau khi đáp (theo SOCK_ON).
-const SOCK_DEPTH = [D.cushion + 1, D.cushion + 2, D.pillow, D.curtain + 2, D.box + 2, D.curtain + 2];
+// Lớp tủ và ghế: cánh tủ mở nằm trên giường (và đồ trên giường) nhưng dưới ghế, áo len, tất trên ghế.
+const WARDROBE_D = D.pillow + 2.5, CHAIR_D = WARDROBE_D + 1;
+const SOCK_DEPTH = [D.cushion + 1, D.cushion + 2, D.pillow, D.curtain + 2, CHAIR_D + 2, D.curtain + 2];
 
 export class Level2 extends BaseLevel {
   constructor() { super('Level2'); }
@@ -292,12 +294,12 @@ export class Level2 extends BaseLevel {
     if (!(this.A.entries.l2_bg_bedroom || {}).real) { if (!this.textures.exists('l2_shelf')) this.makeFallback('l2_shelf'); this.img('l2_shelf', this.P('l2_plush_cat')[0], this.P('l2_plush_cat')[1], D.plant); }
     // Mèo bông ngồi trên kệ, trước gấu rèm (rèm kết thúc trên gáy sách).
     this.plush = this.img('l2_plush_cat', ...P('l2_plush_cat'), D.curtain + 1);
-    this.wardrobe = this.img('l2_wardrobe_closed', ...P('l2_wardrobe_closed'), D.box);
+    this.wardrobe = this.img('l2_wardrobe_closed', ...P('l2_wardrobe_closed'), WARDROBE_D);
     // G2-7: hộp giày nắp hé, hai tai mèo thò lên (hoá ra mũ len hồng tai mèo).
     const wb0 = this.wardrobe.getBounds();
-    this.shoebox = this.img('l2_shoebox_ears', ...(this.pos('l2_shoebox_ears') || [this.wardrobe.x - 1, this.wardrobe.y - 553 * this.wardrobe.scaleY / (1.14 / 1.5)]) /* Vòng 5e: mặt nóc 543–562px trên neo đáy tủ ở cỡ trong game (tủ ×1,14) */, D.box + 1);
+    this.shoebox = this.img('l2_shoebox_ears', ...(this.pos('l2_shoebox_ears') || [this.wardrobe.x - 1, this.wardrobe.y - 553 * this.wardrobe.scaleY / (1.14 / 1.5)]) /* Vòng 5e: mặt nóc 543–562px trên neo đáy tủ ở cỡ trong game (tủ ×1,14) */, WARDROBE_D + 0.2);
     this.attachTo(this.shoebox, this.wardrobe); // O2-18: hộp nằm trên nóc tủ nhún theo tủ
-    this.pinkBeanie = this.img('l2_beanie_pink_cat', this.shoebox.x, this.shoebox.y - 40, D.box).setVisible(false);
+    this.pinkBeanie = this.img('l2_beanie_pink_cat', this.shoebox.x, this.shoebox.y - 40, WARDROBE_D + 0.1).setVisible(false);
     this.bed = this.img('l2_bed_blanket_flat', ...P('l2_bed_blanket_flat'), D.cushion);
     // G2-9: chổi lông thò ra dưới gầm giường như đuôi mèo (gốc khuất sau khung giường), ve vẩy nhẹ.
     const bdb0 = this.bed.getBounds();
@@ -305,9 +307,9 @@ export class Level2 extends BaseLevel {
     this.dusterPeek = this.img('l2_duster_peek', ...pk, D.cushion - 1);
     this.duster = this.img('l2_duster', pk[0], pk[1] + 40, D.cushion - 1).setVisible(false);
     this.wagDuster();
-    this.chair = this.img('l2_chair', ...P('l2_chair'), D.box);
+    this.chair = this.img('l2_chair', ...P('l2_chair'), CHAIR_D);
     const chb = this.chair.getBounds();
-    this.sweater = this.img('l2_sweater_rolled', ...(this.pos('l2_sweater_rolled') || [chb.left + chb.width * 0.48, chb.top + chb.height * 0.6]), D.box + 1); // O2-7: giữa mặt ghế
+    this.sweater = this.img('l2_sweater_rolled', ...(this.pos('l2_sweater_rolled') || [chb.left + chb.width * 0.48, chb.top + chb.height * 0.6]), CHAIR_D + 1); // O2-7: giữa mặt ghế
     this.attachTo(this.sweater, this.chair);
     this.slippersCat = this.img('l2_slippers_cat_idle', ...P('l2_slippers_cat_idle'), D.pillow);
     this.basket = this.img('l2_sock_basket_full', ...bb, D.pillow + 1);
@@ -488,12 +490,12 @@ export class Level2 extends BaseLevel {
     this.sfx('l1_sfx_box_flaps');
     this.swap(this.shoebox, 'l2_shoebox_open');
     const m = this.pinkBeanie, y0 = this.shoebox.y - 30;
-    m.setVisible(true).setPosition(this.shoebox.x, y0).setDepth(D.box + 2);
+    m.setVisible(true).setPosition(this.shoebox.x, y0).setDepth(WARDROBE_D + 0.3);
     this.tweens.chain({ targets: m, tweens: [
       { y: y0 - 150, angle: 20, duration: 300, ease: 'Quad.out' },
       { y: y0 - 150, duration: 150 },
       { y: y0, angle: 0, duration: 300, ease: 'Quad.in' },
-    ], onComplete: () => { m.setDepth(D.box).setVisible(false); this.squash(this.shoebox); this.busy.shoe = false; } });
+    ], onComplete: () => { m.setDepth(WARDROBE_D + 0.1).setVisible(false); this.squash(this.shoebox); this.busy.shoe = false; } });
     this.sfx('sfx_pickup');
   }
 
