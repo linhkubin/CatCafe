@@ -246,7 +246,7 @@ export class Level2 extends BaseLevel {
   constructor() { super('Level2'); }
 
   get levelNo() { return 2; }
-  get nextLevel() { return 'Level1'; }
+  get nextLevel() { return 'Level3'; } // G3-9
   get rewardFish() { return 15; }
   get defaultPos() { return DEF; }
 
@@ -312,7 +312,7 @@ export class Level2 extends BaseLevel {
     this.sweater = this.img('l2_sweater_rolled', ...(this.pos('l2_sweater_rolled') || [chb.left + chb.width * 0.48, chb.top + chb.height * 0.6]), CHAIR_D + 1); // O2-7: giữa mặt ghế
     this.attachTo(this.sweater, this.chair);
     this.slippersCat = this.img('l2_slippers_cat_idle', ...P('l2_slippers_cat_idle'), D.pillow);
-    this.basket = this.img('l2_sock_basket_full', ...bb, D.pillow + 1);
+    this.basket = this.img('l2_sock_basket_full', ...bb, CHAIR_D + 1.5); // giỏ nằm trên ghế và áo len (chủ dự án), dưới tất rơi trên ghế
     // G2-8: giỏ tĩnh hoàn toàn (bỏ phập phồng của G2-2).
     this.player = this.img('player_call', ...P('player_call'), D.player).setVisible(false);
 

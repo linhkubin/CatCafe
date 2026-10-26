@@ -168,6 +168,24 @@ const RECIPES = {
   sfx_sparkle: (c) => { bell(c, 2093, 0, 0.04, 0.2); bell(c, 2637, 0.07, 0.035, 0.2); },
   sfx_win: (c) => [1047, 1319, 1568, 2093].forEach((f, i) => bell(c, f, i * 0.11, 0.09, 0.4)),
   sfx_pickup: (c) => note(c, { f: 1319, t: 0.08, vol: 0.06, glide: [[1760, 0.07]], vib: 0 }),
+  // Túi đồ và kéo-thả (leveldesign 5.2, level 3).
+  sfx_bag_up: (c) => note(c, { f: 392, t: 0.22, vol: 0.12, glide: [[784, 0.12], [698, 0.2]], vib: 0 }), // "tưng"
+  sfx_drop: (c) => { note(c, { f: 330, t: 0.12, vol: 0.12, glide: [[220, 0.1]], vib: 0 }); bell(c, 1047, 0.06, 0.05, 0.15); },
+  sfx_merge: (c) => [1047, 1319, 1568].forEach((f, i) => bell(c, f, i * 0.05, 0.07, 0.25)),
+  sfx_wrong: (c) => { note(c, { f: 440, t: 0.1, vol: 0.08, vib: 0 }); note(c, { f: 370, t: 0.14, vol: 0.08, at: 0.11, vib: 0 }); },
+  sfx_clink: (c) => { bell(c, 1760, 0, 0.06, 0.2); bell(c, 2093, 0.08, 0.05, 0.25); },
+  l3_sfx_doorbell: (c) => { bell(c, 1319, 0, 0.1, 0.5); bell(c, 1047, 0.32, 0.1, 0.6); }, // "ting-tong"
+  l3_sfx_box_thud: (c) => { note(c, { f: 165, t: 0.16, vol: 0.18, glide: [[110, 0.14]], vib: 0, attack: 0.004 }); rustle(c, { t: 0.1, vol: 0.03, f: 900 }); },
+  l3_sfx_scissors_cut: (c) => { for (let i = 0; i < 3; i++) hiss(c, { t: 0.06, vol: 0.06, at: i * 0.09, f: 3600, type: 'bandpass', q: 2 }); },
+  l3_sfx_paper_rip: (c) => rustle(c, { t: 0.3, vol: 0.05, f: 2000 }),
+  l3_sfx_pompom: (c) => { note(c, { f: 660, t: 0.12, vol: 0.08, vib: 0 }); note(c, { f: 587, t: 0.14, vol: 0.07, at: 0.13, vib: 0 }); },
+  l3_sfx_scratch: (c) => { for (let i = 0; i < 4; i++) rustle(c, { t: 0.07, vol: 0.04, at: i * 0.1, f: 1500 }); },
+  l3_sfx_clack: (c) => { note(c, { f: 523, t: 0.07, vol: 0.12, vib: 0, attack: 0.002 }); bell(c, 1568, 0.05, 0.05, 0.18); }, // "cạch" mảnh cột cào khớp
+  l3_sfx_box_tap: (c) => note(c, { f: 220, t: 0.08, vol: 0.06, vib: 0, attack: 0.004 }),
+  sua_sfx_meow_playful: (c) => meow(c, 0.22, 1040),
+  sua_sfx_blep: (c) => note(c, { f: 1568, t: 0.1, vol: 0.06, glide: [[1175, 0.09]], vib: 0 }),
+  sua_sfx_chirp: (c) => { meow(c, 0.1, 1200); meow(c, 0.1, 1300, 0.12); },
+  sua_sfx_meow_question: (c) => meow(c, 0.3, 900),
   // Tiếng ngáy dễ thương của Sữa (VL2-4): hít vào "khò" trầm rồi thở ra "phì" cao, rất nhỏ; g = độ to (0..1).
   sua_sfx_snore: (c, g = 0.3) => {
     note(c, { type: 'triangle', f: 196, t: 0.7, vol: 0.06 * g, attack: 0.25, glide: [[220, 0.6]], vib: 9, vibDepth: 0.04 });

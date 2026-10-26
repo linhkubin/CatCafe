@@ -24,6 +24,12 @@ const ART = path.join(ROOT, "art");
 const OUT = path.join(ART, "out");
 const LOGS = path.join(OUT, "_logs");
 
+// Model vẽ: mặc định sol-medium (đổi bằng biến môi trường CODEX_MODEL / CODEX_EFFORT).
+const MODEL = process.env.CODEX_MODEL || "gpt-6.1-sol";
+const EFFORT = process.env.CODEX_EFFORT || "medium";
+// Đường dẫn codex.exe (không có trong PATH trên máy này).
+const CODEX_BIN = process.env.CODEX_BIN || "codex";
+
 const args = process.argv.slice(2);
 const flag = (name) => args.includes(name);
 const option = (name) => {
@@ -150,12 +156,13 @@ async function drawSheet() {
 function runCodex(prompt, logFile) {
   const codexArgs = [
     "exec", "-C", ROOT, "--skip-git-repo-check",
+    "-m", MODEL, "-c", `model_reasoning_effort="${EFFORT}"`,
     "--sandbox", "workspace-write", "--color", "never",
     "-o", logFile, "-",
   ];
   return new Promise((resolve) => {
     // shell: true vì trên Windows codex là codex.cmd; lời giao việc đi qua stdin nên không lo dấu ngoặc.
-    const child = spawn("codex", codexArgs, { cwd: ROOT, shell: true, stdio: ["pipe", "inherit", "inherit"] });
+    const child = spawn(`"${CODEX_BIN}"`, codexArgs, { cwd: ROOT, shell: true, stdio: ["pipe", "inherit", "inherit"] });
     child.stdin.end(prompt);
     child.on("close", resolve);
   });

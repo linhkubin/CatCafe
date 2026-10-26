@@ -334,7 +334,7 @@ Không vẽ thanh treo (trong nền). Vệt nắng chiếu vào giỏ do code v�
 | l2_duster | 330 | 1085 | |
 | l2_chair | 881 | 1060 | |
 | l2_slippers_cat_idle | 175 | 1330 | |
-| l2_sock_basket_full | 775 | 1320 | |
+| l2_sock_basket_full | 680 | 1320 | |
 | l2_curtain_closed | 260 | 226 | |
 | player_call | 500 | 1520 | đầu |
 

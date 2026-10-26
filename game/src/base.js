@@ -2,7 +2,8 @@
 // nhân vật phản ứng, mở màn, cảnh bế, màn thưởng, nạp asset theo màn.
 // Mỗi màn (Level1, Level2…) kế thừa BaseLevel và cài: levelNo, keys (asset riêng), resetLevel(), buildRoom(),
 // handleLevel(name, g), strongHint(), update(time); tuỳ chọn: onIntro(), blockInput(name), beforeEnding(), endingHide(),
-// makeFallback(key) (ảnh tạm khi chưa có ảnh thật), defaultPos, rewardFish, nextLevel, callSfx.
+// makeFallback(key) (ảnh tạm khi chưa có ảnh thật), defaultPos, rewardFish, nextLevel, callSfx, introPose (tư thế mở màn),
+// fitHead (trạng thái → key đầu nhóm, co cùng tỉ lệ), túi đồ: onBagDrop(item, x, y), onBagCombine(a, b), onBagTap(item).
 // Toạ độ "thế giới" là khung 1024x1536; máy dài hơn 2:3 thì camera lùi lên (Y0) và nền được kéo dài.
 import { playSfx } from './sfx.js';
 import { KEYS, phUrl } from './assets.js';
@@ -12,6 +13,7 @@ export const D = {
   curtain: 35, beam: 36, sua: 40, can: 45, steam: 46, player: 50, fx: 60, hint: 70, zone: 80, ui: 100, uiZone: 150, end: 200,
 };
 export const MIN_HIT = 115;            // vùng chạm tối thiểu (P6)
+export const BANNER = 150;             // dải banner quảng cáo ở đáy màn hình: không đặt UI hay đồ chạm được (leveldesign, quy ước chung)
 export const SWIPE = 40;               // px: dài hơn là vuốt
 export const CREAM = 0xfffcf4, BROWN = 0x6b4a3a, SUN = 0xfce39a;
 
@@ -98,6 +100,10 @@ export class BaseLevel extends Phaser.Scene {
     s.setTexture(key, '__BASE'); // khung gốc (nền có thêm khung 'top'/'bottom' để kéo dài)
     s.setOrigin(e.ax / s.width, e.ay / s.height);
     s.base = 1 / (e.res || 1);
+    // D3-17: có "Rộng demo" thì co cho phần vẽ thật rộng đúng như trong tranh demo; trạng thái cùng nhóm co theo key đầu nhóm.
+    const head = (this.fitHead && this.fitHead[key]) || key;
+    const fw = ((this.A.fit || {})[this.levelNo] || {})[head];
+    if (fw && this.textures.exists(head)) s.base = fw / this.trimWidth(head);
     // Đệm lật: ảnh hiện vẽ dẹt như cái khay. Kéo cao cho tấm đệm dựng nghiêng tựa lưng sofa như tranh l1_demo_reveal
     // (cao ≈ 0,47 bề ngang, mép dưới giữ ở mặt ghế). Ảnh đã đủ cao thì không kéo.
     let sy = 1;
@@ -116,6 +122,51 @@ export class BaseLevel extends Phaser.Scene {
   }
 
   fitWidth(s, w) { s.base = s.baseY = w / s.width; s.setScale(s.base); return s; }
+
+  // Bề rộng phần vẽ thật (bỏ cột trong suốt hai bên) của texture, px ảnh; đọc pixel một lần rồi nhớ.
+  trimWidth(key) {
+    const e = this.A.entries[key] || {};
+    if (e.trimW) return e.trimW;
+    const src = this.textures.get(key).getSourceImage();
+    const w = src.width, h = src.height;
+    let left = 0, right = w - 1;
+    try {
+      const c = document.createElement('canvas');
+      c.width = w; c.height = h;
+      const ctx = c.getContext('2d', { willReadFrequently: true });
+      ctx.drawImage(src, 0, 0);
+      const d = ctx.getImageData(0, 0, w, h).data;
+      const solid = (x) => { for (let y = 0; y < h; y += 2) if (d[(y * w + x) * 4 + 3] > 24) return true; return false; };
+      while (left < right && !solid(left)) left++;
+      while (right > left && !solid(right)) right--;
+    } catch { left = 0; right = w - 1; }
+    e.trimW = Math.max(1, right - left + 1);
+    return e.trimW;
+  }
+
+  // Khung 'trim' ôm sát phần vẽ thật (bỏ lề trong suốt bốn phía) của texture, để icon túi đồ co kín ô.
+  iconFrame(key) {
+    const tex = this.textures.get(key);
+    if (tex.has('trim')) return 'trim';
+    const src = tex.getSourceImage(), w = src.width, h = src.height;
+    let l = 0, t = 0, r = w - 1, b = h - 1;
+    try {
+      const c = document.createElement('canvas');
+      c.width = w; c.height = h;
+      const ctx = c.getContext('2d', { willReadFrequently: true });
+      ctx.drawImage(src, 0, 0);
+      const d = ctx.getImageData(0, 0, w, h).data;
+      l = w; t = h; r = 0; b = 0;
+      for (let y = 0; y < h; y += 2) for (let x = 0; x < w; x += 2) {
+        if (d[(y * w + x) * 4 + 3] > 24) { if (x < l) l = x; if (x > r) r = x; if (y < t) t = y; if (y > b) b = y; }
+      }
+      if (r < l) { l = 0; t = 0; r = w - 1; b = h - 1; }
+    } catch { /* giữ cả khung */ }
+    tex.add('trim', 0, l, t, Math.min(w - l, r - l + 2), Math.min(h - t, b - t + 2));
+    return 'trim';
+  }
+
+  bagIcon(key, x, y) { return this.add.image(x, y, key, this.iconFrame(key)).setDepth(D.ui + 3).setOrigin(0.5, 0.5); }
 
   squash(s, done) {
     const b = s.base, by = s.baseY || b;
@@ -222,14 +273,20 @@ export class BaseLevel extends Phaser.Scene {
     this.busy = {};
     // scene.restart() dùng lại cùng đối tượng Scene: xoá trạng thái của lượt trước.
     Object.assign(this, { qHopLoop: null, glow: null, glowTw: null, endCt: null,
-      handMode: null, press: null, handTimer: null, pawTimer: null, sua: null, dim: null, rewardReadyAt: 0 });
+      handMode: null, press: null, handTimer: null, pawTimer: null, sua: null, dim: null, rewardReadyAt: 0, bag: null, drag: null,
+      pausedState: null, pauseUI: null, reactMask: null });
     this.resetLevel();
 
     this.buildRoom();
     this.buildUI();
     this.layout();
     this.scale.on('resize', this.layout, this);
-    this.events.once('shutdown', () => this.scale.off('resize', this.layout, this));
+    // Tự tạm dừng khi chuyển tab / khoá màn hình; quay lại thấy lớp phủ tạm dừng.
+    this.game.events.on('hidden', this.onHidden, this);
+    this.events.once('shutdown', () => {
+      this.scale.off('resize', this.layout, this);
+      this.game.events.off('hidden', this.onHidden, this);
+    });
     this.setupInput();
     this.intro();
   }
@@ -275,6 +332,12 @@ export class BaseLevel extends Phaser.Scene {
     ct.add([bub, dark, face, q, heart]);
     this.bubble = { ct, bub, dark, face, q, heart, home: 'center' };
 
+    // Nút tạm dừng (leveldesign "Tạm dừng chung"): góc trên phải, tâm (951, 66), rộng 88.
+    this.ensureButtons();
+    this.pauseBtn = this.img('ui_pause_button', 951, 66, D.ui, true).setOrigin(0.5, 0.5);
+    this.fitWidth(this.pauseBtn, 88);
+    this.zone('pause', new Phaser.Geom.Rectangle(951 - 60, 66 - 60, 120, 120), D.uiZone, true);
+
     this.bulb = this.img('ui_bulb_button', 0, 0, D.ui, true);
     this.fitWidth(this.bulb, 130);
     this.bulb.setOrigin(0.5, 0.5);
@@ -294,13 +357,20 @@ export class BaseLevel extends Phaser.Scene {
     this.bgBottom.setScale(s, Math.max(0.001, (this.Y0 + 2) / this.bgBottom.height));
     this.bgTop.setVisible(this.Y0 > 0);
     this.bgBottom.setVisible(this.Y0 > 0);
-    this.bulb.setPosition(1024 - 90, H - 90);
+    this.bulb.setPosition(1024 - 90, H - BANNER - 80); // ngay trên dải banner
     if (this.zones.bulb) this.zones.bulb.setPosition(this.bulb.x, this.bulb.y);
     else this.zone('bulb', this.bulb.getBounds(), D.uiZone, true);
     if (!this.zones.bubble) this.zone('bubble', new Phaser.Geom.Rectangle(380, 10, 150, 110), D.uiZone, true).disableInteractive();
     // Bong bóng như lời nhân vật đang gọi: phía trên bên phải đầu nhân vật, đuôi chĩa xuống trái về phía đầu (toạ độ màn hình).
     this.bubbleCenter = [700, 760 + this.Y0];
     if (this.bubble.home === 'center') this.bubble.ct.setPosition(...this.bubbleCenter);
+    if (this.bag && this.bag.shown) this.bagLayout();
+    if (this.pauseUI) {
+      const [dim, play, again] = this.pauseUI;
+      dim.setPosition(512, H / 2).setSize(1024, H);
+      play.setY(H / 2);
+      again.setY(H / 2);
+    }
   }
 
   // ---------- nhập liệu ----------
@@ -313,7 +383,9 @@ export class BaseLevel extends Phaser.Scene {
       if (this.phase === 'reward') { if (this.time.now > this.rewardReadyAt) this.goNext(); return; }
       if (!over.length && !this.locked) this.tapRing(p.worldX, p.worldY);
     });
+    this.input.on('pointermove', (p) => this.bagMove(p));
     this.input.on('pointerup', (p) => {
+      if (this.drag) { this.bagRelease(p); return; }
       if (!this.press) return;
       const { name, x, y } = this.press;
       this.press = null;
@@ -339,6 +411,7 @@ export class BaseLevel extends Phaser.Scene {
   }
 
   handle(name, g) {
+    if (name === 'pause') { this.pauseGame(); return; }
     if (this.locked) return;
     if (this.blockInput && this.blockInput(name)) return;
     if (name === 'bulb') { this.touch(); this.strongHint(); return; }
@@ -378,8 +451,9 @@ export class BaseLevel extends Phaser.Scene {
   // ---------- nhân vật ----------
   intro() {
     this.cameras.main.fadeIn(300, 0, 0, 0);
-    const p = this.player, [x, y] = this.P('player_call');
-    this.applyKey(p, 'player_call');
+    const pose = this.introPose || 'player_call';
+    const p = this.player, [x, y] = this.P(pose);
+    this.applyKey(p, pose);
     p.setVisible(true).setPosition(-260, y);
     this.time.delayedCall(300, () => {
       this.tweens.add({ targets: p, x, duration: 900, ease: 'Sine.out' });
@@ -387,11 +461,12 @@ export class BaseLevel extends Phaser.Scene {
     });
     this.time.delayedCall(1150, () => { this.sfx(this.callSfx || 'l1_sfx_player_call'); this.hop(p, 10, 300); });
     if (this.onIntro) this.onIntro();
-    this.time.delayedCall(2300, () => { if (this.phase === 'search' && p.key === 'player_call') this.hop(p, 10, 300); });
+    this.time.delayedCall(2300, () => { if (this.phase === 'search' && p.key === pose) this.hop(p, 10, 300); });
     // Nhân vật đứng gọi tới khi bong bóng nhiệm vụ thu về góc rồi mới lui xuống mép dưới,
     // để lúc bong bóng bật ra (2 giây) vẫn thấy người đang gọi.
     this.time.delayedCall(3600, () => {
-      if (p.key !== 'player_call' || !p.visible) return;
+      if (p.key !== pose || !p.visible) return;
+      if (this.onIntroLeave) this.onIntroLeave();
       this.tweens.add({ targets: p, y: this.worldBottom + p.displayHeight, duration: 400, ease: 'Quad.in', onComplete: () => p.setVisible(false).setAngle(0) });
     });
     this.time.delayedCall(2000, () => {
@@ -408,16 +483,22 @@ export class BaseLevel extends Phaser.Scene {
     const p = this.player;
     this.tweens.killTweensOf(p);
     this.applyKey(p, key);
+    p.setScale(p.base * 1.2, (p.baseY || p.base) * 1.2); // to hơn cỡ đứng trong cảnh một chút (chủ dự án)
     const h = p.displayHeight;
     const px = Phaser.Math.Clamp(x, 200, 824);
-    const hidden = this.worldBottom + h * (1 - p.originY) + h * p.originY + 10;
-    const shown = this.worldBottom + h * 0.45;
-    p.setVisible(true).setAngle(0).setPosition(px, hidden);
+    // Trồi lên từ mép trên dải banner (không lấn vào dải banner), nằm trên túi đồ và các nút (chủ dự án).
+    const floor = this.worldBottom - BANNER;
+    const hidden = floor + h * (1 - p.originY) + h * p.originY + 10;
+    const shown = floor + h * 0.45;
+    if (!this.reactMask) this.reactMask = this.make.graphics({ x: 0, y: 0 }, false);
+    this.reactMask.clear().fillStyle(0xffffff).fillRect(0, floor - 4000, 1024, 4000);
+    p.setMask(this.reactMask.createGeometryMask());
+    p.setVisible(true).setAngle(0).setPosition(px, hidden).setDepth(D.ui + 8);
     this.tweens.chain({ targets: p, tweens: [
       { y: shown, duration: 250, ease: 'Back.out' },
       { y: shown, duration: hold },
       { y: hidden, duration: 250, ease: 'Quad.in' },
-    ], onComplete: () => { p.setVisible(false); done && done(); } });
+    ], onComplete: () => { p.setVisible(false).setDepth(D.player).setScale(p.base, p.baseY || p.base).clearMask(true); done && done(); } });
   }
 
   // ---------- bong bóng nhiệm vụ ----------
@@ -488,7 +569,171 @@ export class BaseLevel extends Phaser.Scene {
     if (this[which + 'Timer']) { this[which + 'Timer'].remove(); this[which + 'Timer'] = null; }
     s.setVisible(false).setAlpha(1).setScale(s.base).setFlipX(false);
     if (s.ox0 !== undefined) s.setOrigin(s.ox0, s.originY);
+    if (s.depth0 !== undefined) { s.setDepth(s.depth0); s.depth0 = undefined; }
     if (which === 'hand') this.handMode = null;
+  }
+
+  // Làm mẫu kéo-thả: đầu ngón đi từ `from` tới `to` (toạ độ thế giới), nằm trên túi đồ; lặp `times` lần (-1: mãi).
+  handDrag(from, to, mode = 'guide', which = 'hand', times = -1) {
+    this.handHide(which);
+    const s = this[which];
+    if (which === 'hand') this.handMode = mode;
+    s.depth0 = s.depth;
+    s.setDepth(D.ui + 30).setVisible(true);
+    const once = { n: 0 };
+    const run = () => {
+      if (!s.visible || (times >= 0 && once.n++ >= times)) { this.handHide(which); return; }
+      s.setPosition(from[0], from[1]).setAlpha(0).setScale(s.base);
+      this.tweens.chain({ targets: s, tweens: [
+        { alpha: 1, scale: s.base * 0.88, duration: 200 },
+        { x: to[0], y: to[1], duration: 800, ease: 'Sine.inOut' },
+        { scale: s.base, duration: 150 },
+        { alpha: 0, duration: 250, delay: 150 },
+        { alpha: 0, duration: 350 },
+      ], onComplete: run });
+    };
+    run();
+  }
+
+  // ---------- túi đồ (D3-1, G3-2, G3-3): dải bám mép dưới, 4 ô; kéo món từ ô thả vào cảnh hoặc lên món khác ----------
+  // Toạ độ theo tranh demo level 3 (D3-22): dải neo đáy (422, đáy − 58), tâm ô x 205/348/492/635, cao hơn đáy dải 90.
+  // Bảng vị trí có dòng `ui_bag_bar` / `ui_bag_slot_N` thì dùng (X; Y đổi thành khoảng cách tới mép dưới khung 1536).
+  get bagSlotX() { return [205, 348, 492, 635].map((x, i) => (this.pos('ui_bag_slot_' + (i + 1)) || [x])[0]); }
+  bagX() { return (this.pos('ui_bag_bar') || [422])[0]; }
+  // Đáy dải túi ngay trên dải banner (cách mép dưới màn hình BANNER + 6).
+  bagY() { return this.worldBottom - BANNER - 6; }
+  slotPos(i) { return [this.bagSlotX[i], this.bagY() - 90]; }
+
+  bagShow(done) {
+    if (this.bag) { done && done(); return; }
+    const bar = this.img('ui_bag_bar', this.bagX(), this.bagY(), D.ui - 2);
+    const slots = this.bagSlotX.map((x, i) => {
+      const s = this.img('ui_bag_slot', ...this.slotPos(i), D.ui - 1).setOrigin(0.5, 0.5);
+      if (!((this.A.fit || {})[this.levelNo] || {}).ui_bag_slot) this.fitWidth(s, 136); // đo trên demo l3_demo_reveal
+      const z = this.add.zone(...this.slotPos(i), 135, 135).setDepth(D.ui + 4).setInteractive();
+      z.on('pointerdown', (p) => this.bagPress(i, p));
+      return { s, z };
+    });
+    this.bag = { bar, slots, items: [null, null, null, null], shown: true };
+    const parts = [bar, ...slots.map((o) => o.s)];
+    for (const o of parts) { o.y0 = o.y; o.y += 260; }
+    this.sfx('sfx_bag_up');
+    this.tweens.add({ targets: parts, y: (o) => o.y0, duration: 500, ease: 'Back.out', onComplete: () => done && done() });
+  }
+
+  bagLayout() {
+    const B = this.bag;
+    B.bar.setY(this.bagY());
+    B.slots.forEach((o, i) => { o.s.setPosition(...this.slotPos(i)); o.z.setPosition(...this.slotPos(i)); });
+    B.items.forEach((it) => { if (it && it !== (this.drag && this.drag.item)) it.s.setPosition(...this.slotPos(it.i)); });
+  }
+
+  bagIconScale(s) { return 116 / Math.max(s.width, s.height); } // icon to gần kín ô 136
+
+  // Món bay theo đường cong từ (x, y) (hoặc từ sprite đang có trong cảnh) vào ô trống đầu tiên.
+  bagAdd(key, from, done) {
+    const i = this.bag.items.indexOf(null);
+    if (i < 0) return null;
+    const [fx, fy] = Array.isArray(from) ? from : [from.getCenter().x, from.getCenter().y];
+    const s = this.bagIcon(key, fx, fy);
+    if (!Array.isArray(from)) s.setScale(from.scaleX, from.scaleY);
+    const it = { key, s, i };
+    this.bag.items[i] = it;
+    const k = this.bagIconScale(s), [tx, ty] = this.slotPos(i), sx0 = s.scaleX;
+    this.tweens.addCounter({ from: 0, to: 1, duration: 500, ease: 'Sine.inOut', onUpdate: (tw) => {
+      const t = tw.getValue();
+      s.setPosition(fx + (tx - fx) * t, fy + (ty - fy) * t - 180 * Math.sin(Math.PI * t)).setScale(sx0 + (k - sx0) * t);
+    }, onComplete: () => { s.setPosition(tx, ty).setScale(k); this.hop(s, 12, 220); this.sfx('sfx_pickup'); done && done(it); } });
+    return it;
+  }
+
+  bagRemove(it, fade = true) {
+    if (!it) return;
+    this.bag.items[it.i] = null;
+    if (fade) this.tweens.add({ targets: it.s, alpha: 0, scale: it.s.scale * 0.6, duration: 200, onComplete: () => it.s.destroy() });
+    else it.s.destroy();
+  }
+
+  bagReturn(it, wrong = true) {
+    const [tx, ty] = this.slotPos(it.i), s = it.s;
+    s.setDepth(D.ui + 3);
+    this.tweens.add({ targets: s, x: tx, y: ty, scale: this.bagIconScale(s), duration: 300, ease: 'Quad.out', onComplete: () => {
+      if (wrong) this.shakeNo(s);
+    } });
+    if (wrong) this.sfx('sfx_wrong');
+  }
+
+  shakeNo(s) {
+    const x = s.x;
+    this.tweens.chain({ targets: s, tweens: [
+      { x: x - 6, duration: 50 }, { x: x + 6, duration: 50 }, { x: x - 6, duration: 50 },
+      { x: x + 6, duration: 50 }, { x, duration: 50 },
+    ] });
+  }
+
+  bagPress(i, p) {
+    const it = this.bag && this.bag.items[i];
+    if (!it || this.locked || this.bag.busy || this.phase !== 'search') return;
+    this.drag = { item: it, x0: p.worldX, y0: p.worldY, moved: false };
+  }
+
+  bagMove(p) {
+    const d = this.drag;
+    if (!d) return;
+    if (!d.moved && Math.hypot(p.worldX - d.x0, p.worldY - d.y0) < 12) return;
+    const s = d.item.s;
+    if (!d.moved) {
+      d.moved = true;
+      this.touch();
+      if (this.handMode) this.handHide();
+      this.handHide('paw');
+      s.setDepth(D.ui + 20);
+      // Món đang kéo to dần lên đúng cỡ nó sẽ có khi đặt vào cảnh (màn cho biết qua dragScale), không có thì to hơn icon 1,3 lần.
+      const target = (this.dragScale && this.dragScale(d.item)) || this.bagIconScale(s) * 1.3;
+      this.tweens.add({ targets: s, scale: target, duration: 200, ease: 'Quad.out' });
+    }
+    s.setPosition(p.worldX, p.worldY - 70); // G3-3: món nằm trên ngón tay một đoạn
+    if (this.onBagHover) this.onBagHover(d.item, s.x, s.y);
+  }
+
+  bagRelease() {
+    const d = this.drag;
+    this.drag = null;
+    if (this.onBagHover) this.onBagHover(null);
+    const it = d.item, s = it.s;
+    if (!d.moved) { this.hop(s, 12, 220); this.sfx('sfx_tap'); if (this.onBagTap) this.onBagTap(it); return; }
+    // Thả lên ô khác có món: ghép.
+    const other = this.bag.items.find((o) => o && o !== it && Math.hypot(s.x - this.slotPos(o.i)[0], s.y - this.slotPos(o.i)[1]) < 80);
+    if (other) {
+      if (this.onBagCombine && this.onBagCombine(it, other)) return;
+      this.bagReturn(it);
+      this.shakeNo(other.s);
+      return;
+    }
+    if (this.onBagDrop && this.onBagDrop(it, s.x, s.y)) return;
+    this.bagReturn(it);
+  }
+
+  // Ghép (leveldesign 5.2 `merge`): hai món xoay vào nhau ở giữa, lóe sáng, món mới bật ra ở ô của `b`.
+  bagMerge(a, b, key, done) {
+    this.bag.busy = true;
+    const [mx, my] = [(this.slotPos(a.i)[0] + this.slotPos(b.i)[0]) / 2, this.slotPos(b.i)[1] - 40];
+    this.tweens.add({ targets: [a.s, b.s], x: mx, y: my, angle: 360, scale: (s) => s.scale * 0.8, duration: 400, ease: 'Quad.in', onComplete: () => {
+      this.bag.items[a.i] = null;
+      this.bag.items[b.i] = null;
+      a.s.destroy(); b.s.destroy();
+      const flash = this.add.circle(mx, my, 20, 0xfffbe6, 1).setDepth(D.ui + 6);
+      this.tweens.add({ targets: flash, scale: 5, alpha: 0, duration: 250, onComplete: () => flash.destroy() });
+      this.sfx('sfx_merge');
+      const s = this.bagIcon(key, mx, my);
+      const k = this.bagIconScale(s), it = { key, s, i: b.i };
+      this.bag.items[b.i] = it;
+      s.setScale(0);
+      this.tweens.add({ targets: s, x: this.slotPos(b.i)[0], y: this.slotPos(b.i)[1], scale: k, duration: 300, ease: 'Back.out', onComplete: () => {
+        this.bag.busy = false;
+        done && done(it);
+      } });
+    } });
   }
 
   // flip: lật ngang bàn tay (ngón trỏ chỉ chéo xuống phải), dùng khi chỉ vào mép trái của vật để tay không che vật.
@@ -516,6 +761,92 @@ export class BaseLevel extends Phaser.Scene {
       ], onComplete: () => s.destroy() });
     }
   }
+
+  // ---------- tạm dừng chung (leveldesign "Tạm dừng chung (mọi level)") ----------
+  // Ảnh tạm cho 3 nút khi chưa có ảnh thật: nút tròn kem viền nâu, ký hiệu nâu ở giữa.
+  ensureButtons() {
+    const mk = (key, draw) => {
+      if (this.textures.exists(key)) return;
+      const g = this.make.graphics({ x: 0, y: 0 }, false);
+      g.fillStyle(0xfdf6e8).lineStyle(8, BROWN).fillCircle(100, 100, 90).strokeCircle(100, 100, 90);
+      g.fillStyle(BROWN).lineStyle(14, BROWN);
+      draw(g);
+      g.generateTexture(key, 200, 200);
+      g.destroy();
+      this.A.entries[key] = { url: null, real: false, ax: 100, ay: 100, res: 1 };
+    };
+    mk('ui_pause_button', (g) => g.fillRoundedRect(68, 55, 22, 90, 8).fillRoundedRect(110, 55, 22, 90, 8));
+    mk('ui_play_button', (g) => g.fillTriangle(78, 52, 78, 148, 150, 100));
+    mk('ui_restart_button', (g) => {
+      g.beginPath(); g.arc(100, 100, 46, Phaser.Math.DegToRad(-60), Phaser.Math.DegToRad(250), false); g.strokePath();
+      g.fillTriangle(118, 40, 150, 66, 112, 78);
+    });
+  }
+
+  pauseGame() {
+    if (this.pausedState || this.phase === 'ending' || this.phase === 'reward') return;
+    if (this.drag) { // đang kéo món túi đồ: món về ô
+      const it = this.drag.item;
+      this.drag = null;
+      if (this.onBagHover) this.onBagHover(null);
+      it.s.setPosition(...this.slotPos(it.i)).setScale(this.bagIconScale(it.s)).setDepth(D.ui + 3);
+    }
+    this.press = null;
+    // Chỉ dừng các tween đang chạy, để lúc chơi tiếp không bật nhầm tween màn đã tự dừng.
+    const running = this.tweens.getTweens().filter((t) => !t.paused);
+    running.forEach((t) => t.pause());
+    this.pausedState = { locked: this.locked, frozen: this.frozen, at: this.time.now, running };
+    this.locked = true;
+    this.frozen = true;
+    this.time.paused = true;
+    this.sound.pauseAll();
+    const ctx = this.sound.context;
+    if (ctx && ctx.state === 'running') ctx.suspend();
+
+    const H = this.scale.height, d = D.end + 30;
+    const dim = this.add.rectangle(512, H / 2, 1024, H, 0x000000, 0.45).setScrollFactor(0).setDepth(d).setInteractive(); // chạm ngoài 2 nút: không làm gì
+    const btn = (key, x, fn) => {
+      const b = this.img(key, x, H / 2, d + 1, true).setOrigin(0.5, 0.5);
+      this.fitWidth(b, 180);
+      b.setInteractive().on('pointerup', fn);
+      const k = b.base;
+      b.setScale(0);
+      this.tweens.add({ targets: b, scale: k, duration: 220, ease: 'Back.out' });
+      return b;
+    };
+    this.pauseUI = [dim, btn('ui_play_button', 362, () => this.resumeGame()), btn('ui_restart_button', 662, () => this.restartLevel())];
+  }
+
+  resumeGame() {
+    const s = this.pausedState;
+    if (!s) return;
+    this.pausedState = null;
+    (this.pauseUI || []).forEach((o) => o.destroy());
+    this.pauseUI = null;
+    // Đồng hồ gợi ý chạy tiếp từ chỗ đã dừng, không đếm lại từ đầu.
+    const shift = this.time.now - s.at;
+    this.lastTouch += shift;
+    if (this.hints.sparkleAt) this.hints.sparkleAt += shift;
+    this.time.paused = false;
+    s.running.forEach((t) => t.resume());
+    const ctx = this.sound.context;
+    if (ctx && ctx.state === 'suspended') ctx.resume();
+    this.sound.resumeAll();
+    this.locked = s.locked;
+    this.frozen = s.frozen;
+  }
+
+  // Chơi lại màn từ đầu: túi đồ trống, giữ phần thưởng đã có (registry không đổi).
+  restartLevel() {
+    this.pausedState = null;
+    this.time.paused = false;
+    const ctx = this.sound.context;
+    if (ctx && ctx.state === 'suspended') ctx.resume();
+    this.sound.resumeAll();
+    this.scene.restart();
+  }
+
+  onHidden() { this.pauseGame(); }
 
   // ---------- kết màn: cảnh bế chung, màn thưởng ----------
   startEnding() {

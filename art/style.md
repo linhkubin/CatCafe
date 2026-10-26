@@ -171,6 +171,11 @@ Chốt ở `art/review/level1-thread.md` V23. Tên trong các file đặc tả *
 
 Các trạng thái của cùng một đồ vật vẽ chung một tờ; công cụ cắt ra cùng khung và cùng điểm neo, nên code đổi ảnh không bị giật.
 
+**Tách nền và đồ** (chủ dự án chốt, áp cho mọi màn từ Level 4; Level 3 giữ như hiện tại):
+- Ảnh nền `l<N>_bg_*` chỉ là **phòng trống**: tường, sàn, chân tường, trần, ánh nắng.
+- **Mọi đồ vật vẽ riêng thành sprite** (`l<N>_<đồ>`, nền trong suốt), kể cả đồ không tương tác: thảm, bàn, sofa, kệ, cửa sổ, tranh, đèn.
+- Không vẽ đồ dính vào nền rồi cắt ra, không vá viền. Code đặt từng sprite theo bảng vị trí.
+
 > **Lưu ý:** `design-art-level2.md` trở đi **chưa cập nhật** theo quy tắc này (vẫn tên trạng thái kiểu cũ, mỗi ảnh một canvas, chưa có bảng tờ). Sửa khi tới lượt level đó.
 
 ---
@@ -187,6 +192,21 @@ Các trạng thái của cùng một đồ vật vẽ chung một tờ; công c�
 | `common/ui_dried_fish.png` | `ui_dried_fish` | 1024x1024 | Trong suốt | Con cá khô nhỏ (tiền thưởng), màu caramel nhạt, mắt chấm tròn, có 3 vạch xương đơn giản |
 | `common/ui_hint_paw.png` | `ui_hint_paw` | 1024x1024 | Trong suốt | Bàn chân mèo trắng với 4 đệm thịt hồng, giơ lên như đang chỉ |
 | `common/ui_bulb_button.png` | `ui_bulb_button` | 1024x1024 | Trong suốt | Nút gợi ý tròn màu vàng bơ, giữa là bóng đèn đơn giản |
+
+### Nút tạm dừng (mọi level, `leveldesign.md` "Tạm dừng chung")
+
+Cùng style nút 💡 `ui_bulb_button` và túi đồ `ui_bag_bar`: nút tròn mập **nền kem giấy**, viền gỗ caramel mập + viền nâu mảnh ngoài cùng, vân chì mịn, vài nét chì đổ bóng bên phải dưới. Biểu tượng ở giữa **nâu ấm** (#6B4A3A), mập, bo tròn đầu, chiếm ~45% đường kính. Không chữ, không số. Cả ba nút cùng một kiểu nền, chỉ khác biểu tượng.
+
+| Tờ | Ô | Key | Thư mục | Nhóm | Neo | Hiển thị | Nét |
+|---|---|---|---|---|---|---|---|
+| ui_pause_sheet | 40,300,440,460 | ui_pause_button | common |  | tâm | rộng 88 | 7 |
+| ui_pause_sheet | 482,200,520,620 | ui_play_button | common |  | tâm | rộng 180 | 7 |
+| ui_pause_sheet | 1004,200,532,824 | ui_restart_button | common |  | tâm | rộng 180 | 7 |
+
+Bố cục: nút tạm dừng nhỏ bên trái (đường kính ~220px trong tờ), hai nút to ở giữa và bên phải (đường kính ~420px), tất cả căn giữa theo chiều dọc ở y≈520.
+- `ui_pause_button`: giữa là **hai vạch đứng** mập, bo tròn đầu, song song. Đặt ở góc trên phải dải giao diện (tâm ≈ (951, 66) trên khung 1024x1536).
+- `ui_play_button`: giữa là **tam giác ▶** mập, bo tròn góc, hơi lệch phải cho cân.
+- `ui_restart_button`: giữa là **mũi tên vòng ↻** mập (vòng tròn hở ~300°, đầu mũi tên tròn trịa ở đầu vòng).
 
 ---
 

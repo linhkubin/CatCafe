@@ -2,6 +2,7 @@ import { discover, phUrl, KEYS } from './assets.js';
 import { finalizeEntries } from './base.js';
 import { Level1 } from './level1.js';
 import { Level2 } from './level2.js';
+import { Level3 } from './level3.js';
 
 const W = 1024, BASE_H = 1536, MAX_H = 2304;
 
@@ -39,9 +40,9 @@ class Boot extends Phaser.Scene {
 
   create() {
     finalizeEntries(this, KEYS.common.map(([k]) => k));
-    // ?level=2 để vào thẳng level 2 khi kiểm thử.
+    // ?level=2, ?level=3 để vào thẳng màn đó khi kiểm thử.
     const lv = new URLSearchParams(location.search).get('level');
-    this.scene.start(lv === '2' ? 'Level2' : 'Level1');
+    this.scene.start(['2', '3'].includes(lv) ? 'Level' + lv : 'Level1');
   }
 }
 
@@ -55,7 +56,7 @@ async function start() {
     backgroundColor: '#2b2420',
     scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH, width: W, height: gameHeight() },
     input: { activePointers: 2 },
-    scene: [Boot, Level1, Level2],
+    scene: [Boot, Level1, Level2, Level3],
     callbacks: { preBoot: (g) => { g.registry.set('assets', assets); g.registry.set('hearts', 0); } },
   });
   window.addEventListener('resize', () => {

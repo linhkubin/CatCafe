@@ -223,11 +223,11 @@ Trước khi lộ hộp pate **không có gợi ý tự động** (G10).
 
 | | |
 |---|---|
-| Độ khó | Dạy chơi · **60 giây** |
+| Độ khó | Dạy chơi · **65 giây** |
 | Mèo | Sữa (♥ 3/4) |
 | Phòng | 1: Phòng khách, buổi chiều |
-| Dạy | **Nhặt, Đặt, Ghép** (túi đồ xuất hiện lần đầu) |
-| Bước bắt buộc | 5 (nhặt kéo, đặt kéo lên hộp, ghép cột cào, đặt cột cào, chạm hộp úp) |
+| Dạy | **Nhặt, Đặt, Lắp theo hình** (túi đồ xuất hiện lần đầu) |
+| Bước bắt buộc | 7 (nhặt kéo, đặt kéo lên hộp, lắp 4 mảnh cột cào trên thảm, chạm hộp úp) |
 
 **Sự thật về mèo:** bạn mua cho mèo một **cột cào xịn**, mèo chơi được đúng vài giây rồi bỏ đó, chui vào **cái hộp đựng nó**.
 
@@ -235,15 +235,22 @@ Trước khi lộ hộp pate **không có gợi ý tự động** (G10).
 
 | Giai đoạn | Sữa ở đâu | Chạm vào thì sao |
 |---|---|---|
-| 1. Trước khi có cột cào | Sau rèm, chỉ thấy bóng (**Lẩn tránh**) | Sữa **chạy vụt** sang góc rèm bên kia, có lúc chui qua gầm sofa rồi lại về rèm |
-| 2. Cột cào vừa dựng | Ra khỏi rèm, vồ quả bông trên đỉnh cột cào khoảng 3 giây (**Lẩn tránh**) | Sữa giật mình **chạy vụt ra sau cột cào và biến mất ngay** (chuyển luôn sang giai đoạn 3). Không thắng |
+| 1. Trước khi có cột cào | Sau rèm, chỉ thấy bóng (**Lẩn tránh**) | Sữa **chạy vụt** sang góc rèm bên kia |
+| 2. Cột cào vừa lắp xong | Ra khỏi rèm, vồ quả bông trên đỉnh cột cào khoảng 3 giây (**Lẩn tránh**) | Sữa giật mình **chạy vụt ra sau cột cào và biến mất ngay** (chuyển luôn sang giai đoạn 3). Không thắng |
 | 3. Chơi xong | Sữa chạy vòng ra sau cột cào rồi **biến mất**: thật ra đã chui vào gầm **cái hộp đang úp** (**Ẩn**) | Chạm hộp úp: **hộp lật ngửa lên**, Sữa nằm gọn bên trong |
 | 4. Hộp đã lật ngửa | Trong hộp (**Lộ diện**) | **Thắng** |
 
 **Cơ chế hộp úp:**
-- Khi kéo cắt băng dính, hai mảnh cột cào bay vào túi, **cái hộp rỗng tự lộn nhào úp xuống sàn** ("bộp").
-- Trong lúc người chơi ghép và đặt cột cào, hộp úp **không nhận chạm**: chạm vào không rung, không sáng, không có âm thanh. Hộp chỉ là một vật nằm im trong cảnh.
-- Chỉ sau khi Sữa chơi xong và biến mất, hộp úp mới **nhận chạm**.
+- Khi kéo cắt băng dính, **4 mảnh cột cào** bay vào túi, **cái hộp rỗng tự lộn nhào úp xuống sàn** ("bộp").
+- Trong lúc người chơi lắp cột cào, hộp úp **không nhận chạm**: chạm vào không rung, không sáng, không có âm thanh. Hộp chỉ là một vật nằm im trong cảnh.
+- Chỉ sau khi Sữa chơi xong và biến mất, hộp úp mới **nhận chạm**. Kể cả lúc đó hộp cũng **nằm im hoàn toàn** (không rung, không nhích, không lấp lánh tự động): người chơi phải tự nghĩ ra.
+
+**Cơ chế lắp cột cào (4 mảnh, lắp theo hình):**
+- 4 mảnh: (1) **bục xanh + cột** (đế vuông xanh bạc hà kèm trụ thừng dưới), (2) **bục hồng + cột** (tầng tròn hồng kèm trụ thừng trên), (3) **bục trắng** (ổ lông kem trên đỉnh, có móc treo), (4) **quả cầu lông** đỏ (treo vào móc ổ đỉnh bằng sợi dây).
+- Khi 4 mảnh vào túi, trên thảm (6) hiện **hình mờ chỉ của mảnh 1** (bục xanh + cột) để dạy chỗ đặt. Lắp xong mảnh 1 thì **không còn hình mờ** nào nữa: người chơi tự nhìn hình dạng mà chồng tiếp lên trên.
+- Người chơi kéo từng mảnh từ túi thả lên đúng vùng của nó, **theo thứ tự từ dưới lên**: bục xanh + cột → bục hồng + cột → bục trắng → quả cầu lông (treo vào móc). Mảnh khớp: "cạch", lóe sáng nhẹ.
+- Thả mảnh vào vùng chưa tới lượt (vùng trên khi vùng dưới còn trống) hoặc ra ngoài thảm: mảnh lắc lắc rồi bay về túi, vùng **đang tới lượt** nhấp nháy.
+- Quả cầu lông treo vào móc: cả cột cào lóe sáng, quả cầu bắt đầu đung đưa.
 
 **Bố cục màn hình:**
 
@@ -274,15 +281,15 @@ Trước khi lộ hộp pate **không có gợi ý tự động** (G10).
 | Số | Đồ vật | Vị trí | Loại | Thao tác | Phản hồi | Âm thanh |
 |---|---|---|---|---|---|---|
 | 1 | Rèm (bóng Sữa phía sau) | Trên trái | — | Chạm / Vuốt | Sữa **chạy vụt** sang góc rèm bên kia (Lẩn tránh) | "Meo" tinh nghịch |
-| 2 | Cây kéo trên bàn | Giữa trái | 🎒 | Chạm | Kéo bay xuống **túi đồ** | "Vút" + "tách" vào túi |
-| 3 | Hộp quà dán băng dính chữ thập | Giữa | 🎯 | Chạm / Đặt kéo | **Chạm:** hộp rung, băng dính chắc quá. **Đặt kéo:** kéo tự cắt "xoẹt", nắp bung, **thân cột cào** và **đế cột cào** bay vào túi, **hộp rỗng lộn nhào úp xuống sàn** | "Xoẹt" + giấy xé + "bộp" |
-| 3' | Hộp úp | Giữa | 🔑 | Chạm | **Trước khi Sữa biến mất:** không nhận chạm. **Sau khi Sữa biến mất:** hộp **lật ngửa lên**, Sữa nằm gọn bên trong | "Bộp" + "meo?" |
-| 4 | Gối lông trắng | Phải | 🎭 | Chạm | Chỉ là gối | "Bụp" |
-| 5 | Lọ hoa trên kệ | Trên phải | 🎁 | Chạm | Lọ nghiêng, 10 Cá khô rơi ra | Leng keng |
-| 6 | Thảm trống cạnh hộp | Dưới phải | 🎯 | Đặt cột cào | Cột cào dựng lên, quả bông đung đưa trên đỉnh | "Cộp" |
+| 2 | Cây kéo trên bàn | Giữa trái | 🎒 | Chạm | Kéo bay xuống **túi đồ**. Kéo vẽ **to, dễ thấy, dễ chạm** | "Vút" + "tách" vào túi |
+| 3 | Hộp quà dán băng dính chữ thập | Giữa | 🎯 | Chạm / Đặt kéo | **Chạm:** hộp rung, băng dính chắc quá. **Đặt kéo:** kéo tự cắt "xoẹt", nắp bung, **4 mảnh cột cào** bay vào túi, **hộp rỗng lộn nhào úp xuống sàn** | "Xoẹt" + giấy xé + "bộp" |
+| 3' | Hộp úp | Giữa | 🔑 | Chạm | **Trước khi Sữa biến mất:** không nhận chạm. **Sau khi Sữa biến mất:** vẫn nằm im, chạm vào thì hộp **lật ngửa lên**, Sữa nằm gọn bên trong | "Bộp" + "meo?" |
+| 4 | Gối lông trắng trên sofa | Phải | 🎁 | Chạm | Gối nảy lên lật mặt, **5 Cá khô** bay ra. Chỉ thưởng lần đầu, lần sau chỉ nảy | "Bụp" + leng keng |
+| 5 | Lọ hoa trên kệ | Trên phải | 🎁 | Chạm | Lọ nghiêng, **5 Cá khô** rơi ra. Chỉ thưởng lần đầu | Leng keng |
+| 6 | Thảm trống cạnh hộp | Dưới phải | 🎯 | Đặt 4 mảnh | Hình mờ mảnh 1 trên thảm; lắp từng mảnh từ dưới lên (xem "Cơ chế lắp cột cào") | "Cạch" mỗi mảnh |
 | 6' | Cột cào (sau khi Sữa biến mất) | Dưới phải | ✨ | Chạm | Quả bông đung đưa, không có ai vồ | "Bông bông" |
 
-**Ghép:** thân cột cào + đế cột cào = **cột cào mèo**.
+**Lắp:** bục xanh + cột → bục hồng + cột → bục trắng → quả cầu lông = **cột cào mèo** (lắp trên thảm, không ghép trong túi).
 
 **Luồng giải:**
 
@@ -290,30 +297,30 @@ Trước khi lộ hộp pate **không có gợi ý tự động** (G10).
 |---|---|---|
 | 0–8 | (xem) | Shipper đặt hộp quà xuống rồi đi. Sữa chạy vụt ra sau rèm. Bong bóng nhân vật: hình cái kéo |
 | 9–18 | Chạm **cây kéo (2)** | **Túi đồ trượt lên từ đáy màn hình** (lần đầu). Bàn tay hướng dẫn chỉ kéo. Kéo bay vào ô đầu tiên |
-| 19–26 | Kéo **kéo** từ túi thả lên **hộp quà (3)** | Bàn tay hướng dẫn làm mẫu kéo-thả. "Xoẹt", hai mảnh cột cào vào túi, hộp rỗng lộn nhào **úp xuống sàn** |
-| 27–36 | Kéo **thân** thả lên **đế** trong túi | Bàn tay hướng dẫn làm mẫu. Hai mảnh xoay vào nhau, lóe sáng, thành cột cào |
-| 37–44 | Kéo **cột cào** thả lên **thảm (6)** | Cột cào dựng lên, quả bông đung đưa |
-| 45–50 | (xem) | Sữa ló đầu khỏi rèm, chạy tới **vồ quả bông** hai ba cái… rồi chạy vòng ra sau cột cào và **biến mất** |
-| 51–56 | Chạm **hộp úp (3')** | Hộp **lật ngửa lên**: Sữa nằm gọn bên trong (xem Khoảnh khắc lộ diện) |
-| 57–60 | Chạm **Sữa** trong hộp | Cảnh bế chung |
+| 19–26 | Kéo **kéo** từ túi thả lên **hộp quà (3)** | Bàn tay hướng dẫn làm mẫu kéo-thả. "Xoẹt", 4 mảnh cột cào vào túi, hộp rỗng lộn nhào **úp xuống sàn**. Hình mờ mảnh 1 hiện trên thảm |
+| 27–46 | Kéo lần lượt **4 mảnh** từ túi thả lên **thảm (6)**, chồng từ dưới lên | Bàn tay hướng dẫn làm mẫu **mảnh đầu (bục xanh + cột)**, các mảnh sau người chơi tự làm. Mỗi mảnh "cạch", lóe sáng. Treo quả cầu lông xong: cả cột cào lóe sáng, quả cầu đung đưa |
+| 47–54 | (xem) | Sữa ló đầu khỏi rèm, chạy tới **vồ quả bông** hai ba cái, cào thử… rồi chạy vòng ra sau cột cào và **biến mất**. Ngay sau đó **bong bóng nhiệm vụ** (đầu mèo tối) bật ra giữa màn hình nhắc "tìm mèo", rồi thu về góc |
+| 55–62 | Người chơi tự tìm, chạm **hộp úp (3')** | Hộp **lật ngửa lên**: Sữa nằm gọn bên trong (xem Khoảnh khắc lộ diện) |
+| 63–66 | Chạm **Sữa** trong hộp (không có bàn tay chỉ; 💡 vẫn chỉ được) | Cảnh bế chung |
 
 **Chạm sai và làm khác thứ tự:**
 - Thả kéo vào chỗ khác (sàn, sofa): kéo lắc lắc rồi bay về túi.
-- Ghép sai (thân lên kéo): hai món chạm nhau, nảy ra, về chỗ cũ.
-- Đặt cột cào ở chỗ khác ngoài thảm (6): cột cào bay về túi, thảm (6) sáng lên.
+- Thả mảnh cột cào vào vùng chưa tới lượt, hoặc ra ngoài thảm (6): mảnh lắc lắc rồi bay về túi (không hiện hình mờ).
+- Thả mảnh này lên mảnh khác trong túi: hai món chạm nhau, nảy ra, về chỗ cũ (màn này không ghép trong túi).
 - Chạm hộp úp trong lúc đang ghép, đặt cột cào: không có phản ứng gì (hộp chưa nhận chạm).
-- Vuốt hoặc chạm rèm nhiều lần: Sữa chạy qua lại giữa hai góc rèm và gầm sofa, có lúc thò đầu ra lè lưỡi. Chạm vào lúc thò đầu thì Sữa lại chạy vụt đi (vẫn là Lẩn tránh).
+- Vuốt hoặc chạm rèm nhiều lần: Sữa chạy qua lại giữa hai góc rèm, có lúc thò đầu ra lè lưỡi. Chạm vào lúc thò đầu thì Sữa lại chạy vụt đi (vẫn là Lẩn tránh).
 - Chạm Sữa lúc đang vồ quả bông (giai đoạn 2): Sữa giật mình **chạy vụt ra sau cột cào và biến mất** ngay lập tức. Muốn thắng vẫn phải **lật hộp úp**. Đây là ngoại lệ có chủ ý: ở màn này, chỉ có cách tìm Sữa trong hộp.
 - Sau khi Sữa biến mất, chạm cột cào hoặc rèm: không có ai, quả bông đung đưa vô ích.
 
 **Thang gợi ý:**
-1. *8 giây:* bước hiện tại rung nhẹ (kéo trên bàn, băng dính trên hộp, hai ô trong túi, hoặc thảm). Sau khi Sữa biến mất: **mép hộp úp khẽ nhấc lên**, một cái đuôi trắng thò ra rồi rụt vào.
-2. *16 giây:* đồ cần chạm lấp lánh (hộp úp lấp lánh khi tới lượt nó).
-3. *💡:* bàn chân mèo làm mẫu thao tác đúng (chạm vào hộp úp ở cuối màn).
+1. *8 giây:* bước hiện tại rung nhẹ (kéo trên bàn, băng dính trên hộp, icon mảnh tới lượt trong túi nảy lên).
+2. *16 giây:* đồ cần chạm lấp lánh.
+3. **Sau khi Sữa biến mất: tắt gợi ý tự động** (không rung, không lấp lánh, không đuôi thò ra). Người chơi tự tìm; thỉnh thoảng nghe một tiếng "meo" rất nhỏ là đủ.
+4. *💡:* bàn chân mèo làm mẫu thao tác đúng (cuối màn: chỉ vào hộp úp). Đây là cách duy nhất để được chỉ hộp.
 
 **Khoảnh khắc lộ diện:**
 1. Cột cào vừa dựng xong, quả bông đung đưa. Sữa ló đầu khỏi rèm, mắt sáng lên, chạy tới, **vồ quả bông** hai ba cái, cào thử thân cột cào một nhát.
-2. Rồi Sữa **mất hứng**, chạy vòng ra sau cột cào… và không thấy đâu nữa. Quả bông vẫn đung đưa. Nhân vật nhìn quanh, gãi đầu.
+2. Rồi Sữa **mất hứng**, chạy vòng ra sau cột cào… và không thấy đâu nữa. Quả bông vẫn đung đưa. Bong bóng nhiệm vụ (đầu mèo tối) bật ra giữa màn hình nhắc tìm mèo, rồi thu về góc.
 3. Người chơi chạm vào hộp úp: hộp **lật ngửa lên** "bộp". Sữa **nằm gọn trong hộp**, chỉ thò đầu và hai tai, đuôi vắt qua mép hộp ve vẩy, nhìn lên bạn như thể nó vẫn luôn ở đó. Nhân vật đứng cạnh cột cào xịn, mặt buồn hiu.
 
 **Chạm Sữa → cảnh bế chung.** Cái hộp ở lại cảnh nền, cạnh cột cào.
@@ -322,10 +329,11 @@ Trước khi lộ hộp pate **không có gợi ý tự động** (G10).
 - **Túi đồ** xuất hiện lần đầu với hiệu ứng trượt lên từ đáy, kèm âm thanh "tưng".
 - Cột cào vẽ thật **xịn**: nhiều tầng, có lông mềm, quả bông đỏ. Càng xịn thì trò đùa càng buồn cười.
 - Hiệu ứng ghép (xoay vào nhau, lóe sáng) là hiệu ứng chuẩn, dùng chung cho mọi lần ghép trong game.
-- Cảnh Sữa "biến mất" không cần hiệu ứng phép thuật: Sữa chỉ chạy khuất sau cột cào. Ngay lúc đó **mép hộp úp nhấc lên một chút rồi hạ xuống** rất nhẹ, người tinh mắt sẽ thấy.
-- Hộp úp lúc chưa nhận chạm: vẽ bình thường, không viền sáng, không rung. Lúc đã nhận chạm: thỉnh thoảng nhích nhẹ như có gì bên trong.
+- Cảnh Sữa "biến mất" không cần hiệu ứng phép thuật: Sữa chỉ chạy khuất sau cột cào. Hộp úp **không nhúc nhích**.
+- Hộp úp lúc nào cũng vẽ bình thường, không viền sáng, không rung.
+- Rèm và cửa sổ nhỏ hơn bản demo một chút và nằm **sau** sofa (sofa che một phần chân rèm).
 
-**Thưởng:** 20 Cá khô · Sữa ♥ 3/4.
+**Thưởng:** 20 Cá khô (+5 mỗi bí mật: gối, lọ hoa) · Sữa ♥ 3/4.
 
 ---
 
@@ -376,7 +384,7 @@ NHÀ TẮM (bắt đầu)                    BẾP
 | 7 | Tủ dưới bồn rửa | Bếp | 🔑 | Chạm | Cánh tủ mở, lộ **van đỏ** | Bản lề "kẹt" |
 | 7a | Van đỏ | Bếp | 🔑 | Vuốt xoay | Van xoay, nước chạy rì rầm trong ống | "Rì rầm" dọc ống |
 | 8 | Bát nước của Sữa (đầy) | Bếp | ✨ | Chạm | Mặt nước gợn sóng. Sữa chưa từng uống bát này | "Bõm" |
-| 9 | Hũ bánh quy | Bếp | 🎁 | Chạm | 10 Cá khô | Nắp hũ "cộp" |
+| 9 | Hũ bánh quy | Bếp | 🎁 | Chạm | 5 Cá khô | Nắp hũ "cộp" |
 
 **Ba trạng thái của vòi rửa mặt (2a):**
 
@@ -480,7 +488,7 @@ SÂN SAU (bắt đầu)                    CON HẺM
 | 9 | Vệt nắng | Hẻm | 🎯 | Đặt gương | Gương lóe, **đốm sáng** hiện trên tường (7) | "Ting" |
 | 9a | Đốm sáng | Hẻm | 🔑 | Vuốt giữ và kéo | Đốm sáng chạy theo ngón tay (xem cơ chế) | Tiếng "vù" nhỏ khi di chuyển |
 | 10 | Con quạ trên dây điện | Hẻm | 🎭 | Chạm | Bóng đen hóa ra là quạ, bay đi rồi đậu lại | "Quạ!" |
-| 11 | Ống thoát nước | Hẻm | 🎁 | Chạm | 10 Cá khô | Leng keng |
+| 11 | Ống thoát nước | Hẻm | 🎁 | Chạm | 5 Cá khô | Leng keng |
 
 **Cơ chế đốm sáng:**
 - Đốm sáng chỉ di chuyển trong vùng **bức tường (7) và mặt đất của hẻm**.
@@ -665,7 +673,7 @@ CẬN CẢNH KỆ SÁCH (chạm số 1)
 | 3 | Mũ len đen trên ghế | Phòng đọc | 🎭 | Chạm | Cuộn tròn như mèo, chỉ là mũ | "Bụp" |
 | 4 | Đồng hồ quả lắc | Phòng đọc | ✨ | Chạm | Quả lắc đung đưa mạnh | "Boong" |
 | 7 | Cốc nhựa đỏ trên bàn bếp | Bếp | 🎒 | Chạm | Cốc vào túi đồ | "Tưng" |
-| 8 | Hộp trà | Bếp | 🎁 | Chạm | 10 Cá khô | Nắp "cạch" |
+| 8 | Hộp trà | Bếp | 🎁 | Chạm | 5 Cá khô | Nắp "cạch" |
 | 9 | Ấm trà | Bếp | ✨ | Chạm | Hơi nước bốc lên | Reo khẽ |
 
 **Đồ rơi định kỳ:** cứ khoảng 10 giây, một món nhỏ lại rơi từ kệ xuống sàn phòng đọc (cục tẩy, kẹp giấy, cây bút chì). Đây vừa là trò vui vừa là gợi ý: có ai đó trên kệ đang hất đồ.
@@ -752,7 +760,7 @@ VƯỜN TRƯỚC (bắt đầu)                 GIÀN HOA
 |---|---|---|---|---|---|---|
 | 1 | Tượng mèo đá đen | Vườn trước | 🎭 | Chạm | Y hệt Mun đang ngồi, nhưng là đá. Nhân vật gõ thử | "Cốc cốc" |
 | 2 | Dây phơi | Vườn trước | 🎒 | Chạm | Lấy **chiếc tất cũ** (gợi nhớ level 2) | Kẹp phơi "tách" |
-| 3 | Bình tưới | Vườn trước | 🎁 | Chạm | 10 Cá khô | Nước "róc rách" |
+| 3 | Bình tưới | Vườn trước | 🎁 | Chạm | 5 Cá khô | Nước "róc rách" |
 | 4 | Bãi cỏ | Vườn trước | 🎯 | Đặt gối cỏ mèo | Gối nằm trên cỏ, khói xanh nhạt bốc lên | "Phụp" |
 | 5 | Xích đu | Vườn trước | ✨ | Chạm | Đung đưa | Kẽo kẹt |
 | 7a | Lưới che chậu | Giàn hoa | 🔑 | Vuốt | Lưới gỡ ra | Sột soạt |
@@ -841,7 +849,7 @@ VƯỜN TRƯỚC (bắt đầu)                 GIÀN HOA
 | 2 | Hộp đồ nghề trên bậc thềm | Đáy | 🎒 | Chạm | Nắp mở, lấy **cuộn băng dính** | "Cạch" kim loại |
 | 3 | Đôi găng tay len đen trên ghế | Phải | 🎭 | Chạm | Cuộn tròn trông như mèo, chỉ là găng tay | "Bụp" |
 | 4 | Chậu cây | Trên phải | ✨ | Chạm | Bướm bay ra | — |
-| 5 | Hộp thư | Trên trái | 🎁 | Chạm | 10 Cá khô rơi ra cùng một tờ giấy quảng cáo (chỉ có hình) | Nắp "cạch" |
+| 5 | Hộp thư | Trên trái | 🎁 | Chạm | 5 Cá khô rơi ra cùng một tờ giấy quảng cáo (chỉ có hình) | Nắp "cạch" |
 | 6 | Sàn trống giữa hiên | Giữa | 🎯 | Đặt băng dính | Băng dính tự lăn một vòng, dán thành **ô vuông** | **"Xoẹt xoẹt"** |
 
 **Luồng giải:**
@@ -926,7 +934,7 @@ BẾP
 |---|---|---|---|---|---|---|
 | 1 | Hộp các-tông hàng mới giao | Phòng khách | 🎒 | Chạm | Hộp vào túi đồ | "Sạt" |
 | 2 | Đôi bốt đen | Phòng khách | 🎭 | Chạm | Chỉ là bốt, đổ "bộp" | "Bộp" |
-| 3 | Chậu hoa | Phòng khách | 🎁 | Chạm | 10 Cá khô | Leng keng |
+| 3 | Chậu hoa | Phòng khách | 🎁 | Chạm | 5 Cá khô | Leng keng |
 | 4 | Sofa | Phòng khách | ✨ | Chạm | Đệm nảy | "Phịch" |
 | 7 | Tủ quần áo | Phòng ngủ | 🔑 | Chạm (khi Sữa đã đi) | Ngăn dưới hé mở, đôi mắt vàng của Mun, Mun rúc sâu. Bong bóng nhân vật: hình cái hộp | "Meo" run run |
 | 8 | Sữa canh trước tủ | Phòng ngủ | 🔑 | Chạm | Sữa gầm gừ, đuôi xù to gấp đôi. Bong bóng nhân vật: hình bát hạt | Gầm gừ |
@@ -935,7 +943,7 @@ BẾP
 | 11 | Chỗ trống trước tủ | Phòng ngủ | 🎯 | Đặt hộp các-tông | Hộp đặt xuống, miệng hộp hướng về tủ | "Sạt" |
 | 13 | Hộp hạt trên kệ | Bếp | 🔑 | Vuốt lắc / Đặt vào bát | **Vuốt lắc:** Sữa phóng sang bếp. **Đặt vào bát (14):** hạt đổ đầy bát | **"Lạo xạo lạo xạo!"** |
 | 14 | Bát của Sữa | Bếp | 🎯 | Đặt hộp hạt | Hạt đổ đầy, Sữa cắm mặt ăn | Hạt rơi lách cách |
-| 15 | Hũ bánh quy | Bếp | 🎁 | Chạm | 10 Cá khô | Nắp "cộp" |
+| 15 | Hũ bánh quy | Bếp | 🎁 | Chạm | 5 Cá khô | Nắp "cộp" |
 
 **Luồng giải:**
 

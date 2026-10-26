@@ -9,7 +9,8 @@ export const BUILT = false;
 const ROOT = new URL('../', location.href).href;          // gốc dự án (game/ nằm ngay dưới)
 const ART_OUT = ROOT + 'art/out/';
 const PH = new URL('placeholders/', location.href).href;
-const SPECS = { 1: ROOT + 'art/design-art-level1.md', 2: ROOT + 'art/design-art-level2.md' };
+const SPECS = { 1: ROOT + 'art/design-art-level1.md', 2: ROOT + 'art/design-art-level2.md', 3: ROOT + 'art/design-art-level3.md' };
+const LEVELS = Object.keys(SPECS).map(Number);
 
 // Dự phòng nếu không đọc được design-art level 1 (giá trị ở vòng 5). Level 2 có vị trí dự phòng trong level2.js.
 const DEFAULT_POS = {
@@ -29,6 +30,7 @@ export const KEYS = {
     ['ui_speech_bubble', 'common'], ['ui_cat_head_dark', 'common'], ['ui_question_mark', 'common'], ['ui_question_mark_white', 'common'],
     ['ui_heart', 'common'], ['ui_hand_pointer', 'common'], ['ui_hint_paw', 'common'], ['ui_sparkle', 'common'],
     ['ui_bulb_button', 'common'], ['ui_dried_fish', 'common'], ['fx_pop', 'common'],
+    ['ui_pause_button', 'common'], ['ui_play_button', 'common'], ['ui_restart_button', 'common'],
   ],
   1: [
     ['l1_bg_living_room', 'level1'],
@@ -57,6 +59,16 @@ export const KEYS = {
     ['l2_chair', 'level2'], ['l2_sweater_rolled', 'level2'], ['l2_sweater_unrolled', 'level2'],
     ['l2_sock_basket_one_eye', 'level2'], ['l2_sock_basket_yawn', 'level2'], ['player_wear_beanie', 'player'],
   ],
+  3: [
+    ['l3_bg_living_room_afternoon', 'level3'], ['l3_curtain_closed', 'level3'], ['l3_vase', 'level3'], ['l3_scissors', 'level3'],
+    ['l3_gift_box_taped', 'level3'], ['l3_gift_box_open', 'level3'], ['l3_box_upside_down', 'level3'], ['l3_sua_in_box', 'level3'],
+    ['l3_cat_tree', 'level3'], ['l3_pompom', 'level3'], ['l3_sofa_front', 'level3'], ['l3_table', 'level3'],
+    ['l3_tree_p1', 'level3'], ['l3_tree_p2', 'level3'], ['l3_tree_p3', 'level3'],
+    ['sua_peek_tongue', 'cats'], ['sua_pounce', 'cats'], ['sua_scratch_post', 'cats'], ['sua_sit_stare', 'cats'], ['sua_tail_peek', 'cats'],
+    ['l1_pillow_white_idle', 'level1'], ['l1_pillow_white_flipped', 'level1'],
+    ['player_point_think', 'player'], ['player_sad', 'player'],
+    ['ui_bag_bar', 'common'], ['ui_bag_slot', 'common'], ['ui_thought_bubble', 'common'],
+  ],
 };
 export const ALL_KEYS = Object.values(KEYS).flat();
 
@@ -80,19 +92,25 @@ async function json(url) {
   }
 }
 
+// Bảng vị trí: | Key | X | Y | Cảnh | Rộng demo |. Cột "Rộng demo" (từ level 3, D3-17) = bề rộng phần vẽ thật trong tranh demo;
+// code co ảnh cho khớp bề rộng đó (fit).
 function parseSpec(text) {
-  const pos = {}, info = {};
+  const pos = {}, info = {}, fit = {};
   for (const raw of text.split('\n')) {
     const line = raw.trim();
-    let m = line.match(/^\|\s*([a-z0-9_]+)\s*\|\s*(\d+)\s*\|\s*(\d+)\s*\|\s*([^|]*)\|/);
-    if (m) { pos[m[1]] = [Number(m[2]), Number(m[3])]; continue; }
+    let m = line.match(/^\|\s*([a-z0-9_]+)\s*\|\s*(\d+)\s*\|\s*(\d+)\s*\|\s*([^|]*)\|\s*(\d+)?/);
+    if (m) {
+      pos[m[1]] = [Number(m[2]), Number(m[3])];
+      if (m[5]) fit[m[1]] = Number(m[5]);
+      continue;
+    }
     m = line.match(/^\|\s*`([a-z0-9_]+)`\s*\|\s*(\w+)\s*\|\s*([^|]+)\|\s*([^|]+)\|\s*([^|]+)\|/);
     if (m) {
       const d = m[3].trim().match(/(rộng|cao)\s*(\d+)/);
       info[m[1]] = { folder: m[2], display: d ? { dim: d[1] === 'cao' ? 'h' : 'w', val: Number(d[2]) } : null, neo: m[5].trim() };
     }
   }
-  return { pos, info };
+  return { pos, info, fit };
 }
 
 // Bản build: manifest.json đã có sẵn entries (url tương đối), pos, info, audio, phMeta.
@@ -101,23 +119,30 @@ async function fromManifest() {
   if (!m) throw new Error('Không đọc được manifest.json');
   const base = new URL('./', location.href).href;
   for (const e of Object.values(m.entries)) e.url = base + e.url;
-  return { pos: { 1: { ...DEFAULT_POS, ...(m.pos[1] || {}) }, 2: m.pos[2] || {} }, info: m.info, entries: m.entries, audio: new Set(m.audio), phMeta: m.phMeta || {} };
+  const pos = { ...m.pos, 1: { ...DEFAULT_POS, ...(m.pos[1] || {}) } };
+  return { pos, info: m.info, fit: m.fit || {}, entries: m.entries, audio: new Set(m.audio), phMeta: m.phMeta || {} };
 }
 
-// Trả về { pos, info, entries: {key: {url, real, ax, ay, res, auto}}, audio: Set }
+// Trả về { pos, info, fit, entries: {key: {url, real, ax, ay, res, auto}}, audio: Set }
 export async function discover() {
   if (BUILT) return fromManifest();
   const text = (u) => fetch(u, { cache: 'no-store' }).then((r) => (r.ok ? r.text() : '')).catch(() => '');
-  const [outList, ph, spec1, spec2, audioList] = await Promise.all([
-    listing(ART_OUT), json(PH + 'placeholders.json'), text(SPECS[1]), text(SPECS[2]),
-    listing(new URL('audio/', location.href).href),
+  const [outList, ph, audioList, ...specs] = await Promise.all([
+    listing(ART_OUT), json(PH + 'placeholders.json'), listing(new URL('audio/', location.href).href),
+    ...LEVELS.map((n) => text(SPECS[n])),
   ]);
   const anchors = outList.has('anchors.json') ? await json(ART_OUT + 'anchors.json') : null;
-  const s1 = parseSpec(spec1), s2 = parseSpec(spec2);
-  const pos = { 1: { ...DEFAULT_POS, ...s1.pos }, 2: s2.pos };
-  const info = { ...s2.info, ...s1.info };
+  const pos = {}, fit = {};
+  let info = {};
+  LEVELS.forEach((n, i) => {
+    const s = parseSpec(specs[i]);
+    pos[n] = s.pos;
+    fit[n] = s.fit;
+    info = { ...s.info, ...info }; // level trước thắng khi trùng key (đồ dùng lại)
+  });
+  pos[1] = { ...DEFAULT_POS, ...pos[1] };
   const folders = {};
-  for (const f of ['level1', 'level2', 'cats', 'common', 'player']) {
+  for (const f of [...LEVELS.map((n) => 'level' + n), 'cats', 'common', 'player']) {
     folders[f] = outList.has(f + '/') ? await listing(ART_OUT + f + '/') : new Set();
   }
   const bust = '?v=' + Date.now();
@@ -133,7 +158,7 @@ export async function discover() {
       entries[key] = { url: PH + file + bust, real: false, ...ph[key] };
     }
   }
-  return { pos, info, entries, audio: audioList, phMeta: ph || {} };
+  return { pos, info, fit, entries, audio: audioList, phMeta: ph || {} };
 }
 
 export function phUrl(key) {

@@ -23,7 +23,7 @@ ROOT = Path(__file__).resolve().parents[2]
 GAME = ROOT / "game"
 ART_OUT = ROOT / "art" / "out"
 DIST = GAME / "dist"
-SPECS = {1: ROOT / "art" / "design-art-level1.md", 2: ROOT / "art" / "design-art-level2.md"}
+SPECS = {n: ROOT / "art" / f"design-art-level{n}.md" for n in (1, 2, 3)}
 PHASER = "https://cdnjs.cloudflare.com/ajax/libs/phaser/3.80.1/phaser.min.js"
 
 INDEX = f"""<title>Meo Đâu Rồi – Level 1</title>
@@ -46,14 +46,16 @@ def keys_from_js():
 
 
 def parse_spec(spec):
-    pos, info = {}, {}
+    pos, info, fit = {}, {}, {}
     if not spec.exists():
-        return pos, info
+        return pos, info, fit
     for raw in spec.read_text(encoding="utf8").splitlines():
         line = raw.strip()
-        m = re.match(r"^\|\s*([a-z0-9_]+)\s*\|\s*(\d+)\s*\|\s*(\d+)\s*\|\s*([^|]*)\|", line)
+        m = re.match(r"^\|\s*([a-z0-9_]+)\s*\|\s*(\d+)\s*\|\s*(\d+)\s*\|\s*([^|]*)\|\s*(\d+)?", line)
         if m:
             pos[m.group(1)] = [int(m.group(2)), int(m.group(3))]
+            if m.group(5):
+                fit[m.group(1)] = int(m.group(5))  # cột "Rộng demo" (level 3+)
             continue
         m = re.match(r"^\|\s*`([a-z0-9_]+)`\s*\|\s*(\w+)\s*\|\s*([^|]+)\|\s*([^|]+)\|\s*([^|]+)\|", line)
         if m:
@@ -61,7 +63,7 @@ def parse_spec(spec):
             info[m.group(1)] = {"folder": m.group(2),
                                 "display": {"dim": "h" if d.group(1) == "cao" else "w", "val": int(d.group(2))} if d else None,
                                 "neo": m.group(5).strip()}
-    return pos, info
+    return pos, info, fit
 
 
 def copy_png(src, dst):
@@ -92,9 +94,9 @@ def main():
 
     anchors = json.loads((ART_OUT / "anchors.json").read_text(encoding="utf8")) if (ART_OUT / "anchors.json").exists() else {}
     ph = json.loads((GAME / "placeholders" / "placeholders.json").read_text(encoding="utf8"))
-    pos, info = {}, {}
+    pos, info, fit = {}, {}, {}
     for lv, spec in SPECS.items():
-        pos[lv], inf = parse_spec(spec)
+        pos[lv], inf, fit[lv] = parse_spec(spec)
         info = {**inf, **info}
     entries, real, temp = {}, [], []
     for key, folder in keys_from_js():
@@ -118,7 +120,7 @@ def main():
             shutil.copy2(f, DIST / "audio" / f.name)
             audio.append(f.name)
 
-    manifest = {"entries": entries, "pos": pos, "info": info, "audio": audio,
+    manifest = {"entries": entries, "pos": pos, "info": info, "fit": fit, "audio": audio,
                 "phMeta": {k: v for k, v in ph.items() if k in temp}}
     (DIST / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=1), encoding="utf8")
     (DIST / "index.html").write_text(INDEX, encoding="utf8")

@@ -9,6 +9,8 @@ Mỗi level có một file thảo luận `art/review/level<N>-thread.md`; mọi 
 - Art 2D viết `art/design-art-level<N>.md`: bối cảnh phòng, rồi **từng đồ vật** với góc nhìn (theo "Góc nhìn chung" trong `art/style.md`), mặt thấy được, tỉ lệ, chất liệu, màu.
 - Với mỗi đồ, liệt kê **mọi trạng thái** (đóng/mở, trước/sau khi chạm, các nấc…) và điều gì giữ nguyên giữa các trạng thái (khung, đường đáy, góc nhìn), để các trạng thái vẽ khớp nhau.
 
+- **Tách nền và đồ (chủ dự án chốt, áp cho mọi màn từ Level 4; Level 3 giữ như hiện tại):** ảnh nền chỉ gồm **phòng trống**: tường, sàn, chân tường, trần. **Mọi đồ vật đều vẽ riêng thành sprite**, kể cả đồ không tương tác như thảm, bàn, sofa, kệ, cửa sổ, tranh, đèn. Không vẽ đồ dính vào nền rồi cắt ra.
+
 ## 2. Art 2D và Dev cùng phân tích yêu cầu art
 
 - Dev nêu yêu cầu animation: tách lớp, điểm neo, vật con (đồ nằm trên đồ khác), lớp hiển thị, vùng chạm.

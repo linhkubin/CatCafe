@@ -16,7 +16,7 @@
 |---|---|---|
 | 1 | **30 giây** | 2 |
 | 2 | **45 giây** | 3 |
-| 3 | **60 giây** | 5 |
+| 3 | **65 giây** | 7 |
 
 ### Từ level 4 trở đi: độ khó theo **số đuôi** của level
 
@@ -86,7 +86,8 @@ Mỗi màn có vài đồ vật **trông giống con mèo của màn đó** (đ�
 - **Không thua, không đếm giờ.** Chạm sai chỉ có phản ứng vui.
 - **Game không có chữ.** Mọi thứ truyền đạt bằng hình, biểu tượng, hoạt hình và âm thanh: bong bóng suy nghĩ vẽ hình đồ vật, bàn tay hướng dẫn, biển hiệu vẽ hình, tiếng kêu. Các từ trong ngoặc kép ở tài liệu này ("meo", "tách", "chít"…) là **âm thanh**, không hiện thành chữ trên màn hình.
 - **Gợi ý tự nhiên** bật sau 8 giây không làm gì (đuôi thò ra, tiếng "meo", đồ lấp lánh). Gợi ý mạnh (nút 💡): bàn chân mèo chỉ vào đúng chỗ.
-- **Bí mật:** Easy 0–1, Normal 1, Hard 1–2. Mỗi bí mật 10 Cá khô.
+- **Bí mật 🎁:** mỗi level 1–2 bí mật (Easy 1, Normal 1–2, Hard 2), là đồ trong cảnh chạm vào thì thưởng thêm **5 Cá khô**, chỉ thưởng lần đầu. Không gợi ý, không lấp lánh: để người chơi tò mò tự chạm.
+- **Dải banner quảng cáo ở đáy:** game có banner dưới đáy màn hình. Chừa **150px dưới cùng** (y 1386–1536 trên khung 1024x1536): không đặt túi đồ, nút 💡 hay bất kỳ đồ chạm được nào trong dải này. Túi đồ và nút 💡 đặt ngay trên dải banner.
 
 ### Mở màn chung: bong bóng nhiệm vụ "tìm mèo"
 
@@ -157,6 +158,16 @@ Mọi màn kết thúc theo **cùng một cảnh**, dùng **một dáng mèo và
 - Mèo **lộ diện lúc nào thì chạm được lúc đó**, kể cả khi người chơi chưa làm hết các bước trong "Luồng giải". Viền sáng chỉ để nhắc, không phải điều kiện.
 - Mèo ở trạng thái **Lẩn tránh** thì chạm vào sẽ làm nó chạy hoặc lùi đi (xem "Luật thắng").
 - Bước chạm mèo **không tính vào số bước bắt buộc** của màn, nhưng có tính vào thời lượng (khoảng 2–3 giây).
+
+### Tạm dừng chung (mọi level)
+
+- Nút **⏸** ở góc trên phải (tròn kem, viền nâu, hai vạch đứng), trong dải giao diện, không đè bong bóng nhiệm vụ ở góc trái.
+- Bấm ⏸: **dừng cả màn** (chuyển động, đồng hồ gợi ý 8/16 giây, âm thanh), phủ một lớp tối mờ, giữa màn hình có **2 nút hình, không chữ**:
+  - **▶ Chơi tiếp:** tắt lớp phủ, mọi thứ chạy tiếp đúng chỗ đang dừng (đồng hồ gợi ý chạy tiếp, không đếm lại từ đầu).
+  - **↻ Chơi lại màn:** bắt đầu lại level từ đầu, túi đồ trống, không mất phần thưởng đã có.
+- Chạm ra ngoài hai nút: không làm gì (tránh trẻ bấm nhầm thoát mất).
+- Game web tự tạm dừng khi người chơi chuyển tab hoặc khoá màn hình, quay lại thì thấy lớp phủ tạm dừng.
+- Ảnh dùng chung: `ui_pause_button`, `ui_play_button`, `ui_restart_button`.
 
 ---
 
