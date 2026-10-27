@@ -18,5 +18,21 @@ class NoCache(http.server.SimpleHTTPRequestHandler):
         self.send_header("Cache-Control", "no-store")
         super().end_headers()
 
+    # Lưu ảnh chụp trong game khi khung trình duyệt bị ẩn: POST /save?art/review/<...>.jpg, thân = data URL.
+    # Chỉ ghi vào art/review/.
+    def do_POST(self):
+        import base64
+        from urllib.parse import unquote
+        rel = unquote(self.path.split("?", 1)[-1])
+        dst = (ROOT / rel).resolve()
+        if not self.path.startswith("/save?") or not str(dst).startswith(str(ROOT / "art" / "review")):
+            self.send_error(403)
+            return
+        body = self.rfile.read(int(self.headers["Content-Length"])).decode()
+        dst.parent.mkdir(parents=True, exist_ok=True)
+        dst.write_bytes(base64.b64decode(body.split(",", 1)[1]))
+        self.send_response(200)
+        self.end_headers()
+
 
 http.server.ThreadingHTTPServer(("127.0.0.1", PORT), partial(NoCache, directory=str(ROOT))).serve_forever()

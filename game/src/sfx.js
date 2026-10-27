@@ -191,16 +191,31 @@ const RECIPES = {
     note(c, { type: 'triangle', f: 196, t: 0.7, vol: 0.06 * g, attack: 0.25, glide: [[220, 0.6]], vib: 9, vibDepth: 0.04 });
     note(c, { f: 988, t: 0.35, vol: 0.035 * g, at: 0.85, attack: 0.08, glide: [[1319, 0.3]], vib: 0 });
   },
+  // Level 4 (tiếng tạm).
+  sua_sfx_meow_short: (c) => meow(c, 0.15, 1000),
+  sfx_hinge: (c) => note(c, { type: 'triangle', f: 440, t: 0.28, vol: 0.06, glide: [[620, 0.14], [520, 0.26]], vib: 0 }), // bản lề "kẹt"
+  sfx_lid: (c) => { note(c, { f: 392, t: 0.08, vol: 0.12, vib: 0, attack: 0.003 }); bell(c, 1175, 0.04, 0.04, 0.12); }, // "cộp"
+  sfx_cloth_drop: (c) => { rustle(c, { t: 0.2, vol: 0.04, f: 1200 }); note(c, { f: 196, t: 0.14, vol: 0.1, at: 0.12, glide: [[147, 0.12]], vib: 0 }); }, // "phịch"
+  l4_sfx_mattress_thud: (c) => { note(c, { f: 147, t: 0.2, vol: 0.16, glide: [[98, 0.18]], vib: 0, attack: 0.004 }); rustle(c, { t: 0.35, vol: 0.04, at: 0.05, f: 900 }); }, // "phịch" + "phù"
+  l4_sfx_teddy_flop: (c) => note(c, { f: 262, t: 0.12, vol: 0.1, glide: [[196, 0.1]], vib: 0 }), // "bịch"
+  l4_sfx_books_domino: (c) => { note(c, { f: 220, t: 0.08, vol: 0.12, vib: 0, attack: 0.003 }); rustle(c, { t: 0.08, vol: 0.03, f: 1400 }); }, // "rầm"
+  l4_sfx_books_land: (c) => note(c, { f: 392, t: 0.07, vol: 0.1, vib: 0, attack: 0.003 }), // "cộp"
+  l4_sfx_suitcase_burst: (c) => { note(c, { f: 196, t: 0.12, vol: 0.14, glide: [[392, 0.1]], vib: 0 }); for (let i = 0; i < 5; i++) note(c, { f: 523 + i * 60, t: 0.06, vol: 0.06, at: 0.25 + i * 0.09, vib: 0 }); }, // "bụp" + lộp bộp
+  l4_sfx_duck: (c) => { note(c, { f: 1568, t: 0.09, vol: 0.08, glide: [[1976, 0.08]], vib: 0 }); note(c, { f: 1568, t: 0.09, vol: 0.08, at: 0.14, glide: [[1976, 0.08]], vib: 0 }); }, // "chít"
+  l4_sfx_ball_boing: (c) => note(c, { type: 'triangle', f: 220, t: 0.4, vol: 0.12, glide: [[440, 0.08], [180, 0.38]], vib: 0 }), // "boing"
+  l4_sfx_pen_drop: (c) => [1319, 1175, 1047].forEach((f, i) => note(c, { f, t: 0.05, vol: 0.06, at: i * 0.08, vib: 0, attack: 0.002 })), // "lạch cạch"
+  l4_sfx_land_tap: (c) => note(c, { f: 1760, t: 0.04, vol: 0.05, vib: 0, attack: 0.002 }), // "tạch" thật nhẹ
 };
 
 export const SOUND_KEYS = Object.keys(RECIPES);
 
-export function playSfx(scene, key, gain = 1) {
+// opt: tham số riêng cho tiếng tổng hợp (ví dụ { step } cho tiếng xoay ống cao dần).
+export function playSfx(scene, key, gain = 1, opt) {
   if (scene && scene.cache.audio.exists(key)) {
     scene.sound.play(key, { volume: MASTER * gain });
     return;
   }
   const c = audioCtx(scene);
   const r = RECIPES[key];
-  if (c && r) r(c, gain);
+  if (c && r) r(c, gain, opt);
 }

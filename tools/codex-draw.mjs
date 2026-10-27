@@ -10,6 +10,7 @@
 //   node tools/codex-draw.mjs --sheet l1_pate_sheet --ref art/out/demo/test_pate_can_sheet.png,art/out/_sheets/l1_cushion_sheet.png
 //   -> Codex vẽ art/out/_sheets/l1_pate_sheet.png, xong thì tự chạy tools/sheet_cut.py cut để cắt ra từng key
 //      (thêm --no-cut để không cắt). Dùng chung được --redo, --note, --dry.
+//   Mọi lời giao việc tự kèm art/ref/owner_l1_style_ref.png (màu, chất chì) + khối COLOR và art/ref/l1_depth_angle_ref.png (góc, sofa L1) + khối CAMERA; ảnh lẻ vẽ xong tự đo màu bằng tools/color_check.py; tờ trong suốt kiểm màu bằng ảnh ghép lên nền (G4-20).
 //   --stroke-ref <ảnh>=<tỉ lệ>: thêm câu so nét "viền ngoài dày khoảng <tỉ lệ> lần viền trong <ảnh>"
 //      (Y4: AI làm theo kiểu so sánh tốt hơn số px). Ảnh này nên có cả trong --ref.
 // Nhật ký từng lần vẽ lưu ở art/out/_logs/<key hoặc tờ>.txt.
@@ -41,13 +42,48 @@ const redo = flag("--redo");
 const note = option("--note");
 const level = option("--level");
 const sheet = option("--sheet");
-const refs = (option("--ref") || "").split(",").filter(Boolean);
+// Ảnh mẫu màu level 1 luôn là tham chiếu số 1 (quy tắc giữ màu O6, QUY-TRINH.md bước 3).
+const STYLE_REF = "art/ref/owner_l1_style_ref.png";
+// Mẫu góc (sofa cắt từ ảnh mẫu L1, style.md 2b): luôn là tham chiếu số 2.
+const ANGLE_REF = "art/ref/l1_depth_angle_ref.png";
+const refs = [STYLE_REF, ANGLE_REF, ...(option("--ref") || "").split(",").filter((r) => r && r !== STYLE_REF && r !== ANGLE_REF)];
 const noCut = flag("--no-cut");
 const strokeRef = option("--stroke-ref"); // "<ảnh>=<tỉ lệ>", ví dụ art/out/cats/sua_ref.png=0.5
 const VALUE_OPTS = ["--note", "--level", "--sheet", "--ref", "--stroke-ref"];
 const keys = args.filter((a, i) => !a.startsWith("--") && !VALUE_OPTS.includes(args[i - 1]));
 
 const exists = (p) => access(p).then(() => true, () => false);
+
+// Khối phong cách art/style.md mục 1 (gồm STYLE, COLOR, SIMPLICITY…), dán nguyên vào mọi lời giao việc (O2-11, O6).
+async function colorLines() {
+  const style = await readFile(path.join(ART, "style.md"), "utf8");
+  const block = style.match(/## 1\.[^\n]*\n[\s\S]*?```\n([\s\S]*?)```/);
+  if (!block) throw new Error("Không thấy khối phong cách trong art/style.md mục 1.");
+  return [
+    `- Phong cách và màu (O2-11, O6): mở ${STYLE_REF} bằng view_image làm mẫu màu và chất chì, đính kèm nó cho image_gen. Khối phong cách (art/style.md mục 1, có khối COLOR), dán nguyên:`,
+    "```", block[1].trimEnd(), "```",
+    `- "Nhắc lại quy tắc" phải nhắc lại khối màu; "Tự kiểm" chấm đạt / không đạt về màu.`,
+  ];
+}
+
+// Khối CAMERA trong art/style.md mục 2b (nhìn như sofa level 1), dán nguyên vào mọi lời giao việc.
+async function cameraLines() {
+  const style = await readFile(path.join(ART, "style.md"), "utf8");
+  const block = style.match(/^CAMERA [^\n]*\n(?:.+\n)+?(?=```)/m);
+  if (!block) throw new Error("Không thấy khối CAMERA trong art/style.md mục 2b.");
+  return [
+    `- Góc nhìn: mở ${ANGLE_REF} (sofa level 1) bằng view_image; nhìn mọi thứ như cái sofa đó, đồ có chiều sâu rõ hơn chút. Khối CAMERA (art/style.md mục 2b), dán nguyên:`,
+    "```", block[0].trimEnd(), "```",
+    `- "Nhắc lại quy tắc" phải nhắc lại góc nhìn; "Tự kiểm" chấm đạt / không đạt góc nhìn cho từng đồ.`,
+  ];
+}
+
+// Đo bão hoà theo O6 (tools/color_check.py). Trả về true nếu đạt.
+async function colorOk(file) {
+  const code = await run("python", ["tools/color_check.py", path.relative(ROOT, file)]);
+  if (code !== 0) console.log(`Màu VƯỢT ngưỡng O6: không cắt, vẽ lại với --redo --note "<món bị đậm>".`);
+  return code === 0;
+}
 
 // Đọc mọi dòng bảng có dạng | `thư_mục/key.png` | `key` | ... trong các file đặc tả.
 async function loadAssets() {
@@ -63,12 +99,41 @@ async function loadAssets() {
   return assets;
 }
 
-function brief(asset) {
+// Ảnh demo gốc đã duyệt của phòng chứa tờ / ảnh lẻ (G4-26), đọc từ bảng "Tờ hoặc key | Demo gốc | Vị trí trong demo"
+// trong design-art-level<N>.md. Level đã có demo (art/out/demo/l<N>_demo_*.png) mà thiếu dòng thì dừng.
+async function demoFor(name, specFile) {
+  const m = specFile.match(/level(\d+)/);
+  if (!m) return null;
+  const text = await readFile(path.join(ART, specFile), "utf8");
+  for (const raw of text.split("\n")) {
+    const c = raw.trim().replace(/^\||\|$/g, "").split("|").map((x) => x.trim().replace(/`/g, ""));
+    if (c.length >= 3 && c[0] === name && /^art\/out\/demo\/.+\.png$/.test(c[1])) return { file: c[1], where: c[2] };
+  }
+  const demos = (await readdir(path.join(OUT, "demo")).catch(() => [])).filter((f) => f.startsWith(`l${m[1]}_demo_`));
+  if (demos.length) {
+    console.error(`Thiếu ảnh demo gốc cho ${name} (G4-26): thêm dòng vào bảng "Demo gốc" trong art/${specFile}.`);
+    process.exit(1);
+  }
+  return null;
+}
+
+function demoLines(demo) {
+  return demo ? [`- **Ảnh demo gốc (G4-26): ${demo.file}**, món cần vẽ nằm ở ${demo.where}. Mở bằng view_image, vẽ món đồ giống hệt trong demo (hình dáng, tỉ lệ, màu, nét).`] : [];
+}
+
+function refList(demo) {
+  return (demo ? [STYLE_REF, ANGLE_REF, demo.file, ...refs.slice(2).filter((r) => r !== demo.file)] : refs).join(", ");
+}
+
+function brief(asset, color, demo) {
   const where = asset.spec === "style.md" ? "art/style.md" : `art/style.md (phong cách, nhân vật) và art/${asset.spec}`;
   const lines = [
     `Vẽ asset \`${asset.key}\` cho game, theo đúng quy tắc trong AGENTS.md.`,
     `- Đặc tả: ${where} (tìm dòng có key \`${asset.key}\` và đoạn mô tả chi tiết của nó).`,
     `- Lưu vào: art/out/${asset.file}`,
+    ...demoLines(demo),
+    ...color,
+    `- Ảnh tham chiếu, mở bằng view_image trước khi vẽ: ${refList(demo)}`,
   ];
   if (redo) lines.push("- Được phép ghi đè file đã có.");
   if (note) lines.push(`- Góp ý từ lần trước: ${note}`);
@@ -96,7 +161,7 @@ async function loadSheetRows(name) {
   return rows;
 }
 
-function sheetBrief(name, rows) {
+function sheetBrief(name, rows, color, demo) {
   const cells = rows.map((r) => r["ô"].split(",").map(Number));
   const w = Math.max(...cells.map(([x, , cw]) => x + cw));
   const h = Math.max(...cells.map(([, y, , ch]) => y + ch));
@@ -107,13 +172,15 @@ function sheetBrief(name, rows) {
     `- Các ô (x,y,w,h theo px trong tờ):`,
     ...rows.map((r) => `  - ô ${r["ô"]}: \`${r.key}\`${r["neo"] ? `, neo ${r["neo"]}` : ""}${r["nét"] ? `, viền ngoài chỗ đậm nhất ~${r["nét"]}px` : ""}`),
     `- Mỗi thứ nằm trọn trong ô của nó, cách mép ô ít nhất 40px, không chạm sang ô khác. Các trạng thái của cùng một đồ vật: phần không đổi giống hệt nhau, cùng cỡ, cùng góc nhìn.`,
+    ...demoLines(demo),
+    ...color,
     `- Nét (style.md mục 1): số px ở từng ô là độ dày **đường viền ngoài ở chỗ đậm nhất** (chỗ khuất, chỗ gập). Phần lớn đường viền mảnh hơn (khoảng 60% số đó), đầu nét nhọn dần; nét lông và chi tiết bên trong mảnh hơn nữa. Không vẽ một đường đều dày kiểu vector.`,
   ];
   if (strokeRef) {
     const [img, ratio] = strokeRef.split("=");
     lines.push(`- So nét với ảnh đính kèm ${img}: viền ngoài của tờ này dày khoảng ${ratio || "1"} lần viền ngoài trong ảnh đó (mở ảnh bằng view_image để so).`);
   }
-  if (refs.length) lines.push(`- Ảnh tham chiếu, mở bằng view_image trước khi vẽ: ${refs.join(", ")}`);
+  lines.push(`- Ảnh tham chiếu, mở bằng view_image trước khi vẽ: ${refList(demo)}`);
   if (redo) lines.push("- Được phép ghi đè file đã có.");
   if (note) lines.push(`- Góp ý từ lần trước: ${note}`);
   return lines.join("\n");
@@ -133,7 +200,7 @@ async function drawSheet() {
     process.exit(1);
   }
   const target = path.join(OUT, "_sheets", `${sheet}.png`);
-  const prompt = sheetBrief(sheet, rows);
+  const prompt = sheetBrief(sheet, rows, [...(await colorLines()), ...(await cameraLines())], await demoFor(sheet, rows[0].spec));
   if (dry) { console.log(`\n== ${sheet}\n${prompt}`); return; }
   if (!redo && (await exists(target))) {
     console.log(`Đã có art/out/_sheets/${sheet}.png (thêm --redo để vẽ lại).`);
@@ -146,6 +213,9 @@ async function drawSheet() {
       process.exit(1);
     }
   }
+  // Tờ trong suốt không chặn theo số màu riêng (G4-20): kiểm màu bằng cảnh ghép key lên nền
+  // (sheet_cut.py compose, ngưỡng O6) và nhìn cạnh demo sau khi cắt.
+  console.log("Tờ trong suốt: không chặn theo màu; sau khi cắt, kiểm bằng ảnh ghép lên nền (sheet_cut.py compose) so với demo.");
   if (noCut) return;
   console.log(`\n=== Cắt tờ ${sheet}`);
   // Không dùng cờ -I: script cần import numpy/Pillow từ môi trường thường.
@@ -189,18 +259,20 @@ async function main() {
   }
 
   await mkdir(LOGS, { recursive: true });
+  const color = await colorLines();
   let done = 0, skipped = 0, failed = 0;
   for (const asset of todo) {
     const target = path.join(OUT, asset.file);
     if (!redo && (await exists(target))) { skipped++; continue; }
 
-    const prompt = brief(asset);
+    const prompt = brief(asset, [...color, ...(await cameraLines())], await demoFor(asset.key, asset.spec));
     if (dry) { console.log(`\n== ${asset.key}\n${prompt}`); continue; }
 
     console.log(`\n=== Codex đang vẽ ${asset.key} -> art/out/${asset.file}`);
     const code = await runCodex(prompt, path.join(LOGS, `${asset.key}.txt`));
     if (code === 0 && (await exists(target))) {
       console.log(`xong -> art/out/${asset.file}`);
+      await colorOk(target);
       done++;
     } else {
       console.log(`LỖI: ${asset.key} chưa có file (mã thoát ${code}), xem art/out/_logs/${asset.key}.txt`);

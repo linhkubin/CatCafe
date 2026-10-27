@@ -9,7 +9,8 @@ export const BUILT = false;
 const ROOT = new URL('../', location.href).href;          // gốc dự án (game/ nằm ngay dưới)
 const ART_OUT = ROOT + 'art/out/';
 const PH = new URL('placeholders/', location.href).href;
-const SPECS = { 1: ROOT + 'art/design-art-level1.md', 2: ROOT + 'art/design-art-level2.md', 3: ROOT + 'art/design-art-level3.md' };
+const SPECS = { 1: ROOT + 'art/design-art-level1.md', 2: ROOT + 'art/design-art-level2.md', 3: ROOT + 'art/design-art-level3.md',
+  4: ROOT + 'art/design-art-level4.md' };
 const LEVELS = Object.keys(SPECS).map(Number);
 
 // Dự phòng nếu không đọc được design-art level 1 (giá trị ở vòng 5). Level 2 có vị trí dự phòng trong level2.js.
@@ -68,6 +69,21 @@ export const KEYS = {
     ['l1_pillow_white_idle', 'level1'], ['l1_pillow_white_flipped', 'level1'],
     ['player_point_think', 'player'], ['player_sad', 'player'],
     ['ui_bag_bar', 'common'], ['ui_bag_slot', 'common'], ['ui_thought_bubble', 'common'],
+  ],
+  4: [
+    ['l4_bg_living', 'level4'], ['l4_bg_bedroom', 'level4'], ['l4_bg_study', 'level4'],
+    ['l4_window', 'level4'], ['l4_curtain', 'level4'], ['l4_sofa', 'level4'],
+    ['l4_stack_mattress', 'level4'], ['l4_stack_suitcase', 'level4'], ['l4_stack_books', 'level4'], ['l4_stack_pillow', 'level4'],
+    ['l4_bed', 'level4'], ['l4_pillow', 'level4'], ['l4_bedside_lamp', 'level4'], ['l4_sock_stuck', 'level4'], ['l4_sock_flat', 'level4'],
+    ['l4_mattress_standing', 'level4'], ['l4_mattress_fallen', 'level4'], ['l4_teddy', 'level4'],
+    ['l4_bookshelf_full', 'level4'], ['l4_bookshelf_after', 'level4'], ['l4_book_single', 'level4'], ['l4_book_single_yellow', 'level4'], ['l4_book_single_mint', 'level4'], ['l4_book_stack', 'level4'],
+    ['l4_desk', 'level4'], ['l4_yoga_ball', 'level4'], ['l4_suitcase_full', 'level4'], ['l4_suitcase_folded', 'level4'],
+    ['l4_spill_duck_ring', 'level4'], ['l4_spill_goggles', 'level4'], ['l4_spill_slipper', 'level4'], ['l4_spill_shirt', 'level4'],
+    ['sua_curtain_banana', 'cats'], ['sua_curtain_one_paw', 'cats'], ['sua_curtain_upside', 'cats'], ['sua_curtain_sleep', 'cats'],
+    ['sua_curtain_sulk', 'cats'], ['sua_curl_spin', 'cats'], ['sua_land', 'cats'], ['sua_lick_paw', 'cats'],
+    ['player_reach_up', 'player'], ['player_silly_laugh', 'player'],
+    ['ui_bag_bar', 'common'], ['ui_bag_slot', 'common'], ['ui_room_arrow', 'common'], ['ui_thought_bubble', 'common'],
+    ['fx_dust_puff', 'common'], ['fx_dust_puff_b', 'common'],
   ],
 };
 export const ALL_KEYS = Object.values(KEYS).flat();

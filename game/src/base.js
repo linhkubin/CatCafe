@@ -15,6 +15,9 @@ export const D = {
 export const MIN_HIT = 115;            // vùng chạm tối thiểu (P6)
 export const BANNER = 150;             // dải banner quảng cáo ở đáy màn hình: không đặt UI hay đồ chạm được (leveldesign, quy ước chung)
 export const SWIPE = 40;               // px: dài hơn là vuốt
+// Túi đồ dùng chung mọi level (G4-33: giống hệt L3, đo trên l3_demo_reveal): thanh neo đáy x 409, phần vẽ rộng 688;
+// tâm 4 ô x 205/348/492/635, ô rộng 136. Không đọc từ bảng vị trí từng level.
+export const BAG = { barX: 409, barW: 688, slotX: [205, 348, 492, 635], slotW: 136 };
 export const CREAM = 0xfffcf4, BROWN = 0x6b4a3a, SUN = 0xfce39a;
 
 // Ảnh thật chưa có điểm neo trong anchors.json: suy neo từ cột Neo, tỉ lệ từ cột Hiển thị của design-art.
@@ -575,6 +578,7 @@ export class BaseLevel extends Phaser.Scene {
 
   // Làm mẫu kéo-thả: đầu ngón đi từ `from` tới `to` (toạ độ thế giới), nằm trên túi đồ; lặp `times` lần (-1: mãi).
   handDrag(from, to, mode = 'guide', which = 'hand', times = -1) {
+    if (which === 'hand' && !this.showHand) return;
     this.handHide(which);
     const s = this[which];
     if (which === 'hand') this.handMode = mode;
@@ -596,10 +600,9 @@ export class BaseLevel extends Phaser.Scene {
   }
 
   // ---------- túi đồ (D3-1, G3-2, G3-3): dải bám mép dưới, 4 ô; kéo món từ ô thả vào cảnh hoặc lên món khác ----------
-  // Toạ độ theo tranh demo level 3 (D3-22): dải neo đáy (422, đáy − 58), tâm ô x 205/348/492/635, cao hơn đáy dải 90.
-  // Bảng vị trí có dòng `ui_bag_bar` / `ui_bag_slot_N` thì dùng (X; Y đổi thành khoảng cách tới mép dưới khung 1536).
-  get bagSlotX() { return [205, 348, 492, 635].map((x, i) => (this.pos('ui_bag_slot_' + (i + 1)) || [x])[0]); }
-  bagX() { return (this.pos('ui_bag_bar') || [422])[0]; }
+  // Bộ số chung BAG (G4-33): mọi level cùng chỗ, cùng cỡ như level 3; tâm ô cao hơn đáy dải 90.
+  get bagSlotX() { return BAG.slotX; }
+  bagX() { return BAG.barX; }
   // Đáy dải túi ngay trên dải banner (cách mép dưới màn hình BANNER + 6).
   bagY() { return this.worldBottom - BANNER - 6; }
   slotPos(i) { return [this.bagSlotX[i], this.bagY() - 90]; }
@@ -607,9 +610,10 @@ export class BaseLevel extends Phaser.Scene {
   bagShow(done) {
     if (this.bag) { done && done(); return; }
     const bar = this.img('ui_bag_bar', this.bagX(), this.bagY(), D.ui - 2);
+    bar.setScale(bar.base = bar.baseY = BAG.barW / this.trimWidth('ui_bag_bar'));
     const slots = this.bagSlotX.map((x, i) => {
       const s = this.img('ui_bag_slot', ...this.slotPos(i), D.ui - 1).setOrigin(0.5, 0.5);
-      if (!((this.A.fit || {})[this.levelNo] || {}).ui_bag_slot) this.fitWidth(s, 136); // đo trên demo l3_demo_reveal
+      this.fitWidth(s, BAG.slotW);
       const z = this.add.zone(...this.slotPos(i), 135, 135).setDepth(D.ui + 4).setInteractive();
       z.on('pointerdown', (p) => this.bagPress(i, p));
       return { s, z };
@@ -634,16 +638,30 @@ export class BaseLevel extends Phaser.Scene {
   bagAdd(key, from, done) {
     const i = this.bag.items.indexOf(null);
     if (i < 0) return null;
-    const [fx, fy] = Array.isArray(from) ? from : [from.getCenter().x, from.getCenter().y];
+    // Icon (khung cắt sát phần vẽ) bắt đầu đúng chỗ và đúng cỡ phần vẽ của sprite trong cảnh, rồi co liên tục về cỡ ô:
+    // tâm lấy theo khung cắt sát của chính sprite đó (không theo khung ảnh có lề), scaleX/scaleY nội suy riêng (G4-31).
+    let fx, fy;
+    if (Array.isArray(from)) [fx, fy] = from;
+    else {
+      const f = this.textures.get(from.texture.key).get(this.iconFrame(from.texture.key));
+      const left = from.x - from.originX * from.width * from.scaleX, top = from.y - from.originY * from.height * from.scaleY;
+      fx = left + (f.cutX + f.cutWidth / 2) * from.scaleX;
+      fy = top + (f.cutY + f.cutHeight / 2) * from.scaleY;
+    }
     const s = this.bagIcon(key, fx, fy);
     if (!Array.isArray(from)) s.setScale(from.scaleX, from.scaleY);
     const it = { key, s, i };
     this.bag.items[i] = it;
-    const k = this.bagIconScale(s), [tx, ty] = this.slotPos(i), sx0 = s.scaleX;
+    const k = this.bagIconScale(s), [tx, ty] = this.slotPos(i), sx0 = s.scaleX, sy0 = s.scaleY;
     this.tweens.addCounter({ from: 0, to: 1, duration: 500, ease: 'Sine.inOut', onUpdate: (tw) => {
       const t = tw.getValue();
-      s.setPosition(fx + (tx - fx) * t, fy + (ty - fy) * t - 180 * Math.sin(Math.PI * t)).setScale(sx0 + (k - sx0) * t);
-    }, onComplete: () => { s.setPosition(tx, ty).setScale(k); this.hop(s, 12, 220); this.sfx('sfx_pickup'); done && done(it); } });
+      s.setPosition(fx + (tx - fx) * t, fy + (ty - fy) * t - 180 * Math.sin(Math.PI * t)).setScale(sx0 + (k - sx0) * t, sy0 + (k - sy0) * t);
+    }, onComplete: () => {
+      s.setPosition(tx, ty).setScale(k);
+      if (this.bagLandHop !== false) this.hop(s, 12, 220);
+      this.sfx('sfx_pickup');
+      done && done(it);
+    } });
     return it;
   }
 
@@ -701,7 +719,10 @@ export class BaseLevel extends Phaser.Scene {
     this.drag = null;
     if (this.onBagHover) this.onBagHover(null);
     const it = d.item, s = it.s;
-    if (!d.moved) { this.hop(s, 12, 220); this.sfx('sfx_tap'); if (this.onBagTap) this.onBagTap(it); return; }
+    if (!d.moved) {
+      if (this.bagTapFeedback === false) return; // màn tắt phản hồi khi chạm món trong túi (L4, G4-31)
+      this.hop(s, 12, 220); this.sfx('sfx_tap'); if (this.onBagTap) this.onBagTap(it); return;
+    }
     // Thả lên ô khác có món: ghép.
     const other = this.bag.items.find((o) => o && o !== it && Math.hypot(s.x - this.slotPos(o.i)[0], s.y - this.slotPos(o.i)[1]) < 80);
     if (other) {
@@ -737,7 +758,11 @@ export class BaseLevel extends Phaser.Scene {
   }
 
   // flip: lật ngang bàn tay (ngón trỏ chỉ chéo xuống phải), dùng khi chỉ vào mép trái của vật để tay không che vật.
+  // Từ level 4 không hiện bàn tay hướng dẫn `ui_hand_pointer` (G4-19, leveldesign 6.4); bàn chân 💡 vẫn dùng.
+  get showHand() { return this.levelNo < 4; }
+
   handTap([x, y], mode = 'hint', which = 'hand', flip = false) {
+    if (which === 'hand' && !this.showHand) return;
     this.handHide(which);
     const s = this[which];
     if (which === 'hand') this.handMode = mode;
@@ -880,10 +905,11 @@ export class BaseLevel extends Phaser.Scene {
     // Không phóng quá 1,6 lần (màn dài thì Sữa nằm thấp hơn giữa một chút, thay vì tay và mèo to quá khổ).
     k = Phaser.Math.Clamp(k, 1060 / hands.displayWidth, 1.6);
     const A = bottom - L * k;                                        // toạ độ nách = điểm nắm
-    const ct = this.add.container(512, A).setDepth(D.end + 5);
+    const cx = this.cameras.main.scrollX + 512;                       // giữa màn hình theo camera (màn nhiều phòng trượt ngang)
+    const ct = this.add.container(cx, A).setDepth(D.end + 5);
     hands.setScale(hands.base * k).setPosition(0, L * k + hands.displayHeight + 60);
     const hb = held.base, sitScale = Math.min(1, sb.height / held.displayHeight);
-    held.setPosition(pit[0] - 512, pit[1] - A).setScale(hb * sitScale);
+    held.setPosition(pit[0] - cx, pit[1] - A).setScale(hb * sitScale);
     ct.add([hands, held]); // O10: tay nằm dưới, Sữa vẽ đè lên tay
     this.endCt = { ct, held, hands };
     const T = (ms, fn) => this.time.delayedCall(ms, () => { if (this.phase === 'ending') fn(); });
@@ -900,7 +926,7 @@ export class BaseLevel extends Phaser.Scene {
       this.tweens.chain({ targets: held, tweens: [
         { angle: 5, duration: 200 }, { angle: -5, duration: 400 }, { angle: 5, duration: 400 }, { angle: 0, duration: 200 },
       ] });
-      this.hearts(512, A - held.originY * held.displayHeight - 10, 3);
+      this.hearts(cx, A - held.originY * held.displayHeight - 10, 3);
       this.sfx('sua_sfx_meow');
       this.sfx('sfx_heart');
     });

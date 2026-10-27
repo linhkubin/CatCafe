@@ -20,11 +20,15 @@ STYLE
 - Shapes: simple, round, chubby, soft corners. Slightly crooked and playful, never perfectly geometric.
 - Cute and funny ("kawaii" but not anime): big heads, small bodies, round eyes, tiny mouths.
 
-COLOR
-- Fresh, clear pastel colors with a little more saturation, like richly shaded colored pencil on cream paper: cheerful and bright, never washed out or greyish, never neon.
-- Main palette: cream, warm white, peach, rosy pink, butter yellow, fresh mint green, leaf green, clear sky blue, warm honey-caramel wood, lavender.
-- Medium-low saturation, soft contrast; colors should read clearly at small size. No strong dark shadows.
-- Shading: only a few soft pencil strokes on one side; no gradients, no glossy highlights, no 3D render look.
+COLOR (locked to the Level 1 reference image)
+- The reference image art/ref/owner_l1_style_ref.png is ALWAYS attached. Match its palette, lightness, softness and pencil grain exactly. When in doubt, go lighter and softer, never stronger.
+- Soft, light, slightly muted pastels on warm cream paper, like gentle colored pencil: airy and cheerful, but never vivid, never deep, never neon, and never grey or washed out.
+- Use ONLY this palette (approximate): cream paper #FCF1DD, warm white #FFFAF0, outline brown #6B4A3A, honey wood #F2C796, caramel #D6A472, peach #F7B9A3, powder pink #F8C6CC, butter yellow #FCE39A, mint #B9DDBE, leaf green #9DC283, sky blue #B8DAF2, lavender #D8CCF0. Only for the black cat Mun: warm charcoal #3E3838.
+- No color may be more saturated or darker than its palette swatch. No deep purple or violet, no royal or cobalt blue, no coral or salmon red, no orange, no strong lemon yellow, no bright turquoise.
+- Large areas (walls, floors, curtains, beds, big furniture, big balls or bags) stay the lightest and softest colors in the picture; only small accents may be a little stronger.
+- Walls are warm cream or a very pale tint of a palette color, never pure white and never a strong tint.
+- Every color area shows visible light pencil grain with tiny cream paper gaps: no flat solid fills, no smooth digital gradients, no glossy highlights, no 3D render look.
+- Medium-low saturation, soft contrast; colors still read clearly at small size. No strong dark shadows; shading is only a few soft pencil strokes on one side.
 
 SIMPLICITY
 - Very few details. Each object is recognisable from its silhouette alone.
@@ -50,7 +54,7 @@ ABSOLUTE RULES
 | Chất liệu | Bút chì màu trên giấy kem, thấy rõ vân chì nhẹ |
 | Nét viền | Nâu ấm (không đen), **mảnh**, run tay, **đậm nhạt như bút chì thật**: đậm và dày hơn ở chỗ khuất, chỗ gập, chỗ chồng nhau; nhạt và mảnh dần ở đầu nét; chỗ lông xù có nét đứt ngắn. Không phải một đường đều dày như vector (O5) |
 | Hình khối | Tròn, mập, bo góc, hơi méo cho vui mắt |
-| Màu | Pastel trong và tươi, bão hòa vừa phải (tươi hơn bản demo đầu, không bạc màu, không màu chói), theo `art/ref/owner_color_ref.png` (O3) |
+| Màu | **Khóa theo ảnh mẫu level 1** `art/ref/owner_l1_style_ref.png`: pastel nhạt, mềm, hơi trầm trên giấy kem, chỉ dùng bảng màu bên dưới, không màu nào đậm hơn ô màu của nó; không bạc xám, không chói. Mảng lớn (tường, sàn, rèm, giường, đồ to) nhạt nhất. Mọi mảng màu thấy vân chì, không tô phẳng (O3, O6) |
 | Đổ bóng | Vài nét chì một bên, không gradient, không bóng loáng |
 | Chi tiết | Tối giản, nhìn bóng là nhận ra đồ vật |
 | Họa tiết | Không có. Chỉ khi đặc tả yêu cầu (tất sọc, tất chấm bi) thì vẽ to, ít |
@@ -78,30 +82,27 @@ ABSOLUTE RULES
 
 ---
 
-## 2b. Góc nhìn chung (cho cả game, O2-10)
+## 2b. Góc nhìn chung (cho cả game, chủ dự án chốt: theo sofa level 1)
 
-Mọi nền và mọi đồ vật dùng **một camera duy nhất**, như nền và đồ vật level 1 (D3):
-- Nhìn **chính diện**, mắt hơi cao hơn đồ, nhìn xuống khoảng **15°**.
-- **Cạnh ngang luôn nằm ngang**, **cạnh đứng luôn thẳng đứng**. Không phối cảnh xiên, không điểm tụ, không góc ba phần tư, không đồ nào xoay chéo.
-- **Mặt trước** của đồ là mặt chính, thấy gần như trọn vẹn. **Mặt trên** chỉ là một dải mỏng (khoảng 1/5 chiều cao mặt trước), mặt tròn thành elip dẹt. Mặt hông chỉ thấy khi đồ có chiều sâu lớn, và chỉ là một dải hẹp bên phải.
-- Ánh sáng từ **trên trái**: vài nét chì đổ bóng ở **bên phải** và dưới đồ. Không bóng đổ dưới sàn (code vẽ).
-- Đồ đặt sát tường thì mặt trước song song với tường.
-- Đồ cao lớn đặt bên phải khung (như tủ quần áo) được thấy **một dải hông hẹp bên phải** và nóc là dải mỏng. **Đồ đặt trên hoặc sát nó** (hộp trên nóc tủ…) phải theo **đúng góc đó**: thấy mặt trước, dải hông phải cùng độ rộng tương đối, mặt trên song song với nóc.
+**Mẫu góc duy nhất: cái sofa trong ảnh level 1** (`art/ref/l1_depth_angle_ref.png`, cắt từ `art/ref/owner_l1_style_ref.png`). Mọi nền và mọi đồ vật nhìn giống cách nhìn cái sofa đó, chỉ **cho đồ có chiều sâu rõ hơn một chút**.
 
-| Đồ | Đúng | Sai |
-|---|---|---|
-| Ghế | Nhìn thẳng mặt trước: lưng tựa là hình chữ nhật đứng, mặt ghế là dải ngang mỏng, 4 chân thẳng đứng (2 chân sau ngắn hơn, lấp sau chân trước) | Ghế xoay chéo 3/4, thấy mặt ghế hình thoi, chân xiên |
-| Giường | Nhìn ngang dọc thân giường: đầu giường một bên, chân giường bên kia, mặt nệm và chăn là dải dày nằm ngang, khung giường hình chữ nhật thẳng | Giường nhìn từ trên xuống thấy cả mặt nệm, hoặc giường xoay chéo vào trong phòng |
-| Tủ | Mặt trước chữ nhật thẳng đứng, 2 cánh song song; nóc là một dải mỏng; một dải hông hẹp bên phải | Tủ nghiêng, nóc thấy rộng, cạnh hông chụm về một điểm |
-| Hộp | Mặt trước chữ nhật, nắp là dải mỏng phía trên, hông là dải hẹp bên phải; cùng góc với đồ bên cạnh | Hộp vẽ phẳng 2D không có chiều sâu, hoặc xoay 3/4 |
-| Giỏ tròn | Thân giỏ nhìn ngang, miệng giỏ là elip dẹt (cao bằng ~1/5 bề ngang) | Miệng giỏ tròn vành vạnh như nhìn từ trên xuống |
+- **Hơi trực diện:** nhìn thẳng mặt trước, mắt cao hơn đồ, nhìn xuống nhẹ. Cạnh ngang nằm ngang, cạnh đứng thẳng đứng. Không xoay chéo, không góc ba phần tư.
+- **Chiều sâu nằm ở mặt trên:** như mặt ngồi sofa level 1, thấy rõ mặt trên của đồ. Cạnh chạy vào chiều sâu đi **gần như thẳng lên**, chỉ hơi chụm nhẹ về giữa tranh. Đồ càng sâu thì mặt trên càng cao: **mặt nệm giường** là một mảng lớn, **mặt bàn** rõ, nóc kệ sách mỏng hơn mặt bàn.
+- **Mặt hông rất hẹp:** như hai tay vịn sofa level 1, đồ ở nửa trái tranh thấy một dải hông phải rất mỏng, đồ ở nửa phải thấy dải hông trái rất mỏng. Không đồ nào khoe mặt hông rộng.
+- **Không đồ nào phẳng như dán giấy:** luôn thấy mặt trên và độ dày (đệm, vali, sách, gối, giường, tủ, bàn). Đồ tròn có vài nét chì đổ bóng để ra khối, miệng tròn là elip.
+- **Đồ chồng lên nhau hoặc đứng cạnh nhau** dùng cùng một cách nhìn: mặt trên song song, độ cao mắt như nhau.
+- **Nền phòng** như level 1: tường sau nhìn thẳng, chân tường và ván sàn nằm ngang.
+- Ánh sáng từ **trên trái**, vài nét chì đổ bóng bên phải và dưới đồ. Không bóng đổ dưới sàn (code vẽ).
 
-**Khối dán vào mọi lời giao việc** (O2-11):
+**Khối dán vào mọi lời giao việc:**
 ```
-CAMERA (one shared camera for the whole game): straight-on FRONT view, eye slightly above, looking down only about 15 degrees.
-Horizontal edges stay horizontal, vertical edges stay vertical. NO three-quarter view, NO oblique/diagonal perspective, NO vanishing points, nothing rotated diagonally.
-The front face is the main visible face; the top face is only a thin strip (about 1/5 of the front height); round tops are flat ellipses; a side face, if any, is only a narrow strip on the RIGHT.
-Light from the upper left: a few pencil shading strokes on the right/bottom of each object. No floor shadow.
+CAMERA (one shared camera for the whole game): look at everything the way the SOFA in the attached Level 1 angle reference is seen, with objects showing a bit more depth.
+Almost straight-on front view, eye a little above the objects, looking down gently. Horizontal edges stay horizontal, vertical edges stay vertical. No diagonal rotation, no three-quarter view.
+Depth is shown by the TOP faces, like the sofa seat: depth edges run almost straight up, converging only very slightly toward the picture centre. Deeper objects show taller top faces: a bed shows its mattress top as a large clear area, a desk top is clearly visible and deeper than a bookshelf top.
+Side faces are very thin, like the sofa arms: objects on the left half show a very thin right side, objects on the right half a very thin left side.
+Nothing is a flat paper cut-out: every object shows its top face and its thickness; round objects have a few pencil shading strokes and elliptical openings. Stacked or neighbouring objects share the same view.
+Room backgrounds like Level 1: back wall seen straight on, skirting and floor boards horizontal.
+Light from the upper left: a few pencil shading strokes on the right and bottom. No floor shadow.
 ```
 
 ---

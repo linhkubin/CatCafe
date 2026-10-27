@@ -22,7 +22,7 @@
 | 1 | Dạy | 30 | Sữa | Hộp pate thần kỳ | Gọi không ra, mở hộp pate là có mặt | 2 | Chạm, Vuốt |
 | 2 | Dạy | 50 | Sữa | Giỏ tất | Mèo trắng ngủ lẫn vào đống tất trắng | 6 | Chạm nhiều lần, nhìn kỹ |
 | 3 | Dạy | 60 | Sữa | Quà xịn, hộp còn xịn hơn | Mua đồ chơi xịn, mèo chơi vài giây rồi chui vào cái hộp | 5 | Nhặt, Ghép, Đặt |
-| 4 | 🟡 Normal | 90 | Sữa | Vòi nước nhỏ giọt | Chê bát nước, chỉ uống nước vòi, nhưng ghét nước bắn | 3–4 | Chuyển phòng |
+| 4 | 🟡 Normal | 90 | Sữa | Quả chuối trên rèm | Leo rèm giỏi nhưng không biết xuống; rơi luôn tiếp đất bằng bốn chân | 4 món + xếp tháp | Chuyển phòng, Xếp theo hình dáng |
 | 5 | 🔴 Hard | 150 | Mun | Đốm sáng | Thấy đốm sáng chạy là không nhịn được | 7 | Điều khiển đốm sáng, Bản đồ mini |
 | 6 | 🟢 Easy | 60 | Mun | Túi giấy sột soạt | Túi giấy rỗng là của mèo | 3 | — |
 | 7 | 🟡 Normal | 90 | Mun | Đồ rơi khỏi kệ | Thấy đồ ở mép bàn là phải hất xuống | 5 | Cận cảnh |
@@ -337,106 +337,129 @@ Trước khi lộ hộp pate **không có gợi ý tự động** (G10).
 
 ---
 
-### Level 4 — Vòi nước nhỏ giọt
+### Level 4 — Quả chuối trên rèm
 
 | | |
 |---|---|
 | Độ khó | 🟡 **Normal · 90 giây** |
-| Mèo | Sữa (♥ 4/4 → **vào quán**) |
-| Phòng | 2: Nhà tắm ⇄ Bếp |
-| Dạy | **Chuyển phòng** (mũi tên ở mép màn hình) |
-| Bước bắt buộc | 3–4 (mở tủ bếp, vặn van, vặn vòi; người vặn quá tay cần thêm một lần vặn nhỏ lại) |
+| Mèo | Sữa (♥ 4/4) |
+| Phòng | 3: Phòng ngủ ◄ **Phòng khách** (bắt đầu) ► Phòng làm việc |
+| Dạy | **Chuyển phòng** (mũi tên ở mép màn hình), **xếp chồng theo hình dáng** (không có hình mờ, không ép thứ tự) |
+| Bước bắt buộc | 4 món (đệm, gối, chồng sách, vali) + 2 trở ngại nhỏ (kéo sách, mở vali) + xếp 4 món. Thao tác ngắn nên vẫn khoảng 90 giây |
 
-**Sự thật về mèo:** nhiều con mèo chê bát nước, chỉ thích **uống nước chảy từ vòi**. Nhưng mèo cũng **ghét nước bắn tung tóe**. Vòi phải chảy **nhỏ giọt** thì mèo mới chịu xuống.
+**Sự thật về mèo:** mèo **leo rèm** rất giỏi nhưng **không biết đường xuống**. Rơi từ đâu cũng **tiếp đất bằng bốn chân**, rồi tỉnh bơ như chưa có chuyện gì.
 
-**Trạng thái mèo:** Sữa **Lẩn tránh** trên cao. Chạm vào đuôi Sữa trên nóc tủ gương: Sữa **nhảy vụt sang nóc giá khăn**; chạm lần nữa thì nhảy về nóc tủ gương. Sữa chỉ chịu xuống khi vòi chảy nhỏ giọt. Khi Sữa đã nhảy xuống bồn rửa, Sữa **Lộ diện**: chạm là thắng.
+**Trạng thái mèo:**
+
+| Giai đoạn | Sữa ở đâu | Chạm vào thì sao |
+|---|---|---|
+| 1. Treo trên rèm (từ đầu màn) | Trên đỉnh rèm, **thấy rõ ngay từ đầu** nhưng **không với tới** (**Lẩn tránh**). Người chơi nhìn là biết Sữa ở đâu và cần giải cứu | Sữa vung chân cào không khí, rèm xoay nửa vòng, Sữa quay mặt vào tường giận dỗi 2 giây rồi quay lại. Không thắng |
+| 2. Tháp xếp xong | Nhân vật đứng trên đỉnh tháp với tay | Không nhận chạm (cảnh tự chạy, khoảng 3 giây) |
+| 3. Tiếp đất | Ngồi trên sàn cạnh tháp, liếm chân (**Lộ diện**) | **Thắng** |
+
+**Gag xuyên màn: mỗi lần chạm rèm, một tư thế mới (G4-29).** Mỗi lần người chơi chạm vào rèm hoặc Sữa, Sữa đổi sang tư thế treo kế tiếp (lặp lại từ đầu sau tư thế 4):
+1. Treo bằng hai chân trước, thân duỗi dài như sợi mì, bốn chân dang kiểu **quả chuối**.
+2. Trượt xuống một nấc, **một chân bám**, mặt cam chịu.
+3. **Treo ngược**, đuôi chĩa lên trời.
+4. **Ngủ gật** ngay trên rèm, bong bóng ngủ bay lên.
+
+Lúc đang ở phòng khách, Sữa kêu "meo" theo nhịp rèm đung đưa.
 
 **Bố cục màn hình:**
 
 ```
-NHÀ TẮM (bắt đầu)                    BẾP
-┌──────────────────────────┐  ┌──────────────────────────┐
-│ ♥Sữa ●●●○  [Bản đồ]   ⏸ │  │ ♥Sữa ●●●○  [Bản đồ]   ⏸ │
-│ ┌────────────┐ (3) GIÁ   │  │  (9) HŨ     ┌──────────┐ │
-│ │(1) TỦ GƯƠNG│  KHĂN     │  │  BÁNH QUY   │ Cửa sổ   │ │
-│ │ đuôi trắng │  trắng 🎭 │  │             └──────────┘ │
-│ │ trên nóc ~ │           │  │ ┌──────────────────────┐ │
-│ └────────────┘           │  │ │(6) BỒN RỬA BÁT       │ │
-│ ┌────────────┐           │◄►│ ├──────────────────────┤ │
-│ │(2) BỒN RỬA │           │  │ │(7) TỦ DƯỚI BỒN       │ │
-│ │ (2a) VÒI   │           │  │ │   (7a) VAN ĐỎ        │ │
-│ └────────────┘           │  │ └──────────────────────┘ │
-│ ┌──────────────────────┐ │  │  (8) BÁT NƯỚC của Sữa    │
-│ │(4) BỒN TẮM, vịt cao su│ │  │                          │
-│ └──────────────────────┘ │  │                          │
-└──────────────────────────┘  └──────────────────────────┘
+PHÒNG NGỦ                     PHÒNG KHÁCH (bắt đầu)          PHÒNG LÀM VIỆC
+┌────────────────────────┐   ┌────────────────────────┐   ┌────────────────────────┐
+│ ♥Sữa ●●●○           ⏸ │   │ ♥Sữa ●●●○           ⏸ │   │ ♥Sữa ●●●○           ⏸ │
+│  (5) ĐÈN NGỦ           │   │ ┌─────────────(1) RÈM─┐│   │ ┌──────────────┐       │
+│  (tất dính sau khi     │   │ │ Sữa treo trên đỉnh  ││   │ │(9) KỆ SÁCH   │       │
+│   đệm đổ)              │   │ │                     ││   │ │ cao, kín sách│       │
+│ ┌──────┐               │   │ │   cửa sổ            ││   │ └──────────────┘       │
+│ │(2)   │  ┌──────────┐ │   │ │                     ││   │                        │
+│ │ĐỆM   │  │(3) GIƯỜNG│ │   │ └─────────────────────┘│   │  (10) VALI  (11) BÓNG  │
+│ │dựng  │  │  + GỐI   │ │ ◄►│  (12) CHỖ XẾP THÁP     │◄► │   căng phồng   YOGA 🎭 │
+│ │đứng  │  └──────────┘ │   │   ngay dưới rèm        │   │                        │
+│ └──────┘ (4) GẤU BÔNG🎭│   │        (13) SOFA       │   │   (14) BÀN LÀM VIỆC    │
+├────────────────────────┤   ├────────────────────────┤   ├────────────────────────┤
+│ [ ][ ][ ][ ]       💡  │   │ [ ][ ][ ][ ]       💡  │   │ [ ][ ][ ][ ]       💡  │
+└────────────────────────┘   └────────────────────────┘   └────────────────────────┘
 ```
 
 **Đồ vật:**
 
 | Số | Đồ vật | Phòng | Loại | Thao tác | Phản hồi | Âm thanh |
 |---|---|---|---|---|---|---|
-| 1 | Đuôi Sữa trên nóc tủ gương | Nhà tắm | — | Chạm | Sữa **nhảy vụt sang nóc giá khăn** (Lẩn tránh); chạm lần nữa thì nhảy về nóc tủ gương | "Meo!" |
-| 2a | Vòi rửa mặt | Nhà tắm | 🔑 | Vuốt xoay | 3 trạng thái, xem bảng dưới | Xem bảng dưới |
-| 3 | Khăn tắm trắng cuộn tròn | Nhà tắm | 🎭 | Chạm | Trông như mèo trắng nằm cuộn, chạm thì khăn rơi xuống sàn | "Phịch" |
-| 4 | Bồn tắm, vịt cao su | Nhà tắm | ✨ | Chạm | Vịt cao su kêu, xoay một vòng | "Chít chít" |
-| 6 | Bồn rửa bát | Bếp | ✨ | Chạm | Vòi bếp nhỏ một giọt | "Tách" |
-| 7 | Tủ dưới bồn rửa | Bếp | 🔑 | Chạm | Cánh tủ mở, lộ **van đỏ** | Bản lề "kẹt" |
-| 7a | Van đỏ | Bếp | 🔑 | Vuốt xoay | Van xoay, nước chạy rì rầm trong ống | "Rì rầm" dọc ống |
-| 8 | Bát nước của Sữa (đầy) | Bếp | ✨ | Chạm | Mặt nước gợn sóng. Sữa chưa từng uống bát này | "Bõm" |
-| 9 | Hũ bánh quy | Bếp | 🎁 | Chạm | 5 Cá khô | Nắp hũ "cộp" |
+| 1 | Rèm (Sữa treo trên đỉnh) | Khách | — | Chạm | Rèm **không đóng mở**, chỉ đung đưa nhẹ. **Mỗi lần chạm** Sữa hoặc rèm: Sữa đổi sang **tư thế treo kế tiếp** (Lẩn tránh, G4-29) | "Meo" tủi thân |
+| 2 | Đệm dựng tựa tường | Ngủ | 🔑 | Chạm | Đệm đổ "phịch" xuống sàn (**không rung, không bụi**, G4-21), **một chiếc tất văng lên vắt trên chao đèn ngủ (5)**. Lúc dựng, đệm ở **sau** tủ đầu giường; khi đã nằm xuống, đệm ở **trước** (layer cao hơn) tủ đầu giường (G4-35) | "Phịch" |
+| 2' | Đệm nằm trên sàn | Ngủ | 🎒 | Chạm | Đệm bay vào túi | "Vút" |
+| 3 | Gối trên giường | Ngủ | 🎒 | Chạm | Gối bay vào túi (món dễ, giữ nhịp) | "Bụp" |
+| 4 | Gấu bông trắng ngồi | Ngủ | 🎭 | Chạm | Trông như mèo trắng ngồi. Chạm: gấu **bật nhún nhẹ lên** rồi ngồi lại như cũ. **Không nhặt được** | "Bụp" nhẹ |
+| 5 | Tất dính trên đèn ngủ | Ngủ | 🎁 | Chạm | Chỉ có sau khi đệm đổ. Tất **nhún bật lên, nhảy theo đường cong đáp xuống nằm trên mặt giường** (nảy nhẹ, nằm lại đó tới hết màn), 5 Cá khô (G4-36) | "Tạch" + "bụp" nhẹ |
+| 9 | Kệ sách cao | Làm việc | 🔑 | Chạm kệ | **Chỉ làm được sau khi vali đã vào túi** (G4-34). Trước đó: kệ chỉ lung lay khẽ, sách không rơi, bong bóng nhỏ hình vali. Sau khi có vali: **3 cuốn ở hàng trên cùng** lần lượt bật ra, **vừa rơi vừa xoay từ dựng đứng sang nằm ngang**, đáp chồng khít lên nhau thành **đúng chồng sách** (cùng 3 cuốn, cùng màu, cùng thứ tự như chồng sách và sách trên tháp; cuốn sau đáp đúng lên mặt cuốn trước, không lệch). Các hàng khác vẫn đầy (G4-30, G4-37) | "Rầm" nối tiếp + "cộp" |
+| 9' | Chồng sách dưới sàn | Làm việc | 🎒 | Chạm | Chồng sách bay vào túi | "Vút" |
+| 10 | Vali căng phồng | Làm việc | 🔑 | Chạm lần 1 | Vali **bung nắp kèm một cụm khói bụi pastel mềm phụt ra** (G4-44; riêng vali, đệm vẫn không bụi), **cả đống đồ bay ra** (phao bơi hình vịt, kính lặn, dép lẻ, quần áo) rơi rải khắp phòng; vali rỗng **tự gấp lại** gọn | "Bụp" + đồ rơi lộp bộp |
+| 10' | Vali đã gấp | Làm việc | 🎒 | Chạm lần 2 | Vali bay vào túi | "Vút" |
+| 10a | Phao vịt (rơi từ vali) | Làm việc | 🎁 | Chạm | Phao kêu "chít", 5 Cá khô | "Chít" |
+| 11 | Bóng tập yoga | Làm việc | 🎭 (dụ sai) | Chạm | Bóng nảy "boing", lăn một vòng quanh phòng rồi về chỗ cũ, **xoay quanh đúng tâm quả bóng** khi lăn. **Không nhặt được** | "Boing" |
+| 12 | Chỗ xếp tháp dưới rèm | Khách | 🎯 | Kéo-thả đồ từ túi | Xem "Cơ chế xếp tháp" | Xem dưới |
+| 13 | Sofa | Khách | ✨ | Chạm | `squash` | "Bụp" |
+| 14 | Bàn làm việc | Làm việc | ✨ | Chạm | Bàn rung nhẹ, **không có hạt hay chấm bay ra** (G4-21) | "Cộc" nhẹ |
 
-**Ba trạng thái của vòi rửa mặt (2a):**
+**Đồ đánh lừa (2 món, Normal):** gấu bông trắng (giống Sữa ngồi) và bóng tập yoga (đồ "có vẻ dùng được"). Cả hai **chạm được, có phản ứng vui, nhưng không vào túi**.
 
-| Trạng thái | Cách vào | Hình | Sữa phản ứng |
-|---|---|---|---|
-| **Tắt / không có nước** | Lúc đầu, khi van chưa mở | Vòi khô | Không gì |
-| **Xối mạnh** | Vuốt xoay vòi **dài** (cách vặn tự nhiên của hầu hết người chơi), khi van đã mở | Nước xối ào ào, bắn tung tóe ra ngoài bồn | **Giật mình rụt mất** sau nóc tủ, chỉ còn chóp tai |
-| **Nhỏ giọt** | Vuốt xoay **ngắn, nhẹ** từ trạng thái tắt, hoặc vuốt ngược (vặn nhỏ lại) từ trạng thái xối | "Tách… tách…" đều đặn | Tai dựng lên, nhảy xuống uống |
-
-Vuốt ngược thêm lần nữa khi đang nhỏ giọt: vòi tắt. Người chơi khéo tay vặn nhẹ ngay từ đầu thì ra nhỏ giọt luôn, bỏ qua được cảnh xối (không bị ép phải đi qua trạng thái xối).
+**Cơ chế xếp tháp (12):**
+- Kéo đồ từ túi thả vào vùng ngay dưới rèm. **Không có hình mờ**, không ép thứ tự bằng khóa: người chơi tự nhìn hình dáng để suy ra.
+- Thứ tự đúng theo lẽ thường **rộng ở dưới, hẹp ở trên, mềm trên cùng**: **đệm → vali → chồng sách → gối**.
+- Thả đúng món kế tiếp: món rơi vào đỉnh tháp, nảy nhẹ (`drop_in`), "cộp".
+- Thả **sai thứ tự**: món **bay thẳng về túi** (`return_to_bag`), không chao nghiêng trên tháp; về tới ô trong túi thì **lắc lắc** một nhịp (G4-43). Sữa trên rèm nghiêng đầu theo.
+- Thả ra ngoài vùng tháp: món bay về túi.
+- Xếp xong gối: cả tháp lóe sáng, chuyển sang cảnh cao trào.
 
 **Luồng giải:**
 
 | Giây | Người chơi làm | Game phản hồi |
 |---|---|---|
-| 0–8 | (xem) | Sữa chạy vụt vào nhà tắm, nhảy lên nóc tủ gương. Chỉ thấy đuôi trắng ve vẩy |
-| 9–15 | Vuốt **vòi (2a)** | Vòi khô, "khục khục". Bong bóng nhân vật: hình cái van đỏ |
-| 16–30 | Chạm **mũi tên ◄** | Mũi tên nhấp nháy, có bàn tay hướng dẫn (lần đầu chuyển phòng). Sang bếp. Bản đồ mini xuất hiện ở góc trên |
-| 31–40 | Chạm **tủ dưới bồn (7)** | Cánh tủ mở, thấy van đỏ |
-| 41–50 | Vuốt xoay **van (7a)** | Tiếng nước chạy rì rầm dọc đường ống, đi về phía nhà tắm |
-| 51–60 | Về nhà tắm, vuốt **vòi (2a)** | **Nước xối ào ào**, bắn tung tóe. Sữa giật mình rụt mất. Bong bóng: hình giọt nước nhỏ |
-| 61–80 | Vuốt **ngược** vòi | "Tách… tách…". Sữa xuất hiện (xem Khoảnh khắc lộ diện) |
-| 80–85 | Chạm **Sữa** | Cảnh bế chung |
+| 0–6 | (xem) | Phòng khách. Sữa **đã treo sẵn** trên đỉnh rèm kiểu quả chuối, rèm đung đưa, "meo" thảm thiết. **Nhân vật bước vào đứng giữa phòng gọi** (mở màn chung như level 1–3, G4-25), bong bóng nhiệm vụ hiện cạnh nhân vật rồi thu về góc, nhân vật lui xuống mép dưới |
+| 7–16 | Chạm **mũi tên ◄** | Mũi tên nhấp nháy (lần đầu chuyển phòng; **không có bàn tay hướng dẫn** từ level 4). Sang phòng ngủ |
+| 17–26 | Chạm **đệm (2)**, chạm **đệm (2')**, chạm **gối (3)** | Đệm đổ, tất dính lên đèn; đệm và gối vào túi |
+| 27–36 | Về phòng khách (Sữa đổi tư thế), sang **phòng làm việc ►** | Sữa trượt xuống một chân bám |
+| 37–46 | Chạm **vali (10)** hai lần | Lần 1 bung đồ, vali gấp lại; lần 2 vào túi |
+| 47–56 | Chạm **kệ sách (9)**, chạm **chồng sách (9')** | 3 cuốn hàng trên cùng vừa rơi vừa xoay nằm ngang, xếp khít thành chồng, vào túi; kệ vẫn còn nhiều sách |
+| 57–62 | Về phòng khách | Sữa treo ngược |
+| 63–82 | Kéo 4 món lên **chỗ xếp (12)** | Có thể sai thứ tự một hai lần, món bay về túi. Xếp xong: tháp lóe sáng |
+| 82–85 | (xem) | Cảnh cao trào (xem Khoảnh khắc lộ diện) |
+| 85–88 | Chạm **Sữa** | Cảnh bế chung |
 
 **Chạm sai và làm khác thứ tự:**
-- Sang bếp trước khi chạm vòi: được, người chơi tự khám phá; bong bóng hình van hiện khi chạm vòi lúc sau.
-- Chạm khăn tắm (đánh lừa) khi đang tìm: khăn rơi, nhân vật nhặt lên treo lại (lần 2 thì để nguyên dưới sàn).
-- Để vòi xối lâu: nước bắn lên gương, gương mờ hơi nước, Sữa thò chân che mặt.
-- Vặn vòi tắt hẳn khi Sữa đang uống: không xảy ra, vì Sữa xuất hiện là vòi khóa lại ở trạng thái nhỏ giọt.
+- Lấy đồ theo thứ tự nào cũng được, phòng nào trước cũng được, **trừ chồng sách: phải có vali trong túi rồi mới làm rơi sách được** (G4-34). Chạm kệ trước khi có vali: kệ lung lay khẽ, bong bóng hình vali, không mất gì.
+- Xếp đồ ngay khi có món nào trong túi cũng được: thả đệm trước là đúng; thả món khác lên chỗ trống thì món bay về túi.
+- Chạm gấu bông, bóng yoga: phản ứng vui, không vào túi.
+- Chạm Sữa trên rèm bao nhiêu lần cũng được: Sữa giận dỗi quay mặt vào tường, không chạy mất.
+- Chạm vali đã vào túi rồi trong cảnh: không còn vali, chỉ còn đống đồ rơi (chạm phao vịt là bí mật).
 
 **Thang gợi ý:**
-1. *8 giây:* khi chưa mở van, ống nước dưới bồn rửa mặt rung nhẹ, có hình mũi tên chỉ về phía bếp; khi vòi đang xối, Sữa thò chân che mặt.
-2. *16 giây:* đồ cần chạm lấp lánh (mũi tên, tủ bếp, van, hoặc vòi kèm mũi tên xoay ngược chiều).
-3. *💡:* bàn chân mèo làm mẫu thao tác.
+1. *8 giây:* Sữa kêu "meo" dài, ngón chân duỗi về phía phòng còn đồ chưa lấy; ở phòng có đồ, món cần chạm rung nhẹ.
+2. *16 giây:* món cần lấy lấp lánh; khi đã đủ đồ trong túi, **icon món cần xếp kế tiếp** trong túi nảy lên.
+3. *💡:* bàn chân mèo chỉ món đúng, hoặc làm mẫu kéo món kế tiếp từ túi lên tháp.
 
-**Khoảnh khắc lộ diện:** nghe "tách… tách…", hai tai trắng dựng lên từ sau nóc tủ gương. Sữa thò đầu nhìn xuống, chờ vài giọt để chắc chắn nước không bắn nữa, rồi **nhảy xuống bồn rửa**. Nó nghiêng đầu, **thè lưỡi đớp từng giọt** theo kiểu mèo: có giọt rơi trúng mũi, Sữa lắc đầu, rồi lại uống tiếp. Uống xong, mặt ướt lấm tấm, Sữa ngồi trong bồn liếm mép, nhìn bạn như muốn nói "từ giờ cứ mở vòi như thế nhé".
+**Khoảnh khắc lộ diện:**
+1. Tháp xếp xong lóe sáng. **Nhân vật hiện ra luôn ở đỉnh tháp**, đứng trên gối, kiễng chân, hai tay vươn lên với lấy Sữa.
+2. Tay vừa chạm tới, Sữa **giật mình**, nhả rèm "pực", **bật lên lộn vài vòng** trên không (vệt xoáy, quay nhanh), rồi **tiếp đất bằng bốn chân** "tạch" ngay cạnh tháp, nhẹ như không.
+3. Sữa ngồi xuống, **liếm chân** thản nhiên như chưa có chuyện gì.
+4. Nhân vật vẫn đứng trên đỉnh tháp, hai tay còn giơ trống không, quay xuống nhìn Sữa và **cười ngốc nghếch**, gãi đầu.
 
-**Chạm Sữa → cảnh bế chung.** Màn hình thưởng hiện sau cảnh Sữa vào quán.
+**Chạm Sữa → cảnh bế chung.** Tháp và nhân vật ở lại cảnh nền.
 
-**Sau khi bế (♥ 4/4, không tính giờ):**
-1. Thanh ♥ của Sữa đầy, sáng lên, tiếng chuông nhỏ.
-2. Mini game **Tắm** lần đầu (Sữa đang ướt sẵn, hợp lý): xoa xà phòng → xả vòi sen → lau khăn, tránh vùng mặt.
-3. Căn phòng trống tầng một được dọn ra, treo **biển gỗ vẽ hình chén cafe và mặt mèo**.
-4. Sữa nhảy lên bệ cửa sổ quán nằm phơi nắng.
-5. Hướng dẫn quán: phục vụ 3 khách đầu tiên.
+**Sau khi bế:** màn hình thưởng chung. Đoạn Sữa vào quán (♥ 4/4) **làm sau**, chưa nằm trong màn này.
 
 **Ghi chú vẽ, hoạt hình, âm thanh:**
-- Nước xối cần hiệu ứng hạt nước bắn ra ngoài bồn và đọng trên gương.
-- Tiếng "rì rầm" khi mở van nên chạy **từ bếp sang nhà tắm** (âm thanh định hướng) để gợi ý người chơi quay lại nhà tắm.
-- Bản đồ mini xuất hiện lần đầu ở màn này, chỉ có 2 ô.
+- Rèm dài từ thanh treo gần trần xuống sàn, vải dày màu ấm, **không đóng mở**; Sữa trắng treo trên đỉnh nổi rõ trên nền vải. Thanh rèm và đỉnh rèm cao hơn tầm với của tháp một chút: nhân vật phải vươn tay.
+- Các tư thế Sữa trên rèm **cùng điểm bám** trên đỉnh rèm (đổi ảnh không nhảy chỗ).
+- Đồ đã xếp vẽ thành bản "trên tháp" khớp nhau: đệm rộng nhất, vali hẹp hơn, chồng sách hẹp hơn nữa, gối trên cùng; tổng chiều cao tháp đưa đỉnh gối tới khoảng ngang vai nhân vật đứng tới đỉnh rèm.
+- Cú lộn vòng của Sữa: code xoay một ảnh tư thế cuộn tròn (2–3 vòng, 0,6 giây) theo đường cong, kèm vệt xoáy; tiếp đất bằng `squash`.
+- Âm "tạch" tiếp đất phải thật nhẹ và gọn, đối lập với tiếng đổ "rầm rầm" của kệ sách: chỗ buồn cười là sự bình thản.
 
-**Thưởng:** 30 Cá khô · mở khóa Quán Cafe.
+**Thưởng:** 30 Cá khô (+5 mỗi bí mật: tất trên đèn, phao vịt) · Sữa ♥ 4/4.
 
 ---
 
@@ -665,7 +688,7 @@ CẬN CẢNH KỆ SÁCH (chạm số 1)
 
 | Số | Đồ vật | Phòng | Loại | Thao tác | Phản hồi | Âm thanh |
 |---|---|---|---|---|---|---|
-| 1 | Kệ sách cao | Phòng đọc | 🔑 | Chạm | Mở **cận cảnh** (lần đầu, bàn tay hướng dẫn) | "Vù" phóng to |
+| 1 | Kệ sách cao | Phòng đọc | 🔑 | Chạm | Mở **cận cảnh** (lần đầu: kệ nhấp nháy, không có bàn tay hướng dẫn) | "Vù" phóng to |
 | 1a | Hàng sách tầng trên | Cận cảnh | — | Chạm | Sách lung lay, không thấy gì phía sau | "Lạch cạch" |
 | 1b | Chậu xương rồng nhỏ | Cận cảnh | ✨ | Chạm | Nhân vật rụt tay lại | "Á!" (âm thanh) |
 | 1c | Mép kệ trống | Cận cảnh | 🎯 | Đặt cốc | Cốc đứng ngay mép kệ | "Cộp" |
@@ -684,7 +707,7 @@ CẬN CẢNH KỆ SÁCH (chạm số 1)
 |---|---|---|
 | 0–8 | (xem) | Mun chạy vụt vào phòng đọc, biến mất. Một cây bút rơi "cạch" từ kệ xuống |
 | 9–15 | Chạm **cây bút (2)** | Bút vẫn còn lăn: có ai đó vừa hất |
-| 16–30 | Chạm **kệ sách (1)** | Cận cảnh mở ra (bàn tay hướng dẫn). Chạm hàng sách: lung lay, không thấy gì. Bong bóng: hình cái cốc ở mép kệ |
+| 16–30 | Chạm **kệ sách (1)** | Cận cảnh mở ra. Chạm hàng sách: lung lay, không thấy gì. Bong bóng: hình cái cốc ở mép kệ |
 | 31–35 | Chạm **✕** đóng cận cảnh | Về phòng đọc |
 | 36–50 | Sang bếp, chạm **cốc nhựa (7)** | Cốc vào túi |
 | 51–65 | Về phòng đọc, chạm **kệ (1)**, kéo **cốc** thả lên **mép kệ (1c)** | Cốc đứng ngay mép |

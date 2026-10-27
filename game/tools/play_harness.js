@@ -4,6 +4,7 @@
 // - go('Level3'): vào thẳng màn. tap(x, y), drag(x0, y0, x1, y1): toạ độ thế giới 1024x1536.
 // - compare('start' | 'reveal'): trái = game chồng demo 50%, phải = demo chồng game 55% (đè lên trang để chụp). hideCmp().
 // - tb(sprite): khung bao phần vẽ thật của sprite (toạ độ thế giới).
+// - Màn nhiều phòng (level 4): compare/match so với phòng camera đang đứng (toạ độ x trừ camera.scrollX).
 const g = window.__meoGame;
 g.loop.sleep();
 Phaser.Tweens.TweenManager.prototype.getDelta = function () { return 16.67; };
@@ -33,10 +34,12 @@ const drag = (x0, y0, x1, y1) => {
   for (let k = 1; k <= 10; k++) { ptr('mousemove', x0 + ((x1 - x0) * k) / 10, y0 + ((y1 - y0) * k) / 10); adv(20); }
   ptr('mouseup', x1, y1); adv(50);
 };
+// Tên demo: 'start' | 'reveal' (level 3) hoặc tên file đầy đủ như 'l4_demo_living'.
+const demoUrl = (w) => '/art/out/demo/' + (w.includes('_demo_') ? w : 'l3_demo_' + w) + '.png';
 const load = (u) => new Promise((r) => { const im = new Image(); im.onload = () => r(im); im.src = u; });
 const demo = {};
 const compare = async (which) => {
-  demo[which] = demo[which] || await load('/art/out/demo/l3_demo_' + which + '.png');
+  demo[which] = demo[which] || await load(demoUrl(which));
   let c = document.getElementById('cmp');
   if (!c) {
     c = document.createElement('canvas'); c.id = 'cmp'; c.width = 1024; c.height = 768;
@@ -55,7 +58,7 @@ const compare = async (which) => {
 };
 // zoomCmp(which, x, y, w, h): phóng một vùng (toạ độ thế giới): game + demo 50% | game | demo, lưới 20px (số mỗi 100px).
 const zoomCmp = async (which, rx, ry, rw, rh) => {
-  demo[which] = demo[which] || await load('/art/out/demo/l3_demo_' + which + '.png');
+  demo[which] = demo[which] || await load(demoUrl(which));
   let c = document.getElementById('cmp');
   if (!c) { await compare(which); c = document.getElementById('cmp'); }
   const img = await new Promise((res) => { g.renderer.snapshot((im) => (im.complete ? res(im) : (im.onload = () => res(im)))); adv(17); });
@@ -76,7 +79,7 @@ const zoomCmp = async (which, rx, ry, rw, rh) => {
 };
 // sideBySide(which): trái = game, phải = tranh demo (không chồng).
 const sideBySide = async (which) => {
-  demo[which] = demo[which] || await load('/art/out/demo/l3_demo_' + which + '.png');
+  demo[which] = demo[which] || await load(demoUrl(which));
   if (!document.getElementById('cmp')) await compare(which);
   const c = document.getElementById('cmp'), x = c.getContext('2d');
   const img = await new Promise((res) => { g.renderer.snapshot((im) => (im.complete ? res(im) : (im.onload = () => res(im)))); adv(17); });
@@ -103,7 +106,7 @@ const tb = (s) => {
 const dpx = {};
 const match = async (s, which, R = 60) => {
   if (!dpx[which]) {
-    const im = await load('/art/out/demo/l3_demo_' + which + '.png'), c = document.createElement('canvas');
+    const im = await load(demoUrl(which)), c = document.createElement('canvas');
     c.width = 1024; c.height = 1536;
     const x = c.getContext('2d'); x.drawImage(im, 0, 0, 1024, 1536);
     dpx[which] = x.getImageData(0, 0, 1024, 1536).data;
@@ -117,11 +120,11 @@ const match = async (s, which, R = 60) => {
     const i = (y * src.width + x) * 4;
     if (P[i + 3] > 200) pts.push([x - s.originX * src.width, y - s.originY * src.height, P[i], P[i + 1], P[i + 2]]);
   }
-  const sc = Math.abs(s.scaleX), sy = s.scaleY, fl = s.flipX ? -1 : 1;
+  const sc = Math.abs(s.scaleX), sy = s.scaleY, fl = s.flipX ? -1 : 1, ox = scene().cameras.main.scrollX;
   const err = (dx, dy, k) => {
     let e = 0;
     for (const p of pts) {
-      const X = Math.round(s.x + dx + fl * p[0] * sc * k), Y = Math.round(s.y + dy + p[1] * sy * k);
+      const X = Math.round(s.x - ox + dx + fl * p[0] * sc * k), Y = Math.round(s.y + dy + p[1] * sy * k);
       if (X < 0 || Y < 0 || X >= 1024 || Y >= 1536) { e += 300; continue; }
       const i = (Y * 1024 + X) * 4;
       e += Math.abs(D[i] - p[2]) + Math.abs(D[i + 1] - p[3]) + Math.abs(D[i + 2] - p[4]);
@@ -152,5 +155,16 @@ const playToFound = async () => {
   tap(L.box.x, L.box.y - 80); adv(2500);
   return L.stage;
 };
-Object.assign(window, { adv, go, tap, drag, compare, zoomCmp, sideBySide, hideCmp, tb, scene, match, playToFound });
+// shot('art/review/x.jpg', demo?): lưu ảnh game (có demo thì game | demo cạnh nhau) qua dev_server POST /save (chỉ ghi art/review/).
+const shot = async (path, which) => {
+  let c;
+  if (which) { await sideBySide(which); c = document.getElementById('cmp'); hideCmp(); }
+  else {
+    const img = await new Promise((res) => { g.renderer.snapshot((im) => (im.complete ? res(im) : (im.onload = () => res(im)))); adv(17); });
+    c = document.createElement('canvas'); c.width = 512; c.height = 768; c.getContext('2d').drawImage(img, 0, 0, 512, 768);
+  }
+  const r = await fetch('/save?' + path, { method: 'POST', body: c.toDataURL('image/jpeg', 0.85) });
+  return r.status;
+};
+Object.assign(window, { adv, go, tap, drag, compare, zoomCmp, sideBySide, hideCmp, tb, scene, match, playToFound, shot });
 export default true;

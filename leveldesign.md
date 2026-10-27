@@ -375,7 +375,7 @@ Chạm bất kỳ đâu trong cảnh bế: nhảy thẳng tới nhịp 5.
 
 | Key | Dùng khi | Chuyển động |
 |---|---|---|
-| `ui_hand_pointer` (đã có) | Hướng dẫn lần đầu một thao tác | **Chạm:** nhấn xuống (scale 0,9) rồi nhả, lặp 1 giây/nhịp. **Vuốt:** trượt theo đường vuốt 0,6 giây, mờ đi, lặp. **Kéo thả:** đi từ ô túi tới chỗ đặt 0,8 giây, lặp |
+| `ui_hand_pointer` (đã có) | Hướng dẫn lần đầu một thao tác, **chỉ dùng ở level 1–3**. **Từ level 4 không hiện bàn tay hướng dẫn** (chủ dự án chốt): thao tác mới chỉ được nhắc bằng nhấp nháy, lấp lánh và thang gợi ý; nút 💡 vẫn dùng bàn chân `ui_hint_paw` | **Chạm:** nhấn xuống (scale 0,9) rồi nhả, lặp 1 giây/nhịp. **Vuốt:** trượt theo đường vuốt 0,6 giây, mờ đi, lặp. **Kéo thả:** đi từ ô túi tới chỗ đặt 0,8 giây, lặp |
 | `ui_hint_paw` (đã có) | Gợi ý mạnh (nút 💡) | Giống bàn tay hướng dẫn, chỉ khác hình |
 
 ---

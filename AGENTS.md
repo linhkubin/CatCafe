@@ -28,6 +28,8 @@ Phần lớn asset được **vẽ theo tờ**: mỗi tờ có một **bảng t�
 - **Mỗi lời giao việc một lần gọi `image_gen`:** một tờ, một ảnh lẻ hoặc một ảnh demo. Không tự gộp thêm thứ gì ngoài lời giao việc.
 - Prompt gửi cho `image_gen` viết bằng tiếng Anh, gồm: khối "Prompt phong cách" trong `style.md` mục 1 (rút gọn được nhưng giữ đủ ý) + mô tả asset dịch từ đặc tả.
 - Kích thước theo lời giao việc hoặc cột Kích thước: `1024x1024`, `1536x1024` (ngang) hoặc `1024x1536` (dọc).
+- **Góc nhìn (mọi level):** mở `art/ref/l1_depth_angle_ref.png` (sofa level 1) bằng `view_image` và nhìn mọi thứ như cái sofa đó, chỉ cho đồ có chiều sâu rõ hơn một chút: hơi trực diện, chiều sâu ở mặt trên, mặt hông rất hẹp, không xoay chéo, không phẳng. Theo đúng khối CAMERA trong `style.md` mục 2b.
+- **Giữ màu (O6, bắt buộc mọi lượt):** trước khi vẽ, mở `art/ref/owner_l1_style_ref.png` bằng `view_image` làm mẫu màu và chất chì. Theo đúng khối COLOR trong `style.md` mục 1: chỉ dùng bảng màu khóa, không màu nào đậm hơn ô màu của nó, mảng lớn nhạt nhất, mọi mảng màu thấy vân chì. Nghi ngờ thì vẽ nhạt hơn, không đậm hơn.
 - Cột Nền ghi "Trong suốt": yêu cầu nền trong suốt thật và giữ nguyên kênh alpha. Ghi "Có nền": nền đầy đủ, không trong suốt.
 - **Tuyệt đối không có chữ, số, logo, chữ ký** trong ảnh.
 
@@ -50,6 +52,7 @@ Lời giao việc ghi "Vẽ TỜ `<tên tờ>`" thì làm như sau:
 - Tiền tố `mun_`: tham chiếu `art/out/cats/mun_ref.png`. Tiền tố `player_`: tham chiếu `art/out/player/player_ref.png`.
 - Nếu ảnh tham chiếu cần dùng chưa có, **dừng lại**, không vẽ, báo "thiếu ảnh tham chiếu <đường dẫn>".
 - Tờ có tư thế mèo (`sua_`, `mun_`) hay nhân vật (`player_`) cũng theo quy tắc tham chiếu trên. Lời giao việc có thể kèm thêm ảnh tham chiếu (`--ref`): mở hết bằng `view_image` trước khi vẽ.
+- **Tách ảnh theo demo (G4-26, bắt buộc):** khi vẽ tờ, ảnh lẻ hoặc nền của một level đã có demo duyệt, lời giao việc luôn kèm **ảnh demo gốc** của phòng đó. Mở nó bằng `view_image` trước khi vẽ và vẽ món đồ **giống hệt trong demo** (hình dáng, tỉ lệ, màu, nét). Nếu lời giao việc không kèm ảnh demo gốc, **dừng lại**, không vẽ, báo "thiếu ảnh demo gốc".
 - Các trạng thái của một đồ vật vẽ **chung một tờ**, không vẽ riêng từng ảnh. Chỉ khi lời giao việc ghi rõ "chỉnh sửa từ ảnh <đường dẫn>" mới vẽ dạng chỉnh sửa ảnh đó (giữ nguyên kích thước, vị trí, góc nhìn, màu, chỉ đổi phần trạng thái).
 
 ## Quy tắc giao việc và tự kiểm (O2-11, bắt buộc)

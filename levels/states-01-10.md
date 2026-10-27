@@ -291,50 +291,86 @@ O2-19: tất hiển thị nhỏ (×0,6 cỡ trong design-art, cỡ thật so v�
 
 ---
 
-## Level 4 — Vòi nước nhỏ giọt
+## Level 4 — Quả chuối trên rèm
 
 ### Lớp hiển thị
 
-**Nhà tắm:** `l4_bg_bathroom` → `l4_bathtub` + `l4_rubber_duck` → `l4_towel_rack` + `l4_towel_rolled*` → `l4_sink` + `l4_faucet` → nước (`l4_water_gush` / `l4_water_drip`, sprite phủ lên vòi) → `l4_mirror_cabinet` (+ `l4_mirror_fog` phủ) → Sữa trên nóc tủ → giao diện.
+Ba phòng đặt cạnh nhau theo chiều ngang (phòng ngủ, phòng khách, phòng làm việc), chuyển phòng bằng camera trượt ngang. Nền **chỉ là phòng trống**, mọi đồ là sprite riêng.
 
-**Bếp:** `l4_bg_kitchen` → `l4_cookie_jar`, `l4_water_bowl` → `l4_kitchen_sink` → `l4_sink_cabinet_*` + `l4_valve` → giao diện.
+**Phòng khách:** `l4_bg_living` → `l4_window` → `l4_curtain` → Sữa trên rèm (`sua_curtain_*`) → `l4_sofa` → tháp (`l4_stack_*`, xếp từ dưới lên) → nhân vật (`player_reach_up`, `player_silly_laugh`) → Sữa dưới sàn → giao diện.
+
+**Phòng ngủ:** `l4_bg_bedroom` → `l4_bed` + `l4_pillow` → `l4_bedside_lamp` (+ `l4_sock_stuck`) → `l4_mattress_*` → `l4_teddy` → giao diện.
+
+**Phòng làm việc:** `l4_bg_study` → `l4_bookshelf_*` → `l4_desk` → `l4_book_stack` → `l4_suitcase_*` → đồ rơi từ vali (`l4_spill_*`) → `l4_yoga_ball` → giao diện.
 
 ### Đồ vật
 
 | # | Phòng | Đồ vật | Ảnh trạng thái | Bắt đầu | Thao tác | Điều kiện | Chuyển sang | Phản hồi | Âm thanh |
 |---|---|---|---|---|---|---|---|---|---|
-| 1 | Nhà tắm | Đuôi Sữa trên nóc tủ gương | `sua_tail_peek` | trên tủ gương | Chạm | Sữa đang trên cao | Sữa nhảy sang nóc giá khăn | `sua_jump` (mới) bay cong 0,4 giây, rồi `sua_tail_peek` ở chỗ mới | `sua_sfx_meow_short` |
-| 1 | Nhà tắm | Đuôi Sữa trên giá khăn | `sua_tail_peek` | — | Chạm | — | nhảy về nóc tủ gương | như trên | như trên |
-| 2 | Nhà tắm | Vòi rửa mặt | `l4_faucet` (mới) | khô | Vuốt xoay (bất kỳ) | **van chưa mở** | giữ khô | `wiggle`; bong bóng suy nghĩ vẽ `l4_valve_icon` (mới) | `l4_sfx_pipe_gurgle` |
-| 2 | Nhà tắm | Vòi | + `l4_water_gush` (mới) | khô | Vuốt xoay **dài** (≥ 120px) | van đã mở | khô → **xối** | Sprite nước xối hiện, hạt nước bắn (particle); Sữa giật mình (bảng mèo) | `l4_sfx_water_gush` (lặp) |
-| 2 | Nhà tắm | Vòi | + `l4_water_drip` (mới) | khô | Vuốt xoay **ngắn** (< 120px) | van đã mở | khô → **nhỏ giọt** | Giọt nước rơi đều 0,8 giây/giọt (tween giọt từ vòi xuống bồn) | `l4_sfx_drip` mỗi giọt |
-| 2 | Nhà tắm | Vòi | — | xối | Vuốt ngược (bất kỳ độ dài) | — | xối → nhỏ giọt | Như trên | Dừng `l4_sfx_water_gush` |
-| 2 | Nhà tắm | Vòi | — | nhỏ giọt | Vuốt ngược | Sữa chưa xuống | nhỏ giọt → khô | Ẩn sprite nước | — |
-| 2 | Nhà tắm | Vòi | — | nhỏ giọt | Bất kỳ | **Sữa đã xuống bồn** | khóa ở nhỏ giọt | `disabled` | — |
-| 2' | Nhà tắm | Gương mờ | `l4_mirror_fog` (mới, phủ lên gương) | — | (tự động) | nước xối liên tục ≥ 3 giây | hiện mờ dần 1 giây | — | — |
-| 3 | Nhà tắm | Khăn trắng cuộn 🎭 | `l4_towel_rolled` (mới), `l4_towel_fallen` (mới: rơi dưới sàn, bung ra) | idle | Chạm | — | idle → fallen (giữ) | `fly_arc` xuống sàn | `sfx_cloth_drop` |
-| 4 | Nhà tắm | Vịt cao su | `l4_rubber_duck` (mới) | — | Chạm | — | — | `hop` + xoay 360° | `l4_sfx_duck` |
-| 5 | Bếp | Tủ dưới bồn | `l4_sink_cabinet_closed`, `l4_sink_cabinet_open` (mới) | closed | Chạm | — | closed ↔ open | `swap` | `sfx_hinge` |
-| 6 | Bếp | Van đỏ | `l4_valve` (mới, sprite riêng để xoay) | đóng | Vuốt xoay | tủ đang mở | đóng → mở (không đóng lại được) | Xoay 90° 0,4 giây; vệt rung chạy dọc ống về phía nhà tắm | `l4_sfx_valve`, `l4_sfx_pipe_rumble` (âm định hướng sang trái) |
-| 7 | Bếp | Vòi bếp | `l4_kitchen_sink` (mới) | — | Chạm | — | — | Một giọt rơi | `l4_sfx_drip` |
-| 8 | Bếp | Bát nước của Sữa | `l4_water_bowl` (mới) | — | Chạm | — | — | Gợn sóng (vòng tròn nở trên mặt nước) | `l4_sfx_bloop` |
-| 9 | Bếp | Hũ bánh quy 🎁 | `l4_cookie_jar` (mới) | — | Chạm | — | — | `hop` nắp; `ui_dried_fish` (một lần) | `sfx_lid` |
+| 1 | Khách | Rèm / Sữa trên rèm | `l4_curtain` (một ảnh, không đóng mở) | — | Chạm | Sữa đang treo | giữ | `sua_curtain_sulk` (quay mặt vào tường) 2 giây rồi về tư thế cũ; rèm `swing` | `sua_sfx_meow_short` |
+| 2 | Ngủ | Đệm | `l4_mattress_standing`, `l4_mattress_fallen` | standing | Chạm | — | standing → fallen | `swap` (**không** `wiggle`, **không** `puff`; G4-21); layer: `standing` **sau** tủ đầu giường lúc đứng yên; **ngay khi chạm đệm bắt đầu đổ (đang co xuống)** đệm đã ở **trước** tủ đầu giường, `fallen` cũng trước tủ (G4-35, G4-38); `l4_sock_stuck` bay `fly_arc` rồi **vắt trên chao đèn** đúng điểm neo trên đèn (như demo) | `l4_sfx_mattress_thud` |
+| 2' | Ngủ | Đệm trên sàn | `l4_mattress_fallen` | fallen | Chạm | — | vào túi | `fly_to_bag` | `sfx_pickup` |
+| 3 | Ngủ | Gối | `l4_pillow` | trên giường | Chạm | — | vào túi | `fly_to_bag` | `sfx_pickup` |
+| 4 | Ngủ | Gấu bông 🎭 | `l4_teddy` (một ảnh) | — | Chạm | — | giữ | `squash` + `hop` nhỏ (bật nhún nhẹ rồi ngồi lại); không vào túi. Ngoại lệ có chủ ý với luật "đồ đánh lừa giữ trạng thái after" (chủ dự án chốt) | `l4_sfx_teddy_boing` |
+| 5 | Ngủ | Tất trên đèn 🎁 | `l4_sock_stuck` (trên đèn và trên giường, cùng một ảnh; G4-39) | trên đèn | Chạm | đệm đã đổ | trên đèn → trên giường | nhún nhẹ rồi `fly_arc` **nhảy lên mặt giường** (chỗ đáp thấp xuống một chút trên chăn, G4-42), **giữ nguyên ảnh `l4_sock_stuck`** (không đổi ảnh), **xoay vòng liên tục suốt lúc bay**, đáp thì dừng xoay ở góc ban đầu, nảy nhẹ (G4-39); nằm lại trên giường tới hết màn (vật con của giường); `ui_dried_fish` (một lần); G4-36 | `sfx_cloth_drop` |
+| 9 | Làm việc | Kệ sách | `l4_bookshelf_full`, `l4_bookshelf_after` (giống hệt `_full`, chỉ **hàng trên cùng thiếu đúng 3 cuốn**; G4-30) | full | Chạm kệ | **vali đã vào túi** (G4-34). Chưa có vali: kệ `wiggle` nhỏ, bong bóng nhỏ hình vali (icon `l4_suitcase_folded`), giữ full | full → after | 3 cuốn `l4_book_single` (đúng 3 cuốn đã mất ở hàng trên cùng, cùng màu) lần lượt bật ra, rơi `fly_arc` xuống sàn **vừa rơi vừa xoay 90° từ dựng đứng sang nằm ngang** (ảnh sách nằm ngang khớp từng tầng của `l4_book_stack`), đáp chồng **khít** lên nhau đúng vị trí từng cuốn trong `l4_book_stack`, nảy rất nhẹ, rồi đổi sang ảnh chồng sách (không nhảy hình, không lệch; G4-37) | `l4_sfx_books_domino`, `l4_sfx_books_land` |
+| 9' | Làm việc | Chồng sách | `l4_book_stack` | — | Chạm | kệ đã đổ | vào túi | `fly_to_bag` | `sfx_pickup` |
+| 10 | Làm việc | Vali | `l4_suitcase_full` (căng phồng, khóa kéo căng), `l4_suitcase_folded` (rỗng, gập gọn) | full | Chạm lần 1 | — | full → folded | `wiggle_strong` 0,3 giây, đồ `l4_spill_*` bắn ra `fly_arc` rơi rải quanh, rồi `swap` sang folded | `l4_sfx_suitcase_burst` |
+| 10' | Làm việc | Vali đã gấp | `l4_suitcase_folded` | folded | Chạm lần 2 | — | vào túi | `fly_to_bag` | `sfx_pickup` |
+| 10a | Làm việc | Phao vịt 🎁 | `l4_spill_duck_ring` | dưới sàn | Chạm | vali đã bung | — | `hop`; `ui_dried_fish` (một lần) | `l4_sfx_duck` |
+| 10b | Làm việc | Đồ rơi khác | `l4_spill_goggles`, `l4_spill_slipper`, `l4_spill_shirt` | dưới sàn | Chạm | — | — | `hop` | `sfx_tap` |
+| 11 | Làm việc | Bóng yoga 🎭 | `l4_yoga_ball` | — | Chạm | — | giữ | Nảy lên rồi lăn một vòng quanh phòng (tween theo đường, xoay theo quãng lăn) về chỗ cũ; **neo xoay = tâm hình tròn của quả bóng** (không phải đáy hay góc ảnh), góc xoay = quãng lăn ÷ bán kính; không vào túi | `l4_sfx_ball_boing` |
+| 12 | Khách | Chỗ xếp tháp | `l4_stack_mattress`, `l4_stack_suitcase`, `l4_stack_books`, `l4_stack_pillow` (bản "trên tháp", khớp chồng lên nhau) | trống | Kéo-thả từ túi | đúng món kế tiếp (đệm → vali → sách → gối) | thêm một tầng | `drop_in` | `sfx_drop` |
+| 12 | Khách | Chỗ xếp tháp | — | — | Kéo-thả từ túi | **sai thứ tự** | giữ | `return_to_bag` thẳng (không chao nghiêng trên tháp), về tới ô thì `wiggle` ngắn trong túi (G4-43); Sữa nghiêng đầu theo | `sfx_wrong` |
+| 12 | Khách | Tháp | — | 4 tầng | (tự động) | xếp xong gối | cảnh cao trào | `sparkle` cả tháp, rồi kịch bản lộ diện | `sfx_sparkle` |
+| 13 | Khách | Sofa | `l4_sofa` | — | Chạm | — | — | `squash` | `sfx_cushion_soft` |
+| 14 | Làm việc | Bàn làm việc | `l4_desk` | — | Chạm | — | — | `wiggle` nhẹ, **không hạt, không chấm bay ra** (G4-21) | `sfx_tap` |
 
 ### Trạng thái mèo
 
 | Giai đoạn | Tư thế | Chuyển động | Chạm Sữa |
 |---|---|---|---|
-| Mở màn | `sua_run` → `sua_jump` | Chạy vào, nhảy lên nóc tủ gương | — |
-| Trên cao (Lẩn tránh) | `sua_tail_peek` | Đuôi ve vẩy | Nhảy sang chỗ cao kia |
-| Nước xối | `sua_cover_face` (mới: thò đầu, một chân che mặt) | Rụt sâu: dịch lên 20px, chỉ còn chóp tai | Nhảy sang chỗ cao kia |
-| Nghe nhỏ giọt | `sua_peek_down` (mới: thò đầu nhìn xuống, tai dựng) | Chờ 2 giọt (1,6 giây) | Nhảy sang chỗ cao kia (Lẩn tránh vẫn còn) |
-| Nhảy xuống | `sua_jump` | Bay cong từ chỗ cao xuống bồn rửa 0,5 giây | — |
-| Uống nước (Lộ diện) | `sua_drink` (mới: nghiêng đầu thè lưỡi dưới vòi) | Lặp; mỗi 3 giọt một lần `sua_head_shake` (mới, 0,4 giây) | **Thắng** |
-| Uống xong | `sua_lick_lips` (mới: ngồi trong bồn liếm mép, mặt lấm tấm nước) | `glow_outline` | **Thắng** |
+| Treo, từ đầu màn | `sua_curtain_banana` (mới: hai chân trước bám đỉnh rèm, thân duỗi, bốn chân dang) | `swing` nhẹ theo rèm, "meo" theo nhịp | `sua_curtain_sulk` 2 giây |
+| Treo, lần 2 | `sua_curtain_one_paw` (mới: trượt xuống một nấc, một chân bám, mặt cam chịu) | như trên | như trên |
+| Treo, lần 3 | `sua_curtain_upside` (mới: treo ngược, đuôi chĩa lên) | như trên | như trên |
+| Treo, lần 4 | `sua_curtain_sleep` (mới: ngủ gật trên rèm) | `zzz` | như trên |
+| Giận dỗi | `sua_curtain_sulk` (mới: quay lưng ra ngoài, mặt vào rèm) | — | — |
+| Lộn vòng | `sua_curl_spin` (mới: cuộn tròn để code xoay) | Bật lên từ đỉnh rèm, xoay 2–3 vòng 0,6 giây theo cung, rơi xuống cạnh tháp | — |
+| Tiếp đất | `sua_land` (mới: bốn chân chạm đất, lưng hơi cong) | `squash` 0,15 giây; sau đó ngồi trên sàn **không rung, không nảy**, chỉ **lắc lư nhẹ** (G4-40) | — |
+| Lộ diện | `sua_lick_paw` (mới: ngồi liếm chân trước) | Lặp; `glow_outline` | **Thắng** |
+
+Tư thế treo đổi **mỗi lần chạm rèm hoặc Sữa** (1 → 2 → 3 → 4 → 1, G4-29), không đổi khi chuyển phòng. Mọi tư thế `sua_curtain_*` cùng **điểm bám** trên đỉnh rèm.
+
+### Nhân vật
+
+| Lúc | Tư thế | Chuyển động |
+|---|---|---|
+| Mở màn | `player_call` (đã có, dùng lại L1) | Bước vào đứng giữa phòng khách gọi, giữ tới khi bong bóng nhiệm vụ thu về góc rồi lui xuống mép dưới (mở màn chung `base.js`, G4-25). Cỡ như level 1–3 (~500, A4-18) |
+| Cao trào | `player_reach_up` (mới: đứng trên đỉnh tháp, kiễng chân, hai tay vươn lên) | Hiện ra luôn ở đỉnh tháp (fade 0,2 giây), không có cảnh trèo |
+| Sau khi Sữa tiếp đất | `player_silly_laugh` (mới: vẫn đứng trên tháp, một tay gãi đầu, cười ngốc nghếch nhìn xuống) | `swap` |
+
+### Kịch bản lộ diện (xếp xong gối)
+
+| Nhịp | Thời lượng | Diễn biến |
+|---|---|---|
+| 1 | 0,4 giây | Tháp `sparkle`. Nhân vật `player_reach_up` hiện trên đỉnh tháp |
+| 2 | 0,5 giây | Tay vươn sát Sữa. Sữa giật mình (`hop` nhỏ tại chỗ), "meo!" |
+| 3 | 0,6 giây | Sữa `sua_curl_spin` bật khỏi rèm, xoay 2–3 vòng theo cung, vệt xoáy |
+| 4 | 0,3 giây | `sua_land` chạm đất cạnh tháp, `squash`, "tạch" thật nhẹ |
+| 5 | 1 giây | `sua_lick_paw`; nhân vật `swap` sang `player_silly_laugh`; bong bóng nhiệm vụ tô màu mặt Sữa |
+| 6 | — | `glow_outline` trên Sữa, chờ chạm → cảnh bế chung |
 
 ### Danh sách ảnh (tất cả mới, cần tạo `design-art-level4.md`)
 
-`l4_bg_bathroom`, `l4_bg_kitchen`, `l4_mirror_cabinet`, `l4_mirror_fog`, `l4_sink`, `l4_faucet`, `l4_water_gush`, `l4_water_drip`, `l4_valve_icon`, `l4_towel_rack`, `l4_towel_rolled`, `l4_towel_fallen`, `l4_bathtub`, `l4_rubber_duck`, `l4_kitchen_sink`, `l4_sink_cabinet_closed`, `l4_sink_cabinet_open`, `l4_valve`, `l4_water_bowl`, `l4_cookie_jar`, `sua_jump`, `sua_cover_face`, `sua_peek_down`, `sua_drink`, `sua_head_shake`, `sua_lick_lips`. Cảnh vào quán và mini game Tắm: đặc tả riêng ở file quán cafe (chưa viết).
+Nền: `l4_bg_living`, `l4_bg_bedroom`, `l4_bg_study`.
+Phòng khách: `l4_window`, `l4_curtain`, `l4_sofa`, `l4_stack_mattress`, `l4_stack_suitcase`, `l4_stack_books`, `l4_stack_pillow`.
+Phòng ngủ: `l4_bed`, `l4_pillow`, `l4_mattress_standing`, `l4_mattress_fallen`, `l4_teddy`, `l4_bedside_lamp`, `l4_sock_stuck`, `l4_sock_flat` (G4-36, có thể dùng chung một ảnh nếu tất vắt trên đèn vẫn đọc được khi nằm trên giường).
+Phòng làm việc: `l4_bookshelf_full`, `l4_bookshelf_after`, `l4_book_single`, `l4_book_stack`, `l4_desk`, `l4_suitcase_full`, `l4_suitcase_folded`, `l4_spill_duck_ring`, `l4_spill_goggles`, `l4_spill_slipper`, `l4_spill_shirt`, `l4_yoga_ball`.
+Sữa: `sua_curtain_banana`, `sua_curtain_one_paw`, `sua_curtain_upside`, `sua_curtain_sleep`, `sua_curtain_sulk`, `sua_curl_spin`, `sua_land`, `sua_lick_paw`.
+Nhân vật: `player_reach_up`, `player_silly_laugh`.
+Chung (chuyển phòng): `ui_room_arrow`. **Không có bản đồ mini** ở level 4 (3 phòng nối thẳng, mũi tên là đủ); bản đồ mini dạy lần đầu ở level 5.
+
+Icon túi đồ dùng thu nhỏ ảnh trong cảnh (`l4_mattress_fallen`, `l4_pillow`, `l4_book_stack`, `l4_suitcase_folded`). Đoạn Sữa vào quán: làm sau.
 
 ---
 
@@ -492,7 +528,7 @@ O2-19: tất hiển thị nhỏ (×0,6 cỡ trong design-art, cỡ thật so v�
 | 4 | Vườn trước | Bãi cỏ (chỗ đặt) | vùng trong nền | — | Đặt gối cỏ mèo | — | có gối | `drop_in` `l8_catnip_pillow` (mới) + khói xanh nhạt bốc lên lặp (hạt) | `sfx_drop` |
 | 5 | Vườn trước | Xích đu | `l8_swing` (mới) | — | Chạm | — | — | `swing` | `l8_sfx_swing_creak` |
 | 6 | Giàn hoa | Lưới che chậu | `l8_net_on` (mới), `l8_net_off` (mới: lưới nằm cạnh chậu) | on | Vuốt | — | on → off | `swap` | `sfx_cloth` |
-| 6 | Giàn hoa | Lưới | — | on | Chạm | — | — | `shake_no` nhẹ, bàn tay hướng dẫn vuốt (nếu 💡) | `sfx_tap` |
+| 6 | Giàn hoa | Lưới | — | on | Chạm | — | — | `shake_no` nhẹ, bàn chân 💡 vuốt mẫu (nếu bấm 💡) | `sfx_tap` |
 | 7 | Giàn hoa | Chậu cỏ mèo | `l8_catnip_pot_full` (mới), `l8_catnip_pot_cut` (mới: cỏ thấp hơn một nửa) | full | Chạm | lưới đã off | full → cut | `l8_catnip` (mới) `fly_to_bag` | `sfx_leaves` |
 | 7 | Giàn hoa | Chậu cỏ mèo | — | full | Chạm | lưới còn on | — | `wiggle` | `sfx_tap` |
 | 8 | Giàn hoa | Ghế đá (chỗ đặt) | `l8_stone_bench` (mới) | — | Đặt gối cỏ mèo | — | có gối | như bãi cỏ | `sfx_drop` |
