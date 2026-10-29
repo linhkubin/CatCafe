@@ -93,6 +93,8 @@ Mỗi màn có vài đồ vật **trông giống con mèo của màn đó** (đ�
 
 Mọi màn **mở đầu bằng cùng một tín hiệu**, để người chơi luôn rõ nhiệm vụ: **tìm con mèo**.
 
+**Khoá tương tác khi mở màn (chủ dự án chốt):** từ lúc vào màn cho tới khi bong bóng nhiệm vụ thu về góc xong, **mọi tương tác bị khoá**: đồ vật, mèo, túi đồ, mũi tên chuyển phòng, nút 💡, nút ⏸. Chạm lúc này không có phản hồi, không tính gợi ý. Các cảnh tự chạy khác (lộ diện, cảnh bế, đoạn kết) cũng khoá như vậy, trừ chỗ đặc tả level ghi rõ mèo nhận chạm sớm.
+
 ```
 ┌──────────────────────────────┐
 │                              │

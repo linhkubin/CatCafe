@@ -171,7 +171,7 @@ Trước khi lộ hộp pate **không có gợi ý tự động** (G10).
 |---|---|---|---|---|---|---|
 | 1 | Rèm cửa sổ | Trên trái | ✨ | Vuốt | Rèm kéo ra, nắng chiếu đúng vào giỏ tất (gợi ý ngầm). **Lần đầu mở (G2-30):** cửa sổ hé, gió lùa vào, lộ **bình bông lau trắng (1b)** trên bậu cửa sổ: bông lau cong vút **quất một cái như đuôi mèo** đúng lúc lộ ra (người chơi tưởng mèo), rồi đung đưa chậm | Sột soạt + gió vù nhẹ |
 | 1b | **Bình bông lau trắng** trên bậu cửa sổ, sau rèm (G2-30): một chùm bông lau (cỏ lau, pampas) trắng kem, bông to, cong, xù như **đuôi mèo trắng dựng lên** | Bậu cửa sổ | 🎭 | Chạm (khi rèm mở) | Bông lau **quất qua quất lại 2 nhịp như đuôi mèo ve vẩy**, vài sợi bông bay lơ lửng; nhân vật **hắt xì** một cái. Rèm đóng thì bình bị che, không nhận chạm | Sột soạt + "hắt xì" |
-| 1a | Dây buộc rèm bông trắng thò xuống **như đuôi mèo** (G2-7) | Mép rèm | 🎭 | Chạm | Dây đung đưa, rèm khẽ lay | Sột soạt |
+| 1a | Dây buộc rèm bông trắng thò xuống **như đuôi mèo** (G2-7) | Mép rèm | 🎭 | Chạm | Dây đung đưa, rèm khẽ lay. **Chỉ có khi rèm đóng:** mở rèm thì dây ẩn đi (G2-31), đóng lại thì hiện lại | Sột soạt |
 | 2 | Mèo nhồi bông **trắng** trên kệ | Giữa trái | 🎭 | Chạm | Rơi xuống, kêu "chít", nằm ngửa, hai mắt cúc áo nhìn bạn | "Chít" |
 | 3 | Tủ quần áo | Phải | ✨ | Chạm | Cánh tủ mở: chỉ thấy **quần áo gấp ngăn nắp** từng ngăn; chạm lần nữa đóng lại | Bản lề "kẹt" |
 | 3a | Hộp giày trên nóc tủ: nắp hé, **hai tai mèo** thò lên (G2-7) | Trên phải | 🎭 | Chạm | Hộp bật nắp: hoá ra **mũ len tai mèo màu hồng nhạt**, mũ nảy lên rồi rơi lại vào hộp | "Cộc" |
