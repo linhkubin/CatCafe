@@ -161,9 +161,7 @@ export class Menu extends Phaser.Scene {
   }
 }
 
-// Vào màn n: đặt thanh ♥ như khi chơi lần lượt từ đầu (Sữa L1–L4: n − 1 ô đã tô; Mun L5: trống).
+// Vào màn n (thanh ♥ tự tính theo số level trong cats.js).
 export function startLevel(scene, n) {
-  scene.registry.set('hearts', Math.min(4, n - 1));
-  scene.registry.set('munHearts', 0);
   scene.scene.start('Level' + n);
 }

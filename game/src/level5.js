@@ -5,7 +5,7 @@
 // Vòng 2 (G5-5, G5-6): nối tia nắng. Hẻm tối tới khi kéo bạt (dây kéo, chấm nắng li ti); 3 đồ sáng (gương, nắp thiếc, đĩa CD)
 // thả lần lượt vào đốm sáng ở A → B → C, mỗi lần tia phản chiếu bật sang điểm kế, gần Mun hơn; tới trước gầm thì Mun phóng ra.
 // ?level=5&debug=1: đánh dấu 3 điểm A, B, C và điểm trước gầm xe.
-import { D, BROWN } from './base.js';
+import { D } from './base.js';
 import { RoomsLevel, ROOM_W } from './rooms.js';
 
 const YARD = 0, ALLEY = 1;
@@ -71,9 +71,6 @@ const SPECKS = [[150, 930], [320, 960], [280, 1080], [110, 1190], [430, 1190], [
 // Mỗi vòng 1 giây; Mun ra tới lúc đè ≈ 2,7 giây.
 const LOOP = { x: 600, y: 1215, rx: 230, ry: 40, ms: 2000, lead: 450 };
 const MUN_FOOT = 40;                                  // đáy Mun thấp hơn đốm sáng (Mun chạy trên mặt đất, đốm sáng dưới chân)
-const MAP = { x: 640, y: 62 }, MAP_CELL = { w: 64, h: 36 };       // bản đồ mini (toạ độ màn hình, giữa hai ô)
-// Icon hai ô bản đồ (không chữ): Art vẽ ui_map_yard / ui_map_alley; chưa có thì dùng tạm ảnh đồ đặc trưng của phòng.
-const MAP_ICON = [['ui_map_yard', 'l5_vanity_table'], ['ui_map_alley', 'l5_cart']];
 // Đồ sáng: key trong túi → key lúc đặt (dựng nghiêng ở điểm nối tia).
 const SHINY = { l5_mirror_small: 'l5_mirror_placed', l5_tin_lid: 'l5_tin_lid_placed', l5_cd_hanging: 'l5_cd_placed' };
 const SHINY_ROOM = { l5_mirror_small: YARD, l5_tin_lid: YARD, l5_cd_hanging: ALLEY };
@@ -339,16 +336,13 @@ export class Level5 extends RoomsLevel {
   get fitHead() { return FIT_HEAD; }
   get bagTapFeedback() { return false; }
   get bagLandHop() { return false; }
-  get heartBar() { return { n: 6, x0: 135, step: 48, r: 18, reg: 'munHearts', idx: 0 }; } // ♥Mun ○○○○○○
-  get catFace() { return 'mun_face_icon'; }
-  get heldKey() { return 'mun_held'; }
-  get catMeow() { return 'mun_sfx_meow'; }
-  get catTapSfx() { return 'mun_sfx_meow_cute'; }
 
   get fallbacks() { return FB; }
-  get fallbackCanvas() { return true; } // khối màu có nhãn chữ (bản khối): vẽ bằng canvas 2D
+  get fallbackCanvas() { return true; } // khối màu (bản khối): vẽ bằng canvas 2D
   get roomBgs() { return ['l5_bg_backyard', 'l5_bg_alley']; } // sân sau ⇄ hẻm
   get roomOf() { return ROOM; }
+  // Bản đồ mini: sân = bàn trang điểm, hẻm = xe ba gác (tạm, tới khi Art vẽ ui_map_yard / ui_map_alley).
+  get roomIcons() { return [['ui_map_yard', 'l5_vanity_table'], ['ui_map_alley', 'l5_cart']]; }
   get suaHand() { return false; }
   // Bong bóng nhiệm vụ mở màn nảy mạnh hơn (0 → 1,3 → 1).
   get bubblePop() { return { peak: 1.3, up: 260, rest: 1, down: 160 }; }
@@ -453,8 +447,7 @@ export class Level5 extends RoomsLevel {
     this.mun = this.img('mun_run', 0, 0, 30).setVisible(false);
     this.placedS = [];
 
-    this.buildArrows();
-    this.buildMap();
+    this.buildArrows(); // kèm bản đồ mini
 
     // Vùng chạm.
     this.zone('window', this.artRect(this.windowFrame.visible ? this.windowFrame : this.window), D.zone + 1);
@@ -482,48 +475,6 @@ export class Level5 extends RoomsLevel {
     this.zone('munPaw', new Phaser.Geom.Rectangle(0, 0, 120, 120), D.zone + 5).disableInteractive();
     this.arrowZones();
     if (this.debug) this.buildDebug();
-  }
-
-  // Thanh ♥ của Mun: mặt Mun nhỏ dưới trái tim (không chữ).
-  buildUI() {
-    super.buildUI();
-    const f = this.img('mun_face_icon', 72, 108, D.ui, true).setOrigin(0.5, 0.5);
-    this.fitWidth(f, 46);
-  }
-
-  // Bản đồ mini: hai ô Sân | Hẻm, mỗi ô một icon phòng (không chữ). Ô đang đứng: khung vàng, icon rõ; ô còn lại: khung kem, icon mờ.
-  buildMap() {
-    const g = this.add.graphics().setScrollFactor(0).setDepth(D.ui);
-    const cells = MAP_ICON.map(([key, stand], i) => {
-      const k = this.has(key) ? key : stand, t = this.add.image(MAP.x - 42 + i * 84, MAP.y, k, this.iconFrame(k));
-      return t.setScale(Math.min(MAP_CELL.w / t.width, MAP_CELL.h / t.height)).setScrollFactor(0).setDepth(D.ui + 1);
-    });
-    this.map = { g, cells, blink: null };
-    this.drawMap();
-  }
-
-  drawMap(flash = 0) {
-    const g = this.map.g.clear();
-    [YARD, ALLEY].forEach((r, i) => {
-      const x = MAP.x - 80 + i * 84, on = r === this.room;
-      g.fillStyle(on ? 0xfce39a : 0xfffcf4, 1).lineStyle(4, BROWN, 1);
-      if (r === ALLEY && flash) g.fillStyle(0xffd36b, 1);
-      g.fillRoundedRect(x, MAP.y - 24, 76, 48, 10).strokeRoundedRect(x, MAP.y - 24, 76, 48, 10);
-      this.map.cells[i].setAlpha(on || (r === ALLEY && flash) ? 1 : 0.45);
-    });
-  }
-
-  // Ô Hẻm nhấp nháy (lúc đầu sang hẻm sau khi bóng đen chạy ra).
-  blinkMap() {
-    let n = 0;
-    if (this.map.blink) this.map.blink.remove();
-    this.map.blink = this.time.addEvent({ delay: 180, repeat: 5, callback: () => this.drawMap(++n % 2) });
-  }
-
-  // Ô đang đứng trên bản đồ mini đổi theo phòng.
-  showArrows() {
-    super.showArrows();
-    if (this.map) this.drawMap();
   }
 
   // Bong bóng ở góc nảy mạnh một nhịp (thùng giấy: sắp gặp mèo mới).
@@ -571,8 +522,9 @@ export class Level5 extends RoomsLevel {
     super.goRoom(r);
   }
 
+  mapBlinkOnEnter() { return this.firstAlley; }
+
   onRoomEnter(r) {
-    if (this.firstAlley) this.blinkMap();
     if (r === ALLEY) this.sunThought();
   }
 

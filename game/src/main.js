@@ -60,7 +60,7 @@ async function start() {
     scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH, width: W, height: gameHeight() },
     input: { activePointers: 2 },
     scene: [Boot, Menu, Level1, Level2, Level3, Level4, Level5],
-    callbacks: { preBoot: (g) => { g.registry.set('assets', assets); g.registry.set('hearts', 0); } },
+    callbacks: { preBoot: (g) => { g.registry.set('assets', assets); } },
   });
   window.addEventListener('resize', () => {
     const h = gameHeight();

@@ -267,6 +267,8 @@ export class Level4 extends RoomsLevel {
   get fallbacks() { return FB; }
   get roomBgs() { return ['l4_bg_bedroom', 'l4_bg_living', 'l4_bg_study']; } // phòng ngủ ◄ khách ► làm việc
   get roomOf() { return ROOM; }
+  // Bản đồ mini: ngủ = giường, khách = sofa, làm việc = kệ sách (tạm, tới khi Art vẽ ui_map_bedroom / _living / _study).
+  get roomIcons() { return [['ui_map_bedroom', 'l4_bed'], ['ui_map_living', 'l4_sofa'], ['ui_map_study', 'l4_bookshelf_full']]; }
   // Bong bóng nhiệm vụ mở màn nhỏ hơn bản chung (G4-31).
   get bubblePop() { return { peak: BUBBLE.k * 1.15, up: 230, rest: BUBBLE.k, down: 120 }; }
 

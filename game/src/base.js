@@ -11,6 +11,7 @@
 import { playSfx } from './sfx.js';
 import { KEYS, phUrl } from './assets.js';
 import { Progress } from './progress.js';
+import { catOf } from './cats.js';
 
 export const D = {
   bg: 0, pend: 9, clock: 10, bird: 11, rug: 12, plant: 13, fly: 14, box: 20, canHidden: 25, cushion: 30, pillow: 31,
@@ -362,11 +363,14 @@ export class BaseLevel extends Phaser.Scene {
   }
 
   // Thanh ♥ của mèo đang tìm: Sữa 4 ô (L1–L4), mèo khác có thể nhiều ô hơn (Mun 6 ô, L5). idx = ô được tô khi thắng màn này.
-  get heartBar() { return { n: 4, x0: 145, step: 62, r: 22, reg: 'hearts', idx: this.levelNo - 1 }; }
-  get catFace() { return 'sua_face_icon'; }      // mặt mèo trong bong bóng nhiệm vụ và màn thưởng
-  get heldKey() { return 'sua_held'; }           // mèo trong cảnh bế
-  get catMeow() { return 'sua_sfx_meow'; }       // tiếng kêu trong cảnh bế
-  get catTapSfx() { return 'sua_sfx_meow_cute'; } // chạm mèo đã lộ diện
+  // Mèo của màn này và thanh ♥ của nó (cats.js): n ô = số level của mèo, idx = vị trí màn trong nhóm (0 = màn đầu).
+  // Vào màn có idx tim, thắng thì tô ô idx. Không phụ thuộc thứ tự chơi.
+  get catInfo() { return catOf(this.levelNo); }
+  get heartBar() { const c = this.catInfo; return { n: c.levels.length, idx: c.levels.indexOf(this.levelNo), ...c.bar }; }
+  get catFace() { return this.catInfo.face; }      // mặt mèo trong bong bóng nhiệm vụ và màn thưởng
+  get heldKey() { return this.catInfo.held; }      // mèo trong cảnh bế
+  get catMeow() { return this.catInfo.meow; }      // tiếng kêu trong cảnh bế
+  get catTapSfx() { return this.catInfo.tapSfx; }  // chạm mèo đã lộ diện
 
   buildUI() {
     // Thanh ♥ (biểu tượng mèo + các ô tiến độ), bong bóng nhiệm vụ, nút gợi ý, tay hướng dẫn, chân gợi ý.
@@ -376,8 +380,13 @@ export class BaseLevel extends Phaser.Scene {
     this.slots = this.add.graphics().setScrollFactor(0).setDepth(D.ui);
     this.slots.lineStyle(4, BROWN, 1).fillStyle(CREAM, 1);
     for (let i = 0; i < HB.n; i++) { this.slots.fillCircle(HB.x0 + i * HB.step, 60, HB.r); this.slots.strokeCircle(HB.x0 + i * HB.step, 60, HB.r); }
-    const done = this.levelNo === 1 ? 0 : (this.registry.get(HB.reg) || 0);
-    for (let i = 0; i < Math.min(done, HB.n); i++) { const h = this.img('ui_heart', HB.x0 + i * HB.step, 60, D.ui + 1, true).setOrigin(0.5, 0.5); this.fitWidth(h, HB.r * 1.8); }
+    this.heartFills = [];
+    for (let i = 0; i < Math.max(0, HB.idx); i++) {
+      const h = this.img('ui_heart', HB.x0 + i * HB.step, 60, D.ui + 1, true).setOrigin(0.5, 0.5);
+      this.heartFills.push(this.fitWidth(h, HB.r * 1.8));
+    }
+    this.heartBadge = null; // icon nhỏ dưới tim (Mun)
+    if (this.catInfo.badge) this.heartBadge = this.fitWidth(this.img(this.catInfo.badge, 72, 108, D.ui, true).setOrigin(0.5, 0.5), 46);
 
     const ct = this.add.container(512, 640).setScrollFactor(0).setDepth(D.ui + 5).setVisible(false);
     const bub = this.add.image(0, 0, 'ui_speech_bubble');
@@ -1067,16 +1076,22 @@ export class BaseLevel extends Phaser.Scene {
     face.setScale(0);
     this.tweens.add({ targets: face, scale: fb, duration: 400, ease: 'Back.out' });
 
-    // ♥ N/4 (Sữa) hoặc ♥ N/6 (Mun): ô idx của thanh tiến độ được tô trái tim.
-    const HB = this.heartBar;
-    this.registry.set(HB.reg, Math.max(this.registry.get(HB.reg) || 0, HB.idx + 1));
-    const slot = this.img('ui_heart', HB.x0 + HB.idx * HB.step, 60, D.end + 10, true).setOrigin(0.5, 0.5);
+    // Thanh ♥ góc trên trái nổi lên trên lớp tối; một trái tim bật ra ở mặt mèo, bay vào ô idx, đáp xuống thì nảy nhẹ.
+    const HB = this.heartBar, sx = HB.x0 + HB.idx * HB.step;
+    this.heartIcon.setDepth(D.end + 10);
+    this.slots.setDepth(D.end + 9);
+    for (const h of this.heartFills) h.setDepth(D.end + 10);
+    if (this.heartBadge) this.heartBadge.setDepth(D.end + 10);
+    const slot = this.img('ui_heart', 512, H * 0.38, D.end + 12, true).setOrigin(0.5, 0.5);
     this.fitWidth(slot, HB.r * 1.8);
     const sb = slot.base;
     slot.setScale(0);
-    this.heartIcon.setDepth(D.end + 10);
-    this.slots.setDepth(D.end + 9);
-    this.tweens.add({ targets: slot, scale: sb, duration: 350, delay: 500, ease: 'Back.out', onStart: () => this.sfx('sfx_heart') });
+    this.tweens.chain({ targets: slot, tweens: [
+      { scale: sb * 2.6, duration: 250, delay: 450, ease: 'Back.out', onStart: () => this.sfx('sfx_heart') },
+      { x: sx, y: 60, scale: sb, duration: 550, ease: 'Quad.in' },
+      { scale: sb * 1.35, duration: 120, ease: 'Quad.out', onStart: () => this.sfx('sfx_heart') },
+      { scale: sb, duration: 180, ease: 'Back.out' },
+    ] });
 
     // Cá khô (level 1: 10, level 2: 15) bay vào góc phải trên.
     const pile = this.img('ui_dried_fish', 1024 - 80, 62, D.end + 10, true).setOrigin(0.5, 0.5);

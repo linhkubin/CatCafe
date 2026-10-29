@@ -2,17 +2,21 @@
 // Màn con khai báo:
 //   get roomBgs()  – ảnh nền từng phòng theo thứ tự trái → phải, ví dụ ['l4_bg_bedroom', 'l4_bg_living', 'l4_bg_study'];
 //   get roomOf()   – { key: số phòng } cho P(key) (key không có trong bảng nằm ở phòng 0);
+//   get roomIcons() – icon từng phòng trên bản đồ mini: [[key Art vẽ (ui_map_<phòng>), key tạm có sẵn], …];
 //   resetLevel()   – đặt this.room (phòng bắt đầu) và this.moving = false.
 // Trong buildRoom: buildRoomBgs() thay cho buildBg, buildArrows() chỗ dựng mũi tên, arrowZones() sau cùng các vùng chạm.
-// Tuỳ chọn: onRoomEnter(r) chạy khi camera trượt xong.
+// Tuỳ chọn: onRoomEnter(r) chạy khi camera trượt xong; mapBlinkOnEnter(r) quyết định ô bản đồ có nhấp nháy không
+// (mặc định: lần đầu vào phòng đó).
 // Gợi ý: màn khai báo hintStep() → { arrow: 'left'|'right' } | { sprite } | { item } … ; nút 💡 (strongHint) chung chỉ
 // bàn chân vào mũi tên hoặc đồ cần chạm; kiểu khác (kéo-thả…) xử lý trong strongHintStep(h) (trả true nếu đã xử lý).
-import { D } from './base.js';
+import { D, BROWN } from './base.js';
 import { ObjectLevel } from './objects.js';
 
 export const ROOM_W = 1024;
 const ARROW = { right: [960, 760], left: [64, 760] }; // mũi tên chuyển phòng (A4-4), toạ độ màn hình (y cộng Y0)
 const ARROW_W = 110;
+// Bản đồ mini góc trên (giữa thanh ♥ và nút ⏸): mỗi phòng một ô x0 + i·step, ô rộng w cao h; icon gói trong iw × ih.
+const MAP = { x0: 560, y: 62, step: 84, w: 76, h: 48, iw: 64, ih: 36 };
 
 export class RoomsLevel extends ObjectLevel {
   get roomOf() { return {}; }
@@ -52,7 +56,41 @@ export class RoomsLevel extends ObjectLevel {
   buildArrows() {
     this.arrowR = this.img('ui_room_arrow', 0, 0, D.ui, true).setOrigin(0.5, 0.5);
     this.arrowL = this.img('ui_room_arrow', 0, 0, D.ui, true).setOrigin(0.5, 0.5).setFlipX(true);
+    this.buildMap();
   }
+
+  // ---------- bản đồ mini (không chữ) ----------
+  // Ô đang đứng: khung vàng, icon rõ; ô khác: khung kem, icon mờ. Chưa có ảnh ui_map_<phòng> thì dùng icon tạm.
+  buildMap() {
+    const g = this.add.graphics().setScrollFactor(0).setDepth(D.ui);
+    const cells = this.roomIcons.map(([key, stand], i) => {
+      const k = this.has(key) ? key : stand, t = this.add.image(MAP.x0 + MAP.w / 2 + i * MAP.step, MAP.y, k, this.iconFrame(k));
+      return t.setScale(Math.min(MAP.iw / t.width, MAP.ih / t.height)).setScrollFactor(0).setDepth(D.ui + 1);
+    });
+    this.map = { g, cells, blink: null, blinkRoom: -1 };
+    this.visited = { [this.room]: true };
+    this.drawMap();
+  }
+
+  drawMap(flash = 0) {
+    const g = this.map.g.clear();
+    this.map.cells.forEach((c, r) => {
+      const x = MAP.x0 + r * MAP.step, on = r === this.room, lit = flash && r === this.map.blinkRoom;
+      g.fillStyle(lit ? 0xffd36b : on ? 0xfce39a : 0xfffcf4, 1).lineStyle(4, BROWN, 1);
+      g.fillRoundedRect(x, MAP.y - MAP.h / 2, MAP.w, MAP.h, 10).strokeRoundedRect(x, MAP.y - MAP.h / 2, MAP.w, MAP.h, 10);
+      c.setAlpha(on || lit ? 1 : 0.45);
+    });
+  }
+
+  // Ô phòng r nhấp nháy ba nhịp.
+  blinkMap(r = this.room) {
+    let n = 0;
+    if (this.map.blink) this.map.blink.remove();
+    this.map.blinkRoom = r;
+    this.map.blink = this.time.addEvent({ delay: 180, repeat: 5, callback: () => this.drawMap(++n % 2) });
+  }
+
+  mapBlinkOnEnter(r) { return !this.visited[r]; }
 
   arrowZones() {
     this.zone('arrowR', new Phaser.Geom.Rectangle(0, 0, 140, 200), D.uiZone, true);
@@ -67,6 +105,7 @@ export class RoomsLevel extends ObjectLevel {
     this.arrowR.setVisible(r < this.roomCount - 1);
     on('arrowL', r > 0);
     on('arrowR', r < this.roomCount - 1);
+    if (this.map) this.drawMap();
   }
 
   arrowWorld(side) { return this.W(this.room, ARROW[side]); }
@@ -146,6 +185,8 @@ export class RoomsLevel extends ObjectLevel {
         this.moving = false;
         if (this.bag) this.bagLayout();
         this.touch();
+        if (this.mapBlinkOnEnter(r)) this.blinkMap(r);
+        this.visited[r] = true;
         if (this.onRoomEnter) this.onRoomEnter(r);
       } });
   }
