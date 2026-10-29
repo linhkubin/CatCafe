@@ -183,7 +183,6 @@ export class Level3 extends BaseLevel {
   constructor() { super('Level3'); }
 
   get levelNo() { return 3; }
-  get nextLevel() { return 'Level4'; } // demo Level 4 đã duyệt (G4-15): màn thưởng L3 chạm để sang L4
   get rewardFish() { return 20 + 5 * this.secrets; } // +5 mỗi bí mật (gối, lọ hoa)
   get defaultPos() { return DEF; }
   get introPose() { return 'player_point_think'; } // G3-11

@@ -246,7 +246,6 @@ export class Level2 extends BaseLevel {
   constructor() { super('Level2'); }
 
   get levelNo() { return 2; }
-  get nextLevel() { return 'Level3'; } // G3-9
   get rewardFish() { return 15; }
   get defaultPos() { return DEF; }
 

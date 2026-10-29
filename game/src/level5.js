@@ -368,7 +368,6 @@ export class Level5 extends BaseLevel {
   constructor() { super('Level5'); }
 
   get levelNo() { return 5; }
-  get nextLevel() { return 'Level1'; } // chưa có level 6: chơi lại từ đầu
   get rewardFish() { return 50 + 5 * this.secrets; }
   get defaultPos() { return DEF; }
   get fitHead() { return FIT_HEAD; }

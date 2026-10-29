@@ -2,11 +2,12 @@
 // nhân vật phản ứng, mở màn, cảnh bế, màn thưởng, nạp asset theo màn.
 // Mỗi màn (Level1, Level2…) kế thừa BaseLevel và cài: levelNo, keys (asset riêng), resetLevel(), buildRoom(),
 // handleLevel(name, g), strongHint(), update(time); tuỳ chọn: onIntro(), blockInput(name), beforeEnding(), endingHide(),
-// makeFallback(key) (ảnh tạm khi chưa có ảnh thật), defaultPos, rewardFish, nextLevel, callSfx, introPose (tư thế mở màn),
+// makeFallback(key) (ảnh tạm khi chưa có ảnh thật), defaultPos, rewardFish, callSfx, introPose (tư thế mở màn),
 // fitHead (trạng thái → key đầu nhóm, co cùng tỉ lệ), túi đồ: onBagDrop(item, x, y), onBagCombine(a, b), onBagTap(item).
 // Toạ độ "thế giới" là khung 1024x1536; máy dài hơn 2:3 thì camera lùi lên (Y0) và nền được kéo dài.
 import { playSfx } from './sfx.js';
 import { KEYS, phUrl } from './assets.js';
+import { Progress } from './progress.js';
 
 export const D = {
   bg: 0, pend: 9, clock: 10, bird: 11, rug: 12, plant: 13, fly: 14, box: 20, canHidden: 25, cushion: 30, pillow: 31,
@@ -69,9 +70,10 @@ export class BaseLevel extends Phaser.Scene {
     }
   }
 
+  // Thắng màn: lưu tiến độ (mở màn kế) rồi về menu chọn level.
   goNext() {
-    if (this.nextLevel === 'Level1') this.registry.set('hearts', 0);
-    this.scene.start(this.nextLevel || this.scene.key);
+    Progress.markDone(this.levelNo);
+    this.scene.start('Menu');
   }
 
   endingHide() { if (this.sua) this.sua.setVisible(false); }
@@ -377,10 +379,9 @@ export class BaseLevel extends Phaser.Scene {
     if (this.bubble.home === 'center') this.bubble.ct.setPosition(...this.bubbleCenter);
     if (this.bag && this.bag.shown) this.bagLayout();
     if (this.pauseUI) {
-      const [dim, play, again] = this.pauseUI;
+      const [dim, ...btns] = this.pauseUI;
       dim.setPosition(512, H / 2).setSize(1024, H);
-      play.setY(H / 2);
-      again.setY(H / 2);
+      btns.forEach((b) => b.setY(H / 2));
     }
   }
 
@@ -796,7 +797,7 @@ export class BaseLevel extends Phaser.Scene {
   }
 
   // ---------- tạm dừng chung (leveldesign "Tạm dừng chung (mọi level)") ----------
-  // Ảnh tạm cho 3 nút khi chưa có ảnh thật: nút tròn kem viền nâu, ký hiệu nâu ở giữa.
+  // Ảnh tạm cho 4 nút khi chưa có ảnh thật: nút tròn kem viền nâu, ký hiệu nâu ở giữa.
   ensureButtons() {
     const mk = (key, draw) => {
       if (this.textures.exists(key)) return;
@@ -813,6 +814,10 @@ export class BaseLevel extends Phaser.Scene {
     mk('ui_restart_button', (g) => {
       g.beginPath(); g.arc(100, 100, 46, Phaser.Math.DegToRad(-60), Phaser.Math.DegToRad(250), false); g.strokePath();
       g.fillTriangle(118, 40, 150, 66, 112, 78);
+    });
+    mk('ui_home_button', (g) => {
+      g.fillTriangle(48, 100, 100, 52, 152, 100).fillRect(64, 98, 72, 52);
+      g.fillStyle(0xfdf6e8).fillRect(90, 118, 20, 32);
     });
   }
 
@@ -837,7 +842,7 @@ export class BaseLevel extends Phaser.Scene {
     if (ctx && ctx.state === 'running') ctx.suspend();
 
     const H = this.scale.height, d = D.end + 30;
-    const dim = this.add.rectangle(512, H / 2, 1024, H, 0x000000, 0.45).setScrollFactor(0).setDepth(d).setInteractive(); // chạm ngoài 2 nút: không làm gì
+    const dim = this.add.rectangle(512, H / 2, 1024, H, 0x000000, 0.45).setScrollFactor(0).setDepth(d).setInteractive(); // chạm ngoài 3 nút: không làm gì
     const btn = (key, x, fn) => {
       const b = this.img(key, x, H / 2, d + 1, true).setOrigin(0.5, 0.5);
       this.fitWidth(b, 180);
@@ -847,7 +852,9 @@ export class BaseLevel extends Phaser.Scene {
       this.tweens.add({ targets: b, scale: k, duration: 220, ease: 'Back.out' });
       return b;
     };
-    this.pauseUI = [dim, btn('ui_play_button', 362, () => this.resumeGame()), btn('ui_restart_button', 662, () => this.restartLevel())];
+    // Về menu (trái) · chơi tiếp (giữa) · chơi lại (phải).
+    this.pauseUI = [dim, btn('ui_home_button', 252, () => this.goMenu()), btn('ui_play_button', 512, () => this.resumeGame()),
+      btn('ui_restart_button', 772, () => this.restartLevel())];
   }
 
   resumeGame() {
@@ -869,14 +876,26 @@ export class BaseLevel extends Phaser.Scene {
     this.frozen = s.frozen;
   }
 
-  // Chơi lại màn từ đầu: túi đồ trống, giữ phần thưởng đã có (registry không đổi).
-  restartLevel() {
+  // Bỏ tạm dừng trước khi rời màn (chơi lại / về menu).
+  unfreeze() {
     this.pausedState = null;
     this.time.paused = false;
     const ctx = this.sound.context;
     if (ctx && ctx.state === 'suspended') ctx.resume();
     this.sound.resumeAll();
+  }
+
+  // Chơi lại màn từ đầu: túi đồ trống, giữ phần thưởng đã có (registry không đổi).
+  restartLevel() {
+    this.unfreeze();
     this.scene.restart();
+  }
+
+  // Thoát màn về menu chọn level (không tính là qua màn).
+  goMenu() {
+    this.unfreeze();
+    this.sound.stopAll();
+    this.scene.start('Menu');
   }
 
   onHidden() { this.pauseGame(); }

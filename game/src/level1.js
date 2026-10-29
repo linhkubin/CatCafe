@@ -6,7 +6,6 @@ export class Level1 extends BaseLevel {
   constructor() { super('Level1'); }
 
   get levelNo() { return 1; }
-  get nextLevel() { return 'Level2'; }
   get rewardFish() { return 10; }
 
   resetLevel() {

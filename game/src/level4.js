@@ -260,7 +260,6 @@ export class Level4 extends BaseLevel {
   constructor() { super('Level4'); }
 
   get levelNo() { return 4; }
-  get nextLevel() { return 'Level5'; } // G5-4: thắng L4 sang L5
   get rewardFish() { return 30 + 5 * this.secrets; }
   get defaultPos() { return DEF; }
   get fitHead() { return FIT_HEAD; }
