@@ -1735,12 +1735,12 @@
   "file": "cats/mun_held.png",
   "group": "mun_held",
   "h": 962,
+  "note": "A5-15: neo nách; cao 631 như sua_held để tay bế ôm vừa thân Mun",
   "ox": 0.5,
   "oy": 0.3763,
   "res": 1.5,
   "sheet": "l5src_mun_held",
-  "w": 590,
-  "note": "A5-15: neo nách; cao 631 như sua_held để tay bế ôm vừa thân Mun"
+  "w": 590
  },
  "mun_look_paw": {
   "ax": 159,
@@ -2293,6 +2293,66 @@
   "res": 1.5,
   "sheet": "ui_icons_sheet",
   "w": 226
+ },
+ "ui_map_alley": {
+  "ax": 56,
+  "ay": 39,
+  "file": "common/ui_map_alley.png",
+  "group": "ui_map_alley",
+  "h": 77,
+  "ox": 0.5,
+  "oy": 0.5065,
+  "res": 1.5,
+  "sheet": "ui_map_sheet",
+  "w": 112
+ },
+ "ui_map_bedroom": {
+  "ax": 56,
+  "ay": 43,
+  "file": "common/ui_map_bedroom.png",
+  "group": "ui_map_bedroom",
+  "h": 84,
+  "ox": 0.5,
+  "oy": 0.5119,
+  "res": 1.5,
+  "sheet": "ui_map_sheet",
+  "w": 112
+ },
+ "ui_map_living": {
+  "ax": 56,
+  "ay": 36,
+  "file": "common/ui_map_living.png",
+  "group": "ui_map_living",
+  "h": 70,
+  "ox": 0.5,
+  "oy": 0.5143,
+  "res": 1.5,
+  "sheet": "ui_map_sheet",
+  "w": 112
+ },
+ "ui_map_study": {
+  "ax": 56,
+  "ay": 54,
+  "file": "common/ui_map_study.png",
+  "group": "ui_map_study",
+  "h": 107,
+  "ox": 0.5,
+  "oy": 0.5047,
+  "res": 1.5,
+  "sheet": "ui_map_sheet",
+  "w": 112
+ },
+ "ui_map_yard": {
+  "ax": 56,
+  "ay": 38,
+  "file": "common/ui_map_yard.png",
+  "group": "ui_map_yard",
+  "h": 75,
+  "ox": 0.5,
+  "oy": 0.5067,
+  "res": 1.5,
+  "sheet": "ui_map_sheet",
+  "w": 112
  },
  "ui_pause_button": {
   "ax": 74,

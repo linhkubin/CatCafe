@@ -209,6 +209,32 @@ Bố cục: nút tạm dừng nhỏ bên trái (đường kính ~220px trong t�
 - `ui_play_button`: giữa là **tam giác ▶** mập, bo tròn góc, hơi lệch phải cho cân.
 - `ui_restart_button`: giữa là **mũi tên vòng ↻** mập (vòng tròn hở ~300°, đầu mũi tên tròn trịa ở đầu vòng).
 
+### Icon phòng cho bản đồ mini (mọi màn nhiều phòng, GD yêu cầu 2026-10-30)
+
+Bản đồ mini ở góc trên phải: mỗi ô (~64x36 px, ngang) là icon một phòng. Ô đang đứng có khung vàng, các ô khác mờ (code vẽ khung, icon chỉ là hình). Code co icon vừa ô nên **mọi icon có tỉ lệ khung gần 16:9 (ngang)**.
+
+Mỗi icon là **một món đặc trưng nhất của phòng**, vẽ lại đúng món đó trong demo đã duyệt (hình dáng, màu chính), nhưng **giản lược mạnh** để đọc được ở cỡ 64x36:
+- Dáng to, mập, bóng rõ; bỏ chi tiết nhỏ (nan hoa, vân gỗ, gáy sách, nếp vải); họa tiết nếu có thì rất to, rất ít.
+- **Nét viền nâu đậm và dày hơn đồ trong cảnh** (theo cột Nét), vẫn chất chì, đầu nét nhọn dần.
+- Màu theo demo nhưng **giữ đậm hơn nền một nấc** để không chìm khi icon bị mờ; vẫn trong bảng màu khóa, không chói.
+- Cùng góc nhìn CAMERA (mục 2b), không bóng sàn, không khung, không nền, không chữ.
+- **Riêng tờ này không theo luật "cùng tỉ lệ thật":** mỗi icon tự lấp đầy ô của nó (khoảng 80% bề ngang ô hoặc 80% chiều cao ô, cái nào chạm trước), để 5 icon cùng cỡ thị giác, cùng độ dày nét, cùng độ đậm khi đặt cạnh nhau.
+
+| Tờ | Ô | Key | Thư mục | Nhóm | Neo | Hiển thị | Nét |
+|---|---|---|---|---|---|---|---|
+| ui_map_sheet | 0,60,526,470 | ui_map_bedroom | common |  | tâm | rộng 64 | 22 |
+| ui_map_sheet | 526,60,544,470 | ui_map_living | common |  | tâm | rộng 64 | 22 |
+| ui_map_sheet | 1070,60,466,470 | ui_map_study | common |  | tâm | rộng 64 | 22 |
+| ui_map_sheet | 112,540,683,450 | ui_map_yard | common |  | tâm | rộng 64 | 22 |
+| ui_map_sheet | 795,540,615,450 | ui_map_alley | common |  | tâm | rộng 64 | 22 |
+
+Bố cục (tờ 1536x1024): hàng trên 3 icon phòng của Level 4 (ngủ, khách, làm việc), hàng dưới 2 icon của Level 5 (sân, hẻm), căn giữa. Mỗi icon nằm giữa ô của nó (ô ~512x420), bản thân icon ngang ~16:9.
+- `ui_map_bedroom` (phòng ngủ L4, demo `art/out/demo/l4_demo_bedroom.png`, cái giường ở giữa phải): **giường đơn** nhìn trực diện hơi từ trên, khung gỗ caramel, đầu giường cao bên trái, chân giường thấp bên phải; mặt nệm/chăn **xanh da trời với 3–4 chấm tròn kem to**; một gối kem viền hồng ở đầu giường. Không đèn ngủ, không gấu bông, không nệm dựng.
+- `ui_map_living` (phòng khách L4, demo `art/out/demo/l4_demo_living.png`, sofa bên phải): **sofa 2 chỗ màu xanh bạc hà**, lưng tựa 2 khối tròn, tay vịn tròn mập hai bên, 2 đệm ngồi, chân gỗ ngắn. Không rèm, không tháp đồ, không người.
+- `ui_map_study` (phòng làm việc L4, demo `art/out/demo/l4_demo_study.png`, bàn bên phải): **bàn gỗ caramel** có một ngăn kéo núm tròn, 4 chân; trên bàn bên trái là **đèn bàn xanh bạc hà** cổ cong, chụp đèn tròn hơi sáng vàng bơ; bên phải một **ống bút hồng đào** cắm 3 bút chì màu (chỉ là 3 que màu). Không kệ sách, không vali, không bóng.
+- `ui_map_yard` (sân sau L5, demo `art/out/demo/l5_demo_yard_916.png`, hàng rào và dây phơi phía sau): **một đoạn hàng rào gỗ kem** 5–6 thanh đầu tròn, trên có **dây phơi** căng giữa 2 cọc gỗ, treo **một chiếc áo phông xanh bạc hà** bằng một kẹp gỗ. Không túi rác, không bàn trang điểm, không hộp.
+- `ui_map_alley` (con hẻm L5, demo `art/out/demo/l5_demo_alley_916.png`, xe đạp hồng bên phải): **xe đạp hồng phấn** nhìn ngang, 2 bánh là vòng tròn xám nâu dày **không vẽ nan hoa** (hoặc 3 nan rất mảnh), yên nâu, giỏ mây vàng caramel phía trước; phía sau xe là **một mảng tường kem với 2–3 viên gạch hồng nhạt** nhỏ để gợi hẻm. Không đĩa CD, không xe kéo, không mèo, không quạ.
+
 ---
 
 ## 6. Quy trình vẽ: Codex + tờ
