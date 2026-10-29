@@ -110,7 +110,7 @@ Trước khi lộ hộp pate **không có gợi ý tự động** (G10).
 1. *💡 (người chơi bấm):* bàn chân mèo chỉ vào đuôi chỗ Sữa đang trốn; nếu Sữa đã ở sau rèm hoặc đã biến mất thì vẽ đường vuốt ngang trên rèm.
 2. Sau khi lộ hộp pate: bàn tay hướng dẫn chỉ vào hộp; *8 giây:* hộp nảy nhẹ; *16 giây:* hộp lấp lánh; 💡 chỉ vào hộp.
 
-**Khoảnh khắc lộ diện:** sau tiếng "TÁCH!", toàn màn hình **khựng nửa giây** (mọi chuyển động dừng, một nhịp im lặng). Khung hình tiếp theo: **Sữa đã ngồi sẵn** trên thảm trước sofa, hộp mở bay dần xuống đáp cạnh Sữa (bên phải), mắt tròn xoe, nhìn chằm chằm vào pate. Không có cảnh chạy tới, không có bụi bay, như thể Sữa vẫn luôn ngồi đó. Sữa "meo" một tiếng thật dài (như trách "sao giờ mới mở") rồi cúi đầu ăn. Nhân vật trồi lên ngạc nhiên một giây.
+**Khoảnh khắc lộ diện (G1-30, chủ dự án đổi):** ngay khi nắp bật "TÁCH!", **một cái bóng mèo trắng vụt tới cực nhanh** (khoảng 0,3 giây) từ mép màn hình (phía chỗ Sữa vừa trốn) tới chỗ ngồi trên thảm trước sofa: thân kéo dài thành vệt, có vệt gió phía sau, tiếng "vút", tới nơi thì **phanh gấp** (vài vệt bụi nhỏ). Bóng đáp xuống là **Sữa đã ngồi ngay ngắn chờ sẵn**, rồi toàn màn hình **khựng nửa giây** (mọi chuyển động dừng, một nhịp im lặng). Hộp mở bay dần xuống đáp cạnh Sữa (bên phải), mắt tròn xoe, nhìn chằm chằm vào pate, như thể Sữa đã ngồi đó từ lâu. Chỗ buồn cười: gọi mãi không ra, nhưng nghe tiếng mở pate thì nhanh hơn chớp. Sữa "meo" một tiếng thật dài (như trách "sao giờ mới mở") rồi cúi đầu ăn. Nhân vật trồi lên ngạc nhiên một giây.
 
 **Chạm Sữa → cảnh bế chung.** Bàn tay hướng dẫn chỉ vào Sữa (lần duy nhất trong game có hướng dẫn cho cảnh kết).
 
@@ -169,13 +169,14 @@ Trước khi lộ hộp pate **không có gợi ý tự động** (G10).
 
 | Số | Đồ vật | Vị trí | Loại | Thao tác | Phản hồi | Âm thanh |
 |---|---|---|---|---|---|---|
-| 1 | Rèm cửa sổ | Trên trái | ✨ | Vuốt | Rèm kéo ra, nắng chiếu đúng vào giỏ tất (gợi ý ngầm) | Sột soạt |
+| 1 | Rèm cửa sổ | Trên trái | ✨ | Vuốt | Rèm kéo ra, nắng chiếu đúng vào giỏ tất (gợi ý ngầm). **Lần đầu mở (G2-30):** cửa sổ hé, gió lùa vào, lộ **bình bông lau trắng (1b)** trên bậu cửa sổ: bông lau cong vút **quất một cái như đuôi mèo** đúng lúc lộ ra (người chơi tưởng mèo), rồi đung đưa chậm | Sột soạt + gió vù nhẹ |
+| 1b | **Bình bông lau trắng** trên bậu cửa sổ, sau rèm (G2-30): một chùm bông lau (cỏ lau, pampas) trắng kem, bông to, cong, xù như **đuôi mèo trắng dựng lên** | Bậu cửa sổ | 🎭 | Chạm (khi rèm mở) | Bông lau **quất qua quất lại 2 nhịp như đuôi mèo ve vẩy**, vài sợi bông bay lơ lửng; nhân vật **hắt xì** một cái. Rèm đóng thì bình bị che, không nhận chạm | Sột soạt + "hắt xì" |
 | 1a | Dây buộc rèm bông trắng thò xuống **như đuôi mèo** (G2-7) | Mép rèm | 🎭 | Chạm | Dây đung đưa, rèm khẽ lay | Sột soạt |
 | 2 | Mèo nhồi bông **trắng** trên kệ | Giữa trái | 🎭 | Chạm | Rơi xuống, kêu "chít", nằm ngửa, hai mắt cúc áo nhìn bạn | "Chít" |
 | 3 | Tủ quần áo | Phải | ✨ | Chạm | Cánh tủ mở: chỉ thấy **quần áo gấp ngăn nắp** từng ngăn; chạm lần nữa đóng lại | Bản lề "kẹt" |
 | 3a | Hộp giày trên nóc tủ: nắp hé, **hai tai mèo** thò lên (G2-7) | Trên phải | 🎭 | Chạm | Hộp bật nắp: hoá ra **mũ len tai mèo màu hồng nhạt**, mũ nảy lên rồi rơi lại vào hộp | "Cộc" |
 | 4 | Chăn trên giường (có một cục phồng rõ) | Dưới trái | 🎭 | Vuốt | Chăn lật ra: **không có gì** (chỉ gối trắng, nệm trống), nhân vật nhún vai | Sột soạt |
-| 5 | Gầm giường: thò ra một **túm lông trắng dài, cong như đuôi mèo**, thỉnh thoảng ve vẩy nhẹ (G2-9) | Đáy trái | 🎭 | Chạm | Kéo ra hoá ra là **cây chổi lông quét bụi** (cán gỗ, lông trắng bông), nằm trên sàn cạnh giường; nhân vật gãi đầu | "Xẹt" |
+| 5 | Gầm giường: thò ra một **túm lông trắng cong như đuôi mèo**, thỉnh thoảng ve vẩy nhẹ (G2-9). Phần thò ra **ngắn hơn bản cũ khoảng 1/3** (G2-30): chỉ cỡ một cái đuôi mèo thật, không dài quá | Đáy trái | 🎭 | Chạm | Kéo ra hoá ra là **cây chổi lông quét bụi** (cán gỗ, lông trắng bông), nằm trên sàn cạnh giường; nhân vật gãi đầu | "Xẹt" |
 | 6 | Chao đèn trần | Trên giữa | ✨ | Chạm | Đèn đung đưa, bóng đổ lắc lư | "Kẽo kẹt" |
 | 7 | Giỏ tất | Dưới phải | 🔑 | Chạm ×3 | Mỗi lần một chiếc tất bay ra (xem luồng giải) | "Vèo" mỗi lần |
 | 8 | Mũ len trắng có hai quả bông (như hai tai mèo) trên móc | Trên trái | 🎭 | Chạm | Mũ rơi xuống, nhân vật đội thử lên đầu, hai quả bông ve vẩy như tai mèo | "Bụp" |
@@ -210,7 +211,7 @@ Trước khi lộ hộp pate **không có gợi ý tự động** (G10).
 
 **Ghi chú vẽ, hoạt hình, âm thanh:**
 - **Quan trọng nhất:** trước khi lộ ra, Sữa phải vẽ **cùng màu, cùng nét, cùng bóng đổ** với đống tất trắng. Người tinh mắt nhìn kỹ có thể thấy một hình tròn hơi khác, nhưng người lướt qua thì không.
-- **Đồ ngụy trang (2, 4, 8, 9, 10, 11)** và **chỗ thò tai/chân/đuôi giả (1a, 3a, 5; G2-7)** vẽ cùng tông trắng, cùng độ tròn, cùng kích cỡ với Sữa khi cuộn tròn, để mắt người chơi không phân biệt được ngay. Giỏ tất và mọi đồ ngụy trang đều đứng yên (G2-8 bỏ nhịp thở); manh mối công bằng là tiếng ngáy to dần và việc chạm giỏ lần nào cũng có tất bay ra.
+- **Đồ ngụy trang (2, 4, 8, 9, 10, 11)** và **chỗ thò tai/chân/đuôi giả (1a, 1b, 3a, 5; G2-7, G2-30)** vẽ cùng tông trắng, cùng độ tròn, cùng kích cỡ với Sữa khi cuộn tròn, để mắt người chơi không phân biệt được ngay. Giỏ tất và mọi đồ ngụy trang đều đứng yên (G2-8 bỏ nhịp thở); manh mối công bằng là tiếng ngáy to dần và việc chạm giỏ lần nào cũng có tất bay ra.
 - Đồ ngụy trang đã chạm thì giữ trạng thái sau khi chạm (mũ rơi, áo bung…), để người chơi biết mình đã thử chỗ nào.
 - 6 chiếc tất bay ra (G2-8, O2-19: nhỏ cỡ thật, bay theo đường cong rồi rơi đáp, nảy nhẹ) nằm ở 6 chỗ đỡ được (mặt giường, sàn cạnh chân giường, thảm cạnh dép, kệ trái, mặt ghế, kệ cạnh chậu cây; không treo lên cánh tủ, chao đèn, lưng ghế) và **ở nguyên đó** cho tới hết màn (căn phòng lộn xộn dần, vui mắt).
 - Âm nền: tiếng ngáy rất nhỏ, dễ thương của Sữa (`sua_sfx_snore`, lặp), to dần theo 6 nấc, mỗi chiếc tất bay ra một nấc.
@@ -321,9 +322,15 @@ Trước khi lộ hộp pate **không có gợi ý tự động** (G10).
 **Khoảnh khắc lộ diện:**
 1. Cột cào vừa dựng xong, quả bông đung đưa. Sữa ló đầu khỏi rèm, mắt sáng lên, chạy tới, **vồ quả bông** hai ba cái, cào thử thân cột cào một nhát.
 2. Rồi Sữa **mất hứng**, chạy vòng ra sau cột cào… và không thấy đâu nữa. Quả bông vẫn đung đưa. Bong bóng nhiệm vụ (đầu mèo tối) bật ra giữa màn hình nhắc tìm mèo, rồi thu về góc.
-3. Người chơi chạm vào hộp úp: hộp **lật ngửa lên** "bộp". Sữa **nằm gọn trong hộp**, chỉ thò đầu và hai tai, đuôi vắt qua mép hộp ve vẩy, nhìn lên bạn như thể nó vẫn luôn ở đó. Nhân vật đứng cạnh cột cào xịn, mặt buồn hiu.
+3. Người chơi chạm vào hộp úp: hộp **lật ngửa lên** "bộp". Sữa **nằm gọn trong hộp**, chỉ thò đầu và hai tai, đuôi vắt qua mép hộp ve vẩy, nhìn lên bạn như thể nó vẫn luôn ở đó.
+4. **Nhân vật ngốc nghếch cố giành lại sự chú ý (G3-30, chủ dự án đổi, thay cho mặt buồn hiu, không dùng bong bóng biểu cảm):**
+   - Nhân vật chạy tới cột cào, **cầm quả bông đỏ lắc lắc** ngay trước mặt Sữa, mắt sáng rỡ, nhún nhảy mời mọc.
+   - Sữa liếc quả bông đúng một cái… rồi **ngáp**, **rụt sâu vào hộp**, chỉ còn hai cái tai thò lên.
+   - Nhân vật nhìn quả bông, nhìn cái hộp, ngẫm một giây… rồi **tự leo lên tầng trên cùng của cột cào, cuộn tròn nằm như mèo**: người to quá, chân tay thò ra ngoài, cột cào lắc lư cót két. Nhân vật **cười ngốc**, tự vờn quả bông bằng tay như mèo.
+   - Sữa ló mắt khỏi hộp nhìn nhân vật một cái (vẻ "đồ ngốc"), rồi rúc vào lại.
+   - Thông điệp đọc được không cần chữ: **đồ chơi xịn cho người, cái hộp cho mèo**.
 
-**Chạm Sữa → cảnh bế chung.** Cái hộp ở lại cảnh nền, cạnh cột cào.
+**Chạm Sữa → cảnh bế chung.** Cái hộp ở lại cảnh nền, cạnh cột cào. Sữa nhận chạm ngay khi hộp lật ngửa (không phải chờ hết đoạn nhân vật diễn); chạm sớm thì cắt sang cảnh bế. Thời lượng đoạn 4 khoảng 4–5 giây.
 
 **Ghi chú vẽ, hoạt hình, âm thanh:**
 - **Túi đồ** xuất hiện lần đầu với hiệu ứng trượt lên từ đáy, kèm âm thanh "tưng".
@@ -419,7 +426,7 @@ PHÒNG NGỦ                     PHÒNG KHÁCH (bắt đầu)          PHÒNG L�
 
 | Giây | Người chơi làm | Game phản hồi |
 |---|---|---|
-| 0–6 | (xem) | Phòng khách. Sữa **đã treo sẵn** trên đỉnh rèm kiểu quả chuối, rèm đung đưa, "meo" thảm thiết. **Nhân vật bước vào đứng giữa phòng gọi** (mở màn chung như level 1–3, G4-25), bong bóng nhiệm vụ hiện cạnh nhân vật rồi thu về góc, nhân vật lui xuống mép dưới |
+| 0–6 | (xem) | Phòng khách. Sữa **đã treo sẵn** trên đỉnh rèm kiểu quả chuối, rèm đung đưa, "meo" thảm thiết. **Nhân vật đã đứng sẵn trên ghế sofa (13)** cạnh rèm (không che chỗ xếp tháp 12) (G4-40, chủ dự án đổi, thay cho mở màn bước vào gọi): kiễng chân, hai tay vươn hết cỡ lên phía Sữa, nhảy lên một hai cái vẫn **hụt một khúc**, chới với. Bong bóng nhiệm vụ hiện cạnh nhân vật rồi thu về góc. Nhân vật **ở lại trên sofa suốt màn** (thỉnh thoảng lại kiễng chân với hụt một cái), cho tới khi tháp xếp xong |
 | 7–16 | Chạm **mũi tên ◄** | Mũi tên nhấp nháy (lần đầu chuyển phòng; **không có bàn tay hướng dẫn** từ level 4). Sang phòng ngủ |
 | 17–26 | Chạm **đệm (2)**, chạm **đệm (2')**, chạm **gối (3)** | Đệm đổ, tất dính lên đèn; đệm và gối vào túi |
 | 27–36 | Về phòng khách (Sữa đổi tư thế), sang **phòng làm việc ►** | Sữa trượt xuống một chân bám |
@@ -443,7 +450,7 @@ PHÒNG NGỦ                     PHÒNG KHÁCH (bắt đầu)          PHÒNG L�
 3. *💡:* bàn chân mèo chỉ món đúng, hoặc làm mẫu kéo món kế tiếp từ túi lên tháp.
 
 **Khoảnh khắc lộ diện:**
-1. Tháp xếp xong lóe sáng. **Nhân vật hiện ra luôn ở đỉnh tháp**, đứng trên gối, kiễng chân, hai tay vươn lên với lấy Sữa.
+1. Tháp xếp xong lóe sáng. **Nhân vật nhảy từ sofa sang đỉnh tháp**, đứng trên gối, kiễng chân, hai tay vươn lên với lấy Sữa (lần này với tới).
 2. Tay vừa chạm tới, Sữa **giật mình**, nhả rèm "pực", **bật lên lộn vài vòng** trên không (vệt xoáy, quay nhanh), rồi **tiếp đất bằng bốn chân** "tạch" ngay cạnh tháp, nhẹ như không.
 3. Sữa ngồi xuống, **liếm chân** thản nhiên như chưa có chuyện gì.
 4. Nhân vật vẫn đứng trên đỉnh tháp, hai tay còn giơ trống không, quay xuống nhìn Sữa và **cười ngốc nghếch**, gãi đầu.
