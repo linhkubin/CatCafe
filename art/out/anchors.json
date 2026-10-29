@@ -2294,6 +2294,18 @@
   "sheet": "ui_icons_sheet",
   "w": 226
  },
+ "ui_home_button": {
+  "ax": 143,
+  "ay": 140,
+  "file": "common/ui_home_button.png",
+  "group": "ui_home_button",
+  "h": 279,
+  "ox": 0.5,
+  "oy": 0.5018,
+  "res": 1.5,
+  "sheet": "ui_home_sheet",
+  "w": 286
+ },
  "ui_map_alley": {
   "ax": 56,
   "ay": 39,

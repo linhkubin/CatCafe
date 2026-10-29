@@ -209,6 +209,15 @@ Bố cục: nút tạm dừng nhỏ bên trái (đường kính ~220px trong t�
 - `ui_play_button`: giữa là **tam giác ▶** mập, bo tròn góc, hơi lệch phải cho cân.
 - `ui_restart_button`: giữa là **mũi tên vòng ↻** mập (vòng tròn hở ~300°, đầu mũi tên tròn trịa ở đầu vòng).
 
+**Nút về menu** (GD yêu cầu 2026-10-30; dùng ở màn kết thúc cạnh `ui_play_button` và trong lớp tạm dừng). Vẽ thêm sau tờ `ui_pause_sheet` nên có tờ riêng, nhưng phải **giống hệt bộ nút đó**: vẽ lại đúng nền nút của `ui_play_button` / `ui_restart_button` (vòng gỗ caramel nhạt có vân chì, viền nâu mảnh ngoài cùng và một viền nâu mảnh giữa vòng gỗ và mặt kem, mặt trong kem giấy, vài nét chì đổ bóng), cùng tỉ lệ vòng gỗ / mặt kem, cùng độ dày viền, nhìn thẳng. Ba nút đặt cạnh nhau phải như cùng một bộ.
+
+| Tờ | Ô | Key | Thư mục | Nhóm | Neo | Hiển thị | Nét |
+|---|---|---|---|---|---|---|---|
+| ui_home_sheet | 0,0,1024,1024 | ui_home_button | common |  | tâm | rộng 180 | 7 |
+
+Bố cục (tờ 1024x1024): một nút duy nhất ở giữa tờ, **đường kính ~420px** (bằng cỡ nút play/restart trong tờ `ui_pause_sheet`, để nét cùng độ dày), xung quanh trong suốt.
+- `ui_home_button`: giữa là **ngôi nhà** mập màu nâu ấm đặc (#6B4A3A, cùng màu và cùng chất vân chì như tam giác ▶): mái tam giác bo tròn ba góc, nhô ra hai bên thân một chút; thân vuông bo góc; **cửa vòm** khoét ở giữa đáy thân (lộ mặt kem). Không ống khói, không cửa sổ. Chiếm ~45% đường kính, căn giữa mặt kem, dáng tròn trịa mềm như mũi tên ↻.
+
 ### Icon phòng cho bản đồ mini (mọi màn nhiều phòng, GD yêu cầu 2026-10-30)
 
 Bản đồ mini ở góc trên phải: mỗi ô (~64x36 px, ngang) là icon một phòng. Ô đang đứng có khung vàng, các ô khác mờ (code vẽ khung, icon chỉ là hình). Code co icon vừa ô nên **mọi icon có tỉ lệ khung gần 16:9 (ngang)**.
