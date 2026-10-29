@@ -4,10 +4,9 @@
 import { KEYS } from './assets.js';
 import { BANNER, SWIPE, CREAM, BROWN } from './base.js';
 import { playSfx } from './sfx.js';
-import { Progress } from './progress.js';
+import { Progress, LEVELS } from './progress.js';
 
-// Màn có trong game, theo thứ tự. Thêm màn mới: thêm số vào đây và scene vào main.js.
-export const LEVELS = [1, 2, 3, 4, 5];
+export { LEVELS }; // danh sách màn ở progress.js
 
 const COLS = 3, CARD_W = 280, CARD_H = 430, GAP_X = 310, GAP_Y = 470, TOP = 300;
 const THUMB_W = 256, THUMB_H = 336;

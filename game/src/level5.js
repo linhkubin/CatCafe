@@ -5,7 +5,7 @@
 // Vòng 2 (G5-5, G5-6): nối tia nắng. Hẻm tối tới khi kéo bạt (dây kéo, chấm nắng li ti); 3 đồ sáng (gương, nắp thiếc, đĩa CD)
 // thả lần lượt vào đốm sáng ở A → B → C, mỗi lần tia phản chiếu bật sang điểm kế, gần Mun hơn; tới trước gầm thì Mun phóng ra.
 // ?level=5&debug=1: đánh dấu 3 điểm A, B, C và điểm trước gầm xe.
-import { D } from './base.js';
+import { D, BUBBLE_CORNER } from './base.js';
 import { RoomsLevel, ROOM_W } from './rooms.js';
 
 const YARD = 0, ALLEY = 1;
@@ -481,7 +481,7 @@ export class Level5 extends RoomsLevel {
   bubbleBump() {
     const B = this.bubble;
     if (B.home !== 'corner') return;
-    this.tweens.chain({ targets: B.ct, tweens: [{ scale: 0.55, duration: 160, ease: 'Quad.out' }, { scale: 0.35, duration: 220, ease: 'Back.out' }] });
+    this.tweens.chain({ targets: B.ct, tweens: [{ scale: BUBBLE_CORNER * 1.6, duration: 160, ease: 'Quad.out' }, { scale: BUBBLE_CORNER, duration: 220, ease: 'Back.out' }] });
     this.hop(B.q, 16, 300);
     this.sfx('sfx_meow_question', 0.8);
   }

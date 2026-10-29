@@ -31,7 +31,7 @@ export const KEYS = {
     ['ui_speech_bubble', 'common'], ['ui_cat_head_dark', 'common'], ['ui_question_mark', 'common'], ['ui_question_mark_white', 'common'],
     ['ui_heart', 'common'], ['ui_hand_pointer', 'common'], ['ui_hint_paw', 'common'], ['ui_sparkle', 'common'],
     ['ui_bulb_button', 'common'], ['ui_dried_fish', 'common'], ['fx_pop', 'common'],
-    ['ui_pause_button', 'common'], ['ui_play_button', 'common'], ['ui_restart_button', 'common'],
+    ['ui_pause_button', 'common'], ['ui_play_button', 'common'], ['ui_restart_button', 'common'], ['ui_home_button', 'common'],
   ],
   1: [
     ['l1_bg_living_room', 'level1'],

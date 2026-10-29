@@ -1,5 +1,8 @@
 // Tiến độ chọn màn, lưu cục bộ (localStorage). Màn 1 luôn mở; qua màn N thì mở màn N + 1.
 // Trình duyệt chặn localStorage (chế độ riêng tư…): vẫn chơi được, tiến độ chỉ giữ trong phiên.
+// Các màn có trong game, theo thứ tự. Thêm màn mới: thêm số vào đây, scene vào main.js, mèo vào cats.js.
+export const LEVELS = [1, 2, 3, 4, 5];
+
 const STORE = 'meo_progress_v1';
 let mem = null;
 

@@ -1,7 +1,7 @@
 // Level 3 – Quà xịn, hộp còn xịn hơn. Luồng theo levels/levels-01-10.md, levels/states-01-10.md (Level 3) và các quyết định
 // G3-x, D3-x trong art/review/level3-thread.md. Lần đầu có túi đồ: nhặt kéo, cắt băng dính, ghép cột cào, đặt lên thảm, lật hộp úp.
 // Vị trí và bề rộng theo bảng D3-22 (design-art-level3.md mục 6, đo trên tranh demo đã duyệt). Phần chung ở base.js.
-import { D, SUN, BROWN } from './base.js';
+import { D, SUN, BROWN, BUBBLE_CORNER } from './base.js';
 import { ObjectLevel } from './objects.js';
 
 // Vị trí và bề rộng dự phòng (= bảng vị trí design-art-level3.md mục 6, bản D3-29) khi không đọc được design-art.
@@ -321,7 +321,7 @@ export class Level3 extends ObjectLevel {
   bubbleIntro() {
     const B = this.bubble;
     B.home = 'corner';
-    B.ct.setVisible(true).setPosition(455, 62).setScale(0.35).setAlpha(0);
+    B.ct.setVisible(true).setPosition(455, 62).setScale(BUBBLE_CORNER).setAlpha(0);
     this.tweens.add({ targets: B.ct, alpha: 1, delay: 1600, duration: 300 });
     this.time.delayedCall(1600, () => this.bubbleToCorner());
   }

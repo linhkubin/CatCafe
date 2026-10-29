@@ -10,7 +10,7 @@
 // Toạ độ "thế giới" là khung 1024x1536; máy dài hơn 2:3 thì camera lùi lên (Y0) và nền được kéo dài.
 import { playSfx } from './sfx.js';
 import { KEYS, phUrl } from './assets.js';
-import { Progress } from './progress.js';
+import { Progress, LEVELS } from './progress.js';
 import { catOf } from './cats.js';
 
 export const D = {
@@ -24,6 +24,7 @@ export const SWIPE = 40;               // px: dài hơn là vuốt
 // tâm 4 ô x 205/348/492/635, ô rộng 136. Không đọc từ bảng vị trí từng level.
 export const BAG = { barX: 409, barW: 688, slotX: [205, 348, 492, 635], slotW: 136 };
 export const CREAM = 0xfffcf4, BROWN = 0x6b4a3a, SUN = 0xfce39a;
+export const BUBBLE_CORNER = 0.27;     // cỡ bong bóng mèo "?" khi nằm ở góc trên (so với cỡ giữa màn hình)
 
 // Ảnh thật chưa có điểm neo trong anchors.json: suy neo từ cột Neo, tỉ lệ từ cột Hiển thị của design-art.
 export function finalizeEntries(scene, keys) {
@@ -76,7 +77,7 @@ export class BaseLevel extends Phaser.Scene {
 
   // Ảnh tạm vẽ bằng code cho key chưa có ảnh thật: this.fallbacks[key] = [rộng, cao, neo, draw(g, w, h)].
   // neo: 'bg' (góc trên trái), 'đỉnh', 'tâm', [x, y] hoặc bỏ trống (giữa đáy). fallbackCanvas = true: draw nhận
-  // context canvas 2D thay vì Phaser Graphics (level 5 vẽ chữ nhãn lên khối).
+  // context canvas 2D thay vì Phaser Graphics (level 5).
   makeFallback(key) {
     const spec = this.fallbacks && this.fallbacks[key];
     if (!spec || this.textures.exists(key)) return;
@@ -99,10 +100,13 @@ export class BaseLevel extends Phaser.Scene {
     this.A.entries[key] = { url: null, real: false, ax, ay, res: 1 };
   }
 
-  // Thắng màn: lưu tiến độ (mở màn kế) rồi về menu chọn level.
+  // Màn kế tiếp trong LEVELS (null nếu là màn cuối hiện có).
+  get nextLevelNo() { const i = LEVELS.indexOf(this.levelNo); return i >= 0 && i < LEVELS.length - 1 ? LEVELS[i + 1] : null; }
+
+  // Màn kết: nút ▶ sang màn kế, nút nhà về menu (tiến độ đã lưu lúc vào màn thưởng).
   goNext() {
-    Progress.markDone(this.levelNo);
-    this.scene.start('Menu');
+    const n = this.nextLevelNo;
+    this.scene.start(n ? 'Level' + n : 'Menu');
   }
 
   endingHide() { if (this.sua) this.sua.setVisible(false); }
@@ -330,7 +334,7 @@ export class BaseLevel extends Phaser.Scene {
     this.busy = {};
     // scene.restart() dùng lại cùng đối tượng Scene: xoá trạng thái của lượt trước.
     Object.assign(this, { qHopLoop: null, glow: null, glowTw: null, endCt: null,
-      handMode: null, press: null, handTimer: null, pawTimer: null, sua: null, dim: null, rewardReadyAt: 0, bag: null, drag: null,
+      handMode: null, press: null, handTimer: null, pawTimer: null, sua: null, dim: null, endButtons: null, bag: null, drag: null,
       pausedState: null, pauseUI: null, reactMask: null });
     this.resetLevel();
 
@@ -378,12 +382,11 @@ export class BaseLevel extends Phaser.Scene {
     this.heartIcon = this.img('ui_heart', 72, 60, D.ui, true);
     this.fitWidth(this.heartIcon, 56);
     this.slots = this.add.graphics().setScrollFactor(0).setDepth(D.ui);
-    this.slots.lineStyle(4, BROWN, 1).fillStyle(CREAM, 1);
-    for (let i = 0; i < HB.n; i++) { this.slots.fillCircle(HB.x0 + i * HB.step, 60, HB.r); this.slots.strokeCircle(HB.x0 + i * HB.step, 60, HB.r); }
+    this.drawSlots(HB.idx);
     this.heartFills = [];
     for (let i = 0; i < Math.max(0, HB.idx); i++) {
       const h = this.img('ui_heart', HB.x0 + i * HB.step, 60, D.ui + 1, true).setOrigin(0.5, 0.5);
-      this.heartFills.push(this.fitWidth(h, HB.r * 1.8));
+      this.heartFills.push(this.fitWidth(h, HB.heart));
     }
     this.heartBadge = null; // icon nhỏ dưới tim (Mun)
     if (this.catInfo.badge) this.heartBadge = this.fitWidth(this.img(this.catInfo.badge, 72, 108, D.ui, true).setOrigin(0.5, 0.5), 46);
@@ -420,6 +423,13 @@ export class BaseLevel extends Phaser.Scene {
     if (!this.A.entries.ui_hint_paw || this.A.entries.ui_hint_paw.real) this.paw.setOrigin(0.5, 0.1);
   }
 
+  // Vòng tròn rỗng cho các ô chưa có tim (ô 0 … filled − 1 đã có tim: không vẽ vòng).
+  drawSlots(filled) {
+    const HB = this.heartBar, g = this.slots.clear();
+    g.lineStyle(4, BROWN, 1).fillStyle(CREAM, 1);
+    for (let i = Math.max(0, filled); i < HB.n; i++) { g.fillCircle(HB.x0 + i * HB.step, 60, HB.r); g.strokeCircle(HB.x0 + i * HB.step, 60, HB.r); }
+  }
+
   layout() {
     const H = this.scale.height;
     this.Y0 = (H - 1536) / 2;
@@ -452,7 +462,7 @@ export class BaseLevel extends Phaser.Scene {
     });
     this.input.on('pointerdown', (p, over) => {
       if (this.phase === 'ending') { this.skipEnding(); return; }
-      if (this.phase === 'reward') { if (this.time.now > this.rewardReadyAt) this.goNext(); return; }
+      if (this.phase === 'reward') return; // màn thưởng: chỉ hai nút nhà / ▶ điều hướng
       if (!over.length && !this.locked) this.tapRing(p.worldX, p.worldY);
     });
     this.input.on('pointermove', (p) => this.bagMove(p));
@@ -625,7 +635,7 @@ export class BaseLevel extends Phaser.Scene {
     const B = this.bubble;
     if (B.home === 'gone') return;
     B.home = 'corner';
-    this.tweens.add({ targets: B.ct, x: 455, y: 62, scale: 0.35, duration: 400, ease: 'Quad.inOut' });
+    this.tweens.add({ targets: B.ct, x: 455, y: 62, scale: BUBBLE_CORNER, duration: 400, ease: 'Quad.inOut' });
     this.zones.bubble.setInteractive();
     if (!this.qHopLoop) this.qHopLoop = this.time.addEvent({ delay: 4000, loop: true, callback: () => {
       if (this.bubble.home === 'corner' && !this.frozen) this.hop(this.bubble.q, 12, 300);
@@ -1063,7 +1073,7 @@ export class BaseLevel extends Phaser.Scene {
 
   reward() {
     this.phase = 'reward';
-    this.rewardReadyAt = this.time.now + 900;
+    Progress.markDone(this.levelNo); // mở màn kế ngay khi thắng
     const H = this.scale.height;
     if (this.endCt) this.tweens.killTweensOf([this.endCt.ct, this.endCt.held, this.endCt.hands]);
     this.tweens.add({ targets: this.dim, alpha: 0.55, duration: 300 });
@@ -1083,13 +1093,14 @@ export class BaseLevel extends Phaser.Scene {
     for (const h of this.heartFills) h.setDepth(D.end + 10);
     if (this.heartBadge) this.heartBadge.setDepth(D.end + 10);
     const slot = this.img('ui_heart', 512, H * 0.38, D.end + 12, true).setOrigin(0.5, 0.5);
-    this.fitWidth(slot, HB.r * 1.8);
+    this.fitWidth(slot, HB.heart);
     const sb = slot.base;
     slot.setScale(0);
     this.tweens.chain({ targets: slot, tweens: [
       { scale: sb * 2.6, duration: 250, delay: 450, ease: 'Back.out', onStart: () => this.sfx('sfx_heart') },
       { x: sx, y: 60, scale: sb, duration: 550, ease: 'Quad.in' },
-      { scale: sb * 1.35, duration: 120, ease: 'Quad.out', onStart: () => this.sfx('sfx_heart') },
+      // Tim đáp xuống: vòng tròn của ô đó tắt, chỉ còn trái tim.
+      { scale: sb * 1.35, duration: 120, ease: 'Quad.out', onStart: () => { this.sfx('sfx_heart'); this.drawSlots(HB.idx + 1); } },
       { scale: sb, duration: 180, ease: 'Back.out' },
     ] });
 
@@ -1103,11 +1114,24 @@ export class BaseLevel extends Phaser.Scene {
       this.tweens.add({ targets: f, alpha: 1, x: pile.x, y: pile.y, scale: f.base * 0.6, delay: 700 + i * 90, duration: 500, ease: 'Quad.in',
         onComplete: () => { f.destroy(); this.sfx('sfx_pickup'); this.tweens.add({ targets: pile, scale: pile.base * 1.15, duration: 60, yoyo: true }); } });
     }
-    // Chạm bất kỳ đâu để sang màn kế (G2-6).
+    // Sau 2 giây: nút nhà (về menu) và nút ▶ (màn kế), nảy nhẹ khi hiện. Màn cuối hiện có: chỉ nút nhà.
     this.time.delayedCall(2000, () => {
       if (this.phase !== 'reward') return;
-      this.hand.setDepth(D.end + 12).setScrollFactor(0);
-      this.handTap([512, H * 0.7], 'guide');
+      const y = H * 0.38 + 290, next = this.nextLevelNo;
+      const btn = (key, x, fn, i) => {
+        const b = this.img(key, x, y, D.end + 13, true).setOrigin(0.5, 0.5);
+        this.fitWidth(b, 180);
+        b.setInteractive().on('pointerup', () => { if (this.endButtons) { this.endButtons = null; this.sfx('sfx_tap'); fn(); } });
+        const k = b.base;
+        b.setScale(0);
+        this.tweens.chain({ targets: b, tweens: [
+          { scale: k * 1.12, duration: 240, delay: i * 120, ease: 'Back.out' }, { scale: k, duration: 140, ease: 'Quad.out' },
+        ] });
+        return b;
+      };
+      this.endButtons = next
+        ? [btn('ui_home_button', 362, () => this.goMenu(), 0), btn('ui_play_button', 662, () => this.goNext(), 1)]
+        : [btn('ui_home_button', 512, () => this.goMenu(), 0)];
     });
   }
 }
