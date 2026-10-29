@@ -307,6 +307,25 @@ Không vẽ thanh treo (trong nền). Vệt nắng chiếu vào giỏ do code v�
 
 ---
 
+### 5.9 Tờ `l2_pampas_sheet` — Bình bông lau trên bậu cửa sổ (1536x1024, G2-30, tham chiếu `sua_ref`)
+
+Đồ đánh lừa 🎭 mới: nằm trên **bậu cửa sổ** (nền `l2_bg_bedroom`, bậu ở y≈565, cửa sổ x≈65–455), sau rèm; chỉ thấy khi rèm mở. Cao cả bình + bông ≈ 2/3 chiều cao ô kính. Code xoay **chùm bông quanh gốc cuống** để quất như đuôi mèo, nên vẽ cả bình liền (để đặt tĩnh) và tách 2 phần.
+
+| Tờ | Ô | Key | Thư mục | Nhóm | Neo | Hiển thị | Nét |
+|---|---|---|---|---|---|---|---|
+| l2_pampas_sheet | 0,0,588,1024 | l2_pampas_vase | level2 | pampas | đáy | cao 230 | 12 |
+| l2_pampas_sheet | 588,0,532,1024 | l2_pampas_plume | level2 | pampas | đáy |  | 12 |
+| l2_pampas_sheet | 1120,500,416,524 | l2_pampas_vase_pot | level2 | pampas | đỉnh |  | 12 |
+
+Bố cục: cột trái là bình hoàn chỉnh (bình đứng ở đáy ô, bông vươn lên gần mép trên); cột giữa là **chỉ chùm bông** đúng y như trong bình hoàn chỉnh, cùng cỡ, cùng dáng, gốc cuống ở đáy ô; góc dưới phải là **chỉ cái bình**, cùng cỡ. Ba ô cùng tỉ lệ thật.
+- **Bình** (`l2_pampas_vase_pot`): bình gốm nhỏ dáng tròn mập, cổ hơi thắt, miệng là elip thấy rõ mặt trên (góc nhìn mục 2b); màu **hồng đào nhạt** hợp tường hồng phòng ngủ, một dải kem quanh bụng, vài nét chì đổ bóng bên phải. Không hoa văn. Trong ảnh bình riêng, miệng bình trống (thấy lòng bình tối nhẹ).
+- **Chùm bông lau** (`l2_pampas_plume`): 3 cuống mảnh màu caramel nhạt chụm ở gốc, mỗi cuống mang một bông lau **trắng kem ấm, to, xù, bông mềm**; bông giữa to nhất, **cong vút lên rồi móc nhẹ ở đầu như đuôi mèo trắng dựng lên**, hai bông bên nhỏ hơn ngả ra hai phía. **Cùng tông trắng kem, cùng độ xù, cùng nét lông đứt quãng như lông Sữa** (`sua_ref`) để liếc qua tưởng đuôi Sữa. Gốc cuống cắt gọn ở đáy (phần này nằm khuất trong bình).
+- **Bình hoàn chỉnh** (`l2_pampas_vase`): chùm bông cắm trong bình, đúng hai phần trên ghép lại; gốc cuống khuất sau miệng bình.
+
+| Tờ hoặc key | Demo gốc | Vị trí trong demo |
+|---|---|---|
+| l2_pampas_sheet | art/out/demo/l2_demo_start.png | Bậu cửa sổ trên trái, sau rèm vàng (demo vẽ rèm đóng nên chưa thấy bình; bình đứng trên bậu, cao ≈ 2/3 ô kính, màu hợp phòng như trong demo) |
+
 ## 6. Ghi chú cho lập trình
 
 - **Thứ tự vẽ:** nền (sửa từ `l2_demo_start`) → giỏ → tất → mèo bông/mũ → ghế/áo/dép → giường + thảm lông → tủ/đèn → hộp giày/mũ hồng/dây rèm → rèm → nhân vật đội mũ. 10 lượt Codex.

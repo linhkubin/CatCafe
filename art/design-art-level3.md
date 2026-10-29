@@ -253,6 +253,38 @@ Cùng tỉ lệ thật: 4 ô xếp vừa khít trên dải (code xếp ô lên d
 
 ---
 
+### 5.8 Tờ `l3_box_b_sheet` — Sữa rụt vào hộp, Sữa ló mắt (1536x1024, G3-30, tham chiếu `l3_sua_in_box`, `sua_ref`)
+
+Hai trạng thái thêm của **cùng hộp ngửa** trong `l3_sua_in_box` (tờ 5.1): thân hộp, 4 nắp bung, hình dán cột cào, màu, góc nhìn **giống hệt** ảnh `level3/l3_sua_in_box.png`, cùng cỡ, cùng đường đáy. Chỉ đổi Sữa. Code đổi ảnh `l3_sua_in_box` → `_ears` → `_peek` → `_ears` tại cùng điểm neo đáy.
+
+| Tờ | Ô | Key | Thư mục | Nhóm | Neo | Hiển thị | Nét |
+|---|---|---|---|---|---|---|---|
+| l3_box_b_sheet | 0,0,768,1024 | l3_sua_in_box_ears | level3 | box_b | đáy | rộng 376 | 5 |
+| l3_box_b_sheet | 768,0,768,1024 | l3_sua_in_box_peek | level3 | box_b | đáy |  | 5 |
+
+Bố cục: hai hộp đứng cạnh nhau, mỗi hộp ở nửa dưới ô, cùng cỡ, cùng đường đáy.
+- `l3_sua_in_box_ears`: Sữa đã **rụt sâu vào hộp**: chỉ còn **hai cái tai trắng** (trong tai hồng) thò lên khỏi mép trước của miệng hộp, đỉnh đầu bông trắng chỉ lấp ló ngay mép. Không thấy mắt, không thấy chân, **không còn đuôi vắt ra ngoài**.
+- `l3_sua_in_box_peek`: Sữa **ló nửa trên đầu** khỏi mép trước: hai tai và **đôi mắt xanh** vừa nhô qua mép hộp, **mí mắt nửa khép, lườm ngang** (vẻ lười nhác "đồ ngốc"), mũi và miệng khuất sau mép hộp. Hai bàn chân trước không thò ra, không đuôi.
+
+| Tờ hoặc key | Demo gốc | Vị trí trong demo |
+|---|---|---|
+| l3_box_b_sheet | art/out/demo/l3_demo_reveal.png | Hộp ngửa có Sữa ở giữa trái sàn (vẽ lại đúng hộp đó, chỉ đổi Sữa) |
+
+### 5.9 Tờ `player_l3b_sheet` — Nhân vật ngốc cuối màn (1536x1024, G3-30, thay `player_sad`; tham chiếu `player_ref`, `l3_cat_tree`, `l3_pompom`)
+
+| Tờ | Ô | Key | Thư mục | Nhóm | Neo | Hiển thị | Nét |
+|---|---|---|---|---|---|---|---|
+| player_l3b_sheet | 0,0,690,1024 | player_dangle_pompom | player | player_l3b | đáy | cao 580 | 4 |
+| player_l3b_sheet | 690,0,846,1024 | l3_cat_tree_player | level3 | tree_player | đáy | cao 567 | 4 |
+
+Bố cục: nhân vật đứng ở cột trái, chân chạm đáy ô; cột cào có nhân vật nằm trên ở cột phải, đế chạm đáy ô.
+- `player_dangle_pompom`: đúng `player_ref` (tóc xoăn bồng nâu caramel, áo len vàng bơ, quần xanh trời nhạt, dép bông), đứng nhìn chếch sang phải, **một tay giơ ra trước cầm sợi dây treo quả bông đỏ san hô** (đúng `l3_pompom`: quả bông xù tròn, vòng dây trên) lắc lắc trước mặt, tay kia nắm hờ; **mắt sáng rỡ, miệng cười toe**, đầu gối hơi khuỵu, kiễng một chân như đang **nhún nhảy mời mọc**. Cỡ người bằng `player_point_think`.
+- `l3_cat_tree_player`: **cột cào `l3_cat_tree` vẽ lại y hệt** (đế vuông lông bạc hà, trụ dây thừng mật ong, tầng giữa tròn hồng phấn, tầng trên cùng là ổ tròn kem lông xù; cùng dáng, cùng màu, cùng tỉ lệ), và **nhân vật cuộn tròn nằm như mèo trên ổ tầng trên cùng**: người **to hơn ổ nhiều**, lưng cong tròn, một chân và một tay **thò lủng lẳng ra ngoài mép ổ**, chân kia gác lên; đầu ngả trên mép ổ, **mắt híp cười ngốc**, má hồng, một tay giơ lên **vờn quả bông đỏ** (quả bông vẫn treo ở móc dưới tầng trên như `l3_pompom`). Nhân vật cùng cỡ người như `player_dangle_pompom` (đầu cùng cỡ). Cột cào hơi nghiêng 3° như đang chịu sức nặng.
+
+| Tờ hoặc key | Demo gốc | Vị trí trong demo |
+|---|---|---|
+| player_l3b_sheet | art/out/demo/l3_demo_reveal.png | Cột cào trên thảm bên phải, nhân vật đứng cạnh (vẽ lại đúng cột cào và nhân vật, đổi tư thế) |
+
 ## 6. Ghi chú cho lập trình (không cần đưa Codex)
 
 - **Lớp hiển thị** (D3-18, thay D3-2): nền → lọ hoa, gối → rèm (`sua_peek_tongue` nằm dưới rèm) → bóng Sữa (trên rèm, alpha 0,35) → kéo trên bàn → **đồ trên sàn xếp theo đường đáy** (`player_sad` 1212 → hộp 1225 ↔ Sữa chạy/vồ/cào 1225 → cột cào + quả bông 1230 → `player_point_think` 1232) → hiệu ứng → túi đồ + món đang kéo → giao diện.

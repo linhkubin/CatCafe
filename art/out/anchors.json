@@ -419,6 +419,42 @@
   "sheet": "l2_wardrobe_sheet",
   "w": 110
  },
+ "l2_pampas_plume": {
+  "ax": 119,
+  "ay": 353,
+  "file": "level2/l2_pampas_plume.png",
+  "group": "pampas",
+  "h": 492,
+  "ox": 0.5174,
+  "oy": 0.7175,
+  "res": 1.5,
+  "sheet": "l2_pampas_sheet",
+  "w": 230
+ },
+ "l2_pampas_vase": {
+  "ax": 119,
+  "ay": 353,
+  "file": "level2/l2_pampas_vase.png",
+  "group": "pampas",
+  "h": 492,
+  "ox": 0.5174,
+  "oy": 0.7175,
+  "res": 1.5,
+  "sheet": "l2_pampas_sheet",
+  "w": 230
+ },
+ "l2_pampas_vase_pot": {
+  "ax": 119,
+  "ay": 353,
+  "file": "level2/l2_pampas_vase_pot.png",
+  "group": "pampas",
+  "h": 492,
+  "ox": 0.5174,
+  "oy": 0.7175,
+  "res": 1.5,
+  "sheet": "l2_pampas_sheet",
+  "w": 230
+ },
  "l2_plush_cat": {
   "ax": 126,
   "ay": 264,
@@ -731,6 +767,18 @@
   "sheet": "l3_tree_v3_sheet",
   "w": 512
  },
+ "l3_cat_tree_player": {
+  "ax": 357,
+  "ay": 859,
+  "file": "level3/l3_cat_tree_player.png",
+  "group": "tree_player",
+  "h": 866,
+  "ox": 0.5035,
+  "oy": 0.9919,
+  "res": 1.5,
+  "sheet": "player_l3b_sheet",
+  "w": 709
+ },
  "l3_curtain_closed": {
   "ax": 346,
   "ay": 8,
@@ -838,6 +886,30 @@
   "res": 1.5,
   "sheet": "l3_box_sheet",
   "w": 620
+ },
+ "l3_sua_in_box_ears": {
+  "ax": 289,
+  "ay": 413,
+  "file": "level3/l3_sua_in_box_ears.png",
+  "group": "box_b",
+  "h": 420,
+  "ox": 0.4983,
+  "oy": 0.9833,
+  "res": 1.5,
+  "sheet": "l3_box_b_sheet",
+  "w": 580
+ },
+ "l3_sua_in_box_peek": {
+  "ax": 289,
+  "ay": 413,
+  "file": "level3/l3_sua_in_box_peek.png",
+  "group": "box_b",
+  "h": 420,
+  "ox": 0.4983,
+  "oy": 0.9833,
+  "res": 1.5,
+  "sheet": "l3_box_b_sheet",
+  "w": 580
  },
  "l3_tree_base": {
   "ax": 270,
@@ -1837,6 +1909,18 @@
   "res": 1.5,
   "sheet": "l5src_player_cover_nose",
   "w": 364
+ },
+ "player_dangle_pompom": {
+  "ax": 319,
+  "ay": 878,
+  "file": "player/player_dangle_pompom.png",
+  "group": "player_l3b",
+  "h": 886,
+  "ox": 0.5088,
+  "oy": 0.991,
+  "res": 1.5,
+  "sheet": "player_l3b_sheet",
+  "w": 627
  },
  "player_hands_lift": {
   "ax": 544,
