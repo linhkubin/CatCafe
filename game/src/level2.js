@@ -1,7 +1,8 @@
 // Level 2 – Giỏ tất. Luồng theo levels/levels-01-10.md và levels/states-01-10.md (Level 2), chốt G2-1…G2-6
 // (art/review/level2-thread.md). Phần chung ở base.js. Không có chữ trên màn hình.
 // Chưa có ảnh thật thì dùng ảnh tạm vẽ bằng hình khối (makeFallback); có ảnh trong art/out/ thì tự dùng ảnh thật.
-import { BaseLevel, D, MIN_HIT, SWIPE, SUN, BROWN } from './base.js';
+import { D, SUN, BROWN } from './base.js';
+import { ObjectLevel } from './objects.js';
 
 // Vị trí dự phòng (điểm neo, khung 1024x1536) theo phác thảo bố cục Level 2; bảng vị trí trong design-art-level2.md ghi đè.
 const DEF = {
@@ -242,30 +243,19 @@ function curledCat(g, w, h, mode, ox = 0, oy = 0) {
 const WARDROBE_D = D.pillow + 2.5, CHAIR_D = WARDROBE_D + 1;
 const SOCK_DEPTH = [D.cushion + 1, D.cushion + 2, D.pillow, D.curtain + 2, CHAIR_D + 2, D.curtain + 2];
 
-export class Level2 extends BaseLevel {
+export class Level2 extends ObjectLevel {
   constructor() { super('Level2'); }
 
   get levelNo() { return 2; }
   get rewardFish() { return 15; }
   get defaultPos() { return DEF; }
+  get fallbacks() { return FB; }
 
   resetLevel() {
     Object.assign(this, { shoeOpened: false, snore: null, kids: [], socks: 0, lastBasket: 0, basketBreath: null, zzz: null, glowFx: null, shoeMoved: false, underTaps: 0, sockTargets: [] });
   }
 
   // Ảnh tạm vẽ bằng hình khối cho key chưa có ảnh thật.
-  makeFallback(key) {
-    const spec = FB[key];
-    if (!spec) return;
-    const [w, h, neo, draw] = spec;
-    const g = this.make.graphics({ x: 0, y: 0 }, false);
-    draw(g, w, h);
-    g.generateTexture(key, w, h);
-    g.destroy();
-    const ax = neo === 'bg' ? 0 : w / 2, ay = neo === 'bg' ? 0 : neo === 'đỉnh' ? 0 : neo === 'tâm' ? h / 2 : h;
-    this.A.entries[key] = { url: null, real: false, ax, ay, res: 1 };
-  }
-
   // ---------- dựng phòng ----------
   buildRoom() {
     this.buildBg('l2_bg_bedroom');
@@ -273,8 +263,10 @@ export class Level2 extends BaseLevel {
 
     // Rèm + nắng chiếu đúng vào giỏ tất (gợi ý ngầm).
     this.fitSizes();
-    this.curtain = this.img('l2_curtain_closed', ...P('l2_curtain_closed'), D.curtain);
-    this.curtainOpen = false;
+    // Rèm: chạm đóng / mở, mở thì nắng chiếu vào giỏ.
+    this.addProp({ name: 'curtain', key: 'l2_curtain_closed', depth: D.curtain, zone: D.zone, hit: (s) => s.getBounds(),
+      tap: 'toggle', sfx: 'sfx_cloth', states: ['l2_curtain_closed', 'l2_curtain_open'],
+      onChange: (p, open) => this.tweens.add({ targets: this.beam, alpha: open ? 1 : 0, duration: 500 }) });
     const bb = P('l2_sock_basket_full');
     this.beam = this.add.graphics().setDepth(D.beam).setAlpha(0).setBlendMode(Phaser.BlendModes.SCREEN);
     const cw = this.curtain.getBounds();
@@ -315,8 +307,7 @@ export class Level2 extends BaseLevel {
     // G2-8: giỏ tĩnh hoàn toàn (bỏ phập phồng của G2-2).
     this.player = this.img('player_call', ...P('player_call'), D.player).setVisible(false);
 
-    // Vùng chạm.
-    this.zone('curtain', this.curtain.getBounds());
+    // Vùng chạm (rèm đã có vùng chạm từ addProp).
     // G2-7: dây buộc rèm bông trắng thò xuống như đuôi mèo.
     const cbb = this.curtain.getBounds();
     this.tie = this.img('l2_curtain_tie', ...(this.pos('l2_curtain_tie') || [cbb.left + 70, cbb.bottom - 100]), D.curtain - 1); // O2-6: sau rèm, thò ra dưới gấu rèm trái như demo
@@ -385,7 +376,6 @@ export class Level2 extends BaseLevel {
 
   handleLevel(name, g) {
     switch (name) {
-      case 'curtain': this.toggleCurtain(); break;
       case 'lamp': this.swingLamp(); this.sfx('l1_sfx_box_shake'); break;
       case 'beanie': this.beanieTap(); break;
       case 'plush': this.plushTap(); break;
@@ -401,15 +391,6 @@ export class Level2 extends BaseLevel {
   }
 
   // ---------- đồ vật ----------
-  toggleCurtain() {
-    if (this.busy.curtain) return;
-    this.busy.curtain = true;
-    this.sfx('sfx_cloth');
-    this.curtainOpen = !this.curtainOpen;
-    this.swap(this.curtain, this.curtainOpen ? 'l2_curtain_open' : 'l2_curtain_closed', () => (this.busy.curtain = false));
-    this.tweens.add({ targets: this.beam, alpha: this.curtainOpen ? 1 : 0, duration: 500 });
-  }
-
   swingLamp() {
     const l = this.lamp;
     this.tweens.killTweensOf(l);
@@ -563,12 +544,6 @@ export class Level2 extends BaseLevel {
     this.sfx('sfx_pickup');
     this.time.delayedCall(180, () => this.sfx('sfx_pickup'));
     this.squash(this.slippersCat, () => this.squash(this.slippersCat, () => this.swap(this.slippersCat, 'l2_slippers_cat_after', () => (this.busy.slip = false))));
-  }
-
-  zoneTo(name, s) {
-    const z = this.zones[name], b = s.getBounds();
-    z.setPosition(b.centerX, b.centerY).setSize(Math.max(MIN_HIT, b.width), Math.max(MIN_HIT, b.height));
-    z.input.hitArea.setSize(z.width, z.height);
   }
 
   // ---------- giỏ tất: chạm 3 lần, mỗi lần một chiếc tất bay ra; lần 3 lộ Sữa ----------

@@ -5,9 +5,9 @@
 // Vòng 2 (G5-5, G5-6): nối tia nắng. Hẻm tối tới khi kéo bạt (dây kéo, chấm nắng li ti); 3 đồ sáng (gương, nắp thiếc, đĩa CD)
 // thả lần lượt vào đốm sáng ở A → B → C, mỗi lần tia phản chiếu bật sang điểm kế, gần Mun hơn; tới trước gầm thì Mun phóng ra.
 // ?level=5&debug=1: đánh dấu 3 điểm A, B, C và điểm trước gầm xe.
-import { BaseLevel, D, MIN_HIT, SUN, BROWN } from './base.js';
+import { D, BROWN } from './base.js';
+import { RoomsLevel, ROOM_W } from './rooms.js';
 
-const ROOM_W = 1024;
 const YARD = 0, ALLEY = 1;
 // Vị trí (toạ độ trong khung phòng, khung 1024x1536). ROOM cho biết key ở phòng nào.
 // D5-15: đo trên demo duyệt (G5-22) `l5_demo_yard_frame.png`, `l5_demo_alley_frame.png` (khung 1024x1820, vùng chơi y 142–1678:
@@ -71,7 +71,6 @@ const SPECKS = [[150, 930], [320, 960], [280, 1080], [110, 1190], [430, 1190], [
 // Mỗi vòng 1 giây; Mun ra tới lúc đè ≈ 2,7 giây.
 const LOOP = { x: 600, y: 1215, rx: 230, ry: 40, ms: 2000, lead: 450 };
 const MUN_FOOT = 40;                                  // đáy Mun thấp hơn đốm sáng (Mun chạy trên mặt đất, đốm sáng dưới chân)
-const ARROW = { right: [960, 760], left: [64, 760] };
 const MAP = { x: 640, y: 62 };                        // bản đồ mini (toạ độ màn hình, giữa hai ô)
 // Đồ sáng: key trong túi → key lúc đặt (dựng nghiêng ở điểm nối tia).
 const SHINY = { l5_mirror_small: 'l5_mirror_placed', l5_tin_lid: 'l5_tin_lid_placed', l5_cd_hanging: 'l5_cd_placed' };
@@ -364,7 +363,7 @@ const FB = {
   l5_milk_can: [50, 70, 'đáy', (c, w, h) => { rr(c, 4, 6, w - 8, h - 8, '#e8eef2', 8); rr(c, 4, 20, w - 8, 26, '#f2b8a0', 2, null); label(c, 'bơ', w / 2, 34, 16); }],
 };
 
-export class Level5 extends BaseLevel {
+export class Level5 extends RoomsLevel {
   constructor() { super('Level5'); }
 
   get levelNo() { return 5; }
@@ -379,10 +378,13 @@ export class Level5 extends BaseLevel {
   get catMeow() { return 'mun_sfx_meow'; }
   get catTapSfx() { return 'mun_sfx_meow_cute'; }
 
-  P(key) { const p = super.P(key); return [p[0] + (ROOM[key] || 0) * ROOM_W, p[1]]; }
-  W(room, [x, y]) { return [x + room * ROOM_W, y]; }
-  R(room, r) { return new Phaser.Geom.Rectangle(r.x + room * ROOM_W, r.y, r.w, r.h); }
-  get camX() { return this.cameras.main.scrollX; }
+  get fallbacks() { return FB; }
+  get fallbackCanvas() { return true; } // khối màu có nhãn chữ (bản khối): vẽ bằng canvas 2D
+  get roomBgs() { return ['l5_bg_backyard', 'l5_bg_alley']; } // sân sau ⇄ hẻm
+  get roomOf() { return ROOM; }
+  get suaHand() { return false; }
+  // Bong bóng nhiệm vụ mở màn nảy mạnh hơn (0 → 1,3 → 1).
+  get bubblePop() { return { peak: 1.3, up: 260, rest: 1, down: 160 }; }
 
   sfx(key, gain = 1) { super.sfx(this.cache.audio.exists(key) ? key : SFX_ALIAS[key] || key, gain); }
 
@@ -393,7 +395,7 @@ export class Level5 extends BaseLevel {
     Object.assign(this, { room: YARD, moving: false, secrets: 0, taught: {}, arrowPulse: null, got: {},
       boxDone: false, metMun: false, rolled: false, step: 0, chased: false, trashDone: false, pipeDone: false, crowFar: false, slipDone: false, canDone: false, geckoUp: false,
       eyesAway: false, munStage: 'eyes', pawOut: false, trail: [], chaseOn: false, rays: [], spotAt: null, cordAmp: 4, spotAmp: 3,
-      kbg: null, blinkEv: null, eyesEv: null, thinkB: null, thinkIcon: null, specks: [], dark: null, pawDone: null });
+      blinkEv: null, eyesEv: null, thinkB: null, thinkIcon: null, specks: [], dark: null, pawDone: null });
     this.debug = new URLSearchParams(location.search).get('debug') === '1';
     // Ảnh `mun_held` neo đỉnh (A5-13); cảnh bế chung cần neo ở nách (điểm hai tay nắm), như `sua_held`.
     const he = A.entries.mun_held;
@@ -414,58 +416,11 @@ export class Level5 extends BaseLevel {
     return s;
   }
 
-  makeFallback(key) {
-    const spec = FB[key];
-    if (!spec || this.textures.exists(key)) return;
-    const [w, h, neo, draw] = spec;
-    const t = this.textures.createCanvas(key, w, h);
-    draw(t.getContext(), w, h);
-    t.refresh();
-    let ax = w / 2, ay = h;
-    if (neo === 'bg') { ax = 0; ay = 0; }
-    else if (neo === 'đỉnh') ay = 0;
-    else if (neo === 'tâm') ay = h / 2;
-    else if (Array.isArray(neo)) [ax, ay] = neo;
-    this.A.entries[key] = { url: null, real: false, ax, ay, res: 1 };
-  }
-
-  // ---------- túi đồ đi theo camera (như L4) ----------
-  get bagSlotX() { return super.bagSlotX.map((x) => x + this.camX); }
-  bagX() { return super.bagX() + this.camX; }
-  bagLayout() { super.bagLayout(); this.bag.bar.setX(this.bagX()); }
-  bagItem(key) { return this.bag && this.bag.items.find((o) => o && o.key === key); }
   shinyInBag() { return this.bag ? this.bag.items.filter((o) => o && SHINY[o.key]) : []; }
-
-  // Khung phần vẽ thật (bỏ lề trong suốt), toạ độ thế giới.
-  artRect(s) {
-    const f = this.textures.get(s.key).get(this.iconFrame(s.key));
-    const left = s.x - s.originX * s.width * s.scaleX, top = s.y - s.originY * s.height * s.scaleY;
-    return new Phaser.Geom.Rectangle(left + f.cutX * s.scaleX, top + f.cutY * s.scaleY, f.cutWidth * s.scaleX, f.cutHeight * s.scaleY);
-  }
-
-  zoneTo(name, s) {
-    const z = this.zones[name], b = this.artRect(s);
-    z.setPosition(b.centerX, b.centerY).setSize(Math.max(MIN_HIT, b.width), Math.max(MIN_HIT, b.height));
-    z.input && z.input.hitArea.setSize(z.width, z.height);
-  }
 
   // ---------- dựng hai phòng ----------
   buildRoom() {
-    this.buildBg('l5_bg_backyard');
-    {
-      const key = 'l5_bg_alley', x = ROOM_W, b = this.img(key, x, 0, D.bg).setOrigin(0, 0);
-      const tex = this.textures.get(key), src = tex.getSourceImage(), strip = Math.round(src.height * 0.05);
-      if (!tex.has('top')) tex.add('top', 0, 0, 0, src.width, strip);
-      if (!tex.has('bottom')) tex.add('bottom', 0, 0, src.height - strip, src.width, strip);
-      this.kbg = { b, top: this.add.image(x, 0, key, 'top').setOrigin(0, 1).setDepth(D.bg), bottom: this.add.image(x, 1536, key, 'bottom').setOrigin(0, 0).setDepth(D.bg) };
-    }
-    // Nền thật cao (G5-21: 1024x2304, vùng chơi 1536 ở giữa, dư 384 trên dưới): đặt lệch lên cho vùng chơi khớp y 0–1536,
-    // không kéo giãn dải mép (ảnh đã đủ cao cho máy dài tới 1024x2304).
-    this.tallBg = {};
-    for (const [key, spr] of [['l5_bg_backyard', this.bg], ['l5_bg_alley', this.kbg.b]]) {
-      const src = this.textures.get(key).getSourceImage(), h = (src.height * 1024) / src.width;
-      if (h > 1536 + 100) { spr.setOrigin(0, (h - 1536) / 2 / h); this.tallBg[key] = true; }
-    }
+    this.buildRoomBgs(); // nền thật cao 1024x2304 (G5-21): rooms.js đặt lệch cho vùng chơi khớp y 0–1536
     this.makeFallback('l5_icon_sun_covered');
     const P = (k) => this.P(k);
 
@@ -531,8 +486,7 @@ export class Level5 extends BaseLevel {
     this.mun = this.img('mun_run', 0, 0, 30).setVisible(false);
     this.placedS = [];
 
-    this.arrowR = this.img('ui_room_arrow', 0, 0, D.ui, true).setOrigin(0.5, 0.5);
-    this.arrowL = this.img('ui_room_arrow', 0, 0, D.ui, true).setOrigin(0.5, 0.5).setFlipX(true);
+    this.buildArrows();
     this.buildMap();
 
     // Vùng chạm.
@@ -559,9 +513,7 @@ export class Level5 extends BaseLevel {
     this.zone('cd', this.artRect(this.cd), D.zone + 4);
     this.zone('eyes', this.R(ALLEY, GAP), D.zone + 3);
     this.zone('munPaw', new Phaser.Geom.Rectangle(0, 0, 120, 120), D.zone + 5).disableInteractive();
-    this.zone('arrowR', new Phaser.Geom.Rectangle(0, 0, 140, 200), D.uiZone, true);
-    this.zone('arrowL', new Phaser.Geom.Rectangle(0, 0, 140, 200), D.uiZone, true);
-    this.showArrows();
+    this.arrowZones();
     if (this.debug) this.buildDebug();
   }
 
@@ -597,47 +549,10 @@ export class Level5 extends BaseLevel {
     this.map.blink = this.time.addEvent({ delay: 180, repeat: 5, callback: () => this.drawMap(++n % 2) });
   }
 
-  layout() {
-    super.layout();
-    this.cameras.main.setScroll(this.room * ROOM_W, -this.Y0);
-    const k = this.kbg, s = k.b.scaleX;
-    k.top.setScale(s, Math.max(0.001, (this.Y0 + 2) / k.top.height)).setVisible(this.Y0 > 0 && !this.tallBg.l5_bg_alley);
-    k.bottom.setScale(s, Math.max(0.001, (this.Y0 + 2) / k.bottom.height)).setVisible(this.Y0 > 0 && !this.tallBg.l5_bg_alley);
-    if (this.tallBg.l5_bg_backyard) { this.bgTop.setVisible(false); this.bgBottom.setVisible(false); }
-    const ay = ARROW.right[1] + this.Y0;
-    this.arrowR.setPosition(ARROW.right[0], ay);
-    this.arrowL.setPosition(ARROW.left[0], ay);
-    this.fitWidth(this.arrowR, 110);
-    this.fitWidth(this.arrowL, 110);
-    this.zones.arrowR.setPosition(ARROW.right[0], ay);
-    this.zones.arrowL.setPosition(ARROW.left[0], ay);
-    if (this.bag) this.bagLayout();
-  }
-
+  // Ô đang đứng trên bản đồ mini đổi theo phòng.
   showArrows() {
-    const r = this.room;
-    this.arrowL.setVisible(r === ALLEY);
-    this.arrowR.setVisible(r === YARD);
-    this.zones.arrowL[r === ALLEY ? 'setInteractive' : 'disableInteractive']();
-    this.zones.arrowR[r === YARD ? 'setInteractive' : 'disableInteractive']();
-  }
-
-  // Lộ diện ở L5: không có bàn tay chỉ vào mèo (từ L4); nút 💡 vẫn chỉ được.
-  armSua(rect) {
-    if (this.phase !== 'found' || this.ending || !rect) return;
-    if (this.zones.sua) { this.zones.sua.setPosition(rect.centerX, rect.centerY).setSize(rect.width, rect.height); return; }
-    this.zone('sua', rect, D.zone + 10);
-  }
-
-  // ---------- mở màn: bong bóng nhiệm vụ nảy mạnh hơn (0 → 1,3 → 1) ----------
-  bubbleIntro() {
-    const B = this.bubble;
-    B.home = 'center';
-    B.ct.setVisible(true).setPosition(...this.bubbleCenter).setScale(0);
-    this.sfx('sfx_meow_question');
-    this.tweens.chain({ targets: B.ct, tweens: [{ scale: 1.3, duration: 260, ease: 'Quad.out' }, { scale: 1, duration: 160 }] });
-    this.qHop = this.time.addEvent({ delay: 700, repeat: 1, callback: () => this.hop(B.q, 14, 300) });
-    this.time.delayedCall(1900, () => this.bubbleToCorner());
+    super.showArrows();
+    if (this.map) this.drawMap();
   }
 
   // Bong bóng ở góc nảy mạnh một nhịp (thùng giấy: sắp gặp mèo mới).
@@ -653,8 +568,6 @@ export class Level5 extends BaseLevel {
   handleLevel(name, g) {
     if (this.moving) return;
     switch (name) {
-      case 'arrowR': this.goRoom(ALLEY); break;
-      case 'arrowL': this.goRoom(YARD); break;
       case 'box': this.boxTap(); break;
       case 'mirror': this.pickShiny('l5_mirror_small', this.mirror, 'mirror', 'l5_sfx_glass_ting'); break;
       case 'lid': this.pickShiny('l5_tin_lid', this.lid, 'lid', 'sfx_clink'); break;
@@ -679,25 +592,17 @@ export class Level5 extends BaseLevel {
     }
   }
 
+  // Lần đầu sang hẻm sau khi bóng đen chạy ra: ô Hẻm trên bản đồ nhấp nháy.
   goRoom(r) {
     if (r === this.room || this.moving) return;
-    this.moving = true;
-    if (this.arrowPulse) { this.arrowPulse.stop(); this.arrowPulse = null; this.fitWidth(this.arrowR, 110); }
-    const first = r === ALLEY && this.boxDone && !this.taught.alley;
-    if (first) this.taught.alley = true;
-    this.room = r;
-    this.sfx('sfx_tap');
-    this.showArrows();
-    this.drawMap();
-    this.tweens.add({ targets: this.cameras.main, scrollX: r * ROOM_W, duration: 400, ease: 'Sine.inOut',
-      onUpdate: () => { if (this.bag) this.bagLayout(); },
-      onComplete: () => {
-        this.moving = false;
-        if (this.bag) this.bagLayout();
-        this.touch();
-        if (first) this.blinkMap();
-        if (r === ALLEY) this.sunThought();
-      } });
+    this.firstAlley = r === ALLEY && this.boxDone && !this.taught.alley;
+    if (this.firstAlley) this.taught.alley = true;
+    super.goRoom(r);
+  }
+
+  onRoomEnter(r) {
+    if (this.firstAlley) this.blinkMap();
+    if (r === ALLEY) this.sunThought();
   }
 
   // (1) Thùng giấy: lần đầu rung mạnh, bóng đen vụt ra chạy sang phải (sang hẻm), mũi tên ► nhấp nháy; Mun nấp dưới gầm xe.
@@ -716,7 +621,7 @@ export class Level5 extends BaseLevel {
     });
     this.time.delayedCall(800, () => {
       if (this.room !== YARD) return;
-      this.arrowPulse = this.tweens.add({ targets: this.arrowR, scale: this.arrowR.base * 1.2, duration: 420, yoyo: true, repeat: -1 });
+      this.pulseArrow('right', 1.2, 420);
     });
   }
 
@@ -742,19 +647,14 @@ export class Level5 extends BaseLevel {
   }
 
   // ---------- đồ sáng (G5-5): gương, nắp thiếc (sân sau), đĩa CD (hẻm) ----------
-  pickShiny(key, s, zoneName, sfx, done) {
-    if (this.got[key] || this.busy.pick) return;
-    this.got[key] = true;
-    this.busy.pick = true;
-    this.zones[zoneName].disableInteractive();
-    this.sfx(sfx);
-    const r = this.artRect(s);
-    this.flash(r.centerX, r.centerY);
-    this.bagShow(() => {
-      this.bagAdd(key, s, () => { this.busy.pick = false; this.touch(); done && done(); });
-      s.setVisible(false);
-    });
+  pickShiny(key, s, zoneName, sfx) {
+    this.pickUp(key, s, zoneName, { before: () => {
+      this.sfx(sfx);
+      const r = this.artRect(s);
+      this.flash(r.centerX, r.centerY);
+    } });
   }
+
 
   // Đĩa CD (G5-7): treo trên móc tường bên trái hẻm, xa gầm xe; chạm thì vào túi (Mun không phản ứng).
   cdTap() {
@@ -985,21 +885,6 @@ export class Level5 extends BaseLevel {
     this.secrets++;
     const r = this.artRect(this.pipe);
     this.fishBurst(r.centerX - 40, r.bottom - 120, 5);
-  }
-
-  fishBurst(x, y, n) {
-    this.sfx('sfx_clink');
-    const tx = this.camX + 1024 - 80, ty = 62 - this.Y0;
-    for (let i = 0; i < n; i++) {
-      const f = this.img('ui_dried_fish', x, y, D.fx).setOrigin(0.5, 0.5);
-      this.fitWidth(f, 56);
-      const dx = (i - (n - 1) / 2) * 34;
-      this.tweens.chain({ targets: f, tweens: [
-        { x: x + dx, y: y - 110 - (i % 2) * 30, angle: dx / 2, duration: 280, ease: 'Quad.out' },
-        { x: tx, y: ty, scale: f.base * 0.6, duration: 520, delay: 120 + i * 70, ease: 'Quad.in' },
-        { alpha: 0, duration: 120 },
-      ], onComplete: () => { f.destroy(); this.sfx('sfx_pickup', 0.6); } });
-    }
   }
 
   // (8a) Gầm xe: chưa có Mun thì chỉ rung xe. Có Mun: lùi sâu (hiện lại sau 2 giây), "khè" rất nhỏ,
@@ -1240,7 +1125,7 @@ export class Level5 extends BaseLevel {
           : [r.centerX + 40, r.centerY - 5];
         s.setDepth(31).setPosition(px, py).setScale(s.base * 0.55);
         this.armMun();
-        this.glowOn();
+        this.glowOn(this.mun);
       });
     } });
   }
@@ -1248,14 +1133,6 @@ export class Level5 extends BaseLevel {
   armMun() {
     const b = this.artRect(this.mun);
     this.armSua(new Phaser.Geom.Rectangle(b.x - 20, b.y - 20, b.width + 40, b.height + 30));
-  }
-
-  glowOn() {
-    if (this.renderer.type !== Phaser.WEBGL || !this.mun.preFX || this.glow) return;
-    this.glow = this.mun.preFX.addGlow(SUN, 0, 0, false, 0.1, 14);
-    this.tweens.add({ targets: this.glow, outerStrength: 4, duration: 700, onComplete: () => {
-      this.glowTw = this.tweens.add({ targets: this.glow, outerStrength: 1.5, duration: 1000, yoyo: true, repeat: -1 });
-    } });
   }
 
   // Chạm Mun lúc đang đuổi: thắng ngay, dừng cảnh đuổi.
@@ -1293,7 +1170,6 @@ export class Level5 extends BaseLevel {
     return null;
   }
 
-  arrowWorld(side) { return this.W(this.room, ARROW[side]); }
 
   // 8 giây: mắt vàng chớp chớp; hẻm còn tối thì dây đung đưa mạnh hơn; đã có nắng thì đốm sáng nhảy mạnh hơn. Còn lại rung nhẹ đồ cần chạm.
   hint1() {
@@ -1305,22 +1181,16 @@ export class Level5 extends BaseLevel {
     if (this.room === ALLEY && !this.rolled) this.cordKick(12);
     if (this.room === ALLEY && this.spotAt) this.spotAmp = 10;
     if (!h) return;
-    if (h.arrow) {
-      const a = h.arrow === 'left' ? this.arrowL : this.arrowR;
-      this.tweens.add({ targets: a, x: a.x + (h.arrow === 'right' ? 14 : -14), duration: 160, yoyo: true, repeat: 2 });
-    } else if (h.sprite && !h.cord) this.wiggle(h.sprite, 3, 3, 300);
+    if (h.arrow) this.nudgeArrow(h.arrow);
+    else if (h.sprite && !h.cord) this.wiggle(h.sprite, 3, 3, 300);
   }
 
-  // 💡: bàn chân mèo làm mẫu (không có bàn tay hướng dẫn từ L4).
-  strongHint() {
-    this.tweens.add({ targets: this.bulb, scale: this.bulb.base * 0.9, duration: 90, yoyo: true });
-    const h = this.hintStep();
-    if (!h) return;
-    const paw = (pt) => { this.handTap(pt, 'hint', 'paw'); this.pawTimer = this.time.delayedCall(2500, () => this.handHide('paw')); };
-    if (h.arrow) paw(this.arrowWorld(h.arrow));
-    else if (h.cord) { const r = this.artRect(this.cord); this.handDrag([r.centerX, r.y + 60], [r.centerX, r.bottom + 40], 'hint', 'paw', 2); }
-    else if (h.item) this.handDrag(this.slotPos(h.item.i), this.spotAt, 'hint', 'paw', 2);
-    else if (h.sprite) paw(this.tipOf(h.sprite));
+  // 💡 dây bạt: bàn chân làm mẫu kéo dây xuống; đồ sáng trong túi: kéo vào đốm sáng (mũi tên, đồ cần chạm: strongHint chung).
+  strongHintStep(h) {
+    if (h.arrow) return false;
+    if (h.cord) { const r = this.artRect(this.cord); this.handDrag([r.centerX, r.y + 60], [r.centerX, r.bottom + 40], 'hint', 'paw', 2); return true; }
+    if (h.item) { this.handDrag(this.slotPos(h.item.i), this.spotAt, 'hint', 'paw', 2); return true; }
+    return false;
   }
 
   buildDebug() {

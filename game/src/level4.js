@@ -2,9 +2,9 @@
 // G4-9…G4-14, D4-12…D4-20, A4-9…A4-13 trong art/review/level4-thread.md. Lần đầu có ba phòng (ngủ ◄ khách ► làm việc),
 // camera trượt ngang; túi đồ của L3 đi theo camera; xếp tháp kéo-thả theo hình dáng (đệm → vali → sách → gối).
 // KHUNG ẢNH TẠM: chưa có ảnh thật, mọi key mới tự vẽ bằng makeFallback; vị trí theo bảng design-art-level4.md mục 6.
-import { BaseLevel, D, MIN_HIT, SUN, BROWN } from './base.js';
+import { D, BROWN } from './base.js';
+import { RoomsLevel, ROOM_W } from './rooms.js';
 
-const ROOM_W = 1024;
 const BED = 0, LIVING = 1, STUDY = 2;               // phòng ngủ x 0–1024, khách 1024–2048 (bắt đầu), làm việc 2048–3072
 // Vị trí dự phòng (= bảng vị trí design-art-level4.md mục 6, toạ độ đúng demo G4-27), toạ độ trong khung phòng; ROOM cho biết key ở phòng nào.
 const DEF = {
@@ -54,7 +54,6 @@ const FALL_BOOKS = [{ key: 'l4_book_single_yellow', slot: 2 }, { key: 'l4_book_s
 const SOCK_BED_X = 760;                               // tâm tất nằm trên chăn, bên phải gối (toạ độ phòng ngủ, G4-36)
 const SOCK_BED_DROP = 35;                            // G4-42: điểm đáp hạ thấp hơn mép trên chăn, vẫn nằm trọn trên mặt chăn
 const BOOK_LAYERS = [[0.69, 1], [0.385, 0.71], [0, 0.405]];
-const ARROW = { right: [960, 760], left: [64, 760] }; // mũi tên chuyển phòng (A4-4), toạ độ màn hình (y cộng Y0)
 
 const WHITE = 0xfffaf0, WOOD = 0xd6a472, MINT = 0xb9ddbe, PINK = 0xf8c6cc, SKY = 0xb8daf2, CREAM = 0xfcf1dd, CORAL = 0xee8a7a,
   BUTTER = 0xfce39a, PEACH = 0xf7b9a3, LILAC = 0xd6c8ee, RUST = 0xd98a5a;
@@ -256,7 +255,7 @@ function kid(g, w, h, reach) {
   else { g.lineStyle(3, BROWN).lineBetween(cx - 22, top + 48, cx - 10, top + 48).lineBetween(cx + 10, top + 48, cx + 22, top + 48); g.beginPath(); g.arc(cx, top + 62, 14, 0.2, Math.PI - 0.2); g.strokePath(); }
 }
 
-export class Level4 extends BaseLevel {
+export class Level4 extends RoomsLevel {
   constructor() { super('Level4'); }
 
   get levelNo() { return 4; }
@@ -265,11 +264,11 @@ export class Level4 extends BaseLevel {
   get fitHead() { return FIT_HEAD; }
   get bagTapFeedback() { return false; } // G4-31: chạm món trong túi không phản ứng gì (vẫn kéo-thả được)
   get bagLandHop() { return false; }     // G4-31: món bay vào ô dừng êm, không nảy
-
-  // Toạ độ trong khung phòng → thế giới (D4-12).
-  P(key) { const p = super.P(key); return [p[0] + (ROOM[key] || 0) * ROOM_W, p[1]]; }
-  W(room, [x, y]) { return [x + room * ROOM_W, y]; }
-  get camX() { return this.cameras.main.scrollX; }
+  get fallbacks() { return FB; }
+  get roomBgs() { return ['l4_bg_bedroom', 'l4_bg_living', 'l4_bg_study']; } // phòng ngủ ◄ khách ► làm việc
+  get roomOf() { return ROOM; }
+  // Bong bóng nhiệm vụ mở màn nhỏ hơn bản chung (G4-31).
+  get bubblePop() { return { peak: BUBBLE.k * 1.15, up: 230, rest: BUBBLE.k, down: 120 }; }
 
   resetLevel() {
     const A = this.A;
@@ -277,41 +276,12 @@ export class Level4 extends BaseLevel {
     if (!A.fit[4] || !Object.keys(A.fit[4]).length) A.fit[4] = { ...FIT };
     Object.assign(this, { room: LIVING, moving: false, poseIdx: 0, stack: [],
       got: {}, secrets: 0, sockState: 'hidden', duckDone: false, taught: {}, arrowPulse: null, meowEv: null, climax: false,
-      kbgs: [], sleepEv: null });
+      sleepEv: null });
   }
-
-  makeFallback(key) {
-    const spec = FB[key];
-    if (!spec) return;
-    const [w, h, neo, draw] = spec;
-    const g = this.make.graphics({ x: 0, y: 0 }, false);
-    draw(g, w, h);
-    g.generateTexture(key, w, h);
-    g.destroy();
-    let ax = w / 2, ay = h;
-    if (neo === 'bg') { ax = 0; ay = 0; }
-    else if (neo === 'đỉnh') ay = 0;
-    else if (neo === 'tâm') ay = h / 2;
-    else if (Array.isArray(neo)) [ax, ay] = neo;
-    this.A.entries[key] = { url: null, real: false, ax, ay, res: 1 };
-  }
-
-  // ---------- túi đồ đi theo camera (D4-13) ----------
-  get bagSlotX() { return super.bagSlotX.map((x) => x + this.camX); }
-  bagX() { return super.bagX() + this.camX; }
-  bagLayout() { super.bagLayout(); this.bag.bar.setX(this.bagX()); }
 
   // ---------- dựng ba phòng ----------
   buildRoom() {
-    this.buildBg('l4_bg_bedroom');
-    // Hai nền còn lại đặt bên phải, cũng kéo dài trên/dưới như nền đầu.
-    this.kbgs = ['l4_bg_living', 'l4_bg_study'].map((key, i) => {
-      const x = (i + 1) * ROOM_W, b = this.img(key, x, 0, D.bg).setOrigin(0, 0);
-      const tex = this.textures.get(key), src = tex.getSourceImage(), strip = Math.round(src.height * 0.05);
-      if (!tex.has('top')) tex.add('top', 0, 0, 0, src.width, strip);
-      if (!tex.has('bottom')) tex.add('bottom', 0, 0, src.height - strip, src.width, strip);
-      return { b, top: this.add.image(x, 0, key, 'top').setOrigin(0, 1).setDepth(D.bg), bottom: this.add.image(x, 1536, key, 'bottom').setOrigin(0, 0).setDepth(D.bg) };
-    });
+    this.buildRoomBgs();
     const P = (k) => this.P(k);
 
     // Phòng khách: nền → cửa sổ → rèm → Sữa trên rèm → sofa → tháp → nhân vật → Sữa dưới sàn.
@@ -347,8 +317,7 @@ export class Level4 extends BaseLevel {
     this.ballHome = [this.ball.x, this.ball.y];
 
     // Mũi tên chuyển phòng (giao diện, D4-12).
-    this.arrowR = this.img('ui_room_arrow', 0, 0, D.ui, true).setOrigin(0.5, 0.5);
-    this.arrowL = this.img('ui_room_arrow', 0, 0, D.ui, true).setOrigin(0.5, 0.5).setFlipX(true);
+    this.buildArrows();
 
     // Vùng chạm.
     this.zone('curtain', this.artRect(this.curtain), D.zone + 1);
@@ -367,45 +336,13 @@ export class Level4 extends BaseLevel {
     this.zone('suitcase', this.artRect(this.suitcase), D.zone + 3);
     this.spills.forEach((s, i) => this.zone('spill' + i, this.artRect(s), D.zone + 4).disableInteractive());
     this.zone('ball', this.artRect(this.ball), D.zone + 5);
-    this.zone('arrowR', new Phaser.Geom.Rectangle(0, 0, 140, 200), D.uiZone, true);
-    this.zone('arrowL', new Phaser.Geom.Rectangle(0, 0, 140, 200), D.uiZone, true);
-    this.showArrows();
+    this.arrowZones();
   }
 
   layout() {
     super.layout();
     this.bubbleCenter = [BUBBLE.x, BUBBLE.y + this.Y0]; // G4-31: bong bóng nhiệm vụ cao hơn
     if (this.bubble.home === 'center') this.bubble.ct.setPosition(...this.bubbleCenter);
-    this.cameras.main.setScroll(this.room * ROOM_W, -this.Y0);
-    for (const k of this.kbgs) {
-      const s = k.b.scaleX;
-      k.top.setScale(s, Math.max(0.001, (this.Y0 + 2) / k.top.height)).setVisible(this.Y0 > 0);
-      k.bottom.setScale(s, Math.max(0.001, (this.Y0 + 2) / k.bottom.height)).setVisible(this.Y0 > 0);
-    }
-    const ay = ARROW.right[1] + this.Y0;
-    this.arrowR.setPosition(ARROW.right[0], ay);
-    this.arrowL.setPosition(ARROW.left[0], ay);
-    this.fitWidth(this.arrowR, 110);
-    this.fitWidth(this.arrowL, 110);
-    this.zones.arrowR.setPosition(ARROW.right[0], ay);
-    this.zones.arrowL.setPosition(ARROW.left[0], ay);
-    if (this.bag) this.bagLayout();
-  }
-
-  // Phòng khách có cả ◄ ►, phòng ngủ chỉ ►, phòng làm việc chỉ ◄.
-  showArrows() {
-    const r = this.room, on = (z, v) => this.zones[z][v ? 'setInteractive' : 'disableInteractive']();
-    this.arrowL.setVisible(r > BED);
-    this.arrowR.setVisible(r < STUDY);
-    on('arrowL', r > BED);
-    on('arrowR', r < STUDY);
-  }
-
-  // Khung phần vẽ thật của sprite (bỏ lề trong suốt), toạ độ thế giới; vùng chạm ôm đúng hình đồ vật.
-  artRect(s) {
-    const f = this.textures.get(s.key).get(this.iconFrame(s.key));
-    const left = s.x - s.originX * s.width * s.scaleX, top = s.y - s.originY * s.height * s.scaleY;
-    return new Phaser.Geom.Rectangle(left + f.cutX * s.scaleX, top + f.cutY * s.scaleY, f.cutWidth * s.scaleX, f.cutHeight * s.scaleY);
   }
 
   // Dải hàng sách dưới cùng của kệ; xr = khoảng x (tỉ lệ bề rộng kệ), mặc định cả hàng.
@@ -491,24 +428,7 @@ export class Level4 extends BaseLevel {
     return new Phaser.Geom.Rectangle(r.x + r.width * g[0], r.y + r.height * g[1], r.width * (g[2] - g[0]), r.height * (g[3] - g[1]));
   }
 
-  zoneTo(name, s) {
-    const z = this.zones[name], b = this.artRect(s);
-    z.setPosition(b.centerX, b.centerY).setSize(Math.max(MIN_HIT, b.width), Math.max(MIN_HIT, b.height));
-    z.input && z.input.hitArea.setSize(z.width, z.height);
-  }
-
-  // Cảnh lộ diện: không có bàn tay chỉ vào mèo (như level 3); nút 💡 vẫn chỉ được.
-  armSua(rect) {
-    if (this.phase !== 'found' || this.ending || !rect) return;
-    this.zone('sua', rect, D.zone + 10);
-  }
-
   // ---------- mở màn: "xoẹt xoẹt… phựt!", rèm đung đưa, Sữa treo sẵn trên đỉnh rèm (G4-14) ----------
-  intro() {
-    super.intro();
-    this.player.setX(this.camX - 260); // nhân vật đi vào từ mép trái phòng khách
-  }
-
   onIntro() {
     this.sfx('l3_sfx_scratch');
     this.time.delayedCall(500, () => this.sfx('sfx_cloth'));
@@ -519,7 +439,7 @@ export class Level4 extends BaseLevel {
     // Lần đầu chuyển phòng: mũi tên ◄ nhấp nháy (không có bàn tay hướng dẫn từ level 4, G4-19).
     this.time.delayedCall(4200, () => {
       if (this.taught.arrow) return;
-      this.arrowPulse = this.tweens.add({ targets: this.arrowL, scale: this.arrowL.base * 1.18, duration: 450, yoyo: true, repeat: -1 });
+      this.pulseArrow('left');
     });
   }
 
@@ -533,24 +453,11 @@ export class Level4 extends BaseLevel {
     }, onComplete: () => (c.angle = 0) });
   }
 
-  // Bong bóng nhiệm vụ mở màn nhỏ hơn bản chung (G4-31).
-  bubbleIntro() {
-    const B = this.bubble, k = BUBBLE.k;
-    B.home = 'center';
-    B.ct.setVisible(true).setPosition(...this.bubbleCenter).setScale(0);
-    this.sfx('sfx_meow_question');
-    this.tweens.chain({ targets: B.ct, tweens: [{ scale: k * 1.15, duration: 230, ease: 'Quad.out' }, { scale: k, duration: 120 }] });
-    this.qHop = this.time.addEvent({ delay: 700, repeat: 1, callback: () => this.hop(B.q, 14, 300) });
-    this.time.delayedCall(1900, () => this.bubbleToCorner());
-  }
-
   // ---------- nhập liệu ----------
   handleLevel(name) {
     if (this.moving) return;
     if (name.startsWith('spill')) { this.spillTap(Number(name.slice(5))); return; }
     switch (name) {
-      case 'arrowR': this.goRoom(this.room + 1); break;
-      case 'arrowL': this.goRoom(this.room - 1); break;
       case 'curtain': case 'suaHang': this.curtainTap(); break;
       case 'sofa': this.squash(this.sofa); this.sfx('sfx_cushion_soft'); break;
       case 'mattress': this.mattressTap(); break;
@@ -563,21 +470,6 @@ export class Level4 extends BaseLevel {
       case 'ball': this.ballTap(); break;
       case 'desk': this.deskTap(); break;
     }
-  }
-
-  // ---------- chuyển phòng: camera trượt 0,4 giây; về phòng khách thì Sữa đổi tư thế treo ----------
-  goRoom(r) {
-    if (r < BED || r > STUDY || r === this.room || this.moving) return;
-    this.moving = true;
-    this.handHide();
-    if (this.arrowPulse) { this.arrowPulse.stop(); this.arrowPulse = null; this.fitWidth(this.arrowL, 110); }
-    this.taught.arrow = true;
-    this.room = r;
-    this.sfx('sfx_tap');
-    this.showArrows();
-    this.tweens.add({ targets: this.cameras.main, scrollX: r * ROOM_W, duration: 400, ease: 'Sine.inOut',
-      onUpdate: () => { if (this.bag) this.bagLayout(); },
-      onComplete: () => { this.moving = false; if (this.bag) this.bagLayout(); this.touch(); } });
   }
 
   nextPose() {
@@ -604,18 +496,6 @@ export class Level4 extends BaseLevel {
     this.sfx('sfx_cloth');
     this.sfx('sua_sfx_meow_short');
     this.nextPose();
-  }
-
-  // ---------- nhặt đồ ----------
-  pickUp(key, s, zoneName) {
-    if (this.got[key] || this.busy.pick) return;
-    this.got[key] = true;
-    this.busy.pick = true;
-    this.zones[zoneName].disableInteractive();
-    this.bagShow(() => {
-      this.bagAdd(key, s, () => { this.busy.pick = false; this.touch(); });
-      s.setVisible(false);
-    });
   }
 
   // Đệm dựng: chạm thì đổ "phịch" (không rung, không bụi), một chiếc tất văng lên dính vào đèn ngủ. Đệm nằm: chạm thì vào túi.
@@ -876,21 +756,6 @@ export class Level4 extends BaseLevel {
     this.sfx('l4_sfx_pen_drop');
   }
 
-  fishBurst(x, y, n) {
-    this.sfx('sfx_clink');
-    const tx = this.camX + 1024 - 80, ty = 62 - this.Y0;
-    for (let i = 0; i < n; i++) {
-      const f = this.img('ui_dried_fish', x, y, D.fx).setOrigin(0.5, 0.5);
-      this.fitWidth(f, 56);
-      const dx = (i - (n - 1) / 2) * 34;
-      this.tweens.chain({ targets: f, tweens: [
-        { x: x + dx, y: y - 110 - (i % 2) * 30, angle: dx / 2, duration: 280, ease: 'Quad.out' },
-        { x: tx, y: ty, scale: f.base * 0.6, duration: 520, delay: 120 + i * 70, ease: 'Quad.in' },
-        { alpha: 0, duration: 120 },
-      ], onComplete: () => { f.destroy(); this.sfx('sfx_pickup', 0.6); } });
-    }
-  }
-
   // ---------- xếp tháp (12): kéo đồ từ túi thả dưới rèm ----------
   // Vùng thả: khung tháp đã xếp (rộng ~300, cao ~400 trên đáy tháp) nới 100px mỗi phía.
   towerRect() {
@@ -906,11 +771,10 @@ export class Level4 extends BaseLevel {
     return [top.x, this.artRect(top).top + (n < 4 ? OVERLAP[n - 1] : FEET_SINK)];
   }
 
-  onBagDrop(it, x, y) {
-    if (this.room !== LIVING || this.climax || !this.towerRect().contains(x, y)) return false;
-    if (it.key === ORDER[this.stack.length]) { this.placeLayer(it); return true; }
-    this.wrongLayer(it);
-    return true;
+  // Thả món lên tháp ở phòng khách: đúng thứ tự (đệm → vali → sách → gối) thì xếp, sai thì về túi.
+  get dropSpots() {
+    return [{ when: () => this.room === LIVING && !this.climax, rect: () => this.towerRect(), want: () => ORDER[this.stack.length],
+      place: (it) => this.placeLayer(it), wrong: (it) => this.wrongLayer(it) }];
   }
 
 
@@ -1012,27 +876,17 @@ export class Level4 extends BaseLevel {
       this.tweens.addCounter({ from: 0, to: Math.PI * 2, duration: 2600, repeat: -1, onUpdate: (tw) => (c.angle = 2 * Math.sin(tw.getValue())) });
       this.time.delayedCall(900, () => {
         if (this.phase !== 'found') return;
-        this.glowOn();
+        this.glowOn(this.cat);
         const b = c.getBounds();
         this.armSua(new Phaser.Geom.Rectangle(b.x - 20, b.y - 20, b.width + 40, b.height + 30));
       });
     });
   }
 
-  glowOn() {
-    if (this.renderer.type !== Phaser.WEBGL || !this.cat.preFX) return;
-    this.glow = this.cat.preFX.addGlow(SUN, 0, 0, false, 0.1, 14);
-    this.tweens.add({ targets: this.glow, outerStrength: 4, duration: 700, onComplete: () => {
-      this.glowTw = this.tweens.add({ targets: this.glow, outerStrength: 1.5, duration: 1000, yoyo: true, repeat: -1 });
-    } });
-  }
-
   // Sữa được bế ra; tháp và nhân vật ở lại cảnh nền.
   endingHide() { this.cat.setVisible(false); }
 
   // ---------- gợi ý (thang gợi ý Level 4) ----------
-  bagItem(key) { return this.bag && this.bag.items.find((o) => o && o.key === key); }
-
   // Bước cần làm theo món xếp kế tiếp. Có trong túi → kéo lên tháp (ở phòng khách) hoặc về phòng khách;
   // chưa có → sang phòng của nó và chạm đúng đồ (đệm dựng, kệ sách, vali…).
   hintStep() {
@@ -1048,28 +902,22 @@ export class Level4 extends BaseLevel {
     return { sprite };
   }
 
-  arrowWorld(side) { return this.W(this.room, ARROW[side]); }
-
   hint1() {
     const h = this.hintStep();
     if (!h) return;
     if (h.arrow) {
       // Ở phòng khách: Sữa kêu "meo" dài, duỗi chân về phía phòng còn đồ.
       if (this.room === LIVING) { this.sfx('sua_sfx_meow_long'); this.wiggle(this.hangCat, 6, 2, 500); }
-      const a = h.arrow === 'left' ? this.arrowL : this.arrowR;
-      this.tweens.add({ targets: a, x: a.x + (h.arrow === 'right' ? 14 : -14), duration: 160, yoyo: true, repeat: 2 });
+      this.nudgeArrow(h.arrow);
     } else if (h.item) this.hop(h.item.s, 16, 260);
     else if (h.sprite && !String(h.sprite.key).startsWith('l4_mattress')) this.wiggle(h.sprite, 3, 3, 300); // đệm: không rung (G4-31)
   }
 
-  strongHint() {
-    this.tweens.add({ targets: this.bulb, scale: this.bulb.base * 0.9, duration: 90, yoyo: true });
-    const h = this.hintStep();
-    if (!h) return;
-    const paw = (pt) => { this.handTap(pt, 'hint', 'paw'); this.pawTimer = this.time.delayedCall(2500, () => this.handHide('paw')); };
-    if (h.arrow) paw(this.arrowWorld(h.arrow));
-    else if (h.item) this.guideDrag(h.item, 2, 'paw');
-    else if (h.sprite) paw(this.tipOf(h.sprite));
+  // 💡 món đã có trong túi: bàn chân làm mẫu kéo lên tháp (mũi tên, đồ cần chạm: strongHint chung).
+  strongHintStep(h) {
+    if (h.arrow || !h.item) return false;
+    this.guideDrag(h.item, 2, 'paw');
+    return true;
   }
 
   update(time) {

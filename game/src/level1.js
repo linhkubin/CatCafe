@@ -1,8 +1,9 @@
 // Level 1 – Hộp pate thần kỳ. Luồng theo levels/levels-01-10.md, levels/states-01-10.md (Level 1), leveldesign.md mục 1, 5, 6.
 // Phần chung (giao diện, mở màn, cảnh bế, thưởng…) ở base.js. Không có chữ trên màn hình.
-import { BaseLevel, D, MIN_HIT, SWIPE, SUN } from './base.js';
+import { D, SUN } from './base.js';
+import { ObjectLevel } from './objects.js';
 
-export class Level1 extends BaseLevel {
+export class Level1 extends ObjectLevel {
   constructor() { super('Level1'); }
 
   get levelNo() { return 1; }
@@ -126,13 +127,8 @@ export class Level1 extends BaseLevel {
     tl.setVisible(true).setPosition(p.x, p.y).setDepth(p.depth).setAngle(p.angle);
     tl.setScale(p.mirror ? -tl.base : tl.base, tl.baseY);
     this.tweens.add({ targets: tl, angle: p.angle + (p.mirror ? -12 : 12), duration: 600, yoyo: true, repeat: -1, ease: 'Sine.inOut' });
-    const b = tl.getBounds();
-    if (this.zones.tail) {
-      const z = this.zones.tail;
-      z.setPosition(b.centerX, b.centerY).setSize(Math.max(MIN_HIT, b.width), Math.max(MIN_HIT, b.height));
-      z.input.hitArea.setSize(z.width, z.height);
-      z.setInteractive();
-    } else this.zone('tail', b, D.zone + 8);
+    if (this.zones.tail) { this.zoneTo('tail', tl); this.zones.tail.setInteractive(); }
+    else this.zone('tail', tl.getBounds(), D.zone + 8);
     if (where === 'curtain') {
       // Rèm phồng nhẹ khi Sữa nấp sau.
       this.curtainPuff = this.tweens.add({ targets: this.curtain, scaleX: this.curtain.base * 1.025, duration: 700, yoyo: true, repeat: -1, ease: 'Sine.inOut' });
@@ -319,12 +315,7 @@ export class Level1 extends BaseLevel {
     this.sfx('sfx_cushion_soft');
     const suaHere = this.hideAt === spot;
     if (suaHere) this.flee(spot); // Sữa bật ra rồi vụt chạy
-    this.squash(p, () => this.swap(p, 'l1_pillow_white_flipped', () => {
-      this.busy[zoneName] = false;
-      const z = this.zones[zoneName], b = p.getBounds();
-      z.setPosition(b.centerX, b.centerY).setSize(Math.max(MIN_HIT, b.width), Math.max(MIN_HIT, b.height));
-      z.input.hitArea.setSize(z.width, z.height);
-    }));
+    this.squash(p, () => this.swap(p, 'l1_pillow_white_flipped', () => { this.busy[zoneName] = false; this.zoneTo(zoneName, p); }));
     if (!suaHere) this.react('player_scratch_head', p.x);
   }
 

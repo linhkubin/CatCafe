@@ -1,7 +1,8 @@
 // Level 3 – Quà xịn, hộp còn xịn hơn. Luồng theo levels/levels-01-10.md, levels/states-01-10.md (Level 3) và các quyết định
 // G3-x, D3-x trong art/review/level3-thread.md. Lần đầu có túi đồ: nhặt kéo, cắt băng dính, ghép cột cào, đặt lên thảm, lật hộp úp.
 // Vị trí và bề rộng theo bảng D3-22 (design-art-level3.md mục 6, đo trên tranh demo đã duyệt). Phần chung ở base.js.
-import { BaseLevel, D, MIN_HIT, SUN, BROWN } from './base.js';
+import { D, SUN, BROWN } from './base.js';
+import { ObjectLevel } from './objects.js';
 
 // Vị trí và bề rộng dự phòng (= bảng vị trí design-art-level3.md mục 6, bản D3-29) khi không đọc được design-art.
 const DEF = {
@@ -179,7 +180,7 @@ function kid(g, w, h, point) {
   g.fillStyle(WHITE).fillEllipse(cx - fw * 0.2, h - 14, fw * 0.32, 26).fillEllipse(cx + fw * 0.2, h - 14, fw * 0.32, 26);
 }
 
-export class Level3 extends BaseLevel {
+export class Level3 extends ObjectLevel {
   constructor() { super('Level3'); }
 
   get levelNo() { return 3; }
@@ -187,30 +188,16 @@ export class Level3 extends BaseLevel {
   get defaultPos() { return DEF; }
   get introPose() { return 'player_point_think'; } // G3-11
   get fitHead() { return FIT_HEAD; }
+  get fallbacks() { return FB; }
+  get suaHand() { return false; } // lộ diện: không có bàn tay chỉ vào mèo, nút 💡 vẫn chỉ được
 
   resetLevel() {
     const A = this.A;
     A.fit = A.fit || {};
     if (!A.fit[3] || !Object.keys(A.fit[3]).length) A.fit[3] = { ...FIT };
-    Object.assign(this, { stage: 'scissors', shadowAt: 0, curtainTaps: 0, peeking: false, vaseDone: false, pillowDone: false, secrets: 0,
+    Object.assign(this, { stage: 'scissors', shadowAt: 0, curtainTaps: 0, peeking: false, vaseDone: false, secrets: 0,
       playTimers: [], taught: {}, kids: [], hoverT: null, boxHi: null, glowFx: null, meowLoop: null, boxBreath: null, think: null,
       buildIdx: 0, ghosts: [], placed: [] });
-  }
-
-  makeFallback(key) {
-    const spec = FB[key];
-    if (!spec) return;
-    const [w, h, neo, draw] = spec;
-    const g = this.make.graphics({ x: 0, y: 0 }, false);
-    draw(g, w, h);
-    g.generateTexture(key, w, h);
-    g.destroy();
-    let ax = w / 2, ay = h;
-    if (neo === 'bg' ) { ax = 0; ay = 0; }
-    else if (neo === 'đỉnh') ay = 0;
-    else if (neo === 'tâm') ay = h / 2;
-    else if (Array.isArray(neo)) [ax, ay] = neo;
-    this.A.entries[key] = { url: null, real: false, ax, ay, res: 1 };
   }
 
   // ---------- dựng phòng ----------
@@ -219,7 +206,9 @@ export class Level3 extends BaseLevel {
     const P = (k) => this.P(k);
 
     this.vase = this.img('l3_vase', ...P('l3_vase'), D.plant);
-    this.pillow = this.img('l1_pillow_white_idle', ...P('l1_pillow_white_idle'), D.curtain + 1); // gối nằm trên sofa_front
+    // 🎁 Bí mật: gối nhún rồi lật mặt, lần đầu thêm 5 cá khô bay ra; đã lật thì chỉ lắc. Gối nằm trên sofa_front.
+    this.addProp({ name: 'pillow', key: 'l1_pillow_white_idle', depth: D.curtain + 1, zone: D.zone + 2, hit: (s) => s.getBounds(),
+      tap: 'flip', sfx: 'sfx_cushion_soft', to: 'l1_pillow_white_flipped', secret: 5 });
     this.scissors = this.img('l3_scissors', ...P('l3_scissors'), D.curtain + 1.1); // kéo nằm trên bàn, trên rèm
     this.curtain = this.img('l3_curtain_closed', ...P('l3_curtain_closed'), D.curtain);
     const cb = this.curtain.getBounds();
@@ -265,7 +254,6 @@ export class Level3 extends BaseLevel {
 
     this.zone('curtain', cb);
     this.zone('vase', this.vase.getBounds(), D.zone + 2);
-    this.zone('pillow', this.pillow.getBounds(), D.zone + 2);
     this.zone('scissors', this.scissors.getBounds(), D.zone + 3);
     this.zone('box', this.box.getBounds(), D.zone + 3);
   }
@@ -288,11 +276,6 @@ export class Level3 extends BaseLevel {
   }
 
   // Cảnh lộ diện: bật vùng chạm Sữa nhưng không có bàn tay chỉ vào mèo (chủ dự án); nút 💡 vẫn chỉ được.
-  armSua(rect) {
-    if (this.phase !== 'found' || this.ending || !rect) return;
-    this.zone('sua', rect, D.zone + 10);
-  }
-
   // Chưa có file 4 mảnh: cắt tạm từ ảnh cột cào thành 4 dải ngang, giữ nguyên khung và neo (lắp lại ra đúng ảnh cây).
   makeParts() {
     const tree = this.textures.get('l3_cat_tree').getSourceImage(), e = this.A.entries.l3_cat_tree;
@@ -347,18 +330,11 @@ export class Level3 extends BaseLevel {
     switch (name) {
       case 'curtain': this.curtainTap(); break;
       case 'vase': this.vaseTap(); break;
-      case 'pillow': this.pillowTap(); break;
       case 'scissors': this.scissorsTap(); break;
       case 'box': this.boxTap(); break;
       case 'tree': this.swingPompom(); break;
       case 'suaPlay': if (this.stage === 'play') this.vanish(); break;
     }
-  }
-
-  zoneTo(name, s) {
-    const z = this.zones[name], b = s.getBounds();
-    z.setPosition(b.centerX, b.centerY).setSize(Math.max(MIN_HIT, b.width), Math.max(MIN_HIT, b.height));
-    z.input.hitArea.setSize(z.width, z.height);
   }
 
   // ---------- giai đoạn 1: bóng Sữa sau rèm (Lẩn tránh) ----------
@@ -416,37 +392,6 @@ export class Level3 extends BaseLevel {
     this.secrets++;
     const vb = this.vase.getBounds();
     this.fishBurst(vb.centerX, vb.top + 30, 5, true);
-  }
-
-  // 🎁 Bí mật: gối nhún rồi lật mặt như bản trước, thêm 5 cá khô bay ra (lần đầu).
-  pillowTap() {
-    const p = this.pillow;
-    if (this.busy.pillow) return;
-    this.busy.pillow = true;
-    this.sfx('sfx_cushion_soft');
-    // Chuyển động giữ như bản trước (nhún rồi lật mặt; đã lật thì chỉ lắc), chỉ thêm 5 cá lần đầu.
-    if (this.pillowDone) { this.wiggle(p, 3, 2, 240); this.time.delayedCall(260, () => (this.busy.pillow = false)); return; }
-    this.pillowDone = true;
-    this.secrets++;
-    this.squash(p, () => this.swap(p, 'l1_pillow_white_flipped', () => { this.busy.pillow = false; this.zoneTo('pillow', p); }));
-    const pb = p.getBounds();
-    this.fishBurst(pb.centerX, pb.top + 20, 5, false);
-  }
-
-  // n con cá khô bung ra từ (x, y) rồi bay về góc phải trên (như màn thưởng). drop: rơi ra thấp (lọ hoa nghiêng).
-  fishBurst(x, y, n, drop) {
-    this.sfx('sfx_clink');
-    const tx = 1024 - 80, ty = 62 - this.Y0;
-    for (let i = 0; i < n; i++) {
-      const f = this.img('ui_dried_fish', x, y, D.fx).setOrigin(0.5, 0.5);
-      this.fitWidth(f, 56);
-      const dx = (i - (n - 1) / 2) * 34, up = drop ? 40 : 110 + (i % 2) * 30;
-      this.tweens.chain({ targets: f, tweens: [
-        { x: x + dx, y: y - up, angle: dx / 2, duration: 280, ease: 'Quad.out' },
-        { x: tx, y: ty, scale: f.base * 0.6, duration: 520, delay: 120 + i * 70, ease: 'Quad.in' },
-        { alpha: 0, duration: 120 },
-      ], onComplete: () => { f.destroy(); this.sfx('sfx_pickup', 0.6); } });
-    }
   }
 
   swingPompom() {

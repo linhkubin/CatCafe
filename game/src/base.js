@@ -1,8 +1,11 @@
 // Phần dùng chung cho mọi màn: tiện ích sprite, vùng chạm, giao diện (♥, bong bóng nhiệm vụ, nút 💡, tay hướng dẫn),
 // nhân vật phản ứng, mở màn, cảnh bế, màn thưởng, nạp asset theo màn.
-// Mỗi màn (Level1, Level2…) kế thừa BaseLevel và cài: levelNo, keys (asset riêng), resetLevel(), buildRoom(),
-// handleLevel(name, g), strongHint(), update(time); tuỳ chọn: onIntro(), blockInput(name), beforeEnding(), endingHide(),
-// makeFallback(key) (ảnh tạm khi chưa có ảnh thật), defaultPos, rewardFish, callSfx, introPose (tư thế mở màn),
+// Thứ bậc: BaseLevel (file này) → ObjectLevel (objects.js: đồ vật khai báo bằng dữ liệu, nhặt / thả túi đồ)
+// → RoomsLevel (rooms.js: nhiều phòng, camera trượt ngang). Màn một phòng kế thừa ObjectLevel, màn nhiều phòng RoomsLevel.
+// Mỗi màn cài: levelNo, resetLevel(), buildRoom(), handleLevel(name, g) (cú chạm đồ vật viết riêng), strongHint(),
+// update(time); tuỳ chọn: onIntro(), blockInput(name), beforeEnding(), endingHide(),
+// fallbacks (bảng ảnh tạm vẽ bằng code, xem makeFallback), defaultPos, rewardFish, callSfx, introPose (tư thế mở màn),
+// bubblePop (cỡ bong bóng nhiệm vụ lúc bật ra), suaHand (tay chỉ vào mèo khi lộ diện),
 // fitHead (trạng thái → key đầu nhóm, co cùng tỉ lệ), túi đồ: onBagDrop(item, x, y), onBagCombine(a, b), onBagTap(item).
 // Toạ độ "thế giới" là khung 1024x1536; máy dài hơn 2:3 thì camera lùi lên (Y0) và nền được kéo dài.
 import { playSfx } from './sfx.js';
@@ -66,8 +69,33 @@ export class BaseLevel extends Phaser.Scene {
   prepareAssets() {
     finalizeEntries(this, this.levelKeys);
     for (const k of this.levelKeys) {
-      if (!this.textures.exists(k) && this.makeFallback) this.makeFallback(k);
+      if (!this.textures.exists(k)) this.makeFallback(k);
     }
+  }
+
+  // Ảnh tạm vẽ bằng code cho key chưa có ảnh thật: this.fallbacks[key] = [rộng, cao, neo, draw(g, w, h)].
+  // neo: 'bg' (góc trên trái), 'đỉnh', 'tâm', [x, y] hoặc bỏ trống (giữa đáy). fallbackCanvas = true: draw nhận
+  // context canvas 2D thay vì Phaser Graphics (level 5 vẽ chữ nhãn lên khối).
+  makeFallback(key) {
+    const spec = this.fallbacks && this.fallbacks[key];
+    if (!spec || this.textures.exists(key)) return;
+    const [w, h, neo, draw] = spec;
+    if (this.fallbackCanvas) {
+      const t = this.textures.createCanvas(key, w, h);
+      draw(t.getContext(), w, h);
+      t.refresh();
+    } else {
+      const g = this.make.graphics({ x: 0, y: 0 }, false);
+      draw(g, w, h);
+      g.generateTexture(key, w, h);
+      g.destroy();
+    }
+    let ax = w / 2, ay = h;
+    if (neo === 'bg') { ax = 0; ay = 0; }
+    else if (neo === 'đỉnh') ay = 0;
+    else if (neo === 'tâm') ay = h / 2;
+    else if (Array.isArray(neo)) [ax, ay] = neo;
+    this.A.entries[key] = { url: null, real: false, ax, ay, res: 1 };
   }
 
   // Thắng màn: lưu tiến độ (mở màn kế) rồi về menu chọn level.
@@ -78,17 +106,20 @@ export class BaseLevel extends Phaser.Scene {
 
   endingHide() { if (this.sua) this.sua.setVisible(false); }
 
-  buildBg(key) {
-    const bg = this.img(key, 0, 0, D.bg);
+  // Nền đặt ở x (màn nhiều phòng: mỗi phòng một nền), kèm dải trên/dưới kéo dài khi máy dài hơn 2:3.
+  // Nền đầu tiên (x = 0) gán vào this.bg / bgTop / bgBottom.
+  buildBg(key, x = 0) {
+    const bg = this.img(key, x, 0, D.bg);
     bg.setOrigin(0, 0);
-    this.bg = bg;
     const tex = this.textures.get(key);
     const src = tex.getSourceImage();
     const strip = Math.round(src.height * 0.05);
     if (!tex.has('top')) tex.add('top', 0, 0, 0, src.width, strip);
     if (!tex.has('bottom')) tex.add('bottom', 0, 0, src.height - strip, src.width, strip);
-    this.bgTop = this.add.image(0, 0, key, 'top').setOrigin(0, 1).setDepth(D.bg);
-    this.bgBottom = this.add.image(0, 1536, key, 'bottom').setOrigin(0, 0).setDepth(D.bg);
+    const top = this.add.image(x, 0, key, 'top').setOrigin(0, 1).setDepth(D.bg);
+    const bottom = this.add.image(x, 1536, key, 'bottom').setOrigin(0, 0).setDepth(D.bg);
+    if (x === 0) Object.assign(this, { bg, bgTop: top, bgBottom: bottom });
+    return { b: bg, top, bottom };
   }
 
   // ---------- tiện ích ----------
@@ -248,6 +279,23 @@ export class BaseLevel extends Phaser.Scene {
   }
 
   // Đổi tạm gốc về tâm để xoay quanh tâm; trả về hàm khôi phục.
+  // Khung phần vẽ thật của sprite (bỏ lề trong suốt), toạ độ thế giới; vùng chạm ôm đúng hình đồ vật.
+  artRect(s) {
+    const f = this.textures.get(s.key).get(this.iconFrame(s.key));
+    const left = s.x - s.originX * s.width * s.scaleX, top = s.y - s.originY * s.height * s.scaleY;
+    return new Phaser.Geom.Rectangle(left + f.cutX * s.scaleX, top + f.cutY * s.scaleY, f.cutWidth * s.scaleX, f.cutHeight * s.scaleY);
+  }
+
+  // Khung dùng khi đặt lại vùng chạm theo sprite (zoneTo): L1–L3 theo khung ảnh, màn nhiều phòng theo phần vẽ (artRect).
+  zoneRect(s) { return s.getBounds(); }
+
+  // Đặt lại vùng chạm `name` ôm sprite s (sau khi sprite đổi ảnh / đổi chỗ), không nhỏ hơn MIN_HIT.
+  zoneTo(name, s) {
+    const z = this.zones[name], b = this.zoneRect(s);
+    z.setPosition(b.centerX, b.centerY).setSize(Math.max(MIN_HIT, b.width), Math.max(MIN_HIT, b.height));
+    z.input && z.input.hitArea.setSize(z.width, z.height);
+  }
+
   centerOrigin(s) {
     const { originX: ox, originY: oy, x, y } = s;
     const c = s.getCenter();
@@ -265,6 +313,9 @@ export class BaseLevel extends Phaser.Scene {
   }
 
   sfx(key, gain = 1) { playSfx(this, key, gain); }
+
+  // Camera đang ở đâu theo chiều ngang (màn một phòng luôn 0).
+  get camX() { return this.cameras.main.scrollX; }
 
   // ---------- dựng cảnh ----------
   create() {
@@ -431,8 +482,11 @@ export class BaseLevel extends Phaser.Scene {
     this.touch();
     if (this.handMode === 'hint') this.handHide();
     if (name === 'sua') { this.suaTap(); return; }
-    this.handleLevel(name, g);
+    if (!this.tapProp(name, g)) this.handleLevel(name, g);
   }
+
+  // Đồ vật khai báo bằng dữ liệu (objects.js) xử lý cú chạm trước; true = đã xử lý.
+  tapProp() { return false; }
 
   tipOf(s) { const b = s.getBounds(); return [b.centerX, b.centerY]; }
 
@@ -447,11 +501,40 @@ export class BaseLevel extends Phaser.Scene {
     return [s.x + (xl + 8 - s.originX * w) * s.scaleX, s.y + (py - s.originY * h) * s.scaleY];
   }
 
-  // Bật vùng chạm Sữa khi cảnh lộ diện xong (dùng chung 2 level); tay hướng dẫn chỉ vào Sữa tới lần chạm kế tiếp.
+  // Bật vùng chạm mèo khi cảnh lộ diện xong; gọi lại thì dời vùng chạm sang rect mới (mèo chạy chỗ khác, L5).
+  // Tay hướng dẫn chỉ vào mèo tới lần chạm kế tiếp (suaHand: L1, L2; từ L3 không chỉ, nút 💡 vẫn chỉ được).
+  get suaHand() { return true; }
+
   armSua(rect) {
     if (this.phase !== 'found' || this.ending || !rect) return;
+    if (this.zones.sua) { this.zones.sua.setPosition(rect.centerX, rect.centerY).setSize(rect.width, rect.height); return; }
     this.zone('sua', rect, D.zone + 10);
-    this.handTap(this.suaPoint(), 'hint');
+    if (this.suaHand) this.handTap(this.suaPoint(), 'hint');
+  }
+
+  // Mèo lộ diện phát sáng nhẹ (sáng lên rồi thở đều) tới khi được bế.
+  glowOn(s = this.sua) {
+    if (this.renderer.type !== Phaser.WEBGL || !s.preFX || this.glow) return;
+    this.glow = s.preFX.addGlow(SUN, 0, 0, false, 0.1, 14);
+    this.tweens.add({ targets: this.glow, outerStrength: 4, duration: 700, onComplete: () => {
+      this.glowTw = this.tweens.add({ targets: this.glow, outerStrength: 1.5, duration: 1000, yoyo: true, repeat: -1 });
+    } });
+  }
+
+  // 🎁 n con cá khô bung ra từ (x, y) rồi bay về góc phải trên (như màn thưởng). drop: rơi ra thấp (lọ hoa nghiêng, L3).
+  fishBurst(x, y, n, drop = false) {
+    this.sfx('sfx_clink');
+    const tx = this.camX + 1024 - 80, ty = 62 - this.Y0;
+    for (let i = 0; i < n; i++) {
+      const f = this.img('ui_dried_fish', x, y, D.fx).setOrigin(0.5, 0.5);
+      this.fitWidth(f, 56);
+      const dx = (i - (n - 1) / 2) * 34, up = drop ? 40 : 110 + (i % 2) * 30;
+      this.tweens.chain({ targets: f, tweens: [
+        { x: x + dx, y: y - up, angle: dx / 2, duration: 280, ease: 'Quad.out' },
+        { x: tx, y: ty, scale: f.base * 0.6, duration: 520, delay: 120 + i * 70, ease: 'Quad.in' },
+        { alpha: 0, duration: 120 },
+      ], onComplete: () => { f.destroy(); this.sfx('sfx_pickup', 0.6); } });
+    }
   }
 
   suaTap() {
@@ -514,13 +597,16 @@ export class BaseLevel extends Phaser.Scene {
   }
 
   // ---------- bong bóng nhiệm vụ ----------
+  // Bong bóng bật ra: phóng tới `peak` trong `up` ms rồi về `rest` trong `down` ms.
+  get bubblePop() { return { peak: 1.15, up: 230, rest: 1, down: 120 }; }
+
   bubbleIntro() {
-    const B = this.bubble;
+    const B = this.bubble, k = this.bubblePop;
     B.home = 'center';
     B.ct.setVisible(true).setPosition(...this.bubbleCenter).setScale(0);
     this.sfx('sfx_meow_question');
     this.tweens.chain({ targets: B.ct, tweens: [
-      { scale: 1.15, duration: 230, ease: 'Quad.out' }, { scale: 1, duration: 120 },
+      { scale: k.peak, duration: k.up, ease: 'Quad.out' }, { scale: k.rest, duration: k.down },
     ] });
     this.qHop = this.time.addEvent({ delay: 700, repeat: 1, callback: () => this.hop(B.q, 14, 300) });
     this.time.delayedCall(1900, () => this.bubbleToCorner());
