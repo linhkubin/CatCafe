@@ -308,15 +308,23 @@ export class BaseLevel extends Phaser.Scene {
     }
   }
 
+  // Thanh ♥ của mèo đang tìm: Sữa 4 ô (L1–L4), mèo khác có thể nhiều ô hơn (Mun 6 ô, L5). idx = ô được tô khi thắng màn này.
+  get heartBar() { return { n: 4, x0: 145, step: 62, r: 22, reg: 'hearts', idx: this.levelNo - 1 }; }
+  get catFace() { return 'sua_face_icon'; }      // mặt mèo trong bong bóng nhiệm vụ và màn thưởng
+  get heldKey() { return 'sua_held'; }           // mèo trong cảnh bế
+  get catMeow() { return 'sua_sfx_meow'; }       // tiếng kêu trong cảnh bế
+  get catTapSfx() { return 'sua_sfx_meow_cute'; } // chạm mèo đã lộ diện
+
   buildUI() {
-    // Thanh ♥ (biểu tượng Sữa + 4 ô tiến độ), bong bóng nhiệm vụ, nút gợi ý, tay hướng dẫn, chân gợi ý.
+    // Thanh ♥ (biểu tượng mèo + các ô tiến độ), bong bóng nhiệm vụ, nút gợi ý, tay hướng dẫn, chân gợi ý.
+    const HB = this.heartBar;
     this.heartIcon = this.img('ui_heart', 72, 60, D.ui, true);
     this.fitWidth(this.heartIcon, 56);
     this.slots = this.add.graphics().setScrollFactor(0).setDepth(D.ui);
     this.slots.lineStyle(4, BROWN, 1).fillStyle(CREAM, 1);
-    for (let i = 0; i < 4; i++) { this.slots.fillCircle(145 + i * 62, 60, 22); this.slots.strokeCircle(145 + i * 62, 60, 22); }
-    const done = this.levelNo === 1 ? 0 : (this.registry.get('hearts') || 0);
-    for (let i = 0; i < Math.min(done, 4); i++) { const h = this.img('ui_heart', 145 + i * 62, 60, D.ui + 1, true).setOrigin(0.5, 0.5); this.fitWidth(h, 40); }
+    for (let i = 0; i < HB.n; i++) { this.slots.fillCircle(HB.x0 + i * HB.step, 60, HB.r); this.slots.strokeCircle(HB.x0 + i * HB.step, 60, HB.r); }
+    const done = this.levelNo === 1 ? 0 : (this.registry.get(HB.reg) || 0);
+    for (let i = 0; i < Math.min(done, HB.n); i++) { const h = this.img('ui_heart', HB.x0 + i * HB.step, 60, D.ui + 1, true).setOrigin(0.5, 0.5); this.fitWidth(h, HB.r * 1.8); }
 
     const ct = this.add.container(512, 640).setScrollFactor(0).setDepth(D.ui + 5).setVisible(false);
     const bub = this.add.image(0, 0, 'ui_speech_bubble');
@@ -325,7 +333,7 @@ export class BaseLevel extends Phaser.Scene {
     bub.setScale(330 / bub.width);
     const dark = this.add.image(0, 4, 'ui_cat_head_dark');
     dark.setScale(165 / dark.width);
-    const face = this.add.image(0, 4, 'sua_face_icon').setAlpha(0);
+    const face = this.add.image(0, 4, this.catFace).setAlpha(0);
     face.setScale(165 / face.width);
     const q = this.add.image(0, 10, this.textures.exists('ui_question_mark_white') ? 'ui_question_mark_white' : 'ui_question_mark');
     q.setScale(55 / q.width);
@@ -447,7 +455,7 @@ export class BaseLevel extends Phaser.Scene {
 
   suaTap() {
     if (this.phase !== 'found' || this.ending) return;
-    this.sfx('sua_sfx_meow_cute'); // O2-20
+    this.sfx(this.catTapSfx); // O2-20
     this.startEnding();
   }
 
@@ -896,7 +904,7 @@ export class BaseLevel extends Phaser.Scene {
     const wb = this.worldBottom, wt = wb - H;
     const hk = 'player_hands_lift', he = this.A.entries[hk] || {};
     const hands = this.img(hk, 0, 0, 0);
-    const held = this.img('sua_held', 0, 0, 0).setVisible(false);
+    const held = this.img(this.heldKey, 0, 0, 0).setVisible(false);
     const gy = he.grip ? he.grip[1] / hands.height : 0.25;           // điểm nắm (giữa hai lòng bàn tay), tính từ đỉnh ảnh
     const L = (hands.originY - gy) * hands.displayHeight;             // từ điểm nắm tới đáy ảnh tay (k = 1)
     const c = (0.5 - held.originY) * held.displayHeight;              // tâm Sữa nằm dưới nách bao nhiêu (k = 1)
@@ -927,7 +935,7 @@ export class BaseLevel extends Phaser.Scene {
         { angle: 5, duration: 200 }, { angle: -5, duration: 400 }, { angle: 5, duration: 400 }, { angle: 0, duration: 200 },
       ] });
       this.hearts(cx, A - held.originY * held.displayHeight - 10, 3);
-      this.sfx('sua_sfx_meow');
+      this.sfx(this.catMeow);
       this.sfx('sfx_heart');
     });
     T(1900, () => this.tweens.add({ targets: ct, scale: 1.1, duration: 300 }));
@@ -948,16 +956,17 @@ export class BaseLevel extends Phaser.Scene {
     if (this.endCt) this.tweens.add({ targets: this.endCt.ct, alpha: 0, duration: 300 });
     this.sfx('sfx_win');
 
-    const face = this.img('sua_face_icon', 512, H * 0.38, D.end + 10, true).setOrigin(0.5, 0.5);
+    const face = this.img(this.catFace, 512, H * 0.38, D.end + 10, true).setOrigin(0.5, 0.5);
     this.fitWidth(face, 300);
     const fb = face.base;
     face.setScale(0);
     this.tweens.add({ targets: face, scale: fb, duration: 400, ease: 'Back.out' });
 
-    // ♥ N/4: ô thứ N của thanh tiến độ được tô trái tim.
-    this.registry.set('hearts', Math.max(this.registry.get('hearts') || 0, this.levelNo));
-    const slot = this.img('ui_heart', 145 + (this.levelNo - 1) * 62, 60, D.end + 10, true).setOrigin(0.5, 0.5);
-    this.fitWidth(slot, 40);
+    // ♥ N/4 (Sữa) hoặc ♥ N/6 (Mun): ô idx của thanh tiến độ được tô trái tim.
+    const HB = this.heartBar;
+    this.registry.set(HB.reg, Math.max(this.registry.get(HB.reg) || 0, HB.idx + 1));
+    const slot = this.img('ui_heart', HB.x0 + HB.idx * HB.step, 60, D.end + 10, true).setOrigin(0.5, 0.5);
+    this.fitWidth(slot, HB.r * 1.8);
     const sb = slot.base;
     slot.setScale(0);
     this.heartIcon.setDepth(D.end + 10);

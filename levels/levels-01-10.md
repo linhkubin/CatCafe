@@ -470,8 +470,8 @@ PHÒNG NGỦ                     PHÒNG KHÁCH (bắt đầu)          PHÒNG L�
 | Độ khó | 🔴 **Hard · 150 giây** |
 | Mèo | **Mun** (♥ 1/6), lần đầu xuất hiện |
 | Phòng | 2: Sân sau ⇄ Con hẻm, buổi chiều |
-| Dạy | Điều khiển đốm sáng (vuốt giữ và kéo), Mèo nhút nhát |
-| Bước bắt buộc | 7 |
+| Dạy | Nối tia nắng bằng đồ sáng bóng (kéo-thả từ túi), Mèo nhút nhát |
+| Bước bắt buộc | 8 (thùng giấy, 3 đồ sáng, kéo bạt, đặt 3 điểm nối tia) |
 
 **Sự thật về mèo:** mèo nào thấy **đốm sáng chạy trên tường** cũng không nhịn được, kể cả con nhút nhát nhất.
 
@@ -497,66 +497,86 @@ SÂN SAU (bắt đầu)                    CON HẺM
 └──────────────────────────┘  └──────────────────────────┘
 ```
 
-**Đồ vật:**
+**Đồ vật** (G5-5, chủ dự án đổi cơ chế: bỏ giữ-kéo đốm sáng, thay bằng 3 đồ sáng bóng nối tia nắng tới gần Mun):
 
 | Số | Đồ vật | Phòng | Loại | Thao tác | Phản hồi | Âm thanh |
 |---|---|---|---|---|---|---|
 | 1 | Thùng giấy cũ | Sân sau | 🔑 | Chạm | Bóng đen vụt chạy ra hẻm. Bong bóng nhiệm vụ nảy mạnh hơn bình thường (sắp gặp mèo mới) | Tiếng chân chạy lạch xạch |
-| 2a | Gương nhỏ trên bàn trang điểm | Sân sau | 🎒 | Chạm | Gương vào túi đồ, lóe một tia sáng khi bay | "Kính coong" |
+| 2a | Gương nhỏ trên bàn trang điểm | Sân sau | 🎒 | Chạm | Gương vào túi, lóe một tia sáng khi bay | "Kính coong" |
+| 2b | Nắp hộp bánh quy thiếc (tròn, bóng) dựa cạnh thùng giấy | Sân sau | 🎒 | Chạm | Nắp vào túi, lóe sáng | "Keng" |
+| 2c | Đĩa CD cũ treo lủng lẳng trên móc tường **bên trái hẻm**, xa xe ba gác (G5-7) | Hẻm | 🎒 | Chạm | Đĩa vào túi, lóe sáng | "Tinh" |
 | 3 | Túi rác đen tròn | Sân sau | 🎭 | Chạm | Trông như mèo đen cuộn tròn, chỉ là túi rác. Nhân vật bịt mũi | "Sột soạt" |
 | 4 | Cửa sổ quán | Sân sau | ✨ | Chạm | Sữa áp mặt vào kính, tò mò nhìn ra hẻm | "Meo?" (giọng Sữa) |
-| 6 | Tấm bạt mái hiên | Hẻm | 🔑 | Vuốt lên | Bạt cuộn lên, **vệt nắng** chiếu xuống chỗ (9) | Bạt "phành phạch" |
-| 7 | Bức tường đối diện | Hẻm | — | — | Nơi đốm sáng xuất hiện | — |
+| 6 | Tấm bạt mái hiên + **sợi dây kéo có vòng tròn** thả xuống | Hẻm | 🔑 | Vuốt xuống trên dây (hoặc vuốt bạt lên) | Bạt cuộn lên, **nắng chiếu xuống** điểm A trên đất hẻm; hẻm sáng lên | Bạt "phành phạch" |
+| 7 | 3 điểm nối tia A → B → C | Hẻm | 🎯 | Kéo đồ sáng từ túi thả vào **đốm sáng đang hiện** | Xem "Cơ chế nối tia" | "Ting" mỗi lần nối |
 | 8a | Gầm xe ba gác | Hẻm | 🔑 | Chạm | Đôi mắt vàng, Mun rúc sâu hơn. Bong bóng nhân vật: hình đốm sáng | "Khè" rất nhỏ |
-| 9 | Vệt nắng | Hẻm | 🎯 | Đặt gương | Gương lóe, **đốm sáng** hiện trên tường (7) | "Ting" |
-| 9a | Đốm sáng | Hẻm | 🔑 | Vuốt giữ và kéo | Đốm sáng chạy theo ngón tay (xem cơ chế) | Tiếng "vù" nhỏ khi di chuyển |
 | 10 | Con quạ trên dây điện | Hẻm | 🎭 | Chạm | Bóng đen hóa ra là quạ, bay đi rồi đậu lại | "Quạ!" |
 | 11 | Ống thoát nước | Hẻm | 🎁 | Chạm | 5 Cá khô | Leng keng |
+| 12 | Chậu cây xương rồng cạnh bậc cửa | Sân sau | ✨ | Chạm | Chậu lắc lư, một bông hoa nhỏ bật nở rồi khép lại | "Póc" |
+| 13 | Dây phơi áo | Sân sau | ✨ | Chạm | Chiếc áo phồng gió bay phấp phới, cái kẹp bật ra rồi nhân vật kẹp lại | Gió "phù" |
+| 14 | Chuông gió treo cửa quán | Sân sau | ✨ | Chạm | Chuông đung đưa, Sữa trong cửa sổ ngóc đầu nhìn theo | "Leng keng" |
+| 15 | Đôi dép tổ ong cũ cạnh thùng giấy | Sân sau | 🎁 | Chạm | Dép lật lên, bên dưới có túi cá khô: 5 Cá khô | "Bẹp" |
+| 16 | Xe đạp cũ dựng tường | Hẻm | ✨ | Chạm | Chuông xe kêu, bánh xe quay vài vòng | "Kính coong" |
+| 17 | Vũng nước | Hẻm | ✨ | Chạm | Gợn sóng tròn, bắn vài giọt | "Tõm" |
+| 18 | Thạch sùng trên tường | Hẻm | 🎭 | Chạm | Bóng nhỏ trông như đuôi mèo, hóa ra thạch sùng chạy vụt lên cao | "Tặc tặc" |
+| 19 | Ống bơ sữa trên bậu cửa sổ hẻm | Hẻm | 🎁 | Chạm | Ống bơ nghiêng, cá khô rơi ra: 5 Cá khô | "Lốc cốc" |
 
-**Cơ chế đốm sáng:**
-- Đốm sáng chỉ di chuyển trong vùng **bức tường (7) và mặt đất của hẻm**.
-- Đốm sáng **ở xa gầm xe**: Mun không phản ứng.
-- Đốm sáng **sát gầm xe, di chuyển chậm**: một **bàn chân đen thò ra vồ hụt**.
-- Đốm sáng **ra giữa hẻm, lượn qua lại chậm ít nhất 2 giây**: **Mun phóng ra đuổi**, vồ trúng.
-- Kéo **quá nhanh**: Mun chỉ đảo mắt theo, không động đậy. Đốm sáng nháy nhẹ hai lần (gợi ý kéo chậm lại).
+**Dấu hiệu phải kéo bạt** (hẻm lúc đầu nằm trong bóng râm, hơi tối):
+- Bạt có vài lỗ thủng nhỏ, **lọt mấy chấm nắng li ti lấp lánh** trên đất hẻm, nhắc rằng phía trên có nắng.
+- **Sợi dây kéo có vòng tròn** thả từ mép bạt xuống, **đung đưa nhẹ trong gió** liên tục (đồ duy nhất trong hẻm tự chuyển động), ngang tầm tay nhân vật.
+- Có ít nhất 1 đồ sáng trong túi mà hẻm còn tối: lúc sang hẻm, bong bóng nhân vật hiện **hình mặt trời bị che** một lần.
+- Thả đồ sáng xuống đất khi chưa kéo bạt: đồ bay về túi, sợi dây giật nhẹ và lấp lánh.
+- Gợi ý 8 giây: dây đung đưa mạnh hơn; 16 giây: dây lấp lánh.
+
+**Cơ chế nối tia (G5-5):**
+- Kéo bạt xong: **một dải nắng hẹp** (vừa đủ rộng hơn đốm sáng một chút, G5-9) chiếu xuống **điểm A** (đất hẻm, xa xe ba gác nhất), thấy rõ một **đốm sáng nhảy nhót** ở đó.
+- **Đốm sáng luôn là chỗ đặt kế tiếp** (gợi ý tự nhiên, không cần ô mờ). Đồ phải lắp **đúng thứ tự: nắp thiếc ở A → gương ở B → đĩa CD ở C** (G5-10, sửa ở G5-12). Thả đúng đồ vào đốm sáng: đồ dựng nghiêng ở đó, **tia sáng bật ra** và đốm sáng chạy tới điểm kế tiếp, gần Mun hơn. **Thả sai đồ**: đồ bay thẳng về ô của nó trong túi rồi lắc lắc một nhịp (như level 4, G4-43), đốm sáng nháy:
+  - Đặt ở **A** → tia lên tường, đốm sáng tới **điểm B** (bậu tường giữa hẻm). Mun: đôi mắt mở to, nhìn theo đốm sáng.
+  - Đặt ở **B** → tia chiếu tới **điểm C: giỏ (hoặc yên) xe đạp cũ dựng tường** (G5-15, thay G5-14). Mun: **bàn chân đen thò ra vồ hụt**, rồi ló cả mặt.
+  - Đặt đĩa CD gác nghiêng trên **xe đạp (C)** → tia hắt xuống ngay trước gầm xe, đốm sáng **nhảy nhót lượn qua lại** → **Mun phóng ra đuổi** (Lộ diện).
+  - Từ lúc này tới hết cảnh lộ diện, **tia từ đồ ở C luôn bám theo đốm sáng** (đầu tia di chuyển cùng đốm sáng khi lượn, khi Mun đuổi và khi Mun đè), không để đốm sáng chạy rời khỏi tia (G5-8).
+- Thả đồ không trúng đốm sáng: đồ bay về túi, đốm sáng nháy hai lần.
+- Đồ đã đặt không nhặt lại được. Chỉ 3 đồ, đủ đúng 3 điểm.
+- Gợi ý 16 giây khi đã có nắng: icon **đồ đúng kế tiếp** trong túi nảy lên.
 
 **Luồng giải:**
 
 | Giây | Người chơi làm | Game phản hồi |
 |---|---|---|
 | 0–10 | Chạm **thùng giấy (1)** | Bóng đen vụt chạy ra hẻm. Bong bóng nhiệm vụ nảy mạnh |
-| 11–20 | Chạm **mũi tên ►** sang hẻm | Bản đồ mini nhấp nháy ô Hẻm |
-| 21–35 | Chạm **gầm xe (8a)** | Đôi mắt vàng, Mun rúc sâu. Bong bóng: hình đốm sáng. Hẻm đang trong bóng râm |
-| 36–60 | Về sân sau, chạm **gương (2a)** | Gương vào túi |
-| 61–80 | Sang hẻm, vuốt **tấm bạt (6)** | Bạt cuộn lên, vệt nắng chiếu xuống |
-| 81–90 | Đặt **gương** vào **vệt nắng (9)** | Đốm sáng hiện trên tường |
-| 91–110 | Vuốt kéo **đốm sáng** xuống đất, sát gầm xe | Bàn chân đen thò ra vồ hụt |
-| 111–135 | Kéo đốm sáng ra giữa hẻm, lượn chậm | **Mun phóng ra đuổi, vồ trúng.** Lộ diện |
-| 135–140 | Chạm **Mun** | Cảnh bế chung |
+| 10–30 | Chạm **gương (2a)**, **nắp thiếc (2b)** | Hai đồ vào túi |
+| 30–45 | Sang hẻm, chạm **gầm xe (8a)** | Đôi mắt vàng, Mun rúc sâu. Bong bóng: hình đốm sáng. Hẻm đang trong bóng râm, dây kéo đung đưa |
+| 45–55 | Chạm **đĩa CD (2c)** | Đĩa vào túi, đôi mắt giật mình |
+| 55–65 | Vuốt **dây kéo bạt (6)** | Bạt cuộn lên, nắng xuống điểm A |
+| 65–110 | Thả **nắp thiếc → A, gương → B, đĩa CD → C** | Tia nắng nối dần tới gầm xe; Mun mở to mắt → thò chân vồ → ló mặt |
+| 110–130 | (xem) | **Mun phóng ra đuổi đốm sáng.** Lộ diện |
+| 130–140 | Chạm **Mun** | Cảnh bế chung |
 
 **Chạm sai và làm khác thứ tự:**
-- Đặt gương khi chưa kéo bạt: chỗ (9) không có nắng, gương không lóe, bạt (6) lấp lánh.
-- Chạm bàn chân Mun khi nó đang rình đốm sáng: Mun rụt lại (Lẩn tránh), chỉ cần kéo đốm sáng lại.
-- Chạm Mun lúc đang đuổi đốm sáng giữa hẻm: **thắng ngay**, không cần đợi Mun vồ trúng.
-- Lấy gương trước khi gặp Mun: được, bong bóng hình đốm sáng sẽ hiện khi chạm gầm xe.
-- Chạm túi rác hoặc quạ: phản ứng vui, không ảnh hưởng.
+- Lấy 3 đồ sáng theo thứ tự nào cũng được; chưa gặp Mun cũng lấy được.
+- Thả đồ khi chưa kéo bạt: đồ bay về túi, dây kéo giật nhẹ, lấp lánh.
+- Thả đồ ra ngoài đốm sáng: đồ bay về túi, đốm sáng nháy hai lần.
+- Chạm bàn chân Mun lúc đang vồ: Mun rụt lại (Lẩn tránh), không mất gì.
+- Chạm Mun lúc đang đuổi đốm sáng: **thắng ngay**.
+- Thả sai đồ vào đốm sáng (ví dụ đĩa CD vào A): đồ bay về túi, lắc lắc.
+- Chạm túi rác, quạ, thạch sùng và các đồ ✨: phản ứng vui, không ảnh hưởng.
 
 **Thang gợi ý:**
-1. *8 giây:* đôi mắt vàng chớp chớp dưới gầm xe; khi đã có đốm sáng, đốm sáng tự nhấp nháy.
-2. *16 giây:* đồ cần chạm lấp lánh (thùng giấy, mũi tên, gương, bạt, vệt nắng); nếu đang kéo đốm sáng thì một đường chấm mờ hiện ra, chỉ từ đốm sáng tới gầm xe rồi ra giữa hẻm.
-3. *💡:* bàn chân mèo làm mẫu: kéo đốm sáng chậm rãi theo đường chấm.
+1. *8 giây:* đôi mắt vàng chớp chớp dưới gầm xe; hẻm còn tối thì dây kéo đung đưa mạnh hơn; đã có nắng thì đốm sáng kế tiếp nhảy nhót mạnh hơn.
+2. *16 giây:* đồ cần chạm lấp lánh (thùng giấy, đồ sáng chưa lấy, dây kéo); đã có nắng và có đồ trong túi thì icon đồ sáng trong túi nảy lên.
+3. *💡:* bàn chân mèo làm mẫu: chỉ đồ cần lấy, kéo dây, hoặc kéo một đồ sáng từ túi thả vào đốm sáng.
 
-**Khoảnh khắc lộ diện:** Mun phóng vọt ra khỏi gầm xe, lần đầu người chơi thấy rõ cả con: **mèo đen tuyền, mắt vàng to**. Nó đuổi đốm sáng hai vòng, rồi **đè hai chân trước lên đốm sáng**. Nhấc chân lên xem: đốm sáng lại hiện ngay trên lưng chân nó. Mun ngơ ngác, nhìn chân, nhìn bạn.
+**Khoảnh khắc lộ diện:** Mun phóng vọt ra khỏi gầm xe, lần đầu người chơi thấy rõ cả con: **mèo đen tuyền, mắt vàng to**. Đốm sáng tự lượn **đúng hai vòng** giữa hẻm (nhanh, gọn), Mun đuổi sát theo, hết vòng thứ hai là **bắt được: đè hai chân trước lên đốm sáng** (G5-13). Nhấc chân lên xem: đốm sáng lại hiện ngay trên lưng chân nó. Mun ngơ ngác, nhìn chân, nhìn bạn.
 
 **Chạm Mun → cảnh bế chung.** Lần đầu thấy cảnh bế với lông đen, mắt vàng.
 
 **Ghi chú vẽ, hoạt hình, âm thanh:**
 - Mun xuất hiện lần đầu: cần thiết kế nhân vật rõ ràng (mèo đen tuyền, mắt vàng, tai hơi to, đuôi dài).
 - Sữa có một cameo ở cửa sổ quán (nhắc người chơi rằng Sữa đã ở quán).
-- Đốm sáng: tròn, trắng vàng, có quầng sáng mờ, nhảy nhót nhẹ khi đứng yên.
+- Đốm sáng, tia nắng, tia phản chiếu: ảnh phẳng có vân chì, quầng sáng và độ chói do code làm (G5-3); đốm sáng nhảy nhót nhẹ khi đứng yên.
 - Nhạc nền: hơi bí ẩn ở đầu màn, chuyển sang vui nhộn khi Mun bắt đầu đuổi đốm sáng.
 
-**Thưởng:** 50 Cá khô · Mun ♥ 1/6.
+**Thưởng:** 50 Cá khô (+5 mỗi bí mật: ống thoát nước, dép tổ ong, ống bơ; G5-11) · Mun ♥ 1/6.
 
 ---
 

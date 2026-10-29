@@ -1,5 +1,7 @@
 # Bản build web (tạo lại bằng: python game/tools/build_web.py)
 game/dist/
+game/dist_published.json
+game/dist_changes.txt
 # Ảnh tạm (tạo lại bằng: python game/tools/make_placeholders.py)
 game/placeholders/
 

@@ -378,9 +378,9 @@ Icon túi đồ dùng thu nhỏ ảnh trong cảnh (`l4_mattress_fallen`, `l4_pi
 
 ### Lớp hiển thị
 
-**Sân sau:** `l5_bg_backyard` → `l5_cafe_window` (+ Sữa ở cửa sổ) → `l5_vanity_table` + `l5_mirror_small` → `l5_cardboard_box` → `l5_trash_bag_*` → giao diện.
+**Sân sau:** `l5_bg_backyard` → `l5_cafe_window` (+ Sữa ở cửa sổ) → `l5_vanity_table` + `l5_mirror_small` → `l5_cardboard_box` + `l5_tin_lid` → `l5_trash_bag_*` → giao diện.
 
-**Hẻm:** `l5_bg_alley` (có bức tường đối diện) → `l5_sunbeam` (ẩn tới khi cuộn bạt) → `l5_light_spot` → `l5_cart` (+ vùng gầm tối) + `mun_*` dưới gầm → `l5_drain_pipe` → `l5_awning_*` → `l5_crow_*` → giao diện.
+**Hẻm:** `l5_bg_alley` (có bức tường đối diện; phủ tối bằng code tới khi cuộn bạt) → chấm nắng li ti (code) → `l5_sunbeam` → đồ sáng đã đặt ở A/B/C (`l5_mirror_placed`, `l5_tin_lid_placed`, `l5_cd_placed`) → tia phản chiếu (code) → `l5_light_spot` → `l5_cart` (+ `l5_cd_hanging`, vùng gầm tối) + `mun_*` dưới gầm → `l5_drain_pipe` → `l5_awning_*` → `l5_crow_*` → giao diện.
 
 ### Đồ vật
 
@@ -391,37 +391,43 @@ Icon túi đồ dùng thu nhỏ ảnh trong cảnh (`l4_mattress_fallen`, `l4_pi
 | 2 | Sân sau | Gương nhỏ | `l5_mirror_small` (mới) trên `l5_vanity_table` (mới) | trên bàn | Chạm | — | vào túi | `fly_to_bag`, lóe một tia sáng khi bay | `l5_sfx_glass_ting` |
 | 3 | Sân sau | Túi rác đen 🎭 | `l5_trash_bag_idle` (mới), `l5_trash_bag_after` (mới: xẹp xuống, miệng túi mở) | idle | Chạm | — | idle → after | `squash` → `swap`; `player_cover_nose` (mới) 1 giây | `l5_sfx_plastic` |
 | 4 | Sân sau | Cửa sổ quán | `l5_cafe_window` (mới), `sua_press_window` (mới: Sữa áp mặt vào kính) | — | Chạm | — | — | Sữa `hop` nhỏ trong cửa sổ | `sua_sfx_meow_question` |
-| 5 | Hẻm | Tấm bạt mái hiên | `l5_awning_down` (mới: bạt thả che), `l5_awning_rolled` (mới: bạt cuộn lên) | down | Vuốt lên | — | down → rolled (giữ) | `swap`; `l5_sunbeam` (mới) hiện dần 0,5 giây | `l5_sfx_canvas_flap` |
-| 6 | Hẻm | Vệt nắng (chỗ đặt gương) | `l5_sunbeam` | ẩn | Đặt gương | bạt đã rolled | có gương | `drop_in` gương (`l5_mirror_placed`, mới: gương dựng nghiêng); `l5_light_spot` hiện trên tường | `l5_sfx_glass_ting` |
-| 6 | Hẻm | Vệt nắng | — | ẩn | Đặt gương | **bạt chưa cuộn** | — | `return_to_bag`; bạt `sparkle` | `sfx_wrong` |
-| 7 | Hẻm | **Đốm sáng** | `l5_light_spot` (mới: chấm tròn trắng vàng có quầng mờ) | trên tường | **Giữ và kéo** | — | di chuyển theo ngón tay | Giới hạn trong vùng tường + mặt đất hẻm. Khi đứng yên: nhảy nhót nhẹ ±3px. Kéo quá nhanh: nháy 2 lần | `l5_sfx_light_hum` (rất nhẹ, khi di chuyển) |
+| 2b | Sân sau | Nắp hộp bánh thiếc | `l5_tin_lid` (mới: nắp tròn bóng dựa cạnh thùng) | dựa cạnh thùng | Chạm | — | vào túi | `fly_to_bag`, lóe sáng | `sfx_clink` |
+| 2c | Hẻm | Đĩa CD cũ | `l5_cd_hanging` (mới: treo dây trên móc tường bên trái hẻm, xa xe ba gác; G5-7) | treo | Chạm | — | vào túi | `fly_to_bag`, lóe sáng | `l5_sfx_glass_ting` |
+| 5 | Hẻm | Bạt + dây kéo | `l5_awning_down` (mới: bạt thả che, vài lỗ thủng nhỏ), `l5_awning_rolled` (mới), `l5_awning_cord` (mới: dây có vòng tròn) | down | Vuốt xuống trên dây (hoặc vuốt lên trên bạt) | — | down → rolled (giữ) | Dây `sway` liên tục khi down; kéo: dây giật xuống, bạt `swap` rolled; lớp phủ tối tan 0,5 giây; `l5_sunbeam` hiện dần; chấm nắng li ti biến mất | `l5_sfx_canvas_flap` |
+| 6 | Hẻm | Điểm nối tia A/B/C | `l5_light_spot` ở điểm kế tiếp | ẩn | Kéo-thả đồ sáng từ túi vào đốm sáng | bạt rolled; đúng điểm đang có đốm sáng | đặt đồ, đốm sáng sang điểm kế | `drop_in` ảnh đồ "đặt" (dựng nghiêng); tia phản chiếu (code) vẽ dần 0,3 giây tới điểm kế; đốm sáng `pop` ở đó, nhảy nhót ±3px | `l5_sfx_glass_ting` |
+| 6 | Hẻm | Đất hẻm | — | — | Thả đồ sáng | **bạt chưa cuộn** | — | `return_to_bag`; dây kéo `wiggle` + `sparkle` | `sfx_wrong` |
+| 6 | Hẻm | Ngoài đốm sáng | — | — | Thả đồ sáng | bạt đã cuộn | — | `return_to_bag`; đốm sáng nháy 2 lần | `sfx_wrong` |
 | 8 | Hẻm | Gầm xe ba gác | `l5_cart` (mới) | — | Chạm | Mun dưới gầm | — | `mun_eyes_dark` lùi sâu (mục 6.1); bong bóng suy nghĩ vẽ `l5_light_spot` | `mun_sfx_hiss_tiny` |
 | 9 | Hẻm | Quạ 🎭 | `l5_crow_idle` (mới: đậu dây điện, bóng đen tròn), `l5_crow_far` (mới: đậu xa hơn trên dây) | idle | Chạm | — | idle → far (giữ) | Bay cong sang chỗ mới 0,6 giây | `l5_sfx_crow` |
 | 10 | Hẻm | Ống thoát nước 🎁 | `l5_drain_pipe` (mới) | — | Chạm | — | — | `wiggle`; `ui_dried_fish` (một lần) | `sfx_clink` |
 
-**Luật đốm sáng (dev):**
+**Thứ tự lắp (G5-10, sửa G5-12):** A nhận **nắp thiếc**, B nhận **gương**, C nhận **đĩa CD**. Thả sai đồ vào đốm sáng: `return_to_bag` thẳng rồi `wiggle` trong ô (như G4-43), đốm sáng nháy 2 lần, `sfx_wrong`. Gợi ý 16 giây: icon đồ đúng kế tiếp nảy.
 
-| Điều kiện | Mun phản ứng |
-|---|---|
-| Đốm sáng cách gầm xe > 200px | Đôi mắt nhìn theo (mắt dịch theo hướng đốm sáng), không gì khác |
-| Tốc độ kéo > 600px/giây | Mắt đảo theo, không động đậy; đốm sáng nháy 2 lần |
-| Cách gầm xe ≤ 200px, tốc độ ≤ 600px/giây | `mun_paw_reach` (mới: một bàn chân đen thò ra vồ) mỗi 1 giây |
-| Đốm sáng nằm trong vùng "giữa hẻm" và di chuyển chậm, cộng dồn ≥ 2 giây | **Mun phóng ra** (bảng mèo) |
+**Đồ thêm (G5-11):** ✨ chậu xương rồng, dây phơi áo, chuông gió (sân sau); xe đạp, vũng nước (hẻm). 🎭 thạch sùng (hẻm). 🎁 dép tổ ong (sân sau), ống bơ trên bậu cửa sổ (hẻm), mỗi chỗ 5 Cá khô một lần. Phản ứng xem bảng đồ vật trong `levels-01-10.md`.
+
+**Nối tia (dev, G5-5):** 3 điểm cố định trong hẻm, đo theo bố cục (Dev chọn trên bản khối, GD duyệt):
+
+| Điểm | Vị trí | Sau khi đặt đồ: đốm sáng tới | Mun phản ứng |
+|---|---|---|---|
+| A | Đất hẻm, dưới mép bạt, xa xe nhất (chỗ nắng rơi) | B | `mun_eyes_dark` mở to, nhìn theo đốm sáng |
+| B | Bậu tường đối diện, giữa hẻm | C | `mun_paw_reach` vồ hụt 1 lần, rồi `mun_peek_out` (mới: ló cả mặt ở mép gầm) |
+| C | **Xe đạp cũ dựng tường** (đĩa CD gác nghiêng ở giỏ/yên xe, hắt tia xuống trước gầm xe ba gác; G5-15) | ngay trước gầm xe, tự lượn qua lại | **Mun phóng ra** (bảng mèo) |
 
 ### Trạng thái mèo
 
 | Giai đoạn | Tư thế | Chuyển động | Chạm Mun |
 |---|---|---|---|
 | Dưới gầm (Lẩn tránh) | `mun_eyes_dark` (mới) | Nháy mắt mỗi 2–3 giây | Lùi sâu, hiện lại sau 2 giây |
-| Vồ thử (Lẩn tránh) | `mun_paw_reach` (mới) | Bàn chân thò ra 0,4 giây rồi rụt | Rụt lại ngay |
-| Phóng ra đuổi (Lộ diện) | `mun_run` → `mun_pounce` (mới) | Đuổi theo đốm sáng: luôn chạy tới vị trí đốm sáng 0,5 giây trễ | **Thắng** |
+| Vồ thử (Lẩn tránh) | `mun_paw_reach` (mới) | Sau khi đặt ở B: bàn chân thò ra 0,4 giây rồi rụt | Rụt lại ngay |
+| Ló mặt (Lẩn tránh) | `mun_peek_out` (mới) | Ló mặt ở mép gầm, mắt dõi đốm sáng | Rụt vào 1 giây rồi ló lại |
+| Phóng ra đuổi (Lộ diện) | `mun_run` → `mun_pounce` (mới) | Đốm sáng tự lượn đúng 2 vòng giữa hẻm, nhanh hơn bản trước (G5-13); Mun đuổi sát, hết vòng 2 thì đè trúng | **Thắng** |
 | Đè đốm sáng (Lộ diện) | `mun_pin_light` (mới: hai chân trước đè xuống đất) → `mun_look_paw` (mới: nhấc chân nhìn lòng bàn chân, đốm sáng hiện trên mu chân) | 0,8 giây mỗi tư thế, `glow_outline` | **Thắng** |
 
 **Bong bóng nhiệm vụ ở level này:** lúc vào màn nảy mạnh hơn (scale 0 → 1,3 → 1); lúc tô màu `mun_face_icon` có thêm `ui_star_frame`.
 
 ### Danh sách ảnh (tất cả mới)
 
-`l5_bg_backyard`, `l5_bg_alley`, `l5_cafe_window`, `l5_vanity_table`, `l5_mirror_small`, `l5_mirror_placed`, `l5_cardboard_box`, `l5_trash_bag_idle`, `l5_trash_bag_after`, `l5_awning_down`, `l5_awning_rolled`, `l5_sunbeam`, `l5_light_spot`, `l5_cart`, `l5_crow_idle`, `l5_crow_far`, `l5_drain_pipe`, `player_cover_nose`, `sua_press_window`, `mun_eyes_dark`, `mun_paw_reach`, `mun_run`, `mun_pounce`, `mun_pin_light`, `mun_look_paw`.
+`l5_bg_backyard`, `l5_bg_alley`, `l5_cafe_window`, `l5_vanity_table`, `l5_mirror_small`, `l5_mirror_placed`, `l5_tin_lid`, `l5_tin_lid_placed`, `l5_cd_hanging`, `l5_cd_placed`, `l5_awning_cord`, `l5_cardboard_box`, `l5_trash_bag_idle`, `l5_trash_bag_after`, `l5_awning_down`, `l5_awning_rolled`, `l5_sunbeam`, `l5_light_spot`, `l5_cart`, `l5_crow_idle`, `l5_crow_far`, `l5_drain_pipe`, `player_cover_nose`, `sua_press_window`, `mun_eyes_dark`, `mun_paw_reach`, `mun_peek_out`, `mun_run`, `mun_pounce`, `mun_pin_light`, `mun_look_paw`.
 
 ---
 

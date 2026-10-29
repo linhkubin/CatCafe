@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Đóng gói bản chơi thử Level 1 thành trang tĩnh trong game/dist/ (để đăng Artifact hoặc server bất kỳ).
+"""Đóng gói bản chơi thử (Level 1–5) thành trang tĩnh trong game/dist/ (để đăng Artifact hoặc server bất kỳ).
 
     python game/tools/build_web.py
 
@@ -9,7 +9,11 @@
 - Chép âm thanh có trong game/audio/.
 - Sinh dist/manifest.json: entries (url tương đối, điểm neo, res), pos và info đọc từ art/design-art-level1.md.
 - Sinh dist/index.html chỉ gồm phần thân (Artifact tự bọc doctype/head/body).
+- Đăng từng phần (GD chọn, không nén ảnh): so với bản đã đăng (game/dist_published.json), in và ghi game/dist_changes.txt
+  danh sách file mới / đã đổi / đã bỏ. Mỗi lần đăng chỉ gửi file mới + đã đổi, xoá file đã bỏ.
+  Đăng xong chạy:  python game/tools/build_web.py --mark-published   (lấy dist hiện tại làm mốc cho lần sau).
 """
+import hashlib
 import io
 import json
 import re
@@ -23,10 +27,12 @@ ROOT = Path(__file__).resolve().parents[2]
 GAME = ROOT / "game"
 ART_OUT = ROOT / "art" / "out"
 DIST = GAME / "dist"
-SPECS = {n: ROOT / "art" / f"design-art-level{n}.md" for n in (1, 2, 3)}
+PUBLISHED = GAME / "dist_published.json"   # mã băm từng file của bản đã đăng (mốc so sánh)
+CHANGES = GAME / "dist_changes.txt"
+SPECS = {n: ROOT / "art" / f"design-art-level{n}.md" for n in (1, 2, 3, 4, 5)}  # L5 chưa có design-art (bản khối): bỏ qua
 PHASER = "https://cdnjs.cloudflare.com/ajax/libs/phaser/3.80.1/phaser.min.js"
 
-INDEX = f"""<title>Meo Đâu Rồi – Level 1</title>
+INDEX = f"""<title>Meo Đâu Rồi</title>
 <style>
   html, body {{ margin: 0; padding: 0; height: 100%; background: #2b2420; overflow: hidden; touch-action: none; }}
   #game {{ width: 100%; height: 100%; }}
@@ -78,7 +84,49 @@ def copy_png(src, dst):
     return im.size
 
 
+def dist_hashes():
+    return {p.relative_to(DIST).as_posix(): hashlib.sha1(p.read_bytes()).hexdigest()
+            for p in sorted(DIST.rglob("*")) if p.is_file()}
+
+
+def report_changes():
+    """So dist với bản đã đăng: in và ghi danh sách file mới, đã đổi, đã bỏ."""
+    now = dist_hashes()
+    old = json.loads(PUBLISHED.read_text(encoding="utf8")) if PUBLISHED.exists() else {}
+    added = sorted(k for k in now if k not in old)
+    changed = sorted(k for k in now if k in old and old[k] != now[k])
+    removed = sorted(k for k in old if k not in now)
+    send = added + changed
+    size = sum((DIST / k).stat().st_size for k in send)
+    total = sum((DIST / k).stat().st_size for k in now)
+    lines = [f"So với bản đã đăng ({'chưa có mốc: coi mọi file là mới' if not old else PUBLISHED.name}).",
+             f"Cần gửi: {len(send)} file, {size / 1e6:.1f} MB (mới {len(added)}, đã đổi {len(changed)}); cần bỏ: {len(removed)} file.",
+             f"Cả bản: {len(now)} file, {total / 1e6:.1f} MB.", ""]
+    for title, items in (("MỚI", added), ("ĐÃ ĐỔI", changed), ("ĐÃ BỎ", removed)):
+        lines.append(f"## {title} ({len(items)})")
+        lines += items or ["(không có)"]
+        lines.append("")
+    CHANGES.write_text(chr(10).join(lines), encoding="utf8")
+    print(chr(10).join(lines[:3]))
+    for title, items in (("mới", added), ("đã đổi", changed), ("đã bỏ", removed)):
+        if items:
+            print(f"  {title}: " + ", ".join(items[:12]) + (f" … (+{len(items) - 12}, xem {CHANGES.name})" if len(items) > 12 else ""))
+    if len(send) > 255 or size > 64e6:
+        print("CẢNH BÁO: lượt gửi vượt 255 file hoặc 64 MB: chia làm nhiều lượt đăng.")
+    if total > 256e6 or len(now) > 511:
+        print("CẢNH BÁO: cả bản vượt 256 MB hoặc 511 file (giới hạn một phiên bản Artifact).")
+
+
+def mark_published():
+    PUBLISHED.write_text(json.dumps(dist_hashes(), indent=0), encoding="utf8")
+    print(f"Đã lấy dist hiện tại làm mốc đã đăng ({PUBLISHED}).")
+
+
 def main():
+    sys.stdout.reconfigure(encoding="utf-8")
+    if "--mark-published" in sys.argv:
+        mark_published()
+        return
     sys.stdout.reconfigure(encoding="utf-8")
     # Xoá nội dung cũ nhưng giữ thư mục dist (trên Windows thư mục đang mở bởi tiến trình khác thì không xoá được).
     DIST.mkdir(parents=True, exist_ok=True)
@@ -98,7 +146,7 @@ def main():
     for lv, spec in SPECS.items():
         pos[lv], inf, fit[lv] = parse_spec(spec)
         info = {**inf, **info}
-    entries, real, temp = {}, [], []
+    entries, real, temp, drawn = {}, [], [], []
     for key, folder in keys_from_js():
         src = ART_OUT / folder / f"{key}.png"
         if src.exists():
@@ -112,6 +160,8 @@ def main():
             copy_png(GAME / "placeholders" / f"{key}.png", DIST / "assets" / "placeholders" / f"{key}.png")
             entries[key] = {"url": f"assets/placeholders/{key}.png", "real": False, **ph[key]}
             temp.append(key)
+        elif key not in drawn:
+            drawn.append(key)  # chưa có ảnh: màn tự vẽ bằng code (makeFallback)
 
     audio = []
     for f in sorted((GAME / "audio").glob("*")):
@@ -130,8 +180,10 @@ def main():
     biggest = max(files, key=lambda p: p.stat().st_size)
     print(f"dist: {len(files)} file, {total / 1e6:.1f} MB (lớn nhất {biggest.relative_to(DIST)} {biggest.stat().st_size / 1e6:.1f} MB)")
     print(f"ảnh thật: {len(real)}; ảnh tạm: {len(temp)}{' (' + ', '.join(temp) + ')' if temp else ''}")
-    if len(files) > 255 or total > 64e6 or biggest.stat().st_size > 15e6:
-        print("CẢNH BÁO: vượt giới hạn Artifact (255 file, 64 MB, 15 MB mỗi ảnh)")
+    print(f"vẽ bằng code (chưa có ảnh): {len(drawn)}{' (' + ', '.join(drawn) + ')' if drawn else ''}")
+    if biggest.stat().st_size > 15e6:
+        print("CẢNH BÁO: có ảnh vượt 15 MB (giới hạn Artifact mỗi ảnh)")
+    report_changes()
 
 
 if __name__ == "__main__":

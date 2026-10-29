@@ -10,7 +10,7 @@ const ROOT = new URL('../', location.href).href;          // gốc dự án (gam
 const ART_OUT = ROOT + 'art/out/';
 const PH = new URL('placeholders/', location.href).href;
 const SPECS = { 1: ROOT + 'art/design-art-level1.md', 2: ROOT + 'art/design-art-level2.md', 3: ROOT + 'art/design-art-level3.md',
-  4: ROOT + 'art/design-art-level4.md' };
+  4: ROOT + 'art/design-art-level4.md', 5: ROOT + 'art/design-art-level5.md' }; // L5: chưa có file (bản khối, QUY-TRINH bước 2)
 const LEVELS = Object.keys(SPECS).map(Number);
 
 // Dự phòng nếu không đọc được design-art level 1 (giá trị ở vòng 5). Level 2 có vị trí dự phòng trong level2.js.
@@ -84,6 +84,22 @@ export const KEYS = {
     ['player_reach_up', 'player'], ['player_silly_laugh', 'player'],
     ['ui_bag_bar', 'common'], ['ui_bag_slot', 'common'], ['ui_room_arrow', 'common'], ['ui_thought_bubble', 'common'],
     ['fx_dust_puff', 'common'], ['fx_dust_puff_b', 'common'],
+  ],
+  // Level 5: bản khối (chưa có ảnh), mọi key tự vẽ khối có nhãn trong level5.js; tên key theo states-01-10.md.
+  5: [
+    ['l5_bg_backyard', 'level5'], ['l5_bg_alley', 'level5'], ['l5_cafe_window', 'level5'], ['l5_cafe_window_back', 'level5'], ['l5_cafe_window_frame', 'level5'], ['l5_vanity_table', 'level5'],
+    ['l5_mirror_small', 'level5'], ['l5_mirror_placed', 'level5'], ['l5_cardboard_box', 'level5'],
+    ['l5_trash_bag_idle', 'level5'], ['l5_trash_bag_after', 'level5'], ['l5_awning_down', 'level5'], ['l5_awning_rolled', 'level5'],
+    ['l5_sunbeam', 'level5'], ['l5_light_spot', 'level5'], ['l5_cart', 'level5'], ['l5_crow_idle', 'level5'], ['l5_crow_far', 'level5'],
+    ['l5_drain_pipe', 'level5'], ['l5_tin_lid', 'level5'], ['l5_tin_lid_placed', 'level5'], ['l5_cd_hanging', 'level5'],
+    ['l5_cd_placed', 'level5'], ['l5_awning_cord', 'level5'],
+    ['l5_doorstep', 'level5'], ['l5_cactus_pot', 'level5'], ['l5_cactus_flower', 'level5'], ['l5_clothesline', 'level5'], ['l5_shirt', 'level5'],
+    ['l5_clothespin', 'level5'], ['l5_wind_chime', 'level5'], ['l5_slippers', 'level5'], ['l5_slippers_flipped', 'level5'],
+    ['l5_bike', 'level5'], ['l5_bike_wheel', 'level5'], ['l5_puddle', 'level5'], ['l5_gecko', 'level5'], ['l5_milk_can', 'level5'],
+    ['mun_eyes_dark', 'cats'], ['mun_peek_out', 'cats'], ['mun_paw_reach', 'cats'], ['mun_run', 'cats'], ['mun_pounce', 'cats'], ['mun_pin_light', 'cats'],
+    ['mun_look_paw', 'cats'], ['mun_held', 'cats'], ['mun_face_icon', 'cats'], ['sua_press_window', 'cats'],
+    ['player_cover_nose', 'player'],
+    ['ui_bag_bar', 'common'], ['ui_bag_slot', 'common'], ['ui_room_arrow', 'common'], ['ui_thought_bubble', 'common'],
   ],
 };
 export const ALL_KEYS = Object.values(KEYS).flat();
