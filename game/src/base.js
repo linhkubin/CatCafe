@@ -326,6 +326,10 @@ export class BaseLevel extends Phaser.Scene {
   create() {
     this.prepareAssets();
     this.time.paused = false; // đồng hồ của Scene giữ trạng thái qua lần khởi động lại: vào màn luôn chạy
+    // Khoá mở màn (leveldesign "Mở màn chung"): từ lúc vào màn tới khi bong bóng nhiệm vụ thu về góc xong, mọi cú chạm
+    // (đồ vật, mèo, túi đồ, mũi tên, 💡, ⏸) bị bỏ qua, không phản hồi, không tính gợi ý. Dự phòng: tự mở sau 8 giây.
+    this.introBusy = true;
+    this.time.delayedCall(8000, () => this.endIntroLock());
     this.zones = {};
     this.phase = 'intro';
     this.locked = true;
@@ -459,12 +463,12 @@ export class BaseLevel extends Phaser.Scene {
   // ---------- nhập liệu ----------
   setupInput() {
     this.input.on('gameobjectdown', (p, obj) => {
-      if (obj.zoneName) this.press = { name: obj.zoneName, x: p.x, y: p.y };
+      if (obj.zoneName && !this.introBusy) this.press = { name: obj.zoneName, x: p.x, y: p.y };
     });
     this.input.on('pointerdown', (p, over) => {
       if (this.phase === 'ending') { this.skipEnding(); return; }
       if (this.phase === 'reward') return; // màn thưởng: chỉ hai nút nhà / ▶ điều hướng
-      if (!over.length && !this.locked) this.tapRing(p.worldX, p.worldY);
+      if (!over.length && !this.locked && !this.introBusy) this.tapRing(p.worldX, p.worldY);
     });
     this.input.on('pointermove', (p) => this.bagMove(p));
     this.input.on('pointerup', (p) => {
@@ -494,6 +498,7 @@ export class BaseLevel extends Phaser.Scene {
   }
 
   handle(name, g) {
+    if (this.introBusy) return;
     if (name === 'pause') { this.pauseGame(); return; }
     if (this.locked) return;
     if (this.blockInput && this.blockInput(name)) return;
@@ -636,11 +641,19 @@ export class BaseLevel extends Phaser.Scene {
     const B = this.bubble;
     if (B.home === 'gone') return;
     B.home = 'corner';
-    this.tweens.add({ targets: B.ct, x: 455, y: 62, scale: BUBBLE_CORNER, duration: 400, ease: 'Quad.inOut' });
+    this.tweens.add({ targets: B.ct, x: 455, y: 62, scale: BUBBLE_CORNER, duration: 400, ease: 'Quad.inOut', onComplete: () => this.endIntroLock() });
     this.zones.bubble.setInteractive();
     if (!this.qHopLoop) this.qHopLoop = this.time.addEvent({ delay: 4000, loop: true, callback: () => {
       if (this.bubble.home === 'corner' && !this.frozen) this.hop(this.bubble.q, 12, 300);
     } });
+  }
+
+  // Bong bóng thu về góc xong lần đầu: mở khoá mở màn, bắt đầu đếm gợi ý từ đây.
+  endIntroLock() {
+    if (!this.introBusy) return;
+    this.introBusy = false;
+    this.press = null;
+    this.touch();
   }
 
   bubbleRemind() {
@@ -806,7 +819,7 @@ export class BaseLevel extends Phaser.Scene {
 
   bagPress(i, p) {
     const it = this.bag && this.bag.items[i];
-    if (!it || this.locked || this.bag.busy || this.phase !== 'search') return;
+    if (!it || this.locked || this.introBusy || this.bag.busy || this.phase !== 'search') return;
     this.drag = { item: it, x0: p.worldX, y0: p.worldY, moved: false };
   }
 

@@ -38,6 +38,7 @@ const SIZE_K = {
 };
 // Nén chiều cao (rèm trong demo thấp và rộng: kết thúc trên gáy sách y≈570, không che sách trên kệ).
 const SIZE_Y = { l2_curtain_closed: 0.83, l2_curtain_open: 0.83 };
+const PAMPAS_K = 190 / 230; // G2-31: bình bông lau nhỏ lại (cao 230 → 190) cho ngọn bông nằm gọn trong khung kính
 const DUSTER_TUCK = 1 / 3; // G2-30: túm lông dưới gầm giường thò ra ngắn hơn 1/3 (gốc đẩy sâu vào sau khung giường)
 // Góc nằm của từng chiếc tất sau khi đáp (tất em bé nằm ngang trên kệ).
 // O2-19: tất đáp nằm ngang ở chỗ đỡ được: 1 mặt giường, 2 sàn cạnh chân giường, 3 thảm cạnh dép, 4 kệ trái, 5 mặt ghế, 6 kệ cạnh chậu cây.
@@ -282,7 +283,13 @@ export class Level2 extends ObjectLevel {
     // Rèm: chạm đóng / mở, mở thì nắng chiếu vào giỏ.
     this.addProp({ name: 'curtain', key: 'l2_curtain_closed', depth: D.curtain, zone: D.zone, hit: (s) => s.getBounds(),
       tap: 'toggle', sfx: 'sfx_cloth', states: ['l2_curtain_closed', 'l2_curtain_open'],
-      onChange: (p, open) => { this.tweens.add({ targets: this.beam, alpha: open ? 1 : 0, duration: 500 }); this.pampasShow(open); } });
+      onChange: (p, open) => {
+        this.tweens.add({ targets: this.beam, alpha: open ? 1 : 0, duration: 500 });
+        this.pampasShow(open);
+        // G2-31: dây buộc rèm (1a) chỉ có khi rèm đóng.
+        this.tie.setVisible(!open);
+        this.zones.tie[open ? 'disableInteractive' : 'setInteractive']();
+      } });
     this.buildPampas();
     const bb = P('l2_sock_basket_full');
     this.beam = this.add.graphics().setDepth(D.beam).setAlpha(0).setBlendMode(Phaser.BlendModes.SCREEN);
@@ -421,13 +428,14 @@ export class Level2 extends ObjectLevel {
     // Đáy phần vẽ của bình đứng trên bậu tại (vx, vy). Ba ảnh Art cùng khung 230x492: chùm bông (neo gốc cuống, xoay
     // quanh đó) đặt sao cho khung trùng khung bình thì ra đúng bình liền. Bình liền một ảnh thì xoay quanh đáy bình.
     const pot = this.pampas;
+    pot.setScale(pot.base *= PAMPAS_K, pot.baseY *= PAMPAS_K);
     this.artBottomOrigin(pot).setPosition(vx, vy);
     if (!one) {
       const pl = this.img('l2_pampas_plume', 0, 0, D.curtain - 0.7);
       const left = pot.x - pot.originX * pot.width * pot.scaleX, top = pot.y - pot.originY * pot.height * pot.scaleY;
       const same = pl.width === pot.width && pl.height === pot.height;
       if (same) pl.setScale(pot.scaleX, pot.scaleY).setPosition(left + pl.originX * pl.width * pl.scaleX, top + pl.originY * pl.height * pl.scaleY);
-      else { const pr = this.artRect(pot); this.artBottomOrigin(pl).setPosition(vx, pr.top + pr.height * 0.22); } // ảnh tạm khác khung
+      else { const pr = this.artRect(pot); pl.setScale(pl.base * PAMPAS_K); this.artBottomOrigin(pl).setPosition(vx, pr.top + pr.height * 0.22); } // ảnh tạm khác khung
       this.plume = pl;
     }
     this.propZone('pampas');
@@ -667,6 +675,7 @@ export class Level2 extends ObjectLevel {
   // G2-4: giỏ lộ Sữa cuộn tròn ngủ; giật tai, hé một mắt, ngáp, rúc ngủ tiếp.
   reveal() {
     this.phase = 'found';
+    this.locked = true; // cảnh lộ diện tự chạy: khoá chạm tới khi Sữa nhận chạm (1,5 giây)
     const b = this.basket;
     const bb = b.getBounds();
     // Sữa "ảo" (không vẽ) để cảnh bế chung lấy chỗ và cỡ.
@@ -689,6 +698,7 @@ export class Level2 extends ObjectLevel {
       this.time.delayedCall(dur, () => { if (this.phase === 'found') this.applyKey(b, 'l2_sock_basket_reveal'); });
     });
     // Vùng chạm Sữa bật khi lộ diện xong (~1,5 giây), ôm sát thân Sữa trong miệng giỏ (không phủ cả giỏ).
+    this.time.delayedCall(1500, () => this.phase === 'found' && (this.locked = false));
     this.time.delayedCall(1500, () => this.armSua(new Phaser.Geom.Rectangle(bb.x + bb.width * 0.15, bb.y, bb.width * 0.8, bb.height * 0.5)));
     pose('l2_sock_basket_one_eye', 1500, 800);
     pose('l2_sock_basket_yawn', 2300, 800, 'sua_sfx_meow');
