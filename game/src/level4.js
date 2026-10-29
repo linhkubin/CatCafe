@@ -38,9 +38,12 @@ const STACK = { l4_mattress_fallen: 'l4_stack_mattress', l4_suitcase_folded: 'l4
 const HOME = { l4_mattress_fallen: BED, l4_pillow: BED, l4_book_stack: STUDY, l4_suitcase_folded: STUDY };
 // Xếp tháp (A4-28): món sau đặt đáy = đỉnh phần vẽ món trước + chồng mép; nhân vật đứng lún vào gối 8px.
 const OVERLAP = [14, 14, 10], FEET_SINK = 8;
-// Bong bóng nhiệm vụ lúc mở màn (G4-31, chủ dự án: nhỏ hơn và cao hơn): tâm (toạ độ màn hình) và cỡ so với bản chung.
-const BUBBLE = { x: 700, y: 560, k: 0.8 };
+// Bong bóng nhiệm vụ lúc mở màn (G4-31: nhỏ hơn; G4-40: cạnh đầu nhân vật đứng trên sofa): tâm (toạ độ màn hình), cỡ so với bản chung.
+const BUBBLE = { x: 800, y: 470, k: 0.8 };
 const SOFA = { left: 470, width: 620 };              // G4-24: sofa theo demo phòng khách
+// G4-40: nhân vật đứng sẵn trên sofa cạnh rèm (không che chỗ xếp tháp): chân ở mặt nệm, cách mép trái sofa `dx`,
+// mặt nệm ở `seat` chiều cao phần vẽ sofa. Thỉnh thoảng (6–10 giây, khi ở phòng khách) kiễng chân với hụt một cái.
+const ON_SOFA = { dx: 95, seat: 0.5, every: [6000, 10000] };
 const WINDOW_BOX = { right: 640, bottom: 710, height: 530 }; // cửa sổ đo trên l4_demo_living (khung + bậu; mép trái khuất sau rèm)
 const POSES = ['sua_curtain_banana', 'sua_curtain_one_paw', 'sua_curtain_upside', 'sua_curtain_sleep']; // đổi mỗi lần về phòng khách
 // Chỉ hàng sách tầng dưới cùng rơi (G4-18).
@@ -430,7 +433,52 @@ export class Level4 extends RoomsLevel {
     return new Phaser.Geom.Rectangle(r.x + r.width * g[0], r.y + r.height * g[1], r.width * (g[2] - g[0]), r.height * (g[3] - g[1]));
   }
 
-  // ---------- mở màn: "xoẹt xoẹt… phựt!", rèm đung đưa, Sữa treo sẵn trên đỉnh rèm (G4-14) ----------
+  // ---------- mở màn (G4-40): không bước vào gọi; nhân vật đứng sẵn trên sofa, kiễng chân với Sữa, nhảy hụt ----------
+  get sofaPose() { return (this.A.entries.player_reach_sofa || {}).real ? 'player_reach_sofa' : 'player_reach_up'; }
+
+  sofaSpot() {
+    const r = this.artRect(this.sofa);
+    return [r.x + ON_SOFA.dx, r.y + r.height * ON_SOFA.seat];
+  }
+
+  intro() {
+    this.cameras.main.fadeIn(300, 0, 0, 0);
+    const p = this.climber;
+    this.applyKey(p, this.sofaPose);
+    p.setPosition(...this.sofaSpot()).setVisible(true);
+    this.onIntro();
+    this.time.delayedCall(500, () => { this.sfx(this.callSfx || 'l1_sfx_player_call'); this.reachMiss(2); });
+    this.time.delayedCall(2000, () => {
+      this.bubbleIntro();
+      this.locked = false;
+      this.phase = 'search';
+      this.touch();
+    });
+    this.nextReach();
+  }
+
+  // Kiễng chân, nhảy lên n cái vẫn hụt một khúc, chới với.
+  reachMiss(n = 1) {
+    const p = this.climber, [, y] = this.sofaSpot();
+    if (this.climax || this.busy.reach) return;
+    this.busy.reach = true;
+    const hops = [];
+    for (let i = 0; i < n; i++) hops.push({ y: y - 42, scaleY: p.baseY * 1.05, duration: 220, ease: 'Quad.out' }, { y, scaleY: p.baseY, duration: 200, ease: 'Quad.in' });
+    this.tweens.chain({ targets: p, tweens: hops, onComplete: () => {
+      this.busy.reach = false;
+      this.tweens.add({ targets: p, angle: { from: -3, to: 3 }, duration: 120, yoyo: true, repeat: 1, onComplete: () => p.setAngle(0) });
+    } });
+  }
+
+  nextReach() {
+    this.time.delayedCall(Phaser.Math.Between(...ON_SOFA.every), () => {
+      if (this.climax) return;
+      if (this.room === LIVING && this.phase === 'search' && !this.frozen && !this.moving) this.reachMiss();
+      this.nextReach();
+    });
+  }
+
+  // "xoẹt xoẹt… phựt!", rèm đung đưa, Sữa treo sẵn trên đỉnh rèm (G4-14).
   onIntro() {
     this.sfx('l3_sfx_scratch');
     this.time.delayedCall(500, () => this.sfx('sfx_cloth'));
@@ -821,12 +869,17 @@ export class Level4 extends RoomsLevel {
     this.zones.curtain.disableInteractive();
     this.zones.suaHang.disableInteractive();
     this.applyKey(this.hangCat, 'sua_curtain_banana');
-    // 1. Tháp lóe sáng, nhân vật hiện ngay trên mặt gối.
+    // 1. Tháp lóe sáng, nhân vật nhảy từ sofa sang đỉnh tháp theo đường cong (G4-40), đáp xuống mặt gối.
     for (const s of this.stack) this.sparkle(s);
     const p = this.climber, [, ty] = this.towerTop();
-    this.applyKey(p, 'player_reach_up');
-    p.setPosition(this.P('player_reach_up')[0], ty).setVisible(true).setAlpha(0); // chân lệch phải tâm tháp như demo
-    this.tweens.add({ targets: p, alpha: 1, duration: 200 });
+    this.tweens.killTweensOf(p);
+    p.setAngle(0).setScale(p.base, p.baseY);
+    const x0 = p.x, y0 = p.y, x1 = this.P('player_reach_up')[0]; // chân lệch phải tâm tháp như demo
+    this.sfx('sfx_cloth');
+    this.tweens.addCounter({ from: 0, to: 1, duration: 600, ease: 'Sine.inOut', onUpdate: (tw) => {
+      const k = tw.getValue();
+      p.setPosition(x0 + (x1 - x0) * k, y0 + (ty - y0) * k - 140 * Math.sin(Math.PI * k));
+    }, onComplete: () => { this.applyKey(p, 'player_reach_up'); p.setPosition(x1, ty); this.sfx('l4_sfx_land_tap'); } });
     // 2. Tay vươn sát Sữa: Sữa giật mình.
     this.time.delayedCall(900, () => {
       this.hop(p, 14, 260);

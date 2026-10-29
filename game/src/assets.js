@@ -53,6 +53,7 @@ export const KEYS = {
     ['l2_bed_blanket_flat', 'level2'], ['l2_bed_blanket_flipped', 'level2'], ['l2_duster_peek', 'level2'], ['l2_duster', 'level2'],
     ['l2_wardrobe_closed', 'level2'], ['l2_wardrobe_open', 'level2'], ['l2_shoebox_ears', 'level2'], ['l2_shoebox_open', 'level2'], ['l2_beanie_pink_cat', 'level2'], ['l2_curtain_tie', 'level2'],
     ['l2_curtain_closed', 'level2'], ['l2_curtain_open', 'level2'],
+    ['l2_pampas_vase', 'level2'], ['l2_pampas_vase_pot', 'level2'], ['l2_pampas_plume', 'level2'], ['player_sneeze', 'player'],
     ['l2_plush_cat', 'level2'], ['l2_plush_cat_fallen', 'level2'],
     ['l2_ceiling_lamp', 'level2'], ['l2_coat_hook', 'level2'], ['l2_beanie_white_idle', 'level2'], ['l2_beanie_white_floor', 'level2'],
 
@@ -67,12 +68,14 @@ export const KEYS = {
     ['l3_tree_p1', 'level3'], ['l3_tree_p2', 'level3'], ['l3_tree_p3', 'level3'],
     ['sua_peek_tongue', 'cats'], ['sua_pounce', 'cats'], ['sua_scratch_post', 'cats'], ['sua_sit_stare', 'cats'], ['sua_tail_peek', 'cats'],
     ['l1_pillow_white_idle', 'level1'], ['l1_pillow_white_flipped', 'level1'],
-    ['player_point_think', 'player'], ['player_sad', 'player'],
+    ['player_point_think', 'player'], ['player_silly_laugh', 'player'],
+    ['player_dangle_pompom', 'player'], ['player_curl_on_tree', 'player'], ['l3_cat_tree_player', 'level3'], // G3-30
+    ['l3_sua_in_box_ears', 'level3'], ['l3_sua_in_box_peek', 'level3'],
     ['ui_bag_bar', 'common'], ['ui_bag_slot', 'common'], ['ui_thought_bubble', 'common'],
   ],
   4: [
     ['l4_bg_living', 'level4'], ['ui_map_bedroom', 'common'], ['ui_map_living', 'common'], ['ui_map_study', 'common'], ['l4_bg_bedroom', 'level4'], ['l4_bg_study', 'level4'],
-    ['l4_window', 'level4'], ['l4_curtain', 'level4'], ['l4_sofa', 'level4'],
+    ['l4_window', 'level4'], ['l4_curtain', 'level4'], ['l4_sofa', 'level4'], ['player_reach_sofa', 'player'], // G4-40
     ['l4_stack_mattress', 'level4'], ['l4_stack_suitcase', 'level4'], ['l4_stack_books', 'level4'], ['l4_stack_pillow', 'level4'],
     ['l4_bed', 'level4'], ['l4_pillow', 'level4'], ['l4_bedside_lamp', 'level4'], ['l4_sock_stuck', 'level4'], ['l4_sock_flat', 'level4'],
     ['l4_mattress_standing', 'level4'], ['l4_mattress_fallen', 'level4'], ['l4_teddy', 'level4'],

@@ -1,6 +1,6 @@
 // Level 1 – Hộp pate thần kỳ. Luồng theo levels/levels-01-10.md, levels/states-01-10.md (Level 1), leveldesign.md mục 1, 5, 6.
 // Phần chung (giao diện, mở màn, cảnh bế, thưởng…) ở base.js. Không có chữ trên màn hình.
-import { D, SUN } from './base.js';
+import { D, SUN, BROWN } from './base.js';
 import { ObjectLevel } from './objects.js';
 
 export class Level1 extends ObjectLevel {
@@ -159,6 +159,7 @@ export class Level1 extends ObjectLevel {
     if (this.hideAt !== from) return;
     this.hideTail();
     const next = { pillowL: 'pillowR', pillowR: 'curtain', curtain: null }[from];
+    this.lastSpot = from; // chỗ Sữa trốn cuối cùng: lúc mở pate, bóng Sữa vụt tới từ mép màn hình phía này (G1-30)
     const to = next && !this.spotOpen(next) ? next : null;
     this.hideAt = to ? 'running' : 'gone';
     const r = this.runner, [x, y] = this.suaSpot(from);
@@ -388,36 +389,75 @@ export class Level1 extends ObjectLevel {
     this.tweens.add({ targets: pop, scale: pb * 1.2, angle: 30, duration: 220, ease: 'Back.out' });
     this.tweens.add({ targets: pop, alpha: 0, delay: 220, duration: 200, onComplete: () => pop.destroy() });
     this.sfx('sfx_pop_can');
-    // 0,1: đổi sang hộp mở, rồi khựng tới 0,6 giây
+    // 0,1: đổi sang hộp mở; bóng Sữa vụt tới chỗ ngồi trong 0,3 giây (G1-30), phanh gấp, rồi khựng nửa giây.
     this.time.delayedCall(100, () => {
       this.applyKey(c, 'l1_pate_can_open');
       // Giữ đúng cỡ đang phóng to (hai ảnh cùng khung nên thân hộp rộng bằng nhau), không nhảy cỡ khi đổi ảnh.
       if (this.canK) c.setScale(c.base * this.canK, c.baseY * this.canK);
-      this.frozen = true;
-      this.tweens.pauseAll();
+      this.dashIn(() => {
+        this.showSua();
+        this.frozen = true;
+        this.tweens.pauseAll();
+        this.time.delayedCall(500, () => this.afterDash());
+      });
     });
-    this.time.delayedCall(600, () => {
-      this.frozen = false;
-      this.tweens.resumeAll();
-      this.locked = false;
-      this.phase = 'found';
-      this.showSua();
-      // Hộp mở bay dần xuống, thu nhỏ về chỗ cạnh Sữa; hơi thơm bắt đầu khi hộp đáp xuống.
-      const [ox, oy] = this.P('l1_pate_can_open');
-      this.tweens.add({ targets: c, x: ox, y: oy, scaleX: c.base, scaleY: c.baseY, duration: 650, ease: 'Sine.inOut',
-        onComplete: () => { c.setDepth(D.can); this.startSteam(); } });
-      this.react('player_surprised', 820);
-      this.bubbleFound();
-    });
-    this.time.delayedCall(1400, () => {
+  }
+
+  // Sau khi bóng Sữa phanh và khựng nửa giây: hộp bay xuống cạnh Sữa, Sữa meo dài, rồi ăn (giữ như trước G1-30).
+  afterDash() {
+    const c = this.can;
+    this.frozen = false;
+    this.tweens.resumeAll();
+    this.locked = false;
+    this.phase = 'found';
+    // Hộp mở bay dần xuống, thu nhỏ về chỗ cạnh Sữa; hơi thơm bắt đầu khi hộp đáp xuống.
+    const [ox, oy] = this.P('l1_pate_can_open');
+    this.tweens.add({ targets: c, x: ox, y: oy, scaleX: c.base, scaleY: c.baseY, duration: 650, ease: 'Sine.inOut',
+      onComplete: () => { c.setDepth(D.can); this.startSteam(); } });
+    this.react('player_surprised', 820);
+    this.bubbleFound();
+    this.time.delayedCall(800, () => {
       if (this.phase !== 'found') return;
       this.applyKey(this.sua, 'sua_meow_up');
       this.hop(this.sua, 22, 350);
       this.sfx('sua_sfx_meow_long');
     });
     // Sữa xuất hiện và meo xong mới chạm được (tay hướng dẫn chỉ vào Sữa).
-    this.time.delayedCall(1800, () => this.armSua(this.suaRect));
-    this.time.delayedCall(2200, () => { if (this.phase === 'found') this.startEating(); });
+    this.time.delayedCall(1200, () => this.armSua(this.suaRect));
+    this.time.delayedCall(1600, () => { if (this.phase === 'found') this.startEating(); });
+  }
+
+  // G1-30: bóng mèo trắng vụt từ mép màn hình (phía chỗ Sữa trốn cuối) tới chỗ ngồi trên thảm trong 0,3 giây:
+  // thân kéo dài theo hướng chạy, mờ, hai bóng mờ nối đuôi và vệt gió phía sau, "vút"; tới nơi phanh gấp (bụi nhỏ).
+  dashIn(done) {
+    const [x, y] = this.P('sua_sit_stare'), key = this.has('sua_run') ? 'sua_run' : 'sua_sit_stare';
+    const fromLeft = this.suaSpot(this.lastSpot || 'curtain')[0] < 512, x0 = fromLeft ? -220 : 1244;
+    const mk = (a) => {
+      const s = this.img(key, x0, y, D.sua).setAlpha(a);
+      this.face(s, !fromLeft); // ảnh mèo nhìn sang phải: chạy sang trái thì lật
+      s.setScale(s.base * 1.45, s.baseY * 0.85);
+      return s;
+    };
+    const ghosts = [mk(0.25), mk(0.4)], r = mk(0.8);
+    const lines = this.add.graphics().setDepth(D.sua - 0.1);
+    this.sfx('sfx_whoosh');
+    this.tweens.addCounter({ from: 0, to: 1, duration: 300, ease: 'Quad.in', onUpdate: (tw) => { // 0,3 giây
+      const t = tw.getValue(), cx = x0 + (x - x0) * t, dir = fromLeft ? -1 : 1;
+      r.x = cx;
+      ghosts.forEach((gh, i) => (gh.x = cx + dir * (i === 0 ? 130 : 65) * Math.min(1, t * 3)));
+      lines.clear().lineStyle(5, BROWN, 0.4);
+      for (let i = 0; i < 3; i++) {
+        const ly = y - 60 - i * 45, len = 90 + i * 40;
+        lines.lineBetween(cx + dir * (110 + i * 20), ly, cx + dir * (110 + i * 20 + len), ly);
+      }
+    }, onComplete: () => {
+      ghosts.forEach((gh) => gh.destroy());
+      lines.destroy();
+      r.destroy();
+      this.sfx('sfx_skid');
+      this.dust(x + (fromLeft ? 40 : -40), y);
+      done();
+    } });
   }
 
   startSteam() {

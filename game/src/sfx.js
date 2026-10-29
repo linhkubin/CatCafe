@@ -205,6 +205,13 @@ const RECIPES = {
   l4_sfx_ball_boing: (c) => note(c, { type: 'triangle', f: 220, t: 0.4, vol: 0.12, glide: [[440, 0.08], [180, 0.38]], vib: 0 }), // "boing"
   l4_sfx_pen_drop: (c) => [1319, 1175, 1047].forEach((f, i) => note(c, { f, t: 0.05, vol: 0.06, at: i * 0.08, vib: 0, attack: 0.002 })), // "lạch cạch"
   l4_sfx_land_tap: (c) => note(c, { f: 1760, t: 0.04, vol: 0.05, vib: 0, attack: 0.002 }), // "tạch" thật nhẹ
+  // G1-30, G2-30, G3-30 (tạm, tới khi có file thật):
+  sfx_whoosh: (c) => { hiss(c, { t: 0.28, vol: 0.12, f: 1800, type: 'bandpass', q: 1.2 }); note(c, { f: 660, t: 0.22, vol: 0.05, glide: [[1320, 0.2]], vib: 0 }); }, // "vút"
+  sfx_skid: (c) => { hiss(c, { t: 0.12, vol: 0.07, f: 2600 }); note(c, { f: 330, t: 0.08, vol: 0.06, glide: [[220, 0.07]], vib: 0 }); }, // phanh gấp
+  sfx_wind: (c) => { hiss(c, { t: 0.9, vol: 0.05, f: 700, type: 'bandpass', q: 0.8 }); hiss(c, { t: 0.6, vol: 0.03, at: 0.25, f: 1100, type: 'bandpass', q: 1 }); }, // gió lùa nhẹ
+  sfx_sneeze: (c) => { hiss(c, { t: 0.18, vol: 0.03, f: 1500, type: 'bandpass', q: 1 }); note(c, { type: 'triangle', f: 520, t: 0.12, vol: 0.12, at: 0.2, glide: [[300, 0.1]], vib: 0, attack: 0.004 }); hiss(c, { t: 0.15, vol: 0.12, at: 0.2, f: 3000 }); }, // "hắt xì"
+  sua_sfx_yawn: (c) => note(c, { f: 700, t: 0.6, vol: 0.08, glide: [[900, 0.2], [500, 0.58]], vibDepth: 0.02 }), // ngáp
+  l3_sfx_creak: (c) => { for (let i = 0; i < 2; i++) note(c, { type: 'sawtooth', f: 180 + i * 30, t: 0.18, vol: 0.03, at: i * 0.25, glide: [[260 + i * 30, 0.16]], vib: 0 }); }, // cót két
 };
 
 export const SOUND_KEYS = Object.keys(RECIPES);

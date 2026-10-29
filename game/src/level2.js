@@ -14,6 +14,7 @@ const DEF = {
   l2_bed_blanket_flat: [300, 1262], l2_slipper: [260, 1240],
   l2_chair: [700, 1250], // áo len: tính theo mặt ghế (O2-7)
   l2_slippers_cat_idle: [200, 1440],
+  l2_pampas_vase_pot: [255, 565], // G2-30: đáy bình trên bậu cửa sổ, giữa hai rèm mở (sau rèm đóng)
   l2_sock_basket_full: [600, 1450],
   player_call: [470, 1445],
 };
@@ -37,6 +38,7 @@ const SIZE_K = {
 };
 // Nén chiều cao (rèm trong demo thấp và rộng: kết thúc trên gáy sách y≈570, không che sách trên kệ).
 const SIZE_Y = { l2_curtain_closed: 0.83, l2_curtain_open: 0.83 };
+const DUSTER_TUCK = 1 / 3; // G2-30: túm lông dưới gầm giường thò ra ngắn hơn 1/3 (gốc đẩy sâu vào sau khung giường)
 // Góc nằm của từng chiếc tất sau khi đáp (tất em bé nằm ngang trên kệ).
 // O2-19: tất đáp nằm ngang ở chỗ đỡ được: 1 mặt giường, 2 sàn cạnh chân giường, 3 thảm cạnh dép, 4 kệ trái, 5 mặt ghế, 6 kệ cạnh chậu cây.
 const SOCK_ANGLE = [-80, 75, 80, -80, -80, -75];
@@ -80,6 +82,19 @@ const FB = {
     g.fillStyle(WHITE).lineStyle(4, BROWN);
     g.fillEllipse(w * 0.4, h * 0.3, w * 0.36, h * 0.6).strokeEllipse(w * 0.4, h * 0.3, w * 0.36, h * 0.6);
     g.fillEllipse(w * 0.62, h * 0.72, w * 0.5, h * 0.4).strokeEllipse(w * 0.62, h * 0.72, w * 0.5, h * 0.4);
+  }],
+  // G2-30: bình gốm nhỏ và chùm bông lau (neo ở gốc cọng) như đuôi mèo trắng dựng lên.
+  l2_pampas_vase_pot: [64, 70, 'đáy', (g, w, h) => {
+    g.fillStyle(0xe9dccb).lineStyle(4, BROWN).fillRoundedRect(8, 10, w - 16, h - 14, 14).strokeRoundedRect(8, 10, w - 16, h - 14, 14);
+    g.fillStyle(0xd9c6ae).fillRect(12, 4, w - 24, 12).strokeRect(12, 4, w - 24, 12);
+  }],
+  l2_pampas_plume: [120, 200, 'đáy', (g, w, h) => {
+    g.lineStyle(3, 0xc9a77a);
+    [[-6, -6], [0, 0], [6, 8]].forEach(([dx, tx]) => g.lineBetween(w / 2 + dx, h, w / 2 + tx + 10, h * 0.45));
+    for (let i = 0; i < 9; i++) {
+      const t = i / 8, x = w / 2 + 12 + 26 * Math.sin(t * 2.2), y = h * 0.62 - t * h * 0.55, r = 22 - t * 9;
+      g.fillStyle(WHITE).lineStyle(3, BROWN, 0.55).fillCircle(x, y, r).strokeCircle(x, y, r);
+    }
   }],
   // Cả cây chổi lông quét bụi nằm ngang trên sàn: cán gỗ, đầu lông trắng bông.
   l2_duster: [300, 90, 'đáy', (g, w, h) => {
@@ -252,7 +267,8 @@ export class Level2 extends ObjectLevel {
   get fallbacks() { return FB; }
 
   resetLevel() {
-    Object.assign(this, { shoeOpened: false, snore: null, kids: [], socks: 0, lastBasket: 0, basketBreath: null, zzz: null, glowFx: null, shoeMoved: false, underTaps: 0, sockTargets: [] });
+    Object.assign(this, { shoeOpened: false, snore: null, kids: [], socks: 0, lastBasket: 0, basketBreath: null, zzz: null, glowFx: null, shoeMoved: false, underTaps: 0, sockTargets: [],
+      plume: null, pampasAwake: false, pampasSway: null });
   }
 
   // Ảnh tạm vẽ bằng hình khối cho key chưa có ảnh thật.
@@ -266,7 +282,8 @@ export class Level2 extends ObjectLevel {
     // Rèm: chạm đóng / mở, mở thì nắng chiếu vào giỏ.
     this.addProp({ name: 'curtain', key: 'l2_curtain_closed', depth: D.curtain, zone: D.zone, hit: (s) => s.getBounds(),
       tap: 'toggle', sfx: 'sfx_cloth', states: ['l2_curtain_closed', 'l2_curtain_open'],
-      onChange: (p, open) => this.tweens.add({ targets: this.beam, alpha: open ? 1 : 0, duration: 500 }) });
+      onChange: (p, open) => { this.tweens.add({ targets: this.beam, alpha: open ? 1 : 0, duration: 500 }); this.pampasShow(open); } });
+    this.buildPampas();
     const bb = P('l2_sock_basket_full');
     this.beam = this.add.graphics().setDepth(D.beam).setAlpha(0).setBlendMode(Phaser.BlendModes.SCREEN);
     const cw = this.curtain.getBounds();
@@ -296,6 +313,7 @@ export class Level2 extends ObjectLevel {
     const bdb0 = this.bed.getBounds();
     const pk = this.pos('l2_duster_peek') || [bdb0.left + bdb0.width * 0.35, bdb0.bottom - 45];
     this.dusterPeek = this.img('l2_duster_peek', ...pk, D.cushion - 1);
+    this.dusterPeek.y -= this.dusterPeek.displayHeight * DUSTER_TUCK;
     this.duster = this.img('l2_duster', pk[0], pk[1] + 40, D.cushion - 1).setVisible(false);
     this.wagDuster();
     this.chair = this.img('l2_chair', ...P('l2_chair'), CHAIR_D);
@@ -391,6 +409,79 @@ export class Level2 extends ObjectLevel {
   }
 
   // ---------- đồ vật ----------
+  // G2-30 (1b): bình bông lau trắng trên bậu cửa sổ, sau rèm. Chùm bông (l2_pampas_plume) neo ở gốc, cắm trong bình
+  // (l2_pampas_vase_pot) để quất như đuôi mèo; Art giao một ảnh liền (l2_pampas_vase) thì cả bình đung đưa quanh đáy.
+  buildPampas() {
+    const real = (k) => (this.A.entries[k] || {}).real;
+    const one = real('l2_pampas_vase') && !real('l2_pampas_plume');
+    const [vx, vy] = this.pos('l2_pampas_vase') || this.P('l2_pampas_vase_pot');
+    this.addProp({ name: 'pampas', key: one ? 'l2_pampas_vase' : 'l2_pampas_vase_pot', at: [vx, vy], depth: D.curtain - 0.6,
+      zone: D.zone + 3, off: true, tap: () => this.pampasTap(),
+      hit: (s) => (this.plume ? Phaser.Geom.Rectangle.Union(this.artRect(s), this.artRect(this.plume)) : this.artRect(s)) });
+    // Đáy phần vẽ của bình đứng trên bậu tại (vx, vy). Ba ảnh Art cùng khung 230x492: chùm bông (neo gốc cuống, xoay
+    // quanh đó) đặt sao cho khung trùng khung bình thì ra đúng bình liền. Bình liền một ảnh thì xoay quanh đáy bình.
+    const pot = this.pampas;
+    this.artBottomOrigin(pot).setPosition(vx, vy);
+    if (!one) {
+      const pl = this.img('l2_pampas_plume', 0, 0, D.curtain - 0.7);
+      const left = pot.x - pot.originX * pot.width * pot.scaleX, top = pot.y - pot.originY * pot.height * pot.scaleY;
+      const same = pl.width === pot.width && pl.height === pot.height;
+      if (same) pl.setScale(pot.scaleX, pot.scaleY).setPosition(left + pl.originX * pl.width * pl.scaleX, top + pl.originY * pl.height * pl.scaleY);
+      else { const pr = this.artRect(pot); this.artBottomOrigin(pl).setPosition(vx, pr.top + pr.height * 0.22); } // ảnh tạm khác khung
+      this.plume = pl;
+    }
+    this.propZone('pampas');
+  }
+
+  // Gốc quay / điểm đặt = giữa đáy phần vẽ thật của sprite.
+  artBottomOrigin(s) {
+    const f = this.textures.get(s.key).get(this.iconFrame(s.key));
+    return s.setOrigin((f.cutX + f.cutWidth / 2) / s.width, (f.cutY + f.cutHeight) / s.height);
+  }
+
+  get plumeS() { return this.plume || this.pampas; }
+
+  // Rèm mở: bình lộ ra, nhận chạm; lần đầu mở thì gió lùa, bông lau quất mạnh một cái rồi đung đưa chậm.
+  pampasShow(open) {
+    this.zones.pampas[open ? 'setInteractive' : 'disableInteractive']();
+    if (!open || this.pampasAwake) return;
+    this.pampasAwake = true;
+    this.time.delayedCall(250, () => {
+      this.sfx('sfx_wind');
+      this.tweens.chain({ targets: this.plumeS, tweens: [
+        { angle: 30, duration: 130, ease: 'Quad.out' }, { angle: -12, duration: 260, ease: 'Sine.inOut' }, { angle: 0, duration: 320, ease: 'Sine.out' },
+      ], onComplete: () => this.pampasIdle() });
+    });
+  }
+
+  pampasIdle() {
+    if (this.pampasSway) this.pampasSway.stop();
+    this.plumeS.setAngle(-3);
+    this.pampasSway = this.tweens.add({ targets: this.plumeS, angle: 3, duration: 1600, yoyo: true, repeat: -1, ease: 'Sine.inOut' });
+  }
+
+  // 🎭 Chạm (rèm mở): bông lau quất qua quất lại 2 nhịp như đuôi ve vẩy, vài sợi bông bay lơ lửng; nhân vật hắt xì.
+  pampasTap() {
+    if (this.busy.pampas) return;
+    this.busy.pampas = true;
+    if (this.pampasSway) { this.pampasSway.stop(); this.pampasSway = null; }
+    this.sfx('sfx_cloth');
+    this.tweens.chain({ targets: this.plumeS, tweens: [
+      { angle: 22, duration: 140 }, { angle: -18, duration: 180 }, { angle: 16, duration: 180 }, { angle: -8, duration: 160 }, { angle: 0, duration: 160 },
+    ], onComplete: () => { this.busy.pampas = false; this.pampasIdle(); } });
+    const r = this.artRect(this.plumeS);
+    for (let i = 0; i < 7; i++) {
+      const fx = this.add.circle(r.centerX + Phaser.Math.Between(-30, 30), r.top + Phaser.Math.Between(10, 60), Phaser.Math.Between(3, 6), WHITE, 0.95)
+        .setStrokeStyle(1.5, BROWN, 0.35).setDepth(D.fx);
+      this.tweens.add({ targets: fx, x: fx.x + Phaser.Math.Between(-90, 120), y: fx.y + Phaser.Math.Between(-60, 80), alpha: 0,
+        duration: Phaser.Math.Between(1300, 2000), delay: i * 60, ease: 'Sine.out', onComplete: () => fx.destroy() });
+    }
+    this.time.delayedCall(450, () => {
+      this.sfx('sfx_sneeze');
+      this.react(this.has('player_sneeze') ? 'player_sneeze' : 'player_surprised', r.centerX + 160);
+    });
+  }
+
   swingLamp() {
     const l = this.lamp;
     this.tweens.killTweensOf(l);

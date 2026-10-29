@@ -119,11 +119,13 @@ Trước mốc 0: chạm lần 1, hộp đã bay từ bệ cửa sổ ra giữa 
 |---|---|
 | 0 | `fx_pop` bung tại miệng hộp, âm `sfx_pop_can` (O2-21: như mở lon nước ngọt, "tách" khoen kim loại giòn + xì hơi ngắn) |
 | 0,1 giây | `swap` hộp sang `l1_pate_can_open` |
-| 0,1–0,6 giây | **Khựng:** dừng mọi tween trong cảnh (kể cả quả lắc), nhạc tắt |
-| 0,6 giây | `sua_sit_stare` **xuất hiện tức thì** ở chỗ ngồi trên thảm, nhạc trở lại. Hộp mở bay dần xuống, thu nhỏ về chỗ bên phải Sữa (0,65 giây). Khi hộp đáp xuống, hơi thơm bắt đầu: 3 bản `l1_pate_can_steam` lệch pha, lật ngang ngẫu nhiên, bay lên, lắc, mờ dần, lặp lại. `player_surprised` trồi lên 1 giây |
-| 0,6–1,4 giây | Bong bóng nhiệm vụ bay ra giữa màn hình: `ui_cat_head_dark` mờ dần, `sua_face_icon` hiện lên |
-| 1,4–2,2 giây | `sua_meow_up`, âm `sua_sfx_meow_long` |
-| 2,2 giây trở đi | `sua_eat` ↔ `sua_eat_f2` lặp, `glow_outline`. Bàn tay hướng dẫn chỉ vào Sữa (chỉ có ở level 1) |
+| 0,1–0,4 giây | **Bóng Sữa vụt tới (G1-30):** code dựng từ `sua_run` (không cần ảnh mới): thân kéo dài theo hướng chạy (×1,45 ngang, ×0,85 dọc), mờ 80%, hai bóng mờ nối đuôi, ba vệt gió nâu nhạt phía sau, âm `sfx_whoosh`. Chạy từ mép màn hình phía chỗ Sữa trốn cuối (rèm → mép trái) tới chỗ ngồi trên thảm trong 0,3 giây |
+| 0,4 giây | **Phanh gấp:** bụi nhỏ (`dust`), âm `sfx_skid`; bóng biến mất, `sua_sit_stare` ngồi ngay ngắn ở chỗ ngồi |
+| 0,4–0,9 giây | **Khựng:** dừng mọi tween trong cảnh (kể cả quả lắc), nhạc tắt |
+| 0,9 giây | Nhạc trở lại. Hộp mở bay dần xuống, thu nhỏ về chỗ bên phải Sữa (0,65 giây). Khi hộp đáp xuống, hơi thơm bắt đầu: 3 bản `l1_pate_can_steam` lệch pha, lật ngang ngẫu nhiên, bay lên, lắc, mờ dần, lặp lại. `player_surprised` trồi lên 1 giây |
+| 0,9–1,7 giây | Bong bóng nhiệm vụ bay ra giữa màn hình: `ui_cat_head_dark` mờ dần, `sua_face_icon` hiện lên |
+| 1,7–2,5 giây | `sua_meow_up`, âm `sua_sfx_meow_long` |
+| 2,5 giây trở đi | `sua_eat` ↔ `sua_eat_f2` lặp, `glow_outline`. Bàn tay hướng dẫn chỉ vào Sữa (chỉ có ở level 1) |
 
 ### Danh sách ảnh
 
@@ -132,6 +134,7 @@ Toàn bộ đã có trong `art/design-art-level1.md` (vẽ theo tờ, cắt bằ
 - **Riêng level 1:** `l1_bg_living_room`, `l1_sofa_cushion_flat` (thay `l1_sofa_cushion_bulge`; `l1_sofa_cushion_lifted` không còn dùng từ G10), `l1_pate_can_closed`, `l1_pate_can_open`, `l1_pate_can_steam`, `l1_box_closed`, `l1_box_open_empty`, `l1_pillow_white_idle`, `l1_pillow_white_flipped`, `l1_curtain_closed`, `l1_curtain_open`, `l1_wall_clock_closed`, `l1_wall_clock_open`, `l1_wall_clock_bird`, `l1_wall_clock_pendulum`, `l1_plant`, `l1_rug_flat`, `l1_rug_curled`.
 - **Dùng chung, vẽ lần đầu ở level 1:** `prop_butterfly`, `fx_pop`, `sua_tail_peek`, `sua_run`, `sua_sit_stare`, `sua_meow_up`, `sua_eat`, `sua_eat_f2`, `sua_held`, `sua_face_icon`, `ui_cat_head_dark`, `ui_speech_bubble`, `ui_question_mark`, `ui_question_mark_white`, `ui_heart`, `player_call`, `player_scratch_head`, `player_surprised`, `player_shrug`, `player_hands_lift`, `player_box_on_head` (tùy chọn), `ui_hand_pointer`, `ui_hint_paw`, `ui_sparkle`, `ui_bulb_button`, `ui_dried_fish`.
 - **Không có file riêng** (frame do code cắt): `l1_plant` → `leaves`/`pot`; `l1_curtain_closed` → `left`/`right`.
+- **Âm mới (G1-30, đang tổng hợp bằng code tới khi có file):** `sfx_whoosh` (vút), `sfx_skid` (phanh gấp).
 - **Đổi tên so với bản trước:**
 
   | Tên cũ | Tên mới |
@@ -155,21 +158,23 @@ Toàn bộ đã có trong `art/design-art-level1.md` (vẽ theo tờ, cắt bằ
 3. `l2_wardrobe_*`, `l2_shoebox`, `l2_plush_cat*` (kệ nằm trong nền)
 4. `l2_bed_blanket_*`, `l2_slipper` (ẩn dưới gầm), `l2_slippers_cat_*`, `l2_chair` + `l2_sweater_*`
 5. `l2_sock_basket_*`
-6. `l2_curtain_*`
-7. Tất đang bay (`l2_sock_striped`, `l2_sock_dotted`, `l2_sock_white_big`, `l2_sock_star`, `l2_sock_baby`, `l2_sock_long`), sau khi rơi nằm ở lớp của chỗ rơi
-8. Giao diện
+6. `l2_pampas_plume` + `l2_pampas_vase_pot` (hoặc `l2_pampas_vase` liền) trên bậu cửa sổ, **dưới** rèm (G2-30)
+7. `l2_curtain_*`
+8. Tất đang bay (`l2_sock_striped`, `l2_sock_dotted`, `l2_sock_white_big`, `l2_sock_star`, `l2_sock_baby`, `l2_sock_long`), sau khi rơi nằm ở lớp của chỗ rơi
+9. Giao diện
 
 ### Đồ vật
 
 | # | Đồ vật | Ảnh trạng thái | Bắt đầu | Thao tác | Điều kiện | Chuyển sang | Phản hồi | Âm thanh |
 |---|---|---|---|---|---|---|---|---|
-| 1 | Rèm | `l2_curtain_closed`, `l2_curtain_open` (vệt nắng do code vẽ) | closed | Vuốt / chạm | — | closed ↔ open | `swap` | `sfx_cloth` |
+| 1 | Rèm | `l2_curtain_closed`, `l2_curtain_open` (vệt nắng do code vẽ) | closed | Vuốt / chạm | — | closed ↔ open | `swap`; mở: bình bông lau (1b) nhận chạm, đóng: bình bị che, tắt vùng chạm. **Lần đầu mở (G2-30):** gió lùa, chùm bông lau quất mạnh một cái (xoay quanh gốc tới 30°, bật về −12°, về 0) rồi đung đưa chậm ±3°, 1,6 giây | `sfx_cloth`; lần đầu thêm `sfx_wind` |
+| 1b | Bình bông lau 🎭 (G2-30) | `l2_pampas_vase_pot` + `l2_pampas_plume` (chùm bông neo giữa đáy phần vẽ, cắm vào miệng bình, xoay quanh gốc); có `l2_pampas_vase` liền mà không có `_plume` thì cả bình đung đưa quanh đáy. Ảnh tạm: khối code | đung đưa chậm (sau lần mở rèm đầu) | Chạm (khi rèm mở) | Rèm mở | — | Bông lau quất qua quất lại 2 nhịp (22° → −18° → 16° → −8° → 0), 7 sợi bông trắng (code) bay lơ lửng rồi mờ; 0,45 giây sau nhân vật trồi lên hắt xì (`player_sneeze`, chưa có thì `player_surprised`) | `sfx_cloth` + `sfx_sneeze` |
 | 1a | Dây buộc rèm 🎭 (như đuôi mèo, G2-7) | `l2_curtain_tie` (mới: dây bông trắng thò xuống, neo đỉnh ở chỗ buộc) | — | Chạm | — | — | `swing` dây ±22° tắt dần; rèm `wiggle` nhẹ | `sfx_cloth` |
 | 2 | Mèo nhồi bông trắng 🎭 | `l2_plush_cat` (đặt trên kệ vẽ trong nền), `l2_plush_cat_fallen` (nằm ngửa dưới sàn) | idle | Chạm | — | idle → fallen (giữ) | `fly_arc` từ kệ xuống mặt giường, xoay 1 vòng quanh **tâm**; đổi sang ảnh nằm giữa đường bay (giữ tâm), đáp mượt rồi là vật con của giường (O2-14) | `l2_sfx_squeak` |
 | 3 | Tủ quần áo | `l2_wardrobe_closed`, `l2_wardrobe_open` (quần áo **gấp** ngăn nắp từng ngăn, không treo; G2-7) | closed | Chạm | — | closed ↔ open | `swap` | `sfx_hinge` |
 | 3a | Hộp giày 🎭 (G2-7) | `l2_shoebox_ears` (mới: nắp hé, hai tai mèo nhọn thò lên), `l2_shoebox_open` (mới: nắp bật), `l2_beanie_pink_cat` (mới: mũ len tai mèo hồng nhạt) | ears | Chạm | — | ears → open (giữ) | `swap`; mũ hồng nảy lên 150px rồi rơi lại vào hộp; chạm lại: `hop` nhỏ | `l1_sfx_box_flaps` |
 | 4 | Chăn 🎭 | `l2_bed_blanket_flat` (cục phồng rõ), `l2_bed_blanket_flipped` (không có gì: gối trắng, nệm trống) | flat | Vuốt | — | flat → flipped (giữ) | `swap`; `player_shrug` trồi lên | `sfx_cloth` |
-| 5 | Gầm giường 🎭 (G2-9) | vùng chạm dải dưới ảnh giường + túm lông; `l2_duster_peek` (túm lông thò ra, gốc khuất sau khung giường) → `l2_duster` (cả cây chổi lông nằm ngang) | peek: ve vẩy như đuôi mèo, xoay ±8° quanh gốc, nhịp chậm 1,3 giây, thỉnh thoảng giật nhẹ | Chạm lần đầu | — | peek → chổi nằm trên sàn (giữ) | ẩn `_peek`, chổi trượt ra chỗ `l2_duster` trong bảng vị trí + `puff`; `player_scratch_head` | `l2_sfx_slide` |
+| 5 | Gầm giường 🎭 (G2-9) | vùng chạm dải dưới ảnh giường + túm lông; `l2_duster_peek` (túm lông thò ra, gốc khuất sau khung giường; G2-30: đẩy gốc sâu vào gầm 1/3 chiều cao ảnh nên phần thò ra ngắn lại) → `l2_duster` (cả cây chổi lông nằm ngang) | peek: ve vẩy như đuôi mèo, xoay ±8° quanh gốc, nhịp chậm 1,3 giây, thỉnh thoảng giật nhẹ | Chạm lần đầu | — | peek → chổi nằm trên sàn (giữ) | ẩn `_peek`, chổi trượt ra chỗ `l2_duster` trong bảng vị trí + `puff`; `player_scratch_head` | `l2_sfx_slide` |
 | 5 | Gầm giường | — | — | Chạm lần sau | — | — | `wiggle` giường | `sfx_tap` |
 | 6 | Chao đèn | `l2_ceiling_lamp` (mới, tách khỏi nền) | — | Chạm | — | — | `swing`; bóng đổ lắc theo | `l2_sfx_creak` |
 | 7 | **Giỏ tất** | `l2_sock_basket_full` → `_2` → `_3` → `_reveal`; `_one_eye`, `_yawn` (Sữa vẽ liền trong giỏ, cùng khung) | full | Chạm (6 lần, G2-8) | cách lần trước ≥ 0,4 giây | full → 2 (lần 2) → 3 (lần 4) → reveal (lần 6) | Mỗi lần một chiếc tất bay (bảng dưới); lần 1, 3, 5 giỏ `hop` nhỏ, lần 2, 4, 6 `swap`. Giỏ tĩnh, không `breathe` (G2-8) | `l2_sfx_sock_whoosh` |
@@ -220,6 +225,7 @@ O2-19: tất hiển thị nhỏ (×0,6 cỡ trong design-art, cỡ thật so v�
 - **Có sẵn:** toàn bộ 20 ảnh trong `design-art-level2.md`.
 - **Đổi tên (A2-4/VL2-5):** `sua_one_eye_open` → `l2_sock_basket_one_eye`, `sua_yawn` → `l2_sock_basket_yawn`; không có sprite `l2_shelf` (kệ trong nền). **Gợi ý:** không có gợi ý theo giờ (G2-2); 💡 chỉ vào giỏ.
 - **Cần thêm:** `l2_ceiling_lamp` (nền phải bỏ chao đèn), `l2_plush_cat_fallen`, `l2_coat_hook`, `l2_beanie_white_idle`, `l2_beanie_white_floor`, `player_wear_beanie`, `l2_slippers_cat_idle`, `l2_slippers_cat_after`, `l2_chair`, `l2_sweater_rolled`, `l2_sweater_unrolled`, `l2_sock_star`, `l2_sock_baby`, `l2_sock_long` (G2-8; game dùng ảnh tạm tới khi có).
+- **Thêm (G2-30):** `l2_pampas_vase_pot`, `l2_pampas_plume`, `l2_pampas_vase` (tờ `l2_pampas_sheet`), `player_sneeze` (tuỳ chọn, chưa có thì dùng `player_surprised`). Âm tạm bằng code: `sfx_wind`, `sfx_sneeze`.
 - **Lưu ý màu:** 4 đồ ngụy trang mới phải **trắng ấm cùng tông với Sữa**, tròn, cỡ bằng Sữa cuộn tròn. Dép gầm giường `l2_slipper` (hồng, tai thỏ) giữ nguyên, khác với dép ngụy trang tai mèo.
 
 ---
@@ -234,7 +240,7 @@ O2-19: tất hiển thị nhỏ (×0,6 cỡ trong design-art, cỡ thật so v�
 4. `l3_gift_box_*` / `l3_box_*`
 5. `l3_scissors` (trên bàn)
 6. `l3_curtain_closed` + bóng Sữa (`sua_shadow`, code tạo từ `sua_sit_stare` tô đen 35% độ mờ, đặt **sau** rèm)
-7. Mèo, nhân vật (`player_sad`), `l3_courier_arm`
+7. Mèo, nhân vật (`player_dangle_pompom`; nằm trên cột cào: `l3_cat_tree_player` hoặc `player_curl_on_tree`), `l3_courier_arm`
 8. Giao diện + túi đồ (`ui_bag_bar` trượt lên lần đầu)
 
 ### Đồ vật
@@ -281,13 +287,22 @@ O2-19: tất hiển thị nhỏ (×0,6 cỡ trong design-art, cỡ thật so v�
 
 | Thời gian | Diễn biến |
 |---|---|
-| 0–0,35 giây | Hộp `hop` + xoay 180°, `swap` sang `sua_in_box` |
-| 0,35–1,1 giây | Bong bóng tô màu `sua_face_icon`. `player_sad` (mới: đứng cạnh cột cào, vai xuôi, mặt buồn hiu) |
-| 1,1 giây → | `glow_outline` quanh Sữa trong hộp |
+| 0–0,35 giây | Hộp `hop` + xoay 180°, `swap` sang `l3_sua_in_box` |
+| 0,35 giây | Bong bóng tô màu `sua_face_icon`. **Sữa nhận chạm ngay** (chạm lúc nào cũng cắt sang cảnh bế), `glow_outline` quanh hộp. Bắt đầu đoạn nhân vật ngốc (G3-30, thay cho `player_sad`; mốc dưới tính từ đây) |
+| 0–0,55 giây | `player_dangle_pompom` chạy vào từ mép phải tới giữa hộp và cột cào, nhún 3 nhịp |
+| 0,6–1,6 giây | Lắc quả bông đỏ trước mặt Sữa, nhún nhảy mời mọc (2 `hop`), âm `l3_sfx_pompom`. Chưa có ảnh: dùng `player_silly_laugh` + bản sao `l3_pompom` lắc ở tay, quả bông trên cột cào ẩn tạm |
+| 1,6 giây | Sữa liếc: hộp `wiggle` nhẹ một nhịp |
+| 1,9 giây | Sữa ngáp, rụt sâu vào hộp: `swap` sang `l3_sua_in_box_ears` (chỉ còn hai tai), âm `sua_sfx_yawn` |
+| 2,5 giây | Nhân vật nhìn quả bông, nhìn hộp (lật ngang qua lại 0,25 giây) |
+| 3,0–3,45 giây | Nhân vật leo lên tầng trên cùng cột cào, cuộn tròn như mèo: có `l3_cat_tree_player` thì đổi ảnh cột cào (ẩn nhân vật), không thì `player_curl_on_tree` nhảy lên đỉnh cột cào và bám theo cột |
+| 3,45 giây → | Cột cào lắc lư ±2,5° bốn nhịp, âm `l3_sfx_creak`; quả bông đung đưa, lặp mỗi 1,8 giây (nhân vật vờn quả bông) |
+| 4,0 giây | Sữa ló mắt nhìn: `swap` sang `l3_sua_in_box_peek` |
+| 4,7 giây | Sữa rụt vào lại: `l3_sua_in_box_ears` |
 
 ### Danh sách ảnh (tất cả mới, cần tạo `design-art-level3.md`)
 
-`l3_bg_living_room_afternoon`, `l3_curtain_closed`, `l3_scissors`, `l3_gift_box_taped`, `l3_gift_box_open`, `l3_box_upside_down`, `l3_post_body`, `l3_post_base`, `l3_cat_tree`, `l3_pompom`, `l3_vase`, `l3_courier_arm` (cánh tay shipper đặt hộp qua khung cửa), `sua_peek_tongue`, `sua_pounce`, `sua_scratch_post`, `sua_in_box`, `sua_tail_peek`, `player_sad`. Dùng lại: `l1_pillow_white_idle`, `l1_pillow_white_flipped`, `sua_run`.
+`l3_bg_living_room_afternoon`, `l3_curtain_closed`, `l3_scissors`, `l3_gift_box_taped`, `l3_gift_box_open`, `l3_box_upside_down`, `l3_post_body`, `l3_post_base`, `l3_cat_tree`, `l3_pompom`, `l3_vase`, `l3_courier_arm` (cánh tay shipper đặt hộp qua khung cửa), `sua_peek_tongue`, `sua_pounce`, `sua_scratch_post`, `l3_sua_in_box`, `sua_tail_peek`. Dùng lại: `l1_pillow_white_idle`, `l1_pillow_white_flipped`, `sua_run`.
+**G3-30 (thay `player_sad`, bỏ):** `player_dangle_pompom`, `l3_sua_in_box_ears`, `l3_sua_in_box_peek` (cùng thân, cùng khung với `l3_sua_in_box`), `l3_cat_tree_player` (cột cào có nhân vật cuộn tròn trên tầng trên cùng) hoặc `player_curl_on_tree` (ảnh tạm code). Dùng lại `player_silly_laugh` khi chưa có `player_dangle_pompom`. Âm tạm bằng code: `sua_sfx_yawn`, `l3_sfx_creak`.
 
 ---
 
@@ -345,15 +360,15 @@ Tư thế treo đổi **mỗi lần chạm rèm hoặc Sữa** (1 → 2 → 3 �
 
 | Lúc | Tư thế | Chuyển động |
 |---|---|---|
-| Mở màn | `player_call` (đã có, dùng lại L1) | Bước vào đứng giữa phòng khách gọi, giữ tới khi bong bóng nhiệm vụ thu về góc rồi lui xuống mép dưới (mở màn chung `base.js`, G4-25). Cỡ như level 1–3 (~500, A4-18) |
-| Cao trào | `player_reach_up` (mới: đứng trên đỉnh tháp, kiễng chân, hai tay vươn lên) | Hiện ra luôn ở đỉnh tháp (fade 0,2 giây), không có cảnh trèo |
+| Mở màn và suốt màn (G4-40, thay mở màn bước vào gọi) | `player_reach_sofa` (nếu Art vẽ), chưa có thì `player_reach_up` | **Đứng sẵn trên sofa (13)** cạnh rèm, không che chỗ xếp tháp: chân ở mặt nệm (cách mép trái phần vẽ sofa 95px, ở 50% chiều cao sofa). Mở màn: tiếng gọi + kiễng chân nhảy 2 cái vẫn hụt (lên 42px, kéo dài dọc ×1,05), chới với (lắc ±3°). Bong bóng nhiệm vụ hiện cạnh đầu nhân vật (tâm màn hình 800, 470) rồi thu về góc. Ở lại trên sofa suốt màn; mỗi 6–10 giây (ngẫu nhiên, khi đang ở phòng khách, không lúc chuyển phòng) kiễng chân với hụt một cái |
+| Cao trào | `player_reach_up` (mới: đứng trên đỉnh tháp, kiễng chân, hai tay vươn lên) | Nhảy từ sofa sang đỉnh tháp theo đường cong (0,6 giây, cao 140px), đáp "tạch" (`l4_sfx_land_tap`) |
 | Sau khi Sữa tiếp đất | `player_silly_laugh` (mới: vẫn đứng trên tháp, một tay gãi đầu, cười ngốc nghếch nhìn xuống) | `swap` |
 
 ### Kịch bản lộ diện (xếp xong gối)
 
 | Nhịp | Thời lượng | Diễn biến |
 |---|---|---|
-| 1 | 0,4 giây | Tháp `sparkle`. Nhân vật `player_reach_up` hiện trên đỉnh tháp |
+| 1 | 0,6 giây | Tháp `sparkle`. Nhân vật nhảy từ sofa sang đỉnh tháp theo đường cong, đáp xuống thành `player_reach_up` (G4-40) |
 | 2 | 0,5 giây | Tay vươn sát Sữa. Sữa giật mình (`hop` nhỏ tại chỗ), "meo!" |
 | 3 | 0,6 giây | Sữa `sua_curl_spin` bật khỏi rèm, xoay 2–3 vòng theo cung, vệt xoáy |
 | 4 | 0,3 giây | `sua_land` chạm đất cạnh tháp, `squash`, "tạch" thật nhẹ |
@@ -367,8 +382,8 @@ Phòng khách: `l4_window`, `l4_curtain`, `l4_sofa`, `l4_stack_mattress`, `l4_st
 Phòng ngủ: `l4_bed`, `l4_pillow`, `l4_mattress_standing`, `l4_mattress_fallen`, `l4_teddy`, `l4_bedside_lamp`, `l4_sock_stuck`, `l4_sock_flat` (G4-36, có thể dùng chung một ảnh nếu tất vắt trên đèn vẫn đọc được khi nằm trên giường).
 Phòng làm việc: `l4_bookshelf_full`, `l4_bookshelf_after`, `l4_book_single`, `l4_book_stack`, `l4_desk`, `l4_suitcase_full`, `l4_suitcase_folded`, `l4_spill_duck_ring`, `l4_spill_goggles`, `l4_spill_slipper`, `l4_spill_shirt`, `l4_yoga_ball`.
 Sữa: `sua_curtain_banana`, `sua_curtain_one_paw`, `sua_curtain_upside`, `sua_curtain_sleep`, `sua_curtain_sulk`, `sua_curl_spin`, `sua_land`, `sua_lick_paw`.
-Nhân vật: `player_reach_up`, `player_silly_laugh`.
-Chung (chuyển phòng): `ui_room_arrow`. **Không có bản đồ mini** ở level 4 (3 phòng nối thẳng, mũi tên là đủ); bản đồ mini dạy lần đầu ở level 5.
+Nhân vật: `player_reach_up`, `player_silly_laugh`, `player_reach_sofa` (tuỳ chọn, G4-40: đứng trên sofa kiễng chân với lên; chưa có thì dùng `player_reach_up`). Không dùng `player_call` ở level 4 nữa.
+Chung (chuyển phòng): `ui_room_arrow`, bản đồ mini 3 ô (`ui_map_bedroom`, `ui_map_living`, `ui_map_study`, chung `rooms.js`).
 
 Icon túi đồ dùng thu nhỏ ảnh trong cảnh (`l4_mattress_fallen`, `l4_pillow`, `l4_book_stack`, `l4_suitcase_folded`). Đoạn Sữa vào quán: làm sau.
 

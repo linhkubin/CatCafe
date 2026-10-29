@@ -325,6 +325,7 @@ export class BaseLevel extends Phaser.Scene {
   // ---------- dựng cảnh ----------
   create() {
     this.prepareAssets();
+    this.time.paused = false; // đồng hồ của Scene giữ trạng thái qua lần khởi động lại: vào màn luôn chạy
     this.zones = {};
     this.phase = 'intro';
     this.locked = true;

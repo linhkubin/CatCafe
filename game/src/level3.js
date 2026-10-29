@@ -8,18 +8,19 @@ import { ObjectLevel } from './objects.js';
 const DEF = {
   l3_curtain_closed: [318, 246], l3_sofa_front: [677, 851], l3_table: [44, 668], l3_vase: [815, 388], l3_scissors: [140, 711], l1_pillow_white_idle: [535, 742],
   l3_gift_box_taped: [224, 1140], l3_box_upside_down: [224, 1140], l3_sua_in_box: [224, 1140], l3_cat_tree: [790, 1145],
-  player_point_think: [649, 1124], ui_thought_bubble: [771, 606], player_sad: [511, 1107], sua_pounce: [540, 1140],
+  player_point_think: [649, 1124], ui_thought_bubble: [771, 606], player_dangle_pompom: [500, 1150], sua_pounce: [540, 1140],
   sua_scratch_post: [630, 1140], ui_bag_bar: [409, 1380], l3_pompom: [705, 746],
 };
 const FIT = {
   l3_curtain_closed: 378, l3_sofa_front: 670, l3_vase: 170, l3_scissors: 170, l1_pillow_white_idle: 162, l3_gift_box_taped: 368,
-  l3_cat_tree: 352, player_point_think: 390, ui_thought_bubble: 260, player_sad: 245, ui_bag_bar: 688, l3_pompom: 68,
+  l3_cat_tree: 352, player_point_think: 390, ui_thought_bubble: 260, ui_bag_bar: 688, l3_pompom: 68,
 };
 // Trạng thái cùng nhóm co cùng tỉ lệ với key đầu nhóm (D3-17).
 const FIT_HEAD = {
   l3_tree_p1: 'l3_cat_tree', l3_tree_p2: 'l3_cat_tree', l3_tree_p3: 'l3_cat_tree',
   l3_gift_box_open: 'l3_gift_box_taped', l3_box_upside_down: 'l3_gift_box_taped', l3_sua_in_box: 'l3_gift_box_taped',
-  l1_pillow_white_flipped: 'l1_pillow_white_idle', player_sad: 'player_point_think',
+  l1_pillow_white_flipped: 'l1_pillow_white_idle',
+  l3_sua_in_box_ears: 'l3_gift_box_taped', l3_sua_in_box_peek: 'l3_gift_box_taped', l3_cat_tree_player: 'l3_cat_tree', // G3-30
 };
 const SHADOW_X = [214, 439], SHADOW_Y = 632;       // bóng Sữa: góc trái / góc phải rèm, chân trên gấu rèm (D3-29, G3-12)
 const HOOK = [-85, -415];                           // móc quả bông so với neo đáy cột cào, đo trên demo (737, 815) (ảnh tạm)
@@ -101,7 +102,17 @@ const FB = {
   sua_pounce: [300, 330, 'đáy', (g, w, h) => cat(g, w, h, 'pounce')],
   sua_scratch_post: [220, 340, 'đáy', (g, w, h) => cat(g, w, h, 'scratch')],
   player_point_think: [390, 572, 'đáy', (g, w, h) => kid(g, w, h, true)],
-  player_sad: [245, 547, 'đáy', (g, w, h) => kid(g, w, h, false)],
+  // G3-30 (tạm): nhân vật cuộn tròn trên tầng trên cùng cột cào, người to quá, tay chân thò ra ngoài.
+  player_curl_on_tree: [260, 170, 'đáy', (g, w, h) => {
+    g.lineStyle(4, BROWN);
+    g.fillStyle(SKY).fillRoundedRect(4, h * 0.55, 70, 30, 14).strokeRoundedRect(4, h * 0.55, 70, 30, 14);           // chân thò ra trái
+    g.fillStyle(BUTTER).fillEllipse(w * 0.48, h * 0.62, w * 0.62, h * 0.62).strokeEllipse(w * 0.48, h * 0.62, w * 0.62, h * 0.62);
+    g.fillStyle(BUTTER).fillRoundedRect(w * 0.62, h * 0.7, 90, 26, 12).strokeRoundedRect(w * 0.62, h * 0.7, 90, 26, 12); // tay thò ra phải
+    g.fillStyle(0xfde3cf).fillCircle(w * 0.74, h * 0.4, 46).strokeCircle(w * 0.74, h * 0.4, 46);
+    g.fillStyle(0x9b6a45).fillEllipse(w * 0.74, h * 0.2, 96, 40);
+    g.lineStyle(4, BROWN).beginPath().arc(w * 0.74, h * 0.44, 18, 0.2, Math.PI - 0.2, false).strokePath();      // cười ngốc
+    g.fillStyle(BROWN).fillCircle(w * 0.68, h * 0.37, 5).fillCircle(w * 0.8, h * 0.37, 5);
+  }],
   ui_bag_bar: [655, 210, 'đáy', (g, w, h) => {
     g.lineStyle(10, WOOD).strokeCircle(70, 50, 34);
     g.fillStyle(0xfdf6e8).lineStyle(8, WOOD).fillRoundedRect(4, 40, w - 8, h - 44, 60).strokeRoundedRect(4, 40, w - 8, h - 44, 60);
@@ -167,7 +178,7 @@ function cat(g, w, h, pose) {
     g.fillEllipse(w * 0.82, h * 0.42, 70, 26).strokeEllipse(w * 0.82, h * 0.42, 70, 26);
   }
 }
-// Thân người rộng 245 (như player_sad trên demo); tư thế chỉ tay thêm cánh tay vươn sang trái tới mép khung.
+// Thân người rộng 245; tư thế chỉ tay thêm cánh tay vươn sang trái tới mép khung.
 function kid(g, w, h, point) {
   const fw = Math.min(w, 245), cx = w - fw / 2, r = fw * 0.4;
   g.lineStyle(4, BROWN);
@@ -196,7 +207,7 @@ export class Level3 extends ObjectLevel {
     A.fit = A.fit || {};
     if (!A.fit[3] || !Object.keys(A.fit[3]).length) A.fit[3] = { ...FIT };
     Object.assign(this, { stage: 'scissors', shadowAt: 0, curtainTaps: 0, peeking: false, vaseDone: false, secrets: 0,
-      playTimers: [], taught: {}, kids: [], hoverT: null, boxHi: null, glowFx: null, meowLoop: null, boxBreath: null, think: null,
+      playTimers: [], taught: {}, kids: [], hoverT: null, boxHi: null, glowFx: null, meowLoop: null, boxBreath: null, think: null, fanPlay: null, treeSway: null,
       buildIdx: 0, ghosts: [], placed: [] });
   }
 
@@ -246,8 +257,8 @@ export class Level3 extends ObjectLevel {
     });
     this.placed = PARTS.map((k, i) => (k === 'l3_pompom' ? this.pompom : this.img(k, tx, ty, this.tree.depth + i * 0.0001).setVisible(false)));
     this.cat = this.img('sua_run', 0, 0, floorD(1225)).setVisible(false);
-    const [sx, sy] = P('player_sad');
-    this.sadPlayer = this.img('player_sad', sx, sy, floorD(sy)).setVisible(false);
+    const [sx, sy] = P('player_dangle_pompom');
+    this.fan = this.img(this.has('player_dangle_pompom') ? 'player_dangle_pompom' : 'player_silly_laugh', sx, sy, floorD(sy)).setVisible(false); // G3-30
     this.player = this.img('player_point_think', ...P('player_point_think'), D.player).setVisible(false);
     this.think = this.img('ui_thought_bubble', ...P('ui_thought_bubble'), D.player + 1).setVisible(false);
     this.thinkIcon = this.img('l3_scissors', 0, 0, D.player + 2).setOrigin(0.5, 0.5).setVisible(false);
@@ -715,28 +726,92 @@ export class Level3 extends ObjectLevel {
       this.fitWidth(this.sua, 200);
       this.sfx('sua_sfx_meow_question');
       this.bubbleFound();
-      const p = this.sadPlayer;
-      p.setVisible(true).setAlpha(0);
-      this.tweens.add({ targets: p, alpha: 1, duration: 300 });
-      this.time.delayedCall(300, () => this.hop(p, 10, 300));
-      this.boxBreath = this.tweens.add({ targets: this.box, scaleY: (this.box.baseY || this.box.base) * 1.02, duration: 1600, yoyo: true, repeat: -1, ease: 'Sine.inOut' });
-      this.time.delayedCall(750, () => {
-        if (this.phase !== 'found') return;
-        if (this.renderer.type === Phaser.WEBGL && this.box.preFX) {
-          this.glowFx = this.box.preFX.addGlow(SUN, 0, 0, false, 0.1, 14);
-          this.tweens.add({ targets: this.glowFx, outerStrength: 4, duration: 700, onComplete: () => {
-            this.glowTw = this.tweens.add({ targets: this.glowFx, outerStrength: 1.5, duration: 1000, yoyo: true, repeat: -1 });
-          } });
-        }
-        this.armSua(new Phaser.Geom.Rectangle(bb.x + bb.width * 0.1, bb.y, bb.width * 0.8, bb.height * 0.55));
-      });
+      // G3-30: Sữa nhận chạm ngay khi hộp lật ngửa (chạm sớm thì cắt sang cảnh bế); hộp sáng nhẹ.
+      this.armSua(new Phaser.Geom.Rectangle(bb.x + bb.width * 0.1, bb.y, bb.width * 0.8, bb.height * 0.55));
+      if (this.renderer.type === Phaser.WEBGL && this.box.preFX) {
+        this.glowFx = this.box.preFX.addGlow(SUN, 0, 0, false, 0.1, 14);
+        this.tweens.add({ targets: this.glowFx, outerStrength: 4, duration: 700, onComplete: () => {
+          this.glowTw = this.tweens.add({ targets: this.glowFx, outerStrength: 1.5, duration: 1000, yoyo: true, repeat: -1 });
+        } });
+      }
+      this.fanShow();
     });
+  }
+
+  // ---------- G3-30: nhân vật ngốc cố giành sự chú ý (khoảng 4,7 giây), thay cho mặt buồn hiu ----------
+  // Nhân vật chạy tới lắc quả bông trước mặt Sữa -> Sữa liếc, ngáp, rụt vào hộp (chỉ còn tai) -> nhân vật tự leo lên
+  // tầng trên cùng cột cào cuộn tròn như mèo, cột cào lắc cót két, cười ngốc vờn quả bông -> Sữa ló mắt nhìn rồi rụt lại.
+  // Chạm Sữa lúc nào cũng cắt sang cảnh bế (mọi bước kiểm tra phase).
+  fanShow() {
+    const T = (ms, fn) => this.time.delayedCall(ms, () => { if (this.phase === 'found') fn(); });
+    const p = this.fan, [px, py] = this.P('player_dangle_pompom');
+    const handPom = this.has('player_dangle_pompom') ? null : this.img('l3_pompom', 0, 0, p.depth + 0.001).setVisible(false);
+    // 0: chạy vào từ mép phải tới giữa hộp và cột cào.
+    p.setVisible(true).setPosition(1024 + 200, py);
+    this.tweens.add({ targets: p, x: px, duration: 550, ease: 'Quad.out' });
+    this.tweens.add({ targets: p, y: py - 18, duration: 110, yoyo: true, repeat: 2 });
+    // 0,6: lắc quả bông trước mặt Sữa (ảnh tạm: tay cầm quả bông của cột cào), nhún nhảy mời mọc.
+    T(600, () => {
+      this.sfx('l3_sfx_pompom');
+      if (handPom) {
+        const r = this.artRect(p);
+        handPom.setVisible(true).setPosition(r.left + 20, r.top + r.height * 0.35).setScale(this.pompom.scaleX);
+        this.pompom.setVisible(false);
+        this.tweens.add({ targets: handPom, angle: { from: -25, to: 25 }, duration: 220, yoyo: true, repeat: 3, ease: 'Sine.inOut' });
+      }
+      this.hop(p, 14, 260);
+      this.time.delayedCall(320, () => this.hop(p, 14, 260));
+    });
+    // 1,6: Sữa liếc một cái, ngáp, rụt sâu vào hộp (chỉ còn hai tai).
+    T(1600, () => this.wiggle(this.box, 2, 1, 200));
+    T(1900, () => { this.sfx('sua_sfx_yawn'); this.boxState('ears'); });
+    // 2,5: nhân vật nhìn quả bông, nhìn hộp, rồi leo lên tầng trên cùng cột cào, cuộn tròn.
+    T(2500, () => { this.face(p, true); this.time.delayedCall(250, () => this.face(p, false)); });
+    T(3000, () => {
+      if (handPom) handPom.destroy();
+      this.pompom.setVisible(true);
+      this.curlOnTree(p);
+    });
+    // 4,0: Sữa ló mắt khỏi hộp nhìn, rồi rụt vào lại.
+    T(4000, () => this.boxState('peek'));
+    T(4700, () => this.boxState('ears'));
+  }
+
+  curlOnTree(p) {
+    const t = this.tree, r = this.artRect(t);
+    if ((this.A.entries.l3_cat_tree_player || {}).real && this.has('l3_cat_tree_player')) {
+      p.setVisible(false);
+      this.applyKey(t, 'l3_cat_tree_player');
+    } else {
+      this.applyKey(p, 'player_curl_on_tree');
+      p.setDepth(t.depth + 0.0035).setAngle(0);
+      const ty = r.top + r.height * 0.16;
+      this.tweens.add({ targets: p, x: r.centerX, duration: 450, ease: 'Sine.inOut' });
+      this.tweens.add({ targets: p, y: ty, duration: 450, ease: 'Back.out', onComplete: () => this.attachTo(p, t) });
+    }
+    // Cột cào lắc lư cót két; nhân vật cười ngốc, vờn quả bông.
+    this.time.delayedCall(450, () => {
+      if (this.phase !== 'found') return;
+      this.sfx('l3_sfx_creak');
+      this.treeSway = this.tweens.add({ targets: t, angle: { from: -2.5, to: 2.5 }, duration: 380, yoyo: true, repeat: 3, ease: 'Sine.inOut',
+        onComplete: () => t.setAngle(0) });
+      this.swingPompom();
+      this.fanPlay = this.time.addEvent({ delay: 1800, loop: true, callback: () => { if (this.phase === 'found') this.swingPompom(); } });
+    });
+  }
+
+  // Hộp có Sữa: 'ears' (rụt sâu, còn hai tai), 'peek' (ló mắt nhìn): ảnh cùng thân, cùng khung với l3_sua_in_box
+  // (l3_sua_in_box_ears / _peek). Chưa có ảnh thì giữ Sữa thò đầu như cũ.
+  boxState(st) {
+    const key = st === 'peek' ? 'l3_sua_in_box_peek' : 'l3_sua_in_box_ears';
+    if ((this.A.entries[key] || {}).real && this.has(key)) this.swap(this.box, key);
   }
 
   suaPoint() { const b = this.box.getBounds(); return [b.centerX - 40, b.top + b.height * 0.3]; }
 
   beforeEnding() {
     if (this.meowLoop) this.meowLoop.remove();
+    if (this.fanPlay) { this.fanPlay.remove(); this.fanPlay = null; }
     if (this.boxBreath) this.boxBreath.stop();
     if (this.glowTw) this.glowTw.stop();
     if (this.glowFx) { this.box.preFX.remove(this.glowFx); this.glowFx = null; }
