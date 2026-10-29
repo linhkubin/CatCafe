@@ -41,9 +41,9 @@ const OVERLAP = [14, 14, 10], FEET_SINK = 8;
 // Bong bóng nhiệm vụ lúc mở màn (G4-31: nhỏ hơn; G4-40: cạnh đầu nhân vật đứng trên sofa): tâm (toạ độ màn hình), cỡ so với bản chung.
 const BUBBLE = { x: 800, y: 470, k: 0.8 };
 const SOFA = { left: 470, width: 620 };              // G4-24: sofa theo demo phòng khách
-// G4-40: nhân vật đứng sẵn trên sofa cạnh rèm (không che chỗ xếp tháp): chân ở mặt nệm, cách mép trái sofa `dx`,
-// mặt nệm ở `seat` chiều cao phần vẽ sofa. Thỉnh thoảng (6–10 giây, khi ở phòng khách) kiễng chân với hụt một cái.
-const ON_SOFA = { dx: 95, seat: 0.5, every: [6000, 10000] };
+// G4-40: nhân vật đứng sẵn trên sofa cạnh rèm (không che chỗ xếp tháp): neo đáy (giữa hai dép) trên đệm ngồi, lún nhẹ;
+// cách mép trái phần vẽ sofa `dx`, ở `seat` chiều cao phần vẽ sofa. Thỉnh thoảng (6–10 giây, khi ở phòng khách) kiễng chân với hụt một cái.
+const ON_SOFA = { dx: 135, seat: 0.58, every: [6000, 10000] };
 const WINDOW_BOX = { right: 640, bottom: 710, height: 530 }; // cửa sổ đo trên l4_demo_living (khung + bậu; mép trái khuất sau rèm)
 const POSES = ['sua_curtain_banana', 'sua_curtain_one_paw', 'sua_curtain_upside', 'sua_curtain_sleep']; // đổi mỗi lần về phòng khách
 // Chỉ hàng sách tầng dưới cùng rơi (G4-18).

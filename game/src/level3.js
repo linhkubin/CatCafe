@@ -779,8 +779,11 @@ export class Level3 extends ObjectLevel {
 
   curlOnTree(p) {
     const t = this.tree, r = this.artRect(t);
-    if ((this.A.entries.l3_cat_tree_player || {}).real && this.has('l3_cat_tree_player')) {
+    const drawn = (this.A.entries.l3_cat_tree_player || {}).real && this.has('l3_cat_tree_player');
+    if (drawn) {
+      // Ảnh Art vẽ liền cột cào + nhân vật + quả bông nhân vật đang vờn: ẩn nhân vật và quả bông riêng.
       p.setVisible(false);
+      this.pompom.setVisible(false);
       this.applyKey(t, 'l3_cat_tree_player');
     } else {
       this.applyKey(p, 'player_curl_on_tree');
@@ -795,6 +798,7 @@ export class Level3 extends ObjectLevel {
       this.sfx('l3_sfx_creak');
       this.treeSway = this.tweens.add({ targets: t, angle: { from: -2.5, to: 2.5 }, duration: 380, yoyo: true, repeat: 3, ease: 'Sine.inOut',
         onComplete: () => t.setAngle(0) });
+      if (drawn) return;
       this.swingPompom();
       this.fanPlay = this.time.addEvent({ delay: 1800, loop: true, callback: () => { if (this.phase === 'found') this.swingPompom(); } });
     });

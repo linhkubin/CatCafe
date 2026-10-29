@@ -360,7 +360,7 @@ Tư thế treo đổi **mỗi lần chạm rèm hoặc Sữa** (1 → 2 → 3 �
 
 | Lúc | Tư thế | Chuyển động |
 |---|---|---|
-| Mở màn và suốt màn (G4-40, thay mở màn bước vào gọi) | `player_reach_sofa` (nếu Art vẽ), chưa có thì `player_reach_up` | **Đứng sẵn trên sofa (13)** cạnh rèm, không che chỗ xếp tháp: chân ở mặt nệm (cách mép trái phần vẽ sofa 95px, ở 50% chiều cao sofa). Mở màn: tiếng gọi + kiễng chân nhảy 2 cái vẫn hụt (lên 42px, kéo dài dọc ×1,05), chới với (lắc ±3°). Bong bóng nhiệm vụ hiện cạnh đầu nhân vật (tâm màn hình 800, 470) rồi thu về góc. Ở lại trên sofa suốt màn; mỗi 6–10 giây (ngẫu nhiên, khi đang ở phòng khách, không lúc chuyển phòng) kiễng chân với hụt một cái |
+| Mở màn và suốt màn (G4-40, thay mở màn bước vào gọi) | `player_reach_sofa` (nếu Art vẽ), chưa có thì `player_reach_up` | **Đứng sẵn trên sofa (13)** cạnh rèm, không che chỗ xếp tháp: neo đáy (giữa hai dép) trên đệm ngồi, lún nhẹ (cách mép trái phần vẽ sofa 135px, ở 58% chiều cao sofa). Mở màn: tiếng gọi + kiễng chân nhảy 2 cái vẫn hụt (lên 42px, kéo dài dọc ×1,05), chới với (lắc ±3°). Bong bóng nhiệm vụ hiện cạnh đầu nhân vật (tâm màn hình 800, 470) rồi thu về góc. Ở lại trên sofa suốt màn; mỗi 6–10 giây (ngẫu nhiên, khi đang ở phòng khách, không lúc chuyển phòng) kiễng chân với hụt một cái |
 | Cao trào | `player_reach_up` (mới: đứng trên đỉnh tháp, kiễng chân, hai tay vươn lên) | Nhảy từ sofa sang đỉnh tháp theo đường cong (0,6 giây, cao 140px), đáp "tạch" (`l4_sfx_land_tap`) |
 | Sau khi Sữa tiếp đất | `player_silly_laugh` (mới: vẫn đứng trên tháp, một tay gãi đầu, cười ngốc nghếch nhìn xuống) | `swap` |
 
