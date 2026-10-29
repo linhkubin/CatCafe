@@ -309,7 +309,7 @@ Không vẽ thanh treo (trong nền). Vệt nắng chiếu vào giỏ do code v�
 
 ### 5.9 Tờ `l2_pampas_sheet` — Bình bông lau trên bậu cửa sổ (1536x1024, G2-30, tham chiếu `sua_ref`)
 
-Đồ đánh lừa 🎭 mới: nằm trên **bậu cửa sổ** (nền `l2_bg_bedroom`, bậu ở y≈565, cửa sổ x≈65–455), sau rèm; chỉ thấy khi rèm mở. Cao cả bình + bông ≈ 2/3 chiều cao ô kính. Code xoay **chùm bông quanh gốc cuống** để quất như đuôi mèo, nên vẽ cả bình liền (để đặt tĩnh) và tách 2 phần.
+Đồ đánh lừa 🎭 mới: nằm trên **bậu cửa sổ** (nền `l2_bg_bedroom`, bậu ở y≈565, cửa sổ x≈65–455), sau rèm; chỉ thấy khi rèm mở. Cao cả bình + bông ≈ 2/3 chiều cao ô kính. Code xoay **chùm bông quanh gốc cuống** để quất như đuôi mèo, nên vẽ cả bình liền (để đặt tĩnh) và tách 2 phần. **G2-31:** trong game hiển thị cao 190 (Dev co ×190/230 trong code) để ngọn bông nằm gọn trong khung kính; ảnh xuất vẫn theo cao 230 ở bảng dưới.
 
 | Tờ | Ô | Key | Thư mục | Nhóm | Neo | Hiển thị | Nét |
 |---|---|---|---|---|---|---|---|
