@@ -71,7 +71,9 @@ const SPECKS = [[150, 930], [320, 960], [280, 1080], [110, 1190], [430, 1190], [
 // Mỗi vòng 1 giây; Mun ra tới lúc đè ≈ 2,7 giây.
 const LOOP = { x: 600, y: 1215, rx: 230, ry: 40, ms: 2000, lead: 450 };
 const MUN_FOOT = 40;                                  // đáy Mun thấp hơn đốm sáng (Mun chạy trên mặt đất, đốm sáng dưới chân)
-const MAP = { x: 640, y: 62 };                        // bản đồ mini (toạ độ màn hình, giữa hai ô)
+const MAP = { x: 640, y: 62 }, MAP_CELL = { w: 64, h: 36 };       // bản đồ mini (toạ độ màn hình, giữa hai ô)
+// Icon hai ô bản đồ (không chữ): Art vẽ ui_map_yard / ui_map_alley; chưa có thì dùng tạm ảnh đồ đặc trưng của phòng.
+const MAP_ICON = [['ui_map_yard', 'l5_vanity_table'], ['ui_map_alley', 'l5_cart']];
 // Đồ sáng: key trong túi → key lúc đặt (dựng nghiêng ở điểm nối tia).
 const SHINY = { l5_mirror_small: 'l5_mirror_placed', l5_tin_lid: 'l5_tin_lid_placed', l5_cd_hanging: 'l5_cd_placed' };
 const SHINY_ROOM = { l5_mirror_small: YARD, l5_tin_lid: YARD, l5_cd_hanging: ALLEY };
@@ -96,14 +98,6 @@ function el(c, cx, cy, rx, ry, fill, stroke = C.brown, lw = 4) {
   c.beginPath(); c.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2); c.fillStyle = fill; c.fill();
   if (stroke) { c.lineWidth = lw; c.strokeStyle = stroke; c.stroke(); }
 }
-// ?nolabel=1: khối không chữ nhãn (ảnh chụp sạch cho Art).
-const NOLABEL = typeof location !== 'undefined' && new URLSearchParams(location.search).get('nolabel') === '1';
-function label(c, text, x, y, size = 26, color = C.brown, halo = C.white) {
-  if (NOLABEL) return;
-  c.font = `bold ${size}px sans-serif`; c.textAlign = 'center'; c.textBaseline = 'middle';
-  c.lineWidth = 6; c.strokeStyle = halo; c.strokeText(text, x, y);
-  c.fillStyle = color; c.fillText(text, x, y);
-}
 // Mèo đen khối: thân elip, đầu tròn, tai tam giác, mắt vàng.
 function blackCat(c, cx, cy, s, eyes = true) {
   el(c, cx, cy + 40 * s, 80 * s, 50 * s, C.black, null);
@@ -116,11 +110,10 @@ function blackCat(c, cx, cy, s, eyes = true) {
 // Đồ sáng dựng nghiêng (lúc đặt ở điểm nối tia).
 const placed = (name, draw) => [124, 120, 'đáy', (c, w, h) => {
   c.save(); c.translate(w / 2, h - 8); c.rotate(-0.35); draw(c); c.restore();
-  label(c, name, w / 2, h - 18, 18);
 }];
 const kid = (name, color) => [300, 440, 'đáy', (c, w, h) => {
   rr(c, w / 2 - 70, 170, 140, 190, color, 30); rr(c, w / 2 - 60, 350, 120, 86, C.sky, 16);
-  el(c, w / 2, 110, 70, 72, '#f6dcc4'); label(c, name, w / 2, 250, 26);
+  el(c, w / 2, 110, 70, 72, '#f6dcc4');
 }];
 const bg = (wall, ground, groundY, extra) => [1024, 1536, 'bg', (c) => {
   c.fillStyle = wall; c.fillRect(0, 0, 1024, groundY);
@@ -138,9 +131,8 @@ const FB = {
     c.strokeStyle = 'rgba(107,74,58,0.35)'; c.lineWidth = 3;
     for (let x = 0; x < 1024; x += 64) { c.beginPath(); c.moveTo(x, 355); c.lineTo(x, 872); c.stroke(); }
     c.fillStyle = '#9a6a3e'; c.fillRect(480, 262, 20, 610); c.fillRect(965, 262, 20, 610);    // hai cột dây phơi
-    rr(c, 890, 362, 140, 488, '#d6a472', 4); label(c, 'cửa quán', 958, 600, 18);              // cửa sau quán
+    rr(c, 890, 362, 140, 488, '#d6a472', 4); // cửa sau quán
     rr(c, 880, 850, 150, 40, '#e9dfd2', 4);                                                    // bậc cửa trên
-    label(c, 'SÂN SAU (nền)', 300, 300, 30, 'rgba(107,74,58,0.55)', 'rgba(255,255,255,0)');
   }),
   l5_bg_alley: bg('#f7e3c8', '#cfc8bf', 860, (c) => {
     c.fillStyle = '#cfe6f5'; c.fillRect(0, 0, 1024, 285);                                    // trời
@@ -153,9 +145,6 @@ const FB = {
     rr(c, LEDGE.x, LEDGE.y, LEDGE.w, LEDGE.h, '#e8c89a', 4);                                 // bậu tường (điểm B)
     rr(c, 605, 440, 192, 153, '#bcdcf2', 6); c.fillStyle = C.wood; c.fillRect(698, 440, 6, 153); c.fillRect(605, 520, 192, 6); // cửa sổ hẻm
     rr(c, 598, 590, 210, 25, '#e8c89a', 4);                                                   // bậu cửa sổ (ống bơ đứng ở đây)
-    label(c, 'bậu tường', LEDGE.x + LEDGE.w / 2, LEDGE.y + 52, 18, 'rgba(107,74,58,0.6)', 'rgba(255,255,255,0)');
-    label(c, 'TƯỜNG ĐỐI DIỆN (7)', 300, 820, 24, 'rgba(107,74,58,0.5)', 'rgba(255,255,255,0)');
-    label(c, 'CON HẺM (nền)', 512, 1420, 30, 'rgba(107,74,58,0.5)', 'rgba(255,255,255,0)');
   }),
   // Cửa sổ quán tách 2 lớp (Art, design-art-level5 mục 2): kính + trong quán (sau Sữa), khung + bậu + thanh ngang (trước Sữa).
   l5_cafe_window_back: [386, 396, 'đáy', (c, w, h) => {
@@ -166,29 +155,25 @@ const FB = {
     c.fillStyle = C.wood; c.beginPath(); c.roundRect(4, 4, w - 8, h - 8, 12); c.rect(32, 27, w - 64, 335); c.fill('evenodd');
     c.lineWidth = 4; c.strokeStyle = C.brown; c.beginPath(); c.roundRect(4, 4, w - 8, h - 8, 12); c.stroke(); c.strokeRect(32, 27, w - 64, 335);
     rr(c, 32, 162, w - 64, 12, C.wood, 2);                                               // thanh ngang (y ≈ 578), trên đầu Sữa
-    label(c, 'Cửa sổ quán (4)', w / 2, h - 16, 18);
   }],
   sua_press_window: [205, 160, 'đáy', (c, w, h) => { // cỡ theo demo: đầu và hai chân áp lên bậu cửa sổ
     el(c, w / 2, 72, 78, 64, C.cream); el(c, w / 2 - 50, h - 14, 24, 12, C.cream); el(c, w / 2 + 50, h - 14, 24, 12, C.cream);
-    el(c, w / 2 - 26, 72, 8, 10, C.brown, null); el(c, w / 2 + 26, 72, 8, 10, C.brown, null); label(c, 'Sữa', w / 2, 112, 22);
+    el(c, w / 2 - 26, 72, 8, 10, C.brown, null); el(c, w / 2 + 26, 72, 8, 10, C.brown, null);
   }],
   l5_vanity_table: [320, 250, 'đáy', (c, w, h) => {
     rr(c, 6, 6, w - 12, 50, C.pink, 10); rr(c, 24, 50, 30, h - 56, C.wood, 6); rr(c, w - 54, 50, 30, h - 56, C.wood, 6);
-    rr(c, 60, 60, w - 120, 90, '#f3d9cf', 8); label(c, 'Bàn trang điểm (2)', w / 2, 105, 22);
+    rr(c, 60, 60, w - 120, 90, '#f3d9cf', 8);
   }],
   l5_mirror_small: [110, 150, 'đáy', (c, w, h) => {
     el(c, w / 2, 58, 46, 54, C.glass); rr(c, w / 2 - 8, 110, 16, 30, C.wood, 4); rr(c, 20, h - 14, w - 40, 12, C.wood, 4);
-    label(c, 'Gương', w / 2, 58, 22);
   }],
   l5_tin_lid: [110, 110, 'đáy', (c, w, h) => {
     c.save(); c.translate(w / 2, h - 6); c.rotate(-0.25); el(c, 0, -50, 46, 50, C.tin); el(c, 0, -50, 30, 33, '#dfe7ee', 'rgba(107,74,58,0.4)', 2); c.restore();
-    label(c, 'Nắp thiếc', w / 2, h / 2, 18);
   }],
   l5_cd_hanging: [80, 110, 'đỉnh', (c, w, h) => { // G5-7: treo trên móc tường bên trái hẻm
     c.strokeStyle = C.dark; c.lineWidth = 6; c.beginPath(); c.arc(w / 2, 10, 8, Math.PI, 0, true); c.stroke();  // móc
     c.strokeStyle = C.brown; c.lineWidth = 3; c.beginPath(); c.moveTo(w / 2, 10); c.lineTo(w / 2, 34); c.stroke();
     el(c, w / 2, 70, 34, 34, '#e9eef7'); el(c, w / 2, 70, 9, 9, '#c4cbd6', C.brown, 2);
-    label(c, 'Đĩa CD', w / 2, 70, 16);
   }],
   l5_mirror_placed: placed('Gương', (c) => el(c, 0, -52, 34, 44, C.glass)),
   l5_tin_lid_placed: placed('Nắp', (c) => el(c, 0, -46, 40, 42, C.tin)),
@@ -197,24 +182,20 @@ const FB = {
     rr(c, 6, 40, w - 12, h - 46, C.kraft, 8);
     c.fillStyle = '#c99358'; c.beginPath(); c.moveTo(6, 40); c.lineTo(40, 6); c.lineTo(130, 40); c.fill();
     c.beginPath(); c.moveTo(w - 6, 40); c.lineTo(w - 40, 6); c.lineTo(w - 130, 40); c.fill();
-    label(c, 'Thùng giấy cũ (1)', w / 2, h / 2 + 25, 24);
   }],
   l5_trash_bag_idle: [210, 190, 'đáy', (c, w, h) => {
     el(c, w / 2, h / 2 + 15, w / 2 - 8, h / 2 - 22, C.dark); el(c, w / 2, 22, 22, 16, C.dark);
-    label(c, 'Túi rác 🎭', w / 2, h / 2 + 20, 24, C.white, C.dark);
   }],
   l5_trash_bag_after: [220, 130, 'đáy', (c, w, h) => {
     el(c, w / 2, h / 2 + 10, w / 2 - 8, h / 2 - 16, C.dark); el(c, w / 2, 26, 40, 14, '#5a5454');
-    label(c, 'Túi rác (xẹp)', w / 2, h / 2 + 14, 22, C.white, C.dark);
   }],
   l5_awning_down: [757, 170, 'đỉnh', (c, w, h) => {
     rr(c, 4, 4, w - 8, h - 8, C.canvas, 6);
     c.fillStyle = 'rgba(255,255,255,0.4)'; for (let x = 40; x < w; x += 100) c.fillRect(x, 4, 46, h - 8);
     c.fillStyle = '#fff6c8'; [[110, 120], [260, 60], [420, 130], [580, 80], [190, 40]].forEach(([x, y]) => { c.beginPath(); c.arc(x, y, 6, 0, Math.PI * 2); c.fill(); }); // lỗ thủng
-    label(c, 'Tấm bạt mái hiên (6)', w / 2, h / 2, 26);
   }],
   l5_awning_rolled: [757, 140, 'đỉnh', (c, w, h) => { // A5-11: bạt cuộn có luôn đoạn dây ngắn có vòng ở đầu phải (như demo)
-    rr(c, 4, 4, w - 8, 50, C.canvas, 24); label(c, 'Bạt (đã cuộn)', w / 2, 29, 22);
+    rr(c, 4, 4, w - 8, 50, C.canvas, 24);
     c.strokeStyle = '#8a6a4a'; c.lineWidth = 4; c.beginPath(); c.moveTo(728, 54); c.lineTo(728, 112); c.stroke();
     c.beginPath(); c.arc(728, 124, 11, 0, Math.PI * 2); c.lineWidth = 6; c.strokeStyle = '#c98a3a'; c.stroke();
   }],
@@ -226,7 +207,6 @@ const FB = {
     c.fillStyle = 'rgba(255,236,150,0.42)'; c.beginPath();
     c.moveTo(w / 2 - 22, 0); c.lineTo(w / 2 + 22, 0); c.lineTo(w - 4, h - 34); c.lineTo(4, h - 34); c.fill();
     el(c, w / 2, h - 34, w / 2 - 4, 30, C.sun, 'rgba(230,190,90,0.9)', 3);
-    c.save(); c.translate(w / 2, h / 2); c.rotate(-Math.PI / 2); label(c, 'nắng từ bạt', 0, 0, 18); c.restore();
   }],
   l5_light_spot: [96, 96, 'tâm', (c, w, h) => {
     const g = c.createRadialGradient(w / 2, h / 2, 6, w / 2, h / 2, w / 2);
@@ -242,20 +222,16 @@ const FB = {
     c.strokeStyle = 'rgba(107,74,58,0.45)'; c.lineWidth = 3; [52, 104].forEach((y) => { c.beginPath(); c.moveTo(4, y); c.lineTo(364, y); c.stroke(); });
     el(c, 104, 179, 63, 63, 'rgba(0,0,0,0)', C.dark, 9); el(c, 104, 179, 8, 8, C.dark, null);  // bánh lớn
     el(c, 490, 169, 43, 43, 'rgba(0,0,0,0)', C.dark, 7); el(c, 490, 169, 6, 6, C.dark, null);  // bánh nhỏ
-    label(c, 'Xe ba gác (8)', 183, 80, 26); label(c, 'gầm xe (8a)', 287, 198, 16, '#9a8f86', 'rgba(0,0,0,0)');
   }],
   l5_crow_idle: [110, 100, 'đáy', (c, w, h) => {
     el(c, w / 2, h / 2 + 8, 44, 38, C.black, null); el(c, w / 2 + 30, 26, 20, 18, C.black, null);
     c.fillStyle = C.gold; c.beginPath(); c.moveTo(w / 2 + 48, 24); c.lineTo(w - 2, 30); c.lineTo(w / 2 + 48, 34); c.fill();
-    label(c, 'Quạ 🎭', w / 2, h / 2 + 12, 20, C.white, C.black);
   }],
   l5_crow_far: [90, 85, 'đáy', (c, w, h) => {
     el(c, w / 2, h / 2 + 6, 36, 32, C.black, null); el(c, w / 2 - 24, 22, 17, 15, C.black, null);
-    label(c, 'Quạ', w / 2, h / 2 + 8, 18, C.white, C.black);
   }],
   l5_drain_pipe: [56, 935, 'đáy', (c, w, h) => {
     rr(c, 8, 4, w - 16, h - 50, '#a9c6d8', 8); rr(c, 2, h - 60, w - 4, 56, '#a9c6d8', 8);
-    c.save(); c.translate(w / 2, h / 2); c.rotate(-Math.PI / 2); label(c, 'Ống thoát nước (11) 🎁', 0, 0, 20); c.restore();
   }],
   mun_eyes_dark: [130, 56, 'tâm', (c, w, h) => {
     el(c, w / 2 - 28, h / 2, 16, 18, C.gold, null); el(c, w / 2 + 28, h / 2, 16, 18, C.gold, null);
@@ -263,7 +239,6 @@ const FB = {
   }],
   mun_paw_reach: [150, 54, [0, 27], (c, w, h) => {
     rr(c, 0, 12, w - 40, 30, C.black, 14, null); el(c, w - 34, h / 2, 30, 24, C.black, null);
-    label(c, 'chân Mun', w / 2 - 14, h / 2, 16, C.white, C.black);
   }],
   mun_peek_out: [150, 110, 'đáy', (c, w, h) => {
     el(c, w / 2, h - 40, 58, 46, C.black, null);
@@ -271,7 +246,6 @@ const FB = {
     c.moveTo(w / 2 - 54, h - 60); c.lineTo(w / 2 - 44, 4); c.lineTo(w / 2 - 14, h - 80);
     c.moveTo(w / 2 + 54, h - 60); c.lineTo(w / 2 + 44, 4); c.lineTo(w / 2 + 14, h - 80); c.fill();
     el(c, w / 2 - 22, h - 46, 13, 15, C.gold, null); el(c, w / 2 + 22, h - 46, 13, 15, C.gold, null);
-    label(c, 'Mun ló mặt', w / 2, h - 14, 16, C.white, C.black);
   }],
   mun_run: [220, 130, 'đáy', (c, w, h) => {
     el(c, w / 2 - 10, h - 50, 80, 36, C.black, null); el(c, w - 50, h - 78, 38, 34, C.black, null);
@@ -284,15 +258,12 @@ const FB = {
   }],
   mun_pin_light: [200, 160, 'đáy', (c, w, h) => {
     blackCat(c, w / 2, h / 2, 0.85); rr(c, w / 2 - 50, h - 22, 100, 18, C.black, 9, null);
-    label(c, 'Mun đè', w / 2, h / 2 + 40, 20, C.white, C.black);
   }],
   mun_look_paw: [190, 210, 'đáy', (c, w, h) => {
     blackCat(c, w / 2, h / 2 + 10, 0.95); rr(c, w / 2 + 30, h / 2 - 10, 26, 60, C.black, 12, null);
-    label(c, 'Mun nhìn chân', w / 2, h - 40, 18, C.white, C.black);
   }],
   mun_held: [260, 320, [130, 134], (c, w, h) => {
     blackCat(c, w / 2, h / 2 - 20, 1.25); rr(c, w / 2 - 60, h - 110, 120, 100, C.black, 40, null);
-    label(c, 'Mun', w / 2, h / 2 + 50, 28, C.white, C.black);
   }],
   mun_face_icon: [300, 300, 'tâm', (c, w, h) => { // chỉ phần đầu: đầu tròn, tai to, mắt vàng to
     el(c, w / 2, h / 2 + 30, 120, 105, C.black, null);
@@ -313,7 +284,7 @@ const FB = {
   l5_doorstep: [150, 80, 'đáy', (c, w, h) => { rr(c, 2, 2, w - 4, h - 4, '#e9dfd2', 6); }],
   l5_cactus_pot: [90, 130, 'đáy', (c, w, h) => {
     rr(c, 32, 10, 26, 80, '#8fc28a', 12); rr(c, 14, 36, 18, 30, '#8fc28a', 9); rr(c, 58, 30, 18, 30, '#8fc28a', 9);
-    rr(c, 14, 84, w - 28, 44, '#d98a5a', 6); label(c, 'Xương rồng', w / 2, 106, 14);
+    rr(c, 14, 84, w - 28, 44, '#d98a5a', 6);
   }],
   l5_cactus_flower: [34, 30, 'đáy', (c, w, h) => { el(c, w / 2, h / 2, 14, 12, '#f59ab8', '#c75a80', 2); el(c, w / 2, h / 2, 5, 5, C.gold, null); }],
   l5_clothesline: [485, 24, 'tâm', (c, w, h) => { c.strokeStyle = '#8a6a4a'; c.lineWidth = 3; c.beginPath(); c.moveTo(0, 4); c.quadraticCurveTo(w / 2, 22, w, 4); c.stroke(); }],
@@ -321,21 +292,18 @@ const FB = {
     c.fillStyle = '#b9ddbe'; c.strokeStyle = C.brown; c.lineWidth = 4; c.beginPath();
     c.moveTo(40, 4); c.lineTo(110, 4); c.lineTo(146, 34); c.lineTo(124, 56); c.lineTo(112, 46); c.lineTo(112, 136); c.lineTo(38, 136);
     c.lineTo(38, 46); c.lineTo(26, 56); c.lineTo(4, 34); c.closePath(); c.fill(); c.stroke();
-    label(c, 'Áo phơi', w / 2, 86, 18);
   }],
   l5_clothespin: [16, 34, 'đỉnh', (c, w, h) => { rr(c, 2, 2, w - 4, h - 4, '#d6a472', 4, C.brown, 2); }],
   l5_wind_chime: [70, 150, 'đỉnh', (c, w, h) => {
     c.strokeStyle = C.brown; c.lineWidth = 3; c.beginPath(); c.moveTo(w / 2, 0); c.lineTo(w / 2, 24); c.stroke();
     el(c, w / 2, 30, 28, 9, '#d6a472', C.brown, 2);
     [14, 28, 42, 56].forEach((x, i) => { c.beginPath(); c.moveTo(x, 34); c.lineTo(x, 60 + (i % 2) * 12); c.stroke(); rr(c, x - 4, 60 + (i % 2) * 12, 8, 46, '#c9d3dc', 3, C.brown, 2); });
-    label(c, 'Chuông gió', w / 2, 138, 14);
   }],
   l5_slippers: [120, 50, 'đáy', (c, w, h) => {
-    rr(c, 4, 10, 52, 36, '#7fb3d5', 16); rr(c, 62, 8, 52, 38, '#7fb3d5', 16); label(c, 'Dép', w / 2, 28, 16);
+    rr(c, 4, 10, 52, 36, '#7fb3d5', 16); rr(c, 62, 8, 52, 38, '#7fb3d5', 16);
   }],
   l5_slippers_flipped: [130, 60, 'đáy', (c, w, h) => {
     rr(c, 2, 26, 46, 30, '#5d93b8', 14); rr(c, 52, 14, 46, 30, '#5d93b8', 14); rr(c, 80, 30, 46, 26, '#e8d2a8', 6);
-    label(c, 'túi cá', 103, 43, 13);
   }],
   l5_bike: [353, 213, 'đáy', (c, w, h) => {
     c.strokeStyle = '#ef9aa0'; c.lineWidth = 9; c.beginPath();
@@ -347,20 +315,19 @@ const FB = {
     rr(c, 80, 32, 64, 18, '#7a4a32', 9, null);                                                                             // yên
     rr(c, 257, 31, 94, 61, '#d9b98a', 6, C.brown, 3);                                                                      // giỏ mây (điểm C)
     c.strokeStyle = C.brown; c.lineWidth = 1.5; for (let x = 267; x < 350; x += 10) { c.beginPath(); c.moveTo(x, 33); c.lineTo(x, 90); c.stroke(); }
-    label(c, 'Xe đạp', 150, 110, 18);
   }],
   l5_bike_wheel: [124, 124, 'tâm', (c, w, h) => {
     c.strokeStyle = C.dark; c.lineWidth = 7; c.beginPath(); c.arc(w / 2, h / 2, 58, 0, Math.PI * 2); c.stroke();
     c.lineWidth = 2; for (let i = 0; i < 8; i++) { const a = (i * Math.PI) / 4; c.beginPath(); c.moveTo(w / 2, h / 2); c.lineTo(w / 2 + 56 * Math.cos(a), h / 2 + 56 * Math.sin(a)); c.stroke(); }
     c.strokeStyle = '#c75a50'; c.lineWidth = 6; c.beginPath(); c.moveTo(w / 2, h / 2); c.lineTo(w / 2 + 56, h / 2); c.stroke(); // nan đỏ để thấy bánh quay
   }],
-  l5_puddle: [150, 44, 'tâm', (c, w, h) => { el(c, w / 2, h / 2, w / 2 - 4, h / 2 - 4, '#a9c6d8', '#7f9db0', 3); label(c, 'Vũng nước', w / 2, h / 2, 15); }],
+  l5_puddle: [150, 44, 'tâm', (c, w, h) => { el(c, w / 2, h / 2, w / 2 - 4, h / 2 - 4, '#a9c6d8', '#7f9db0', 3); }],
   l5_gecko: [60, 120, 'tâm', (c, w, h) => {
     c.strokeStyle = '#4a3a30'; c.lineWidth = 10; c.lineCap = 'round'; c.beginPath(); c.moveTo(w / 2, 58); c.quadraticCurveTo(w - 4, 92, w / 2 - 6, h - 6); c.stroke();
     el(c, w / 2, 40, 13, 24, '#4a3a30', null); el(c, w / 2, 14, 10, 11, '#4a3a30', null);
     [[16, 30], [44, 30], [16, 54], [44, 54]].forEach(([x, y]) => el(c, x, y, 6, 4, '#4a3a30', null));
   }],
-  l5_milk_can: [50, 70, 'đáy', (c, w, h) => { rr(c, 4, 6, w - 8, h - 8, '#e8eef2', 8); rr(c, 4, 20, w - 8, 26, '#f2b8a0', 2, null); label(c, 'bơ', w / 2, 34, 16); }],
+  l5_milk_can: [50, 70, 'đáy', (c, w, h) => { rr(c, 4, 6, w - 8, h - 8, '#e8eef2', 8); rr(c, 4, 20, w - 8, 26, '#f2b8a0', 2, null); }],
 };
 
 export class Level5 extends RoomsLevel {
@@ -517,18 +484,21 @@ export class Level5 extends RoomsLevel {
     if (this.debug) this.buildDebug();
   }
 
+  // Thanh ♥ của Mun: mặt Mun nhỏ dưới trái tim (không chữ).
   buildUI() {
     super.buildUI();
-    this.add.text(72, 104, 'Mun', { fontFamily: 'sans-serif', fontSize: '22px', fontStyle: 'bold', color: '#6b4a3a' })
-      .setOrigin(0.5, 0.5).setScrollFactor(0).setDepth(D.ui);
+    const f = this.img('mun_face_icon', 72, 108, D.ui, true).setOrigin(0.5, 0.5);
+    this.fitWidth(f, 46);
   }
 
-  // Bản đồ mini: hai ô Sân | Hẻm, ô đang đứng tô đậm.
+  // Bản đồ mini: hai ô Sân | Hẻm, mỗi ô một icon phòng (không chữ). Ô đang đứng: khung vàng, icon rõ; ô còn lại: khung kem, icon mờ.
   buildMap() {
     const g = this.add.graphics().setScrollFactor(0).setDepth(D.ui);
-    const t = (s, x) => this.add.text(x, MAP.y, s, { fontFamily: 'sans-serif', fontSize: '20px', fontStyle: 'bold', color: '#6b4a3a' })
-      .setOrigin(0.5, 0.5).setScrollFactor(0).setDepth(D.ui + 1);
-    this.map = { g, cells: [t('Sân', MAP.x - 42), t('Hẻm', MAP.x + 42)], blink: null };
+    const cells = MAP_ICON.map(([key, stand], i) => {
+      const k = this.has(key) ? key : stand, t = this.add.image(MAP.x - 42 + i * 84, MAP.y, k, this.iconFrame(k));
+      return t.setScale(Math.min(MAP_CELL.w / t.width, MAP_CELL.h / t.height)).setScrollFactor(0).setDepth(D.ui + 1);
+    });
+    this.map = { g, cells, blink: null };
     this.drawMap();
   }
 
@@ -539,6 +509,7 @@ export class Level5 extends RoomsLevel {
       g.fillStyle(on ? 0xfce39a : 0xfffcf4, 1).lineStyle(4, BROWN, 1);
       if (r === ALLEY && flash) g.fillStyle(0xffd36b, 1);
       g.fillRoundedRect(x, MAP.y - 24, 76, 48, 10).strokeRoundedRect(x, MAP.y - 24, 76, 48, 10);
+      this.map.cells[i].setAlpha(on || (r === ALLEY && flash) ? 1 : 0.45);
     });
   }
 
@@ -1197,7 +1168,7 @@ export class Level5 extends RoomsLevel {
     const g = this.add.graphics().setDepth(D.hint - 2);
     [...PTS, FRONT].forEach(([x, y], i) => {
       g.lineStyle(3, 0xff4060, 0.8).strokeCircle(x + ROOM_W, y, HIT);
-      this.add.text(x + ROOM_W, y - HIT - 16, 'ABCF'[i], { fontFamily: 'monospace', fontSize: '26px', color: '#ff4060' }).setOrigin(0.5).setDepth(D.hint - 2);
+      for (let k = 0; k <= i; k++) g.fillStyle(0xff4060, 0.9).fillCircle(x + ROOM_W - i * 9 + k * 18, y - HIT - 16, 6); // A, B, C, F = 1–4 chấm
     });
     const gap = this.R(ALLEY, GAP);
     g.lineStyle(3, 0x3070ff, 0.8).strokeRect(gap.x, gap.y, gap.width, gap.height);

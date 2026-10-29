@@ -87,7 +87,7 @@ export const KEYS = {
   ],
   // Level 5: bản khối (chưa có ảnh), mọi key tự vẽ khối có nhãn trong level5.js; tên key theo states-01-10.md.
   5: [
-    ['l5_bg_backyard', 'level5'], ['l5_bg_alley', 'level5'], ['l5_cafe_window', 'level5'], ['l5_cafe_window_back', 'level5'], ['l5_cafe_window_frame', 'level5'], ['l5_vanity_table', 'level5'],
+    ['l5_bg_backyard', 'level5'], ['l5_bg_alley', 'level5'], ['ui_map_yard', 'level5'], ['ui_map_alley', 'level5'], ['l5_cafe_window', 'level5'], ['l5_cafe_window_back', 'level5'], ['l5_cafe_window_frame', 'level5'], ['l5_vanity_table', 'level5'],
     ['l5_mirror_small', 'level5'], ['l5_mirror_placed', 'level5'], ['l5_cardboard_box', 'level5'],
     ['l5_trash_bag_idle', 'level5'], ['l5_trash_bag_after', 'level5'], ['l5_awning_down', 'level5'], ['l5_awning_rolled', 'level5'],
     ['l5_sunbeam', 'level5'], ['l5_light_spot', 'level5'], ['l5_cart', 'level5'], ['l5_crow_idle', 'level5'], ['l5_crow_far', 'level5'],
