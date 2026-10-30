@@ -10,7 +10,9 @@ import { PAL, rr, el, label, block } from './blocks.js';
 const DEF = {
   player_call: [260, 1385],
   // QUY-TRINH bước 5: đồ đứng yên đo trên demo đã duyệt (G6-21, l6_demo_path_play.png, khung 1024x1536), neo theo anchors.json.
-  l6_tree: [19, 848], l6_bird_nest: [132, 480], l5_wind_chime: [330, 380], l6_glove_black_idle: [418, 342], // găng vắt đỉnh rào: neo đỉnh
+  // G6-21: gốc cây chạm nền sân (chân rào y ≈ 870), ổ chim theo cành.
+  l6_tree: [19, 905], l6_bird_nest: [132, 537],
+  l5_wind_chime: [330, 380], l6_glove_black_idle: [418, 342], // găng vắt đỉnh rào: neo đỉnh
   // G6-18: bố cục như G6-16, đồ to theo G6-17 tại chỗ (neo giữa đáy). Kho 560 × 541 (G6-17) để mặt mái y 475, 4 bậc hụt đều 120;
   // mép mái trái x ≈ 580. Mun nằm mái và ống khói hạ theo mặt mái (−66).
   // Ghép ảnh thật: kho vẽ lại (A6-11) đặt cho đỉnh mái trùng demo (y 447), mép trái 522; Mun nằm mái như demo.
@@ -29,8 +31,9 @@ const DEF = {
   l6_stool: [230, 1110], // trước mép bàn, sau bụi rau; cách chỗ C hơn tầm hút 110
   // Ghép ảnh thật: bụi rau (343, 1242) và bình tưới (705, 1275) theo demo. Phuy đứng hàng trước bên trái (trước bụi rau).
   // Hộp dụng cụ thấp (cao 103) đứng ngoài vùng túi đồ (khung 3:4 túi đồ phủ x 65–753, y ≈ 1210–1380), dưới chuồng, không che cửa.
-  l6_toolbox: [820, 1262], l6_veggie_bed: [343, 1242], l6_barrel: [80, 1296], l6_watering_can: [705, 1275],
-  // G6-6: thùng gỗ đứng riêng cạnh hàng rào, sau bàn, cao hơn bàn (bậc nhảy mở màn bàn → thùng gỗ → cột → mái).
+  l6_toolbox: [865, 1300], // G6-21: thấp xuống, lệch phải; khung 3:4 nằm ngoài túi đồ (x ≤ 753), không che cửa chuồng
+  l6_veggie_bed: [343, 1242], l6_barrel: [80, 1296], l6_watering_can: [705, 1275],
+  // G6-6, G6-21: thùng gỗ đứng riêng cạnh hàng rào, sau bàn (mở màn Mun nhảy thùng gỗ → mái).
   l6_crate: [275, 880],
 };
 // Chỗ đặt xếp đường (vị trí đặt sprite): A sát tường kho (phuy, rồi hộp dụng cụ đậy miệng phuy), B thùng gỗ, C ghế đẩu.
@@ -45,18 +48,19 @@ const STAND = { toolbox: 18, crate: 13, stool: 22, table: 13 };
 const STEPS = ['barrel', 'toolbox', 'crate', 'stool']; // thứ tự gợi ý; đặt tự do, trừ hộp dụng cụ phải sau phuy
 // Đường Mun xuống: mép mái → mặt hộp dụng cụ (A) → mặt thùng gỗ (B) → mặt ghế (C) → nhảy lên bàn ăn.
 const ROOF_EDGE = [598, 480];
-// G6-6: vòng chạy mở màn quanh sân (đáy Mun) và chỗ Mun bám cột dây phơi (cột có sẵn trong nền, x ≈ 490).
-// G6-13: chạy qua chỗ trống: dải đất phía trước (y ≈ 1380, túi đồ chưa hiện), vòng lên khe giữa bình tưới và chuồng, qua khoảng
-// trống trước kho (chỗ A, B, C còn trống) rồi tới chân bàn. Lớp trước sau theo y chân (ySort).
-const INTRO_LOOP = [[-200, 1380], [250, 1400], [650, 1395], [930, 1370], [770, 1285], [715, 1150], [600, 1040], [430, 1015], [340, 1050]];
-const INTRO_POLE = [492, 610];
-const LU_BRAKE = [400, 1090];                        // G6-14: Lu phanh ở chân bàn (bên phải bàn, chỗ C còn trống) khi Mun nhảy lên bàn
+// G6-6, G6-21: vòng chạy mở màn (đáy Mun). Đồ trên sân xếp thành hàng chắn ngang, thân chạy rộng ≈ 300: chỉ chạy các đoạn
+// NGANG (y chân không đổi nên không đổi lớp giữa chừng, không xuyên qua đồ), đổi dải ở ngoài mép màn (x < −400, kể cả khung 3:4).
+// Vào từ phải ở dải trước (y 1430, trước mọi đồ) chạy sang trái, ra khỏi màn, vòng lên dải sau (y 1000: trước bàn, sau ghế đẩu,
+// phuy, bụi rau; trước kho) chạy sang phải tới khoảng trống trước kho.
+const INTRO_LOOP = [[1450, 1430], [-420, 1430], [-420, 1000], [450, 1000]];
+const LU_BRAKE = [480, 1005];                        // G6-14: Lu phanh trên dải sau, ngẩng nhìn Mun nhảy lên thùng gỗ
+const DOG_DOOR = [[1180, 990], [1180, 1255], [856, 1255]]; // G6-21: Lu ngậm xương đi sau chuồng, xuống ngoài mép phải, vòng ra trước cửa
 const TREAT_DX = 85;
 const EAT_DX = 20, EAT_MOUTH = [62, -16];               // Mun ăn đứng lùi trái chỗ xúc xích; xúc xích ngay trước miệng (dáng nhìn phải)                                  // G6-5: xúc xích trên mặt bàn, bên phải tâm bàn (bên phải giỏ); G6-19: Mun từ ghế bước ngang sang ăn
-const STEP_ARC = 30;                                   // G6-2: mỗi bậc nhảy ngắn, đáp nhẹ (vồng thấp)
+const STEP_ARC = 40;                                   // G6-2, G6-21: mỗi bậc nhảy vồng mềm (cung thấp, ease in-out), đáp nhún nhẹ
 const BEHIND_CHIMNEY = [960, 477];
 const GLOVE_FALLEN = [418, 905];                     // găng rơi xuống đất ngay dưới chỗ vắt trên hàng rào, nằm yên ở đó
-const GLOVE_DOG = [520, 960];                         // chỗ Lu đứng vờn găng: chân trên mặt sân cạnh găng (không kéo găng đi)
+const GLOVE_DOG = [540, 960];                         // chỗ Lu đứng ngửi găng: chân trên mặt sân cạnh găng (găng nằm yên)
 const DOG_BEG = [380, 1110];                           // Lu chồm tới bàn đòi xúc xích
 
 const dogBody = (txt, pose) => (c, w, h) => {          // Lu khối: thân + đầu + tai, nhãn tư thế
@@ -93,7 +97,6 @@ const FB = {
   mun_roof_crouch: block(210, 130, null, '', { draw: munBody('MUN rạp') }),
   mun_roof_crouch_ears_up: block(210, 130, null, '', { draw: munBody('MUN rạp, tai dựng') }),
   mun_roof_edge: block(210, 160, null, '', { draw: munBody('MUN ló mép') }),
-  mun_climb: block(140, 210, null, '', { draw: munBody('MUN bám cột') }),
   mun_step_down: block(210, 190, null, '', { draw: munBody('MUN bước') }),
   mun_jump_up: block(200, 230, null, '', { draw: munBody('MUN nhảy lên') }),
   mun_eat: block(210, 170, null, '', { draw: munBody('MUN ăn') }),
@@ -135,7 +138,11 @@ export class Level6 extends ObjectLevel {
   get fallbackCanvas() { return true; }
   get defaultPos() { return DEF; }
   // mun_run, chuông gió: ảnh dùng lại từ L5, cùng cỡ L5. Cây (A6-11) phóng như demo: ngọn y ≈ 120, ổ chim nằm trên cành ngang phải.
-  get fitDefaults() { return { mun_run: 320, l5_wind_chime: 60, l6_tree: 430 }; }
+  // G6-21: Mun trên mái và lúc xuống ×0,85 (cùng cỡ Mun lúc chạy, lúc ăn; khớp demo).
+  get fitDefaults() {
+    return { mun_run: 320, mun_pounce: 185, l5_wind_chime: 60, l6_tree: 430,
+      mun_roof_crouch: 214, mun_roof_crouch_ears_up: 218, mun_roof_edge: 256, mun_step_down: 246 };
+  }
   get rewardFish() { return 30 + 5 * this.secrets; }         // +5 mỗi bí mật (ổ chim, bình tưới)
   get suaHand() { return false; }
   get bubblePop() { return { peak: 0.9, up: 260, rest: 0.7, down: 160 }; }
@@ -218,7 +225,8 @@ export class Level6 extends ObjectLevel {
   // liên tiếp bàn → thùng gỗ → cột điện (cột dây phơi có sẵn trong nền, bám leo) → mép mái, mỗi nhịp 0,35 giây; Lu chạy tới
   // dưới mái ngồi sủa. Mun nằm rạp trên mái rồi nhân vật mới trồi lên gọi, bong bóng bật ra (introCall); khoá chạm tới hết.
   onIntro() {
-    const m = this.mun, d = this.dog, loop = new Phaser.Curves.Spline(INTRO_LOOP.map(([x, y]) => new Phaser.Math.Vector2(x, y)));
+    const m = this.mun, d = this.dog, loop = new Phaser.Curves.Path(...INTRO_LOOP[0]);
+    for (const [x, y] of INTRO_LOOP.slice(1)) loop.lineTo(x, y);
     this.introT0 = this.time.now;
     this.applyKey(m, 'mun_run');
     this.applyKey(d, 'l6_dog_run'); // G6-9: dáng chạy đuổi
@@ -230,17 +238,17 @@ export class Level6 extends ObjectLevel {
       along(m, k);
       along(d, k - 0.14); // Lu đuổi sát sau
     }, onComplete: () => {
-      const [cx, cy] = this.P('l6_crate'), cr = this.artRect(this.crate), top = [cx, cr.top + 2];
+      // G6-21: bỏ dáng bám cột. Mun vồ lên mặt thùng gỗ rồi vọt theo đường cong lên mép mái (dáng vồ L5, chưa có thì dáng chạy).
+      const cr = this.artRect(this.crate), top = [this.crate.x, cr.top + STAND.crate];
+      const jump = this.has('mun_pounce') ? 'mun_pounce' : 'mun_run';
       m.setDepth(D.player - 1); // nhảy lên đồ: vẽ trên mọi đồ trong sân
       this.dogBrake();
-      this.hopTo(m, ...this.tableTreat, 350, () => this.hopTo(m, ...top, 350, () => {
-        // Bám cột: mèo dựng đứng trên cột, rồi vọt lên mép mái. Mun vọt qua phía trên đầu Lu: Lu quay theo.
-        this.dogTurnTo(INTRO_POLE[0], true);
-        this.hopTo(m, ...INTRO_POLE, 350, () => {
-          this.applyKey(m, 'mun_climb'); // G6-9: dáng bám cột
-          this.hopTo(m, ...ROOF_EDGE, 350, () => this.introLanded(), 60);
-        }, 50);
-      }, 90), 70);
+      this.applyKey(m, jump);
+      this.moveTo(m, ...top, 380, { ease: 'Sine.inOut', arc: 120, onComplete: () => {
+        this.squash(m);
+        this.dogTurnTo(ROOF_EDGE[0], true); // Mun vọt qua phía trên đầu Lu: Lu quay theo, sủa
+        this.time.delayedCall(120, () => this.moveTo(m, ...ROOF_EDGE, 420, { ease: 'Sine.inOut', arc: 140, onComplete: () => this.introLanded() }));
+      } });
     } });
   }
 
@@ -285,9 +293,21 @@ export class Level6 extends ObjectLevel {
     } });
   }
 
-  // Xuống một bậc (G6-2): nhảy ngắn, vồng thấp, đáp nhẹ (nhún).
+  // Xuống một bậc (G6-2, G6-21): quay mặt theo hướng đi, ra mép bậc, dừng nhìn xuống một nhịp, nhảy vồng mềm (cung thấp,
+  // ease in-out), đáp nhún nhẹ, chân đúng mặt bậc. Cùng một dáng, một cỡ suốt đoạn.
   stepDown(s, [x, y], done) {
-    this.hopTo(s, x, y, 360, () => { this.squash(s); this.sfx('l4_sfx_land_tap', 0.6); done(); }, STEP_ARC);
+    this.faceToward(s, x);
+    const dir = x < s.x ? -1 : 1, look = dir * 7;
+    this.moveTo(s, s.x + dir * 18, s.y, 180, { ease: 'Sine.out', onComplete: () => {
+      this.tweens.add({ targets: s, angle: look, duration: 160, yoyo: true, hold: 220, ease: 'Sine.inOut', onComplete: () => {
+        s.setAngle(0);
+        this.moveTo(s, x, y, 460, { ease: 'Sine.inOut', arc: STEP_ARC, onComplete: () => {
+          this.tweens.add({ targets: s, scaleY: s.baseY * 0.9, scaleX: s.base * 1.05, duration: 90, yoyo: true, ease: 'Quad.out',
+            onComplete: () => { s.setScale(s.base, s.baseY); done(); } });
+          this.sfx('l4_sfx_land_tap', 0.6);
+        } });
+      } });
+    } });
   }
 
   // ---------- chạm ----------
@@ -384,10 +404,10 @@ export class Level6 extends ObjectLevel {
     } });
   }
 
-  // G6-4: Lu rảnh chạy tới chỗ găng, ngậm lắc lắc, vờn một lúc (găng nảy, lật tại chỗ), bỏ găng ở đó rồi chạy về.
-  // Găng không di chuyển về phía Lu. Lu đang gặm trong chuồng thì chỉ ngẩng đầu nhìn.
+  // G6-4, G6-21: Lu rảnh chạy tới chỗ găng, cúi ngửi ngửi (đầu nhấp, khịt khịt, đuôi vẫy) khoảng 1 giây rồi chạy về chỗ cũ.
+  // Găng nằm yên. Lu đang gặm trong chuồng thì chỉ ngẩng đầu nhìn.
   dogFetchGlove() {
-    const d = this.dog, g = this.glove;
+    const d = this.dog;
     if (this.dogState === 'chew') { if (!this.busy.dog) this.hop(d, 14, 260); return; }
     if (this.dogState !== 'bark' || this.busy.dog) return;
     this.busy.dog = true;
@@ -396,22 +416,22 @@ export class Level6 extends ObjectLevel {
     d.setAngle(0);
     this.applyKey(d, 'l6_dog_run');
     this.moveTo(d, ...GLOVE_DOG, 550, { onUpdate: () => this.ySort(d), onComplete: () => {
-      this.applyKey(d, 'l6_dog_bark'); // G6-9: vờn găng bằng dáng sủa + găng tween tại chỗ
-      this.sfx('l6_sfx_dog_happy');
-      // Ngậm lắc lắc: đầu Lu lắc, găng giật theo tại chỗ; rồi vờn: chồm, găng nảy lật.
-      this.tweens.add({ targets: d, angle: { from: -8, to: 8 }, duration: 90, yoyo: true, repeat: 5, onComplete: () => d.setAngle(0) });
-      this.tweens.add({ targets: g, angle: { from: -25, to: 25 }, duration: 90, yoyo: true, repeat: 5, onComplete: () => g.setAngle(0) });
-      this.time.delayedCall(1150, () => {
-        this.hop(d, 26, 300);
-        this.tweens.add({ targets: g, y: g.y - 30, angle: 180, duration: 180, yoyo: true, onComplete: () => g.setAngle(0).setPosition(...GLOVE_FALLEN) });
-        this.sfx('l6_sfx_dog_bark', 0.6);
+      this.applyKey(d, 'l6_dog_bark');
+      this.faceToward(d, GLOVE_FALLEN[0]);
+      this.sfx('l6_sfx_dog_sniff');
+      // Cúi ngửi: đầu nhấp xuống (nghiêng về phía găng, co dọc nhẹ) 4 nhịp; vẫy đuôi = lắc mông nhẹ.
+      const lean = d.flipX ? -6 : 6;
+      this.tweens.add({ targets: d, angle: lean, scaleY: d.baseY * 0.94, duration: 120, yoyo: true, repeat: 3, ease: 'Sine.inOut',
+        onComplete: () => d.setAngle(0).setScale(d.base, d.baseY) });
+      this.time.delayedCall(1050, () => {
+        this.applyKey(d, 'l6_dog_run');
+        this.moveTo(d, ...home, 550, { onUpdate: () => this.ySort(d), onComplete: () => {
+          this.applyKey(d, 'l6_dog_bark');
+          this.faceToward(d, this.mun.x); // về chỗ: đứng yên ngẩng nhìn Mun
+          this.zoneTo('dog', d);
+          this.busy.dog = false;
+        } });
       });
-      this.time.delayedCall(1800, () => this.applyKey(d, 'l6_dog_run') && this.moveTo(d, ...home, 550, { onUpdate: () => this.ySort(d), onComplete: () => {
-        this.applyKey(d, 'l6_dog_bark');
-        this.faceToward(d, this.mun.x); // về chỗ: đứng yên ngẩng nhìn Mun
-        this.zoneTo('dog', d);
-        this.busy.dog = false;
-      } }));
     } });
   }
 
@@ -528,8 +548,13 @@ export class Level6 extends ObjectLevel {
     this.sfx('l6_sfx_dog_happy');
     this.applyKey(this.dog, 'l6_dog_run_bone');
     this.dog.setAngle(0);
-    const [cx, cy] = this.P('l6_dog_chew');
-    this.moveTo(this.dog, cx, cy, 600, { onUpdate: () => this.ySort(this.dog), onComplete: () => {
+    const [cx, cy] = this.P('l6_dog_chew'), d = this.dog;
+    // G6-21: đi sau chuồng, xuống ngoài mép phải chuồng, vòng ra trước cửa (đoạn ngang / dọc không chồng thân chuồng), chui vào.
+    this.walkPath(d, DOG_DOOR, 0.9, () => {
+      this.faceToward(d, cx);
+      this.tweens.add({ targets: d, y: cy + 30, scaleX: d.base * 0.85, scaleY: d.baseY * 0.85, alpha: 0.4, duration: 220, ease: 'Quad.in', onComplete: () => {
+      d.setAlpha(1);
+      d.setPosition(cx, cy);
       this.applyKey(this.dog, 'l6_dog_chew');
       this.dog.setDepth(this.house.depth + 0.01); // đầu Lu trong cửa chuồng, dưới khung cửa
       this.dogState = 'chew';
@@ -538,8 +563,17 @@ export class Level6 extends ObjectLevel {
       this.zones.dog.setInteractive();
       this.chewLoop = this.time.addEvent({ delay: 1600, loop: true, callback: () => { if (!this.frozen) this.sfx('l6_sfx_dog_chew', 0.5); } });
       this.time.delayedCall(300, () => this.munPeek('look', 1000));
-    } });
+      } });
+    });
     this.touch();
+  }
+
+  // Đi theo các điểm (đáy), tốc độ px/ms, quay mặt theo hướng đi, lớp theo chân.
+  walkPath(s, pts, speed, done) {
+    const [p, ...rest] = pts;
+    if (!p) { done && done(); return; }
+    const ms = Math.max(120, Math.hypot(p[0] - s.x, p[1] - s.y) / speed);
+    this.moveTo(s, p[0], p[1], ms, { ease: 'Linear', onUpdate: () => this.ySort(s), onComplete: () => this.walkPath(s, rest, speed, done) });
   }
 
   // Thả xúc xích lên bàn (G6-5). Lu rảnh: Lu chồm đòi, xúc xích về túi. Đủ 4 bậc: Mun xuống ăn. Thiếu: Mun ra mép kêu, xúc xích ở lại.
@@ -594,7 +628,6 @@ export class Level6 extends ObjectLevel {
         this.stepDown(m, this.standOn('toolbox'), () => {
           // Ở bậc A ngoái lại nhìn người chơi 0,5 giây.
           this.face(m, !m.faceLeft); // quay lại phía vừa đi
-          this.hop(m, 10, 240);
           this.sfx('mun_sfx_meow', 0.5);
           this.time.delayedCall(500, () => {
             this.stepDown(m, this.standOn('crate'), () => this.stepDown(m, this.standOn('stool'), () => this.jumpToTable()));

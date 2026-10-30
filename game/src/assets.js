@@ -115,8 +115,8 @@ export const KEYS = {
     ['l6_picnic_basket_open', 'level6'], ['l6_bone', 'level6'], ['l6_sausage', 'level6'], ['l6_barrel', 'level6'], ['l6_toolbox', 'level6'],
     ['l6_crate', 'level6'], ['l6_stool', 'level6'], ['l6_glove_black_idle', 'level6'], ['l6_glove_black_fallen', 'level6'],
     ['l6_dog_bark', 'level6'], ['l6_dog_run', 'level6'], ['l6_dog_run_bone', 'level6'], ['l6_dog_house_front', 'level6'], ['l6_dog_chew', 'level6'], ['l6_dog_beg', 'level6'], ['l6_dog_belly', 'level6'],
-    ['mun_roof_crouch', 'cats'], ['mun_roof_crouch_ears_up', 'cats'], ['mun_roof_edge', 'cats'], ['mun_climb', 'cats'], ['mun_step_down', 'cats'], ['mun_jump_up', 'cats'], ['mun_eat', 'cats'], ['mun_sit_look', 'cats'],
-    ['mun_run', 'cats'], ['mun_held', 'cats'], ['mun_face_icon', 'cats'],
+    ['mun_roof_crouch', 'cats'], ['mun_roof_crouch_ears_up', 'cats'], ['mun_roof_edge', 'cats'], ['mun_step_down', 'cats'], ['mun_jump_up', 'cats'], ['mun_eat', 'cats'], ['mun_sit_look', 'cats'],
+    ['mun_run', 'cats'], ['mun_pounce', 'cats'], ['mun_held', 'cats'], ['mun_face_icon', 'cats'],
     ...BAG_UI,
   ],
 };

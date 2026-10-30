@@ -216,6 +216,7 @@ const RECIPES = {
   l6_sfx_dog_happy: (c) => note(c, { type: 'triangle', f: 392, t: 0.16, vol: 0.12, glide: [[587, 0.14]], vib: 0, attack: 0.005 }), // "gâu!" vui
   l6_sfx_dog_chew: (c) => [0, 0.14, 0.28].forEach((at) => rustle(c, { t: 0.06, vol: 0.03, at, f: 1200 })), // gặm rộp rộp
   l6_sfx_dog_whine: (c) => note(c, { f: 740, t: 0.32, vol: 0.08, glide: [[520, 0.3]], vibDepth: 0.02 }), // "ư ử"
+  l6_sfx_dog_sniff: (c) => [0, 0.16, 0.3, 0.52, 0.66].forEach((at) => hiss(c, { t: 0.07, vol: 0.06, at, f: 2200, type: 'bandpass', q: 1.5 })), // khịt khịt
   l3_sfx_creak: (c) => { for (let i = 0; i < 2; i++) note(c, { type: 'sawtooth', f: 180 + i * 30, t: 0.18, vol: 0.03, at: i * 0.25, glide: [[260 + i * 30, 0.16]], vib: 0 }); }, // cót két
 };
 
