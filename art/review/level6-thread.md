@@ -374,3 +374,13 @@
 - **Dùng lại:** `l5_wind_chime`, `l5_bg_backyard`, `mun_run`, `mun_held`, `mun_face_icon`. **Bỏ:** `mun_jump_up` (D6-19: Mun bước ngang sang bàn; code chỉ còn khối tạm, không gọi).
 
 **A6-12 (Art, trả Dev: nền L6 ở 3:4).** Nền riêng `art/out/level6/l6_bg_backyard.png` 1366x2304 (vùng chơi 1024x1536 ở x 171, y 384), dựng từ điểm ảnh `l5_bg_backyard` (không qua Codex, không đổi màu): bỏ cửa quán và bậc thềm, nới 171px mỗi bên. Trời, rào lật gương quanh khe ván x 822 và x 52 (cột dây phơi thứ hai ở x 1325 ảnh mới, dây võng đối xứng); sàn phải lật theo đường gạch xiên, sàn trái dịch một ô gạch theo phối cảnh, đường gạch liền. Phần vùng chơi giữ nguyên ảnh L5 trừ góc phải (từ đường gạch xiên x ~720 và rào từ x 822 sang phải). Dev đổi key trong `level6.js`, bỏ `bgSideSrc` tạm.
+
+**G6-21 (GD, chủ dự án chơi thử bản ghép 2026-10-31).** Giao Dev và Art.
+- Mở màn: Mun và Lu đang chạy xuyên qua hộp dụng cụ. Đường chạy phải vòng tránh đồ, đúng lớp trước sau (G6-13).
+- Găng tay: bỏ đoạn Lu ngậm lắc găng. Lu chạy tới, cúi ngửi ngửi rồi về chỗ cũ. Art vẽ lại găng (`l6_glove_black_idle`, `l6_glove_black_fallen`) đẹp hơn.
+- Mun nhảy lên mái: bỏ dáng `mun_climb` (bám cột), Mun nhảy thẳng theo đường cong bằng dáng chạy/nhảy sẵn có.
+- Mun trên mái và lúc xuống đang hơi to: thu nhỏ cho cùng cỡ Mun ở các cảnh khác và khớp demo.
+- Đoạn Mun xuống từng bậc chưa đẹp: làm lại nhịp (dừng nhìn, nhảy vồng mềm, đáp nhún nhẹ, cùng một cỡ và hướng).
+- Cây hạ thấp để gốc chạm nền sân.
+- Hộp dụng cụ (chỗ ban đầu) thấp xuống và dịch phải một chút.
+- Lu ngậm xương về chuồng: đi vòng ra trước cửa chuồng rồi chui vào, không đi xuyên qua chuồng.

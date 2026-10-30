@@ -636,7 +636,7 @@ A, B, C: 3 chỗ đặt, thấp dần từ mép mái xuống đất. A sát tư�
 | 4d | Ghế đẩu | Dưới trái | 🔑 | Kéo tới chỗ **C** (bậc thấp nhất, gần đất) | Ghế đặt vào, thành bậc cuối | "Cạch" |
 | 4' | Mặt bàn (chỗ trống bên phải giỏ) | Cạnh chỗ C | 🎯 | Kéo **xúc xích** từ túi thả lên bàn | Xem Khoảnh khắc lộ diện | "Pặc" |
 | 6 | Chuồng Lu | Dưới phải | ✨ | Chạm (khi Lu đang gặm) | Lu lăn ra khoe bụng rồi gặm tiếp | "Ư ử" |
-| 7 | Găng tay làm vườn đen trên hàng rào | Giữa trái | 🎭 | Chạm | Trông như mèo đen ngồi, hoá ra găng tay: găng rơi xuống đất dưới hàng rào và nằm yên ở đó. Lu (nếu rảnh) **chạy tới chỗ găng**, ngậm lắc lắc, vờn một lúc rồi bỏ găng tại chỗ, chạy về chỗ cũ. Lu đang gặm trong chuồng thì chỉ ngẩng đầu nhìn | "Phịch" |
+| 7 | Găng tay làm vườn đen trên hàng rào | Giữa trái | 🎭 | Chạm | Trông như mèo đen ngồi, hoá ra găng tay: găng rơi xuống đất dưới hàng rào và nằm yên ở đó. Lu (nếu rảnh) **chạy tới chỗ găng, cúi ngửi ngửi** (mũi khịt khịt, đuôi vẫy) rồi chạy về chỗ cũ; không ngậm, không vờn (G6-21). Lu đang gặm trong chuồng thì chỉ ngẩng đầu nhìn | "Phịch" |
 | 8 | Cây + ổ chim | Trên trái | 🎁 | Chạm | Ổ chim lắc, 5 Cá khô rơi ra | Chim ríu rít |
 | 9 | Chuông gió | Trên trái | ✨ | Chạm | Leng keng, Mun trên mái vểnh tai | Leng keng |
 | 10 | Bình tưới | Cạnh bụi rau | 🎁 | Chạm | Bình nghiêng, nước chảy ra cùng 5 Cá khô | "Ồ ồ" |
