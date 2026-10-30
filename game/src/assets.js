@@ -109,7 +109,7 @@ export const KEYS = {
   ],
   // L6 bản khối (G6-1): nền sân sau, chuông gió và các dáng Mun có sẵn dùng lại; còn lại là khối có nhãn (level6.js).
   6: [
-    ['l5_bg_backyard', 'level5'], ['l5_wind_chime', 'level5'],
+    ['l6_bg_backyard', 'level6'], ['l5_wind_chime', 'level5'],
     ['l6_shed', 'level6'], ['l6_shed_chimney', 'level6'], ['l6_tree', 'level6'], ['l6_bird_nest', 'level6'], ['l6_dog_house', 'level6'],
     ['l6_veggie_bed', 'level6'], ['l6_watering_can', 'level6'], ['l6_table', 'level6'], ['l6_picnic_basket_closed', 'level6'],
     ['l6_picnic_basket_open', 'level6'], ['l6_bone', 'level6'], ['l6_sausage', 'level6'], ['l6_barrel', 'level6'], ['l6_toolbox', 'level6'],

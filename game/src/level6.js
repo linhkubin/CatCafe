@@ -133,9 +133,6 @@ export class Level6 extends ObjectLevel {
   get levelNo() { return 6; }
   get fallbacks() { return FB; }
   get fallbackCanvas() { return true; }
-  // Nền L5 dùng lại: mép phải là cửa quán và bậc thềm. Khung rộng (G-SCREEN 3:4) kéo dài hai bên bằng cột hàng rào và sân sạch
-  // (hai tấm ván rào x 560–688), tạm tới khi Art vẽ nền L6 rộng 1366.
-  get bgSideSrc() { return { right: [560 / 1024, 128 / 1024] }; }
   get defaultPos() { return DEF; }
   // mun_run, chuông gió: ảnh dùng lại từ L5, cùng cỡ L5. Cây (A6-11) phóng như demo: ngọn y ≈ 120, ổ chim nằm trên cành ngang phải.
   get fitDefaults() { return { mun_run: 320, l5_wind_chime: 60, l6_tree: 430 }; }
@@ -156,7 +153,7 @@ export class Level6 extends ObjectLevel {
   get crouchKey() { return this.dogState === 'chew' ? 'mun_roof_crouch_ears_up' : 'mun_roof_crouch'; }
 
   buildRoom() {
-    this.buildBg('l5_bg_backyard'); // QUY-TRINH mục 6: dùng lại nền sân sau L5
+    this.buildBg('l6_bg_backyard'); // nền riêng L6 (A6-12): sân L5 bỏ cửa quán, bậc thềm, dư hai bên cho khung 3:4 (1366x2304)
     const P = (k) => this.P(k);
     this.addProps([
       { name: 'tree', key: 'l6_tree', depth: 2, tap: 'wiggle', wiggle: [1.5, 2, 300], sfx: 'sfx_leaves' },

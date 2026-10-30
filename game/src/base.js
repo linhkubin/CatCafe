@@ -120,8 +120,8 @@ export class BaseLevel extends Phaser.Scene {
     const tex = this.textures.get(key);
     const src = tex.getSourceImage(), sw = src.width, sh = src.height;
     const sy = Math.round(sh * 0.05), sx = Math.round(sw * 0.03);
-    // Cột nguồn của dải trái / phải (tỉ lệ bề ngang ảnh): mặc định 3% sát mép; màn dùng lại nền có đồ ở mép (L6 dùng nền L5,
-    // mép phải là cửa quán) chọn cột sạch qua bgSideSrc = { left: [x, w], right: [x, w] }.
+    // Cột nguồn của dải trái / phải (tỉ lệ bề ngang ảnh): mặc định 3% sát mép; nền có đồ ở sát mép chọn cột sạch qua
+    // bgSideSrc = { left: [x, w], right: [x, w] }. Nền rộng 1366 (G-SCREEN) thì không cần dải hai bên.
     const side = (k, def) => { const [fx, fw] = (this.bgSideSrc && this.bgSideSrc[k]) || def; return [Math.round(fx * sw), Math.max(1, Math.round(fw * sw))]; };
     const [lx, lw] = side('left', [0, 0.03]), [rx, rw] = side('right', [1 - sx / sw, sx / sw]);
     const frame = (name, fx, fy, fw, fh) => { if (!tex.has(name)) tex.add(name, 0, fx, fy, fw, fh); return name; };
