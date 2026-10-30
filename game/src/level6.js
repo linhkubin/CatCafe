@@ -9,22 +9,25 @@ import { PAL, rr, el, label, block } from './blocks.js';
 // Vị trí (toạ độ khung 1024x1536, neo theo ảnh tạm: đa số giữa đáy). Sân: hàng rào tới y ≈ 872, đất bên dưới.
 const DEF = {
   player_call: [260, 1385],
-  l6_tree: [100, 880], l6_bird_nest: [175, 600], l5_wind_chime: [330, 380], l6_glove_black_idle: [440, 415], // găng vắt đỉnh rào (y ≈ 365): nửa trên nhô lên, nửa dưới thòng mặt trước
+  // QUY-TRINH bước 5: đồ đứng yên đo trên demo đã duyệt (G6-21, l6_demo_path_play.png, khung 1024x1536), neo theo anchors.json.
+  l6_tree: [100, 880], l6_bird_nest: [132, 480], l5_wind_chime: [330, 380], l6_glove_black_idle: [418, 342], // găng vắt đỉnh rào: neo đỉnh
   // G6-18: bố cục như G6-16, đồ to theo G6-17 tại chỗ (neo giữa đáy). Kho 560 × 541 (G6-17) để mặt mái y 475, 4 bậc hụt đều 120;
   // mép mái trái x ≈ 580. Mun nằm mái và ống khói hạ theo mặt mái (−66).
-  l6_shed: [820, 1010], l6_shed_chimney: [960, 524], mun_roof_crouch: [690, 477],
+  l6_shed: [820, 1010], l6_shed_chimney: [965, 455], mun_roof_crouch: [690, 477],
   // G6-5: bàn sát cạnh trái ghế đẩu ở chỗ C, giỏ ở mép trái mặt bàn, chỗ trống bên phải đặt xúc xích.
   // G6-18: bàn rộng 320 nhích phải 30 (khỏi lọt mép trái). G6-19: bàn thấp 228 (1,2 Hm), chân bàn xuống 23 (1040 → 1063) để
   // mặt bàn 835 ngang mặt ghế ở C; ghế vẫn đứng trước bàn (chân ghế 1065).
-  l6_table: [160, 1063], l6_picnic_basket_closed: [72, 835],
+  l6_table: [140, 1020], l6_picnic_basket_closed: [123, 848], l6_picnic_basket_open: [123, 848],
   // G6-13/16: Lu ngồi sủa trước kho, bên phải chỗ A. G6-18: nhích phải 55 (phuy rộng 170 ở chỗ đầu che Lu).
-  l6_dog_bark: [755, 1060], l6_dog_house: [880, 1290], l6_dog_house_front: [880, 1290], l6_dog_chew: [880, 1290], // đầu Lu thò cửa chuồng
-  l6_dog_belly: [860, 1395], // G6-16: lăn ra nằm ngay trước cửa chuồng
+  l6_dog_bark: [700, 975], l6_dog_house: [856, 1167], l6_dog_house_front: [856, 1167], l6_dog_chew: [856, 1167], // đầu Lu thò cửa chuồng
+  l6_dog_belly: [856, 1270], // G6-16: lăn ra nằm ngay trước cửa chuồng
   // G6-4, G6-5: chỗ đầu các món rải rác. Hàng trước sân đáy y 1290 (túi đồ từ y ≈ 1298). Ghế đẩu dưới bàn bên trái.
   // G6-18: hàng trước to lên không đủ 1024 cho 5 món cạnh nhau: hộp dụng cụ nhích trái 20, bụi rau lùi 28 (phuy che nhẹ mép phải),
   // phuy nhích phải 25, bình tưới nhích phải 42.
   l6_stool: [150, 1200],
-  l6_toolbox: [130, 1290], l6_veggie_bed: [365, 1262], l6_barrel: [555, 1295], l6_watering_can: [692, 1290],
+  // Ghép ảnh thật: bụi rau (343, 1242) và bình tưới (705, 1275) theo demo. Phuy đứng hàng trước bên trái (trước bụi rau).
+  // Hộp dụng cụ thấp (cao 103) đứng ngoài vùng túi đồ (khung 3:4 túi đồ phủ x 65–753, y ≈ 1210–1380), dưới chuồng, không che cửa.
+  l6_toolbox: [820, 1262], l6_veggie_bed: [343, 1242], l6_barrel: [175, 1296], l6_watering_can: [705, 1275],
   // G6-6: thùng gỗ đứng riêng cạnh hàng rào, sau bàn, cao hơn bàn (bậc nhảy mở màn bàn → thùng gỗ → cột → mái).
   l6_crate: [275, 880],
 };
@@ -33,22 +36,25 @@ const DEF = {
 // → nhảy lên mặt bàn 755. Phuy cao 350, hộp dụng cụ 95, thùng gỗ 255, ghế 230.
 // Nhích so với G6-16 (chỉ theo y cho bậc đều): A xuống 30 (1010 → 1040), B lùi 65 (1035 → 970), C giữ nguyên.
 // Đồ to nên bậc thấp đứng trước che nhẹ chân bậc cao (lớp theo y chân), mặt mỗi bậc vẫn lộ cho Mun đứng.
-const SPOT = { barrel: [530, 1040], toolbox: [530, 690], crate: [405, 970], stool: [300, 1065] };
+// Ghép ảnh thật (G6-21): chỗ đặt đo trên demo xếp xong đường (l6_demo_path_play.png), neo giữa đáy.
+const SPOT = { barrel: [535, 968], toolbox: [528, 680], crate: [395, 982], stool: [323, 1024] };
+// Chỗ Mun đứng trên mặt mỗi bậc = đỉnh phần vẽ + độ sâu mặt trên (hộp dụng cụ: dưới quai, trên nắp phẳng).
+const STAND = { toolbox: 18, crate: 13, stool: 22, table: 13 };
 const STEPS = ['barrel', 'toolbox', 'crate', 'stool']; // thứ tự gợi ý; đặt tự do, trừ hộp dụng cụ phải sau phuy
 // Đường Mun xuống: mép mái → mặt hộp dụng cụ (A) → mặt thùng gỗ (B) → mặt ghế (C) → nhảy lên bàn ăn.
-const ROOF_EDGE = [598, 480], MUN_PATH = [[530, 595], [405, 715], [300, 835]];
+const ROOF_EDGE = [598, 480];
 // G6-6: vòng chạy mở màn quanh sân (đáy Mun) và chỗ Mun bám cột dây phơi (cột có sẵn trong nền, x ≈ 490).
 // G6-13: chạy qua chỗ trống: dải đất phía trước (y ≈ 1380, túi đồ chưa hiện), vòng lên khe giữa bình tưới và chuồng, qua khoảng
 // trống trước kho (chỗ A, B, C còn trống) rồi tới chân bàn. Lớp trước sau theo y chân (ySort).
 const INTRO_LOOP = [[-200, 1380], [250, 1400], [650, 1395], [930, 1370], [770, 1285], [715, 1150], [600, 1040], [430, 1015], [340, 1050]];
 const INTRO_POLE = [492, 610];
 const LU_BRAKE = [400, 1090];                        // G6-14: Lu phanh ở chân bàn (bên phải bàn, chỗ C còn trống) khi Mun nhảy lên bàn
-const TABLE_TREAT = [220, 835];                       // G6-5: chỗ xúc xích trên mặt bàn (bên phải giỏ); G6-19: Mun từ ghế bước ngang sang ăn
+const TREAT_DX = 85;                                  // G6-5: xúc xích trên mặt bàn, bên phải tâm bàn (bên phải giỏ); G6-19: Mun từ ghế bước ngang sang ăn
 const STEP_ARC = 30;                                   // G6-2: mỗi bậc nhảy ngắn, đáp nhẹ (vồng thấp)
 const BEHIND_CHIMNEY = [960, 477];
-const GLOVE_FALLEN = [440, 900];                     // găng rơi xuống đất ngay dưới chỗ vắt trên hàng rào, nằm yên ở đó
+const GLOVE_FALLEN = [418, 905];                     // găng rơi xuống đất ngay dưới chỗ vắt trên hàng rào, nằm yên ở đó
 const GLOVE_DOG = [520, 960];                         // chỗ Lu đứng vờn găng: chân trên mặt sân cạnh găng (không kéo găng đi)
-const DOG_BEG = [360, 1150];                           // Lu chồm tới bàn đòi xúc xích
+const DOG_BEG = [380, 1110];                           // Lu chồm tới bàn đòi xúc xích
 
 const dogBody = (txt, pose) => (c, w, h) => {          // Lu khối: thân + đầu + tai, nhãn tư thế
   if (pose === 'lie') { el(c, w * 0.45, h * 0.62, w * 0.42, h * 0.32, PAL.dog); el(c, w * 0.82, h * 0.42, h * 0.3, h * 0.3, PAL.dog); }
@@ -171,7 +177,7 @@ export class Level6 extends ObjectLevel {
     this.zone('dog', this.artRect(this.dog), D.zone + 4).disableInteractive();
     this.bone = this.img('l6_bone', 0, 0, this.veggie.depth + 0.01).setVisible(false);
     this.sausage = this.img('l6_sausage', 0, 0, this.basket.depth + 0.01).setVisible(false);
-    this.treat = this.img('l6_sausage', ...TABLE_TREAT, this.table.depth + 0.02).setVisible(false); // xúc xích đặt trên bàn (G6-5)
+    this.treat = this.img('l6_sausage', 0, 0, this.table.depth + 0.02).setVisible(false); // xúc xích đặt trên bàn (G6-5)
     this.player = this.img('player_call', ...P('player_call'), D.player).setVisible(false);
 
     // 4 món xếp đường: kéo trong cảnh (hàm chung sceneDraggable, objects.js). Mỗi chỗ chỉ nhận đúng món; hộp dụng cụ sau phuy.
@@ -185,6 +191,10 @@ export class Level6 extends ObjectLevel {
     }
   }
 
+  // Chỗ đứng trên mặt bậc / mặt bàn (toạ độ thế giới), đo theo phần vẽ thật của sprite.
+  standOn(name) { const s = this[name]; return [s.x, this.artRect(s).top + STAND[name]]; }
+  get tableTreat() { const [x, y] = this.standOn('table'); return [x + TREAT_DX, y]; }
+
   // ---------- lớp trước sau theo chiều sâu (G6-13) ----------
   // Đồ đứng trên mặt sân và con vật đang đi trên mặt sân: lớp theo y chân (y-sort), chân thấp hơn (gần người chơi) vẽ trước.
   // Đồ nằm trên đồ khác theo lớp đồ đỡ nó (giỏ, xúc xích trên bàn; hộp dụng cụ trên phuy; Mun trên mái, trên bậc, trên bàn).
@@ -193,7 +203,7 @@ export class Level6 extends ObjectLevel {
   ySort(s, off = 0) { return s.setDepth(this.yDepth(s.y) + off); }
 
   groundDepths() {
-    this.shed.setDepth(this.yDepth(1000));                 // chân kho 1010: đồ đặt sát chân kho (phuy ở A) vẽ trước kho
+    this.shed.setDepth(this.yDepth(900));                  // phuy ở A (chân 968, demo G6-21) và Lu sủa trước kho vẽ trước kho
     this.chimney.setDepth(this.shed.depth + 0.02);         // ống khói trên Mun nằm mái (Mun = kho + 0,01)
     for (const n of ['table', 'veggie', 'can', 'barrel', 'toolbox', 'crate', 'stool', 'house']) this.ySort(this[n]);
     this.basket.setDepth(this.table.depth + 0.01);
@@ -219,7 +229,7 @@ export class Level6 extends ObjectLevel {
       const [cx, cy] = this.P('l6_crate'), cr = this.artRect(this.crate), top = [cx, cr.top + 2];
       m.setDepth(D.player - 1); // nhảy lên đồ: vẽ trên mọi đồ trong sân
       this.dogBrake();
-      this.hopTo(m, ...TABLE_TREAT, 350, () => this.hopTo(m, ...top, 350, () => {
+      this.hopTo(m, ...this.tableTreat, 350, () => this.hopTo(m, ...top, 350, () => {
         // Bám cột: mèo dựng đứng trên cột, rồi vọt lên mép mái. Mun vọt qua phía trên đầu Lu: Lu quay theo.
         this.dogTurnTo(INTRO_POLE[0], true);
         this.hopTo(m, ...INTRO_POLE, 350, () => {
@@ -526,7 +536,7 @@ export class Level6 extends ObjectLevel {
     if (this.dogState !== 'chew') { this.dogBeg(it); return; }
     this.bagRemove(it, false);
     this.sausageOn = true;
-    this.treat.setPosition(...TABLE_TREAT).setVisible(true);
+    this.treat.setPosition(...this.tableTreat).setVisible(true);
     this.squash(this.treat);
     this.sfx('l6_sfx_sausage_drop');
     if (this.allSteps()) this.time.delayedCall(400, () => this.revealDown());
@@ -570,13 +580,13 @@ export class Level6 extends ObjectLevel {
       this.applyKey(m, 'mun_roof_edge');
       this.moveTo(m, ...ROOF_EDGE, 400, { onComplete: () => {
         this.applyKey(m, 'mun_step_down');
-        this.stepDown(m, MUN_PATH[0], () => {
+        this.stepDown(m, this.standOn('toolbox'), () => {
           // Ở bậc A ngoái lại nhìn người chơi 0,5 giây.
           this.face(m, !m.faceLeft); // quay lại phía vừa đi
           this.hop(m, 10, 240);
           this.sfx('mun_sfx_meow', 0.5);
           this.time.delayedCall(500, () => {
-            this.stepDown(m, MUN_PATH[1], () => this.stepDown(m, MUN_PATH[2], () => this.jumpToTable()));
+            this.stepDown(m, this.standOn('crate'), () => this.stepDown(m, this.standOn('stool'), () => this.jumpToTable()));
           });
         });
       } });
@@ -588,7 +598,8 @@ export class Level6 extends ObjectLevel {
     const m = this.mun;
     this.tweens.add({ targets: m, scaleY: m.baseY * 0.92, duration: 120, yoyo: true, onComplete: () => {
       // G6-19: mặt bàn ngang mặt ghế: bước ngang sang (vồng thấp như xuống bậc), không nhảy phốc.
-      this.hopTo(m, TABLE_TREAT[0] + 20, TABLE_TREAT[1], 380, () => {
+      const [tx, ty] = this.tableTreat;
+      this.hopTo(m, tx + 20, ty, 380, () => {
         this.sfx('l4_sfx_land_tap', 0.6);
         this.squash(m);
         m.setDepth(this.table.depth + 0.03); // ngồi trên bàn: trên bàn, giỏ, xúc xích
@@ -641,7 +652,7 @@ export class Level6 extends ObjectLevel {
     const k = STEPS.find((n) => !this.placed[n]);
     if (k) return { drag: k, to: this.sceneSpotCenter(k, SPOT[k]) };
     const it = this.bagItem('l6_sausage');
-    return it ? { item: it, to: TABLE_TREAT } : null;
+    return it ? { item: it, to: this.tableTreat } : null;
   }
 
   // 8 giây: chưa có xương thì Lu ngoái nhìn bụi rau; đã cho xương thì Mun nhìn xuống chỗ còn thiếu bậc.
