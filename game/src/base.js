@@ -120,17 +120,22 @@ export class BaseLevel extends Phaser.Scene {
     const tex = this.textures.get(key);
     const src = tex.getSourceImage(), sw = src.width, sh = src.height;
     const sy = Math.round(sh * 0.05), sx = Math.round(sw * 0.03);
-    const frame = (name, fx, fy, fw, fh) => { if (!tex.has(name)) tex.add(name, 0, fx, fy, fw, fh); };
+    // Cột nguồn của dải trái / phải (tỉ lệ bề ngang ảnh): mặc định 3% sát mép; màn dùng lại nền có đồ ở mép (L6 dùng nền L5,
+    // mép phải là cửa quán) chọn cột sạch qua bgSideSrc = { left: [x, w], right: [x, w] }.
+    const side = (k, def) => { const [fx, fw] = (this.bgSideSrc && this.bgSideSrc[k]) || def; return [Math.round(fx * sw), Math.max(1, Math.round(fw * sw))]; };
+    const [lx, lw] = side('left', [0, 0.03]), [rx, rw] = side('right', [1 - sx / sw, sx / sw]);
+    const frame = (name, fx, fy, fw, fh) => { if (!tex.has(name)) tex.add(name, 0, fx, fy, fw, fh); return name; };
     frame('top', 0, 0, sw, sy); frame('bottom', 0, sh - sy, sw, sy);
-    frame('left', 0, 0, sx, sh); frame('right', sw - sx, 0, sx, sh);
-    frame('tl', 0, 0, sx, sy); frame('tr', sw - sx, 0, sx, sy); frame('bl', 0, sh - sy, sx, sy); frame('br', sw - sx, sh - sy, sx, sy);
+    const L = frame(`left@${lx},${lw}`, lx, 0, lw, sh), R = frame(`right@${rx},${rw}`, rx, 0, rw, sh);
+    const TL = frame(`tl@${lx},${lw}`, lx, 0, lw, sy), TR = frame(`tr@${rx},${rw}`, rx, 0, rw, sy);
+    const BL = frame(`bl@${lx},${lw}`, lx, sh - sy, lw, sy), BR = frame(`br@${rx},${rw}`, rx, sh - sy, rw, sy);
     const part = (f) => this.add.image(x, 0, key, f).setDepth(D.bg).setVisible(false);
     // Nền vẽ dư (G5-21 cao 1024x2304; G-SCREEN rộng 1366x2304): vùng chơi 1024x1536 nằm giữa ảnh, đặt lệch cho vùng chơi khớp
     // (x … x + 1024, 0 … 1536). Dải mép kéo giãn chỉ hiện ở phần màn mà nền chưa phủ tới (layoutBg).
     const dw = bg.displayWidth, dh = bg.displayHeight, tall = dh > 1536 + 100;
     bg.setOrigin(Math.max(0, (dw - 1024) / 2) / dw, Math.max(0, (dh - 1536) / 2) / dh);
-    const rec = { b: bg, x, tall, top: part('top'), bottom: part('bottom'), left: part('left'), right: part('right'),
-      tl: part('tl'), tr: part('tr'), bl: part('bl'), br: part('br') };
+    const rec = { b: bg, x, tall, top: part('top'), bottom: part('bottom'), left: part(L), right: part(R),
+      tl: part(TL), tr: part(TR), bl: part(BL), br: part(BR) };
     (this.bgRecs = this.bgRecs || []).push(rec);
     if (x === 0) Object.assign(this, { bg, bgTall: tall });
     return rec;
@@ -865,8 +870,20 @@ export class BaseLevel extends Phaser.Scene {
     this.tweens.add({ targets: parts, y: (o) => o.y0, duration: 500, ease: 'Back.out', onComplete: () => done && done() });
   }
 
+  // Túi đồ trượt xuống khỏi màn hình rồi ẩn (cảnh bế, màn thưởng); ô túi thôi nhận chạm.
+  bagHide() {
+    const B = this.bag;
+    if (!B || B.hidden) return;
+    B.hidden = true;
+    if (this.drag) this.drag = null;
+    const parts = [B.bar, ...B.slots.map((o) => o.s), ...B.items.filter(Boolean).map((it) => it.s)];
+    B.slots.forEach((o) => o.z.disableInteractive());
+    this.tweens.add({ targets: parts, y: (o) => o.y + 260, alpha: 0, duration: 350, ease: 'Quad.in', onComplete: () => parts.forEach((o) => o.setVisible(false)) });
+  }
+
   bagLayout() {
     const B = this.bag;
+    if (B.hidden) return;
     B.bar.setPosition(this.bagX(), this.bagY());
     B.slots.forEach((o, i) => { o.s.setPosition(...this.slotPos(i)); o.z.setPosition(...this.slotPos(i)); });
     B.items.forEach((it) => { if (it && it !== (this.drag && this.drag.item)) it.s.setPosition(...this.slotPos(it.i)); });
@@ -1181,6 +1198,7 @@ export class BaseLevel extends Phaser.Scene {
     this.locked = true;
     this.handHide();
     this.handHide('paw');
+    this.bagHide(); // cảnh bế và màn thưởng không có túi đồ
     if (this.beforeEnding) this.beforeEnding();
     if (this.glowTw) this.glowTw.stop();
     if (this.glow) (this.glowAt || this.sua).preFX.remove(this.glow);

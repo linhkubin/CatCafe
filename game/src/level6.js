@@ -51,7 +51,8 @@ const ROOF_EDGE = [598, 480];
 const INTRO_LOOP = [[-200, 1380], [250, 1400], [650, 1395], [930, 1370], [770, 1285], [715, 1150], [600, 1040], [430, 1015], [340, 1050]];
 const INTRO_POLE = [492, 610];
 const LU_BRAKE = [400, 1090];                        // G6-14: Lu phanh ở chân bàn (bên phải bàn, chỗ C còn trống) khi Mun nhảy lên bàn
-const TREAT_DX = 85;                                  // G6-5: xúc xích trên mặt bàn, bên phải tâm bàn (bên phải giỏ); G6-19: Mun từ ghế bước ngang sang ăn
+const TREAT_DX = 85;
+const EAT_DX = 20, EAT_MOUTH = [62, -16];               // Mun ăn đứng lùi trái chỗ xúc xích; xúc xích ngay trước miệng (dáng nhìn phải)                                  // G6-5: xúc xích trên mặt bàn, bên phải tâm bàn (bên phải giỏ); G6-19: Mun từ ghế bước ngang sang ăn
 const STEP_ARC = 30;                                   // G6-2: mỗi bậc nhảy ngắn, đáp nhẹ (vồng thấp)
 const BEHIND_CHIMNEY = [960, 477];
 const GLOVE_FALLEN = [418, 905];                     // găng rơi xuống đất ngay dưới chỗ vắt trên hàng rào, nằm yên ở đó
@@ -132,6 +133,9 @@ export class Level6 extends ObjectLevel {
   get levelNo() { return 6; }
   get fallbacks() { return FB; }
   get fallbackCanvas() { return true; }
+  // Nền L5 dùng lại: mép phải là cửa quán và bậc thềm. Khung rộng (G-SCREEN 3:4) kéo dài hai bên bằng cột hàng rào và sân sạch
+  // (hai tấm ván rào x 560–688), tạm tới khi Art vẽ nền L6 rộng 1366.
+  get bgSideSrc() { return { right: [560 / 1024, 128 / 1024] }; }
   get defaultPos() { return DEF; }
   // mun_run, chuông gió: ảnh dùng lại từ L5, cùng cỡ L5. Cây (A6-11) phóng như demo: ngọn y ≈ 120, ổ chim nằm trên cành ngang phải.
   get fitDefaults() { return { mun_run: 320, l5_wind_chime: 60, l6_tree: 430 }; }
@@ -495,9 +499,16 @@ export class Level6 extends ObjectLevel {
     return [
       { when: () => this.dogState === 'bark', rect: () => this.padRect(this.artRect(this.dog), 40), want: () => 'l6_bone',
         place: (it) => this.giveBone(it) },
-      { when: () => !this.sausageOn, rect: () => this.padRect(this.artRect(this.table), 40), want: () => 'l6_sausage',
+      // Món kéo nằm trên ngón tay 70px: vùng bàn kéo dài lên trên 70 và gộp cả ghế đẩu ở chỗ C (đứng sát mép phải bàn).
+      { when: () => !this.sausageOn, rect: () => this.tableDropRect(), want: () => 'l6_sausage',
         place: (it) => this.sausageToTable(it) },
     ];
+  }
+
+  tableDropRect() {
+    let r = this.padRect(this.artRect(this.table), 40);
+    if (this.placed.stool) r = Phaser.Geom.Rectangle.Union(r, this.padRect(this.artRect(this.stool), 20));
+    return new Phaser.Geom.Rectangle(r.x, r.y - 70, r.width, r.height + 70);
   }
 
   padRect(r, p) { return new Phaser.Geom.Rectangle(r.x - p, r.y - p, r.width + 2 * p, r.height + 2 * p); }
@@ -602,7 +613,7 @@ export class Level6 extends ObjectLevel {
     this.tweens.add({ targets: m, scaleY: m.baseY * 0.92, duration: 120, yoyo: true, onComplete: () => {
       // G6-19: mặt bàn ngang mặt ghế: bước ngang sang (vồng thấp như xuống bậc), không nhảy phốc.
       const [tx, ty] = this.tableTreat;
-      this.hopTo(m, tx + 20, ty, 380, () => {
+      this.hopTo(m, tx - EAT_DX, ty, 380, () => {
         this.sfx('l4_sfx_land_tap', 0.6);
         this.squash(m);
         m.setDepth(this.table.depth + 0.03); // ngồi trên bàn: trên bàn, giỏ, xúc xích
@@ -621,6 +632,10 @@ export class Level6 extends ObjectLevel {
   munEat() {
     const m = this.mun;
     this.applyKey(m, 'mun_eat');
+    this.face(m, false); // quay mặt về phía mặt bàn trống bên phải (giỏ ở bên trái)
+    // Xúc xích ngay trước miệng, nằm trước Mun (không bị thân che) để thấy rõ đang ăn.
+    this.treat.setPosition(m.x + EAT_MOUTH[0], m.y + EAT_MOUTH[1]).setDepth(m.depth + 0.01).setVisible(true);
+    this.tweens.add({ targets: this.treat, scaleX: this.treat.base * 0.6, duration: 1500, ease: 'Sine.in' }); // ăn dần
     this.tweens.add({ targets: m, angle: { from: -4, to: 4 }, duration: 150, yoyo: true, repeat: 4, onComplete: () => {
       m.setAngle(0);
       this.treat.setVisible(false);
