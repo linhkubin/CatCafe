@@ -520,18 +520,16 @@ export class Level1 extends ObjectLevel {
 
   strongHint() {
     // Nút 💡: bàn chân mèo làm mẫu đúng thao tác của bước hiện tại.
-    this.tweens.add({ targets: this.bulb, scale: this.bulb.base * 0.9, duration: 90, yoyo: true });
+    this.pressBulb();
     if (this.phase === 'search') {
       // G10: chỉ vào đuôi chỗ Sữa đang trốn (gối), hoặc vẽ đường vuốt trên rèm nếu Sữa ở sau rèm / đã biến mất.
       if ((this.hideAt === 'pillowL' || this.hideAt === 'pillowR') && this.tail.visible) {
-        this.handTap(this.tipOf(this.tail), 'hint', 'paw');
-        this.pawTimer = this.time.delayedCall(2500, () => this.handHide('paw'));
+        this.pawAt(this.tipOf(this.tail));
       } else this.showSwipeGuide('paw', 2);
     }
     else if (this.phase === 'can' && !this.curtainOpen) this.showSwipeGuide('paw', 2);
-    else if (this.phase === 'canCenter') { this.handTap(this.tipOf(this.can), 'hint', 'paw'); this.pawTimer = this.time.delayedCall(2500, () => this.handHide('paw')); }
-    else if (this.phase === 'can') { this.handTap(this.tipOf(this.can), 'hint', 'paw'); this.pawTimer = this.time.delayedCall(2500, () => this.handHide('paw')); }
-    else if (this.phase === 'found') { this.handTap(this.suaPoint(), 'hint', 'paw'); this.pawTimer = this.time.delayedCall(2500, () => this.handHide('paw')); }
+    else if (this.phase === 'canCenter' || this.phase === 'can') this.pawAt(this.tipOf(this.can));
+    else if (this.phase === 'found') this.pawAt(this.suaPoint());
   }
 
   update(time) {

@@ -202,12 +202,11 @@ export class Level3 extends ObjectLevel {
   get fallbacks() { return FB; }
   get suaHand() { return false; } // lộ diện: không có bàn tay chỉ vào mèo, nút 💡 vẫn chỉ được
 
+  get fitDefaults() { return FIT; }
+
   resetLevel() {
-    const A = this.A;
-    A.fit = A.fit || {};
-    if (!A.fit[3] || !Object.keys(A.fit[3]).length) A.fit[3] = { ...FIT };
     Object.assign(this, { stage: 'scissors', shadowAt: 0, curtainTaps: 0, peeking: false, vaseDone: false, secrets: 0,
-      playTimers: [], taught: {}, kids: [], hoverT: null, boxHi: null, glowFx: null, meowLoop: null, boxBreath: null, think: null, fanPlay: null, treeSway: null,
+      playTimers: [], taught: {}, kids: [], hoverT: null, boxHi: null, meowLoop: null, boxBreath: null, fanPlay: null, treeSway: null,
       buildIdx: 0, ghosts: [], placed: [] });
   }
 
@@ -260,8 +259,6 @@ export class Level3 extends ObjectLevel {
     const [sx, sy] = P('player_dangle_pompom');
     this.fan = this.img(this.has('player_dangle_pompom') ? 'player_dangle_pompom' : 'player_silly_laugh', sx, sy, floorD(sy)).setVisible(false); // G3-30
     this.player = this.img('player_point_think', ...P('player_point_think'), D.player).setVisible(false);
-    this.think = this.img('ui_thought_bubble', ...P('ui_thought_bubble'), D.player + 1).setVisible(false);
-    this.thinkIcon = this.img('l3_scissors', 0, 0, D.player + 2).setOrigin(0.5, 0.5).setVisible(false);
 
     this.zone('curtain', cb);
     this.zone('vase', this.vase.getBounds(), D.zone + 2);
@@ -316,16 +313,10 @@ export class Level3 extends ObjectLevel {
 
   onIntroLeave() { this.showThink(false); }
 
+  // Bong bóng suy nghĩ hình cái kéo lúc mở màn (base thinkBubble), cỡ theo bảng FIT, hiện tới khi nhân vật lui.
   showThink(on) {
-    const t = this.think, ic = this.thinkIcon;
-    if (!on) { this.tweens.add({ targets: [t, ic], alpha: 0, duration: 200, onComplete: () => { t.setVisible(false); ic.setVisible(false); } }); return; }
-    t.setVisible(true).setAlpha(1).setScale(0);
-    this.tweens.add({ targets: t, scale: t.base, duration: 300, ease: 'Back.out', onComplete: () => {
-      const tb = t.getBounds();
-      ic.setVisible(true).setAlpha(1).setPosition(tb.x + tb.width * 0.58, tb.y + tb.height * 0.36);
-      this.fitWidth(ic, tb.width * 0.6);
-    } });
-    this.sfx('sfx_meow_question');
+    if (!on) { this.thinkHide(200); return; }
+    this.thinkBubble('l3_scissors', ...this.P('ui_thought_bubble'), { iconK: 0.6, iconX: 0.58, hold: 0, dur: 300, sfx: 'sfx_meow_question' });
   }
 
   // Bong bóng nhiệm vụ không bật ra giữa màn (đã có bong bóng suy nghĩ); hiện thẳng ở góc như demo reveal.
@@ -728,12 +719,7 @@ export class Level3 extends ObjectLevel {
       this.bubbleFound();
       // G3-30: Sữa nhận chạm ngay khi hộp lật ngửa (chạm sớm thì cắt sang cảnh bế); hộp sáng nhẹ.
       this.armSua(new Phaser.Geom.Rectangle(bb.x + bb.width * 0.1, bb.y, bb.width * 0.8, bb.height * 0.55));
-      if (this.renderer.type === Phaser.WEBGL && this.box.preFX) {
-        this.glowFx = this.box.preFX.addGlow(SUN, 0, 0, false, 0.1, 14);
-        this.tweens.add({ targets: this.glowFx, outerStrength: 4, duration: 700, onComplete: () => {
-          this.glowTw = this.tweens.add({ targets: this.glowFx, outerStrength: 1.5, duration: 1000, yoyo: true, repeat: -1 });
-        } });
-      }
+      this.glowOn(this.box);
       this.fanShow();
     });
   }
@@ -817,9 +803,6 @@ export class Level3 extends ObjectLevel {
     if (this.meowLoop) this.meowLoop.remove();
     if (this.fanPlay) { this.fanPlay.remove(); this.fanPlay = null; }
     if (this.boxBreath) this.boxBreath.stop();
-    if (this.glowTw) this.glowTw.stop();
-    if (this.glowFx) { this.box.preFX.remove(this.glowFx); this.glowFx = null; }
-    this.glow = null;
   }
 
   // Sữa được bế ra; hộp rỗng ngửa ở lại cảnh nền, cạnh cột cào (ảnh hộp úp xoay 180°).
@@ -859,8 +842,8 @@ export class Level3 extends ObjectLevel {
   }
 
   strongHint() {
-    this.tweens.add({ targets: this.bulb, scale: this.bulb.base * 0.9, duration: 90, yoyo: true });
-    const paw = (pt) => { this.handTap(pt, 'hint', 'paw'); this.pawTimer = this.time.delayedCall(2500, () => this.handHide('paw')); };
+    this.pressBulb();
+    const paw = (pt) => this.pawAt(pt);
     const it = (k) => this.bag && this.bag.items.find((o) => o && o.key === k);
     const bc = this.box.getCenter();
     if (this.phase === 'found') { paw(this.suaPoint()); return; }
@@ -872,16 +855,10 @@ export class Level3 extends ObjectLevel {
     }
   }
 
+  idleSparkle() { const t = this.hintTarget(); if (t) this.sparkle(t); }
+
   update(time) {
     this.followKids();
-    if (this.frozen || this.locked || this.phase !== 'search' || this.drag || (this.bag && this.bag.busy)) return;
-    if (!['scissors', 'cut', 'build'].includes(this.stage)) return; // 'hidden': không gợi ý tự động
-    const idle = (time - this.lastTouch) / 1000, H = this.hints;
-    if (idle >= 8 && !H.h1) { H.h1 = true; this.hint1(); }
-    if (idle >= 16 && time - H.sparkleAt > 2000) {
-      H.sparkleAt = time;
-      const t = this.hintTarget();
-      if (t) this.sparkle(t);
-    }
+    if (['scissors', 'cut', 'build'].includes(this.stage)) this.idleHints(time); // 'hidden': không gợi ý tự động
   }
 }

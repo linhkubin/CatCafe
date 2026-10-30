@@ -4,6 +4,8 @@
     python game/tools/build_web.py
 
 - Chép game/src/*.js (đổi BUILT = true trong assets.js để game đọc manifest.json thay vì dò thư mục).
+- G5-32: ảnh nền đặc (key có `_bg_`, không có điểm trong suốt) đổi sang JPG chất lượng 92, giữ đủ màu (4:4:4) để trời,
+  tường nhạt không có vệt nén. Ảnh gốc PNG trong art/out/ giữ nguyên; manifest trỏ tới file .jpg.
 - Chép PNG đang dùng từ art/out/ (chỉ key trong KEYS của assets.js) vào dist/assets/<thư mục>/, nén lại bằng Pillow
   (optimize, không đổi cỡ ảnh). Key nào chưa có ảnh thật thì chép ảnh tạm từ game/placeholders/ vào dist/assets/placeholders/.
 - Chép âm thanh có trong game/audio/.
@@ -29,7 +31,7 @@ ART_OUT = ROOT / "art" / "out"
 DIST = GAME / "dist"
 PUBLISHED = GAME / "dist_published.json"   # mã băm từng file của bản đã đăng (mốc so sánh)
 CHANGES = GAME / "dist_changes.txt"
-SPECS = {n: ROOT / "art" / f"design-art-level{n}.md" for n in (1, 2, 3, 4, 5)}  # L5 chưa có design-art (bản khối): bỏ qua
+SPECS = {n: ROOT / "art" / f"design-art-level{n}.md" for n in (1, 2, 3, 4, 5, 6)}  # màn chưa có design-art (bản khối): bỏ qua
 PHASER = "https://cdnjs.cloudflare.com/ajax/libs/phaser/3.80.1/phaser.min.js"
 
 INDEX = f"""<title>Meo Đâu Rồi</title>
@@ -46,7 +48,7 @@ INDEX = f"""<title>Meo Đâu Rồi</title>
 
 def keys_from_js():
     text = (GAME / "src" / "assets.js").read_text(encoding="utf8")
-    start = text.index("export const KEYS")
+    start = text.index("const BAG_UI")  # danh sách dùng chung khai báo ngay trước KEYS, tính luôn
     block = text[start:text.index("\n};", start)]
     return re.findall(r"\['([a-z0-9_]+)', '([a-z0-9]+)'\]", block)
 
@@ -81,6 +83,24 @@ def copy_png(src, dst):
     im.save(buf, "PNG", optimize=True)
     data = buf.getvalue()
     dst.write_bytes(data if len(data) < len(raw) else raw)
+    return im.size
+
+
+JPG_Q = 92  # G5-32: nền JPG, đủ cao để không thấy vệt nén ở vùng trời và tường nhạt
+
+
+def is_solid_bg(key, src):
+    """Ảnh nền đặc: key có `_bg_` và mọi điểm đều đục (không cần kênh trong suốt)."""
+    if "_bg_" not in key:
+        return False
+    im = Image.open(src)
+    return im.mode == "RGB" or (im.mode in ("RGBA", "LA") and im.getchannel("A").getextrema()[0] == 255)
+
+
+def copy_jpg(src, dst):
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    im = Image.open(src).convert("RGB")
+    im.save(dst, "JPEG", quality=JPG_Q, subsampling=0, optimize=True, progressive=True)
     return im.size
 
 
@@ -150,8 +170,9 @@ def main():
     for key, folder in keys_from_js():
         src = ART_OUT / folder / f"{key}.png"
         if src.exists():
-            copy_png(src, DIST / "assets" / folder / f"{key}.png")
-            url = f"assets/{folder}/{key}.png"
+            ext = "jpg" if is_solid_bg(key, src) else "png"
+            (copy_jpg if ext == "jpg" else copy_png)(src, DIST / "assets" / folder / f"{key}.{ext}")
+            url = f"assets/{folder}/{key}.{ext}"
             a = anchors.get(key)
             entries[key] = ({"url": url, "real": True, "ax": a["ax"], "ay": a["ay"], "res": a.get("res", 1.5)} if a
                             else {"url": url, "real": True, "auto": True})

@@ -10,7 +10,7 @@ const ROOT = new URL('../', location.href).href;          // gốc dự án (gam
 const ART_OUT = ROOT + 'art/out/';
 const PH = new URL('placeholders/', location.href).href;
 const SPECS = { 1: ROOT + 'art/design-art-level1.md', 2: ROOT + 'art/design-art-level2.md', 3: ROOT + 'art/design-art-level3.md',
-  4: ROOT + 'art/design-art-level4.md', 5: ROOT + 'art/design-art-level5.md' }; // L5: chưa có file (bản khối, QUY-TRINH bước 2)
+  4: ROOT + 'art/design-art-level4.md', 5: ROOT + 'art/design-art-level5.md', 6: ROOT + 'art/design-art-level6.md' }; // L6: chưa có file (bản khối, QUY-TRINH bước 2)
 const LEVELS = Object.keys(SPECS).map(Number);
 
 // Dự phòng nếu không đọc được design-art level 1 (giá trị ở vòng 5). Level 2 có vị trí dự phòng trong level2.js.
@@ -23,6 +23,9 @@ const DEFAULT_POS = {
 };
 
 // Key theo màn: [key, thư mục]. 'common' tải ở Boot; mỗi màn chỉ tải phần của mình khi vào màn.
+// Giao diện túi đồ + bong bóng suy nghĩ: cùng một file ảnh, màn nào dùng thì trải vào danh sách của màn.
+const BAG_UI = [['ui_bag_bar', 'common'], ['ui_bag_slot', 'common'], ['ui_thought_bubble', 'common']];
+
 export const KEYS = {
   common: [
     ['sua_held', 'cats'], ['sua_face_icon', 'cats'], ['sua_run', 'cats'],
@@ -71,12 +74,12 @@ export const KEYS = {
     ['player_point_think', 'player'], ['player_silly_laugh', 'player'],
     ['player_dangle_pompom', 'player'], ['player_curl_on_tree', 'player'], ['l3_cat_tree_player', 'level3'], // G3-30
     ['l3_sua_in_box_ears', 'level3'], ['l3_sua_in_box_peek', 'level3'],
-    ['ui_bag_bar', 'common'], ['ui_bag_slot', 'common'], ['ui_thought_bubble', 'common'],
+    ...BAG_UI,
   ],
   4: [
     ['l4_bg_living', 'level4'], ['ui_map_bedroom', 'common'], ['ui_map_living', 'common'], ['ui_map_study', 'common'], ['l4_bg_bedroom', 'level4'], ['l4_bg_study', 'level4'],
     ['l4_window', 'level4'], ['l4_curtain', 'level4'], ['l4_sofa', 'level4'], ['player_reach_sofa', 'player'], // G4-40
-    ['l4_stack_mattress', 'level4'], ['l4_stack_suitcase', 'level4'], ['l4_stack_books', 'level4'], ['l4_stack_pillow', 'level4'],
+    ['l4_stack_mattress', 'level4'], ['l4_stack_suitcase', 'level4'], ['l4_stack_pillow', 'level4'],
     ['l4_bed', 'level4'], ['l4_pillow', 'level4'], ['l4_bedside_lamp', 'level4'], ['l4_sock_stuck', 'level4'], ['l4_sock_flat', 'level4'],
     ['l4_mattress_standing', 'level4'], ['l4_mattress_fallen', 'level4'], ['l4_teddy', 'level4'],
     ['l4_bookshelf_full', 'level4'], ['l4_bookshelf_after', 'level4'], ['l4_book_single', 'level4'], ['l4_book_single_yellow', 'level4'], ['l4_book_single_mint', 'level4'], ['l4_book_stack', 'level4'],
@@ -85,24 +88,36 @@ export const KEYS = {
     ['sua_curtain_banana', 'cats'], ['sua_curtain_one_paw', 'cats'], ['sua_curtain_upside', 'cats'], ['sua_curtain_sleep', 'cats'],
     ['sua_curtain_sulk', 'cats'], ['sua_curl_spin', 'cats'], ['sua_land', 'cats'], ['sua_lick_paw', 'cats'],
     ['player_reach_up', 'player'], ['player_silly_laugh', 'player'],
-    ['ui_bag_bar', 'common'], ['ui_bag_slot', 'common'], ['ui_room_arrow', 'common'], ['ui_thought_bubble', 'common'],
+    ...BAG_UI, ['ui_room_arrow', 'common'],
     ['fx_dust_puff', 'common'], ['fx_dust_puff_b', 'common'],
   ],
   // Level 5: bản khối (chưa có ảnh), mọi key tự vẽ khối có nhãn trong level5.js; tên key theo states-01-10.md.
   5: [
     ['l5_bg_backyard', 'level5'], ['l5_bg_alley', 'level5'], ['ui_map_yard', 'common'], ['ui_map_alley', 'common'], ['l5_cafe_window', 'level5'], ['l5_cafe_window_back', 'level5'], ['l5_cafe_window_frame', 'level5'], ['l5_vanity_table', 'level5'],
     ['l5_mirror_small', 'level5'], ['l5_mirror_placed', 'level5'], ['l5_cardboard_box', 'level5'],
-    ['l5_trash_bag_idle', 'level5'], ['l5_trash_bag_after', 'level5'], ['l5_awning_down', 'level5'], ['l5_awning_rolled', 'level5'],
-    ['l5_sunbeam', 'level5'], ['l5_light_spot', 'level5'], ['l5_cart', 'level5'], ['l5_crow_idle', 'level5'], ['l5_crow_far', 'level5'],
+    ['l5_trash_bag_idle', 'level5'], ['l5_trash_bag_after', 'level5'], ['l5_awning_down', 'level5'],
+    ['l5_light_spot', 'level5'], ['l5_cart', 'level5'], ['l5_crow_idle', 'level5'], ['l5_crow_far', 'level5'],
     ['l5_drain_pipe', 'level5'], ['l5_tin_lid', 'level5'], ['l5_tin_lid_placed', 'level5'], ['l5_cd_hanging', 'level5'],
-    ['l5_cd_placed', 'level5'], ['l5_awning_cord', 'level5'],
+    ['l5_cd_placed', 'level5'],
     ['l5_doorstep', 'level5'], ['l5_cactus_pot', 'level5'], ['l5_cactus_flower', 'level5'], ['l5_clothesline', 'level5'], ['l5_shirt', 'level5'],
     ['l5_clothespin', 'level5'], ['l5_wind_chime', 'level5'], ['l5_slippers', 'level5'], ['l5_slippers_flipped', 'level5'],
     ['l5_bike', 'level5'], ['l5_bike_wheel', 'level5'], ['l5_puddle', 'level5'], ['l5_gecko', 'level5'], ['l5_milk_can', 'level5'],
     ['mun_eyes_dark', 'cats'], ['mun_peek_out', 'cats'], ['mun_paw_reach', 'cats'], ['mun_run', 'cats'], ['mun_pounce', 'cats'], ['mun_pin_light', 'cats'],
     ['mun_look_paw', 'cats'], ['mun_held', 'cats'], ['mun_face_icon', 'cats'], ['sua_press_window', 'cats'],
     ['player_cover_nose', 'player'],
-    ['ui_bag_bar', 'common'], ['ui_bag_slot', 'common'], ['ui_room_arrow', 'common'], ['ui_thought_bubble', 'common'],
+    ...BAG_UI, ['ui_room_arrow', 'common'],
+  ],
+  // L6 bản khối (G6-1): nền sân sau, chuông gió và các dáng Mun có sẵn dùng lại; còn lại là khối có nhãn (level6.js).
+  6: [
+    ['l5_bg_backyard', 'level5'], ['l5_wind_chime', 'level5'],
+    ['l6_shed', 'level6'], ['l6_shed_chimney', 'level6'], ['l6_tree', 'level6'], ['l6_bird_nest', 'level6'], ['l6_dog_house', 'level6'],
+    ['l6_veggie_bed', 'level6'], ['l6_watering_can', 'level6'], ['l6_table', 'level6'], ['l6_picnic_basket_closed', 'level6'],
+    ['l6_picnic_basket_open', 'level6'], ['l6_bone', 'level6'], ['l6_sausage', 'level6'], ['l6_barrel', 'level6'], ['l6_toolbox', 'level6'],
+    ['l6_crate', 'level6'], ['l6_stool', 'level6'], ['l6_glove_black_idle', 'level6'], ['l6_glove_black_fallen', 'level6'],
+    ['l6_dog_bark', 'level6'], ['l6_dog_run', 'level6'], ['l6_dog_run_bone', 'level6'], ['l6_dog_house_front', 'level6'], ['l6_dog_chew', 'level6'], ['l6_dog_beg', 'level6'], ['l6_dog_belly', 'level6'],
+    ['mun_roof_crouch', 'cats'], ['mun_roof_crouch_ears_up', 'cats'], ['mun_roof_edge', 'cats'], ['mun_climb', 'cats'], ['mun_step_down', 'cats'], ['mun_jump_up', 'cats'], ['mun_eat', 'cats'], ['mun_sit_look', 'cats'],
+    ['mun_run', 'cats'], ['mun_held', 'cats'], ['mun_face_icon', 'cats'],
+    ...BAG_UI,
   ],
 };
 export const ALL_KEYS = Object.values(KEYS).flat();

@@ -5,16 +5,21 @@ import { Level2 } from './level2.js';
 import { Level3 } from './level3.js';
 import { Level4 } from './level4.js';
 import { Level5 } from './level5.js';
+import { Level6 } from './level6.js';
 import { Menu, LEVELS, startLevel } from './menu.js';
 
-const W = 1024, BASE_H = 1536, MAX_H = 2304;
+const W = 1024, STD_H = 1820, MAX_H = 2304, MAX_W = 1365;
 
-// Chiều cao khung theo tỉ lệ màn hình: giữ đủ 1024 ngang, máy dài thì kéo dài nền trên/dưới (D7).
-export function gameHeight() {
+// Cỡ khung theo tỉ lệ màn hình (G-SCREEN, chủ dự án chốt): chuẩn 9:16 (1024x1820, toạ độ đồ vật không đổi).
+// Máy dài hơn 9:16: giữ ngang 1024, mở thêm trên dưới (tới 2304). Máy rộng hơn 9:16: giữ dọc 1820, mở thêm hai bên,
+// tối đa 3:4 (rộng 1365); rộng hơn nữa thì FIT để viền màu nền hai bên.
+export function gameSize() {
   // Đo khung chứa thật (#game), vì trang có thể nằm trong iframe có lề safe-area.
   const el = document.getElementById('game');
-  const vw = (el && el.clientWidth) || window.innerWidth || W, vh = (el && el.clientHeight) || window.innerHeight || BASE_H;
-  return Math.round(Math.min(MAX_H, Math.max(BASE_H, (W * vh) / vw)));
+  const vw = (el && el.clientWidth) || window.innerWidth || W, vh = (el && el.clientHeight) || window.innerHeight || STD_H;
+  const r = vw / vh;
+  if (r <= W / STD_H) return [W, Math.round(Math.min(MAX_H, W / r))];
+  return [Math.round(Math.min(MAX_W, STD_H * r)), STD_H];
 }
 
 // Boot chỉ tải phần dùng chung (giao diện, cảnh bế, Sữa chạy, nhân vật); mỗi màn tự tải ảnh riêng khi vào màn.
@@ -57,14 +62,14 @@ async function start() {
     type: Phaser.AUTO,
     parent: 'game',
     backgroundColor: '#2b2420',
-    scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH, width: W, height: gameHeight() },
+    scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH, width: gameSize()[0], height: gameSize()[1] },
     input: { activePointers: 2 },
-    scene: [Boot, Menu, Level1, Level2, Level3, Level4, Level5],
+    scene: [Boot, Menu, Level1, Level2, Level3, Level4, Level5, Level6],
     callbacks: { preBoot: (g) => { g.registry.set('assets', assets); } },
   });
   window.addEventListener('resize', () => {
-    const h = gameHeight();
-    if (h !== game.scale.height) game.scale.setGameSize(W, h);
+    const [w, h] = gameSize();
+    if (w !== game.scale.width || h !== game.scale.height) game.scale.setGameSize(w, h);
   });
   window.__meoGame = game; // để kiểm thử
 }

@@ -395,7 +395,7 @@ Icon túi đồ dùng thu nhỏ ảnh trong cảnh (`l4_mattress_fallen`, `l4_pi
 
 **Sân sau:** `l5_bg_backyard` → `l5_cafe_window` (+ Sữa ở cửa sổ) → `l5_vanity_table` + `l5_mirror_small` → `l5_cardboard_box` + `l5_tin_lid` → `l5_trash_bag_*` → giao diện.
 
-**Hẻm:** `l5_bg_alley` (có bức tường đối diện; phủ tối bằng code tới khi cuộn bạt) → chấm nắng li ti (code) → `l5_sunbeam` → đồ sáng đã đặt ở A/B/C (`l5_mirror_placed`, `l5_tin_lid_placed`, `l5_cd_placed`) → tia phản chiếu (code) → `l5_light_spot` → `l5_cart` (+ `l5_cd_hanging`, vùng gầm tối) + `mun_*` dưới gầm → `l5_drain_pipe` → `l5_awning_*` → `l5_crow_*` → giao diện.
+**Hẻm:** `l5_bg_alley` (có bức tường đối diện; phủ bóng râm của bạt bằng code, cả màn, G5-26) → tia nắng qua lỗ thủng (code, đường thẳng nhỏ) → đồ sáng đã đặt ở A/B/C (`l5_mirror_placed`, `l5_tin_lid_placed`, `l5_cd_placed`) → tia phản chiếu (code) → `l5_light_spot` → `l5_cart` (+ `l5_cd_hanging`, vùng gầm tối) + `mun_*` dưới gầm → `l5_drain_pipe` → `l5_awning_*` → `l5_crow_*` → giao diện.
 
 ### Đồ vật
 
@@ -408,10 +408,9 @@ Icon túi đồ dùng thu nhỏ ảnh trong cảnh (`l4_mattress_fallen`, `l4_pi
 | 4 | Sân sau | Cửa sổ quán | `l5_cafe_window` (mới), `sua_press_window` (mới: Sữa áp mặt vào kính) | — | Chạm | — | — | Sữa `hop` nhỏ trong cửa sổ | `sua_sfx_meow_question` |
 | 2b | Sân sau | Nắp hộp bánh thiếc | `l5_tin_lid` (mới: nắp tròn bóng dựa cạnh thùng) | dựa cạnh thùng | Chạm | — | vào túi | `fly_to_bag`, lóe sáng | `sfx_clink` |
 | 2c | Hẻm | Đĩa CD cũ | `l5_cd_hanging` (mới: treo dây trên móc tường bên trái hẻm, xa xe ba gác; G5-7) | treo | Chạm | — | vào túi | `fly_to_bag`, lóe sáng | `l5_sfx_glass_ting` |
-| 5 | Hẻm | Bạt + dây kéo | `l5_awning_down` (mới: bạt thả che, vài lỗ thủng nhỏ), `l5_awning_rolled` (mới), `l5_awning_cord` (mới: dây có vòng tròn) | down | Vuốt xuống trên dây (hoặc vuốt lên trên bạt) | — | down → rolled (giữ) | Dây `sway` liên tục khi down; kéo: dây giật xuống, bạt `swap` rolled; lớp phủ tối tan 0,5 giây; `l5_sunbeam` hiện dần; chấm nắng li ti biến mất | `l5_sfx_canvas_flap` |
-| 6 | Hẻm | Điểm nối tia A/B/C | `l5_light_spot` ở điểm kế tiếp | ẩn | Kéo-thả đồ sáng từ túi vào đốm sáng | bạt rolled; đúng điểm đang có đốm sáng | đặt đồ, đốm sáng sang điểm kế | `drop_in` ảnh đồ "đặt" (dựng nghiêng); tia phản chiếu (code) vẽ dần 0,3 giây tới điểm kế; đốm sáng `pop` ở đó, nhảy nhót ±3px | `l5_sfx_glass_ting` |
-| 6 | Hẻm | Đất hẻm | — | — | Thả đồ sáng | **bạt chưa cuộn** | — | `return_to_bag`; dây kéo `wiggle` + `sparkle` | `sfx_wrong` |
-| 6 | Hẻm | Ngoài đốm sáng | — | — | Thả đồ sáng | bạt đã cuộn | — | `return_to_bag`; đốm sáng nháy 2 lần | `sfx_wrong` |
+| 5 | Hẻm | Bạt che kín (G5-26) | `l5_awning_down` (vẽ lại: bạt to căng ngang che kín đầu hẻm, hết bề ngang màn, **một lỗ thủng nhỏ**) | — | Chạm | — | — | Bạt phồng gió nhẹ; tia nắng qua lỗ rung rinh. Bỏ `l5_awning_rolled`, `l5_sunbeam`, chấm nắng li ti | `l5_sfx_canvas_flap` |
+| 6 | Hẻm | Điểm nối tia A/B/C | `l5_light_spot` ở điểm kế tiếp | A: hiện từ đầu | Kéo-thả đồ sáng từ túi vào đốm sáng | đúng điểm đang có đốm sáng | đặt đồ, đốm sáng sang điểm kế | `drop_in` ảnh đồ "đặt" (dựng nghiêng); tia phản chiếu (code) vẽ dần 0,3 giây tới điểm kế; đốm sáng `pop` ở đó, nhảy nhót ±3px | `l5_sfx_glass_ting` |
+| 6 | Hẻm | Ngoài đốm sáng | — | — | Thả đồ sáng | — | — | `return_to_bag`; đốm sáng nháy 2 lần | `sfx_wrong` |
 | 8 | Hẻm | Gầm xe ba gác | `l5_cart` (mới) | — | Chạm | Mun dưới gầm | — | `mun_eyes_dark` lùi sâu (mục 6.1); bong bóng suy nghĩ vẽ `l5_light_spot` | `mun_sfx_hiss_tiny` |
 | 9 | Hẻm | Quạ 🎭 | `l5_crow_idle` (mới: đậu dây điện, bóng đen tròn), `l5_crow_far` (mới: đậu xa hơn trên dây) | idle | Chạm | — | idle → far (giữ) | Bay cong sang chỗ mới 0,6 giây | `l5_sfx_crow` |
 | 10 | Hẻm | Ống thoát nước 🎁 | `l5_drain_pipe` (mới) | — | Chạm | — | — | `wiggle`; `ui_dried_fish` (một lần) | `sfx_clink` |
@@ -424,7 +423,7 @@ Icon túi đồ dùng thu nhỏ ảnh trong cảnh (`l4_mattress_fallen`, `l4_pi
 
 | Điểm | Vị trí | Sau khi đặt đồ: đốm sáng tới | Mun phản ứng |
 |---|---|---|---|
-| A | Đất hẻm, dưới mép bạt, xa xe nhất (chỗ nắng rơi) | B | `mun_eyes_dark` mở to, nhìn theo đốm sáng |
+| A | Đất hẻm, xa xe nhất (chỗ tia nắng qua lỗ thủng rơi xuống) | B | `mun_eyes_dark` mở to, nhìn theo đốm sáng |
 | B | Bậu tường đối diện, giữa hẻm | C | `mun_paw_reach` vồ hụt 1 lần, rồi `mun_peek_out` (mới: ló cả mặt ở mép gầm) |
 | C | **Xe đạp cũ dựng tường** (đĩa CD gác nghiêng ở giỏ/yên xe, hắt tia xuống trước gầm xe ba gác; G5-15) | ngay trước gầm xe, tự lượn qua lại | **Mun phóng ra** (bảng mèo) |
 
@@ -442,44 +441,62 @@ Icon túi đồ dùng thu nhỏ ảnh trong cảnh (`l4_mattress_fallen`, `l4_pi
 
 ### Danh sách ảnh (tất cả mới)
 
-`l5_bg_backyard`, `l5_bg_alley`, `l5_cafe_window`, `l5_vanity_table`, `l5_mirror_small`, `l5_mirror_placed`, `l5_tin_lid`, `l5_tin_lid_placed`, `l5_cd_hanging`, `l5_cd_placed`, `l5_awning_cord`, `l5_cardboard_box`, `l5_trash_bag_idle`, `l5_trash_bag_after`, `l5_awning_down`, `l5_awning_rolled`, `l5_sunbeam`, `l5_light_spot`, `l5_cart`, `l5_crow_idle`, `l5_crow_far`, `l5_drain_pipe`, `player_cover_nose`, `sua_press_window`, `mun_eyes_dark`, `mun_paw_reach`, `mun_peek_out`, `mun_run`, `mun_pounce`, `mun_pin_light`, `mun_look_paw`.
+`l5_bg_backyard`, `l5_bg_alley`, `l5_cafe_window`, `l5_vanity_table`, `l5_mirror_small`, `l5_mirror_placed`, `l5_tin_lid`, `l5_tin_lid_placed`, `l5_cd_hanging`, `l5_cd_placed`, `l5_cardboard_box`, `l5_trash_bag_idle`, `l5_trash_bag_after`, `l5_awning_down`, `l5_light_spot`, `l5_cart`, `l5_crow_idle`, `l5_crow_far`, `l5_drain_pipe`, `player_cover_nose`, `sua_press_window`, `mun_eyes_dark`, `mun_paw_reach`, `mun_peek_out`, `mun_run`, `mun_pounce`, `mun_pin_light`, `mun_look_paw`.
 
 ---
 
-## Level 6 — Túi giấy sột soạt
+## Level 6 — Xuống đây nào, Mun! (G6-1)
 
-### Lớp hiển thị
+### Lớp hiển thị (dưới → trên)
 
-`l6_bg_front_yard` → `l6_gate_*` → `l6_wind_chime` → `l6_flower_bush` (+ `mun_eyes_dark` bên trong, cắt theo bụi) → `l6_chair` + `l6_bread_bag_*` → `l6_paper_bag_*` (trên sân) → `l6_boot_black_*`, `l6_frog` → giao diện.
+`l5_bg_backyard` (**dùng lại nền sân sau L5**) → `l6_tree` + `l6_bird_nest` → `l6_wind_chime` → `l6_shed` (nhà kho gỗ, mái tôn, ống khói) → Mun trên mái (`mun_*`, sau `l6_shed_chimney` khi lùi) → `l6_shed_chimney` → `l6_dog_house` → `l6_veggie_bed` + `l6_watering_can` → `l6_table` + `l6_picnic_basket_*` → 4 món xếp đường (`l6_barrel`, `l6_toolbox`, `l6_crate`, `l6_stool`) → `l6_glove_black_*` → `l6_dog_*` (Lu) → giao diện.
 
 ### Đồ vật
 
 | # | Đồ vật | Ảnh trạng thái | Bắt đầu | Thao tác | Điều kiện | Chuyển sang | Phản hồi | Âm thanh |
 |---|---|---|---|---|---|---|---|---|
-| 1 | Bụi hoa | `l6_flower_bush` (mới) | — | Chạm | Mun trong bụi | — | `wiggle_strong` + vài cánh hoa bay ra; `mun_eyes_dark` lùi sâu | `sfx_leaves` |
-| 2 | Túi bánh mì trên ghế | `l6_bread_bag_full` (mới), `l6_paper_bag_empty_chair` (mới: túi giấy rỗng dựng trên ghế) | full | Chạm | — | full → empty_chair | Ổ bánh mì `l6_bread` (mới) `fly_to_bag`; `swap` | `l6_sfx_paper_crinkle` |
-| 3 | Túi giấy rỗng trên ghế | `l6_paper_bag_empty_chair` | empty_chair | Vuốt xuống (chạm cũng được) | — | rơi xuống sân → `l6_paper_bag_floor` (mới: nằm nghiêng, miệng túi hướng bụi hoa) | `fly_arc` ngắn xuống sân, `puff` | `l6_sfx_paper_thud` |
-| 4 | Túi giấy trên sân | `l6_paper_bag_floor` | floor | Vuốt qua lại | — | đếm số lần vuốt | Túi `wiggle` theo hướng vuốt | `l6_sfx_paper_rustle` (to, rõ) |
-| 4 | Túi giấy trên sân | — | floor | Chạm (không vuốt) | — | — | `wiggle` nhỏ; `mun_eyes_dark` ló ra rồi thụt vào | `l6_sfx_paper_crinkle` (nhỏ) |
-| 4 | Túi giấy | `l6_paper_bag_mun` (mới: túi có 4 chân đen và đuôi thò ra), `l6_paper_bag_mun_peek` (mới: Mun thò đầu khỏi miệng túi) | floor | Vuốt qua lại lần **thứ 2** | — | → có Mun | Xem kịch bản | — |
-| 5 | Ủng đen 🎭 | `l6_boot_black_idle` (mới: dựng như mèo ngồi), `l6_boot_black_fallen` (mới: đổ nghiêng), `l6_frog` (mới) | idle | Chạm | — | idle → fallen (giữ) | `swap`; ếch nhảy ra `hop` 3 lần rồi khuất | `l6_sfx_boot_thud`, `l6_sfx_frog` |
-| 6 | Chuông gió | `l6_wind_chime` (mới) | — | Chạm | — | — | `swing`; Mun trong bụi vẫy tai (đôi mắt chớp) | `l6_sfx_chime` |
-| 7 | Cổng | `l6_gate_closed`, `l6_gate_open` (mới) | closed | Chạm | — | open 1 giây rồi tự về closed | `swap` 2 lần | `l6_sfx_gate_creak` |
-| 8 | Sân (đặt bánh mì) | `l6_bread` thả xuống sân, `l6_sparrow` (mới) | — | Đặt bánh mì | — | — | Chim sẻ sà xuống mổ 2 giây rồi bay đi (trang trí, không ảnh hưởng) | `l6_sfx_sparrow` |
+| 1 | Mun trên mái | `mun_roof_crouch` (mới: nằm rạp tai cụp), `mun_roof_edge` (mới: ló ra mép mái nhìn xuống, run) | crouch | Chạm | Chưa lên bàn | — | Mun trượt ra sau ống khói (khuất), 2 giây sau ló lại | `mun_sfx_meow` nhỏ, run |
+| 2 | Lu | `l6_dog_bark` (mới: ngồi ngẩng sủa, đuôi vẫy) | bark | Chạm | Lu chưa có xương | — | `hop` nhỏ, sủa to hơn; Mun `squash` nằm rạp. Bong bóng nhân vật: hình khúc xương (`l6_bone`) | `l6_sfx_dog_bark` |
+| 3 | Bụi rau | `l6_veggie_bed` (mới) | — | Chạm | Chưa lấy xương | — | `wiggle`, lá rẽ ra, `l6_bone` (mới) `fly_to_bag` | `sfx_leaves` |
+| 4 | Lu nhận xương | `l6_dog_run_bone` (mới: ngậm xương chạy), `l6_dog_chew` (mới: Lu chui hẳn vào chuồng, chỉ thò đầu ra cửa chuồng gặm xương, mắt híp vui vẻ) | bark | Thả xương vào Lu | — | bark → chew (giữ) | Lu ngậm xương chạy về chuồng (0,6 giây), chui hẳn vào trong, chỉ thò đầu ra cửa gặm xương vui vẻ, đuôi (nếu thấy) vẫy; Mun ngóc đầu (`mun_roof_edge` 1 giây rồi lại crouch nhưng tai dựng) | `l6_sfx_dog_happy`, `l6_sfx_dog_chew` lặp nhỏ |
+| 5 | Giỏ picnic ở **mép trái mặt bàn** (G6-5) | `l6_picnic_basket_closed`, `l6_picnic_basket_open` (mới) | closed | Chạm | — | closed → open (giữ) | `l6_sausage` (mới) `fly_to_bag` | `l6_sfx_basket` |
+| 6a | Thùng phuy nước | `l6_barrel` (mới: phuy có nước), đặt ở A | chỗ cũ | **Kéo trong cảnh** tới chỗ A | — | đứng ở A | Lăn tới A, `squash` khi dựng; Mun ra mép nhìn, thấy nước, lùi | `l6_sfx_barrel_roll` |
+| 6b | Hộp dụng cụ nhỏ | `l6_toolbox` (mới) | chỗ cũ | Kéo trong cảnh lên miệng phuy ở A | Phuy đã ở A | đậy trên phuy | `drop_in` khớp miệng phuy | `l6_sfx_wood_clack` |
+| 6c | Thùng gỗ | `l6_crate` (mới) | chỗ cũ | Kéo trong cảnh tới chỗ B | — | ở B | `drop_in` | `l6_sfx_wood_clack` |
+| 6d | Ghế đẩu | `l6_stool` (mới) | chỗ cũ | Kéo trong cảnh tới chỗ C | — | ở C | `drop_in` | `l6_sfx_stool` |
+| 6x | Món xếp đường thả sai chỗ | — | — | Thả ngoài viền chỗ đặt, hoặc chỗ không hợp món | — | — | Trượt về chỗ cũ, `wiggle` 1 nhịp | `sfx_wrong` |
+| 7 | Bàn (mồi, chỗ trống bên phải giỏ) | `l6_sausage` đặt nằm trên bàn | — | Thả xúc xích lên bàn | **Lu đang gặm** | — | Xem Kịch bản lộ diện (nếu đủ 4 bậc); thiếu bậc: Mun ra mép kêu, xúc xích ở lại | `l6_sfx_sausage_drop` |
+| 7x | Bàn khi Lu còn rảnh | `l6_dog_beg` (mới: chồm hít) | — | Thả xúc xích lên bàn | Lu chưa có xương | — | Lu chồm tới hít, sủa đòi; xúc xích `return_to_bag`; bong bóng khúc xương | `l6_sfx_dog_bark` |
+| 8 | Găng tay đen 🎭 | `l6_glove_black_idle` (mới: vắt trên hàng rào, dáng như mèo ngồi), `l6_glove_black_fallen` (mới) | idle | Chạm | — | idle → fallen (giữ) | Găng rơi xuống đất dưới hàng rào, nằm yên tại chỗ (không di chuyển). Nếu Lu rảnh: Lu chạy tới chỗ găng (0,5 giây), ngậm lắc lắc, vờn 1,5 giây, bỏ găng tại chỗ rồi chạy về; Lu đang gặm thì chỉ ngẩng đầu nhìn | `l6_sfx_glove_flop` |
+| 9 | Chuồng Lu | `l6_dog_house` (mới), `l6_dog_belly` (mới: Lu lăn khoe bụng) | — | Chạm | Lu đang gặm | — | Lu lăn khoe bụng 1 giây rồi gặm tiếp | `l6_sfx_dog_whine` |
+| 10 | Ổ chim 🎁 | `l6_bird_nest` (mới) | — | Chạm | Chưa lấy | — | `wiggle`, 5 Cá khô rơi | `l6_sfx_bird` |
+| 11 | Bình tưới 🎁 | `l6_watering_can` (mới) | — | Chạm | Chưa lấy | — | Nghiêng, nước chảy, 5 Cá khô | `l6_sfx_water` |
+| 12 | Chuông gió | `l6_wind_chime` (mới, hoặc dùng lại `l5_wind_chime`) | — | Chạm | — | — | `swing`; Mun vểnh tai | `l5_sfx_chime` |
+
+**Chỗ đặt xếp đường:** A (sát tường kho, cao nhất: phuy + hộp dụng cụ), B (thùng gỗ), C (ghế đẩu, thấp nhất, **sát cạnh bàn**; bàn đặt gần chân đường xuống). Khi đang kéo một món, chỗ hợp với món đó hiện viền mờ; thả trong khoảng ~110px quanh chỗ đặt là khớp.
 
 ### Trạng thái mèo
 
 | Giai đoạn | Tư thế | Chuyển động | Chạm Mun |
 |---|---|---|---|
-| Mở màn | `mun_run` | Chạy vụt vào bụi hoa | — |
-| Trong bụi (Lẩn tránh) | `mun_eyes_dark` | Nháy mắt; khi chuông gió kêu thì liếc | Lùi sâu |
-| Phóng vào túi | `mun_run` | Từ bụi hoa lao thẳng vào miệng túi 0,3 giây, túi nảy | — |
-| Túi chạy (Lộ diện) | `l6_paper_bag_mun` | Chạy quanh sân 2 vòng theo đường cong (2 giây), mỗi bước túi `squash` nhẹ, va vào chân ghế thì `hop` | **Thắng** |
-| Thò đầu (Lộ diện) | `l6_paper_bag_mun_peek` | `breathe`, `glow_outline` | **Thắng** |
+| Mở màn (G6-6) | `mun_run`, `mun_jump_up` | Lu đuổi sau, Mun chạy **một vòng quanh sân** (khoảng 2,5 giây); hết vòng Mun nhảy liên tiếp lên **bàn → thùng gỗ (ở chỗ ban đầu) → cột điện (bám leo) → mái kho**, mỗi nhịp 0,35 giây. Lu chạy tới dưới mái, ngồi sủa | — |
+| Lu còn sủa (Lẩn tránh) | `mun_roof_crouch` | Nằm rạp, tai cụp, run nhẹ | Lùi sau ống khói |
+| Lu đã gặm (Lẩn tránh) | `mun_roof_crouch` tai dựng | Mỗi lần thêm bậc: `mun_roof_edge` 1,2 giây rồi lùi | Lùi sau ống khói |
+| Xuống bậc | `mun_step_down` (mới: rón rén bước xuống), `mun_jump_up` (mới: nhún nhảy lên) | Từ mái → hộp dụng cụ (A) → thùng gỗ (B) → ghế (C) → **nhảy lên bàn**, mỗi bậc 0,5 giây; ở bậc A ngoái nhìn người chơi | — (đang di chuyển, không nhận chạm) |
+| Ăn trên bàn (Lộ diện) | `mun_eat` (mới: cúi ăn xúc xích trên bàn) → `mun_sit_look` | Ăn 1,5 giây, liếm mép, ngẩng nhìn | **Thắng** |
 
-### Danh sách ảnh (tất cả mới)
+### Kịch bản lộ diện (xúc xích trên bàn, đủ 4 bậc, Lu đang gặm)
 
-`l6_bg_front_yard`, `l6_flower_bush`, `l6_chair`, `l6_bread_bag_full`, `l6_bread`, `l6_paper_bag_empty_chair`, `l6_paper_bag_floor`, `l6_paper_bag_mun`, `l6_paper_bag_mun_peek`, `l6_boot_black_idle`, `l6_boot_black_fallen`, `l6_frog`, `l6_wind_chime`, `l6_gate_closed`, `l6_gate_open`, `l6_sparrow`.
+1. Mũi Mun khịt khịt (0,5 giây), Mun bò ra mép mái.
+2. Bước xuống hộp dụng cụ, **ngoái lại nhìn người chơi** 0,5 giây; xuống thùng gỗ; xuống ghế; nhún người nhảy phốc lên bàn.
+3. Ngấu nghiến xúc xích, liếm mép, ngẩng nhìn người chơi. `glow_outline`, Mun Lộ diện.
+4. Lu thò đầu khỏi chuồng: Mun xù lông 0,5 giây rồi nép sát về phía người chơi (trên bàn, cạnh giỏ). Vẫn Lộ diện.
+5. Chạm Mun → cảnh bế chung.
+
+### Danh sách ảnh
+
+- **Dùng lại:** `l5_bg_backyard`, `l5_wind_chime` (nếu hợp), các tư thế Mun đã có (`mun_run`, `mun_sit_look`, `mun_held`, `mun_face_icon`).
+- **Mới:** `l6_shed`, `l6_shed_chimney`, `l6_tree`, `l6_bird_nest`, `l6_dog_house`, `l6_veggie_bed`, `l6_watering_can`, `l6_table`, `l6_picnic_basket_closed`, `l6_picnic_basket_open`, `l6_bone`, `l6_sausage`, `l6_barrel`, `l6_toolbox`, `l6_crate`, `l6_stool`, `l6_glove_black_idle`, `l6_glove_black_fallen`, `l6_dog_bark`, `l6_dog_run_bone`, `l6_dog_chew`, `l6_dog_beg`, `l6_dog_belly`, `mun_roof_crouch`, `mun_roof_edge`, `mun_step_down`, `mun_eat`.
 
 ---
 

@@ -1,13 +1,13 @@
 // Bộ chơi thử tự động trong trình duyệt (dùng khi khung trình duyệt bị ẩn, requestAnimationFrame không chạy).
 // Nạp trong console của trang game: await import('/game/tools/play_harness.js')
 // - Dừng vòng lặp thật, tự đẩy khung hình: adv(ms). Tween đi theo thời gian giả (không theo Date.now).
-// - go('Level3'): vào thẳng màn. tap(x, y), drag(x0, y0, x1, y1): toạ độ thế giới 1024x1536.
+// - go('Level3'): vào thẳng màn. tap(x, y), drag(x0, y0, x1, y1): toạ độ thế giới (đổi sang màn theo camera).
 // - compare('start' | 'reveal'): trái = game chồng demo 50%, phải = demo chồng game 55% (đè lên trang để chụp). hideCmp().
 // - tb(sprite): khung bao phần vẽ thật của sprite (toạ độ thế giới).
 // - Màn nhiều phòng (level 4): compare/match so với phòng camera đang đứng (toạ độ x trừ camera.scrollX).
 // - aspect('9:16') (G5-21, QUY-TRINH bước 4): khung game 1024x1820 như máy 9:16; shot() khi đó ra 540x960.
 //   compare/sideBySide vẽ theo tỉ lệ khung đang dùng; tranh demo khác tỉ lệ (demo 2:3 cũ) đặt giữa theo chiều dọc, không kéo giãn.
-//   aspect('2:3') về khung 1024x1536 cũ.
+//   aspect('2:3') về khung 1024x1536 cũ; aspect('3:4') khung rộng 1365x1820, aspect('9:19.5') khung dài 1024x2219 (G-SCREEN).
 const g = window.__meoGame;
 g.loop.sleep();
 Phaser.Tweens.TweenManager.prototype.getDelta = function () { return 16.67; };
@@ -26,9 +26,10 @@ const go = async (k) => {
   const t0 = performance.now(); // ảnh màn nạp thật (bất đồng bộ): chờ tối đa 30 giây
   while (performance.now() - t0 < 30000) { adv(17); await tick(); if (target.sys.settings.status === 5 && target.player) break; }
 };
+// tap / drag nhận toạ độ thế giới (cả màn nhiều phòng, G-SCREEN): đổi sang điểm trên màn theo camera hiện tại.
 const ptr = (type, wx, wy) => {
-  const cv = g.canvas, r = cv.getBoundingClientRect(), Y0 = scene().Y0 || 0;
-  const cx = r.left + (wx * r.width) / g.scale.width, cy = r.top + ((wy + Y0) * r.height) / g.scale.height;
+  const cv = g.canvas, r = cv.getBoundingClientRect(), cam = scene().cameras.main;
+  const cx = r.left + ((wx - cam.scrollX) * r.width) / g.scale.width, cy = r.top + ((wy - cam.scrollY) * r.height) / g.scale.height;
   cv.dispatchEvent(new MouseEvent(type, { clientX: cx, clientY: cy, bubbles: true, button: 0, buttons: type === 'mouseup' ? 0 : 1 }));
 };
 const tap = (x, y) => { ptr('mousedown', x, y); adv(50); ptr('mouseup', x, y); adv(50); };
@@ -37,8 +38,9 @@ const drag = (x0, y0, x1, y1) => {
   for (let k = 1; k <= 10; k++) { ptr('mousemove', x0 + ((x1 - x0) * k) / 10, y0 + ((y1 - y0) * k) / 10); adv(20); }
   ptr('mouseup', x1, y1); adv(50);
 };
-const ASPECT = { '9:16': Math.round((1024 * 16) / 9), '2:3': 1536 };
-const aspect = (r = '9:16') => { g.scale.setGameSize(1024, ASPECT[r] || r); for (let i = 0; i < 3; i++) adv(17); return g.scale.height; };
+// G-SCREEN: khung chuẩn 9:16 (1024x1820); dài hơn mở dọc (9:19,5 → 1024x2219); rộng hơn mở ngang tới 3:4 (1365x1820).
+const ASPECT = { '9:16': [1024, 1820], '2:3': [1024, 1536], '9:19.5': [1024, 2219], '3:4': [1365, 1820] };
+const aspect = (r = '9:16') => { const [w, h] = ASPECT[r] || [1024, r]; g.scale.setGameSize(w, h); for (let i = 0; i < 3; i++) adv(17); return [g.scale.width, g.scale.height]; };
 // Khung so sánh: mỗi bên rộng 512, cao theo tỉ lệ khung game. Ảnh demo vẽ đúng tỉ lệ của nó, đặt giữa theo chiều dọc
 // (thế giới 1536 nằm giữa khung cao hơn, Y0 = (H − 1536) / 2, nên demo 2:3 vẫn khớp toạ độ).
 const panelH = () => Math.round((512 * g.scale.height) / 1024);
@@ -177,7 +179,8 @@ const shot = async (path, which) => {
   if (which) { await sideBySide(which); c = document.getElementById('cmp'); hideCmp(); }
   else {
     const img = await new Promise((res) => { g.renderer.snapshot((im) => (im.complete ? res(im) : (im.onload = () => res(im)))); adv(17); });
-    const w = g.scale.height > 1536 ? 540 : 512, h = Math.round((w * g.scale.height) / 1024);
+    // Cao 960 (khung 2:3 cũ: 768); rộng theo tỉ lệ khung đang dùng (9:16 → 540, 3:4 → 720).
+    const h = g.scale.height > 1536 ? 960 : 768, w = Math.round((h * g.scale.width) / g.scale.height);
     c = document.createElement('canvas'); c.width = w; c.height = h; c.getContext('2d').drawImage(img, 0, 0, w, h);
   }
   const r = await fetch('/save?' + path, { method: 'POST', body: c.toDataURL('image/jpeg', 0.85) });

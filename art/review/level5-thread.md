@@ -533,3 +533,285 @@ Nguyên văn: "Nếu là demo này tôi muốn ánh sáng chạy quanh phía dư
 - Cảnh bế Mun giống hệt Sữa: cùng tư thế tay, cùng khoảng cách. Hai tay ôm sát hai bên nách, không còn hở, Mun treo dưới tay (`l5_dev_check/v17_held_mun_vs_sua_l1.jpg`: Mun L5 | Sữa L1, cùng thời điểm 1 giây sau khi chạm).
 - Đã build lại web.
 - **Đã kiểm trong game** (`l5_dev_check/v17_held_mun_vs_sua_l1.jpg`, D5-20): hai tay ôm sát nách Mun như Sữa L1, không còn hở. Xong A5-15.
+
+**G5-25 (GD, chủ dự án duyệt 2026-10-30). Home ô số, chỉnh L5, lý do hẻm tối, tia đầu mảnh.** Giao Dev. Không cần ảnh mới.
+- **Home:** chỉ còn lưới ô vuông nhỏ đánh số 1, 2, 3… (bỏ thumbnail, bỏ mặt Sữa đầu trang). Giữ khoá màn: đã qua ô xanh, đang mở nhún, chưa mở xám và lắc khi chạm.
+- **Sân sau:**
+  - Nhân vật lúc mở màn (`player_call`) xuống 40px: (720, 1290).
+  - Nắp hộp bánh (`l5_tin_lid`) sang phải 40px: (769, 1277).
+  - Chạm áo phơi: bỏ hai tay nhân vật (`player_hands_lift`) trồi lên; kẹp tự kẹp lại sau khi áo bay xong.
+  - Bóng Mun chui ra từ thùng giấy (`mun_run`) to ×1,5.
+  - *GD lỡ tự sửa 4 mục trên và home trong `game/src/menu.js`, `game/src/level5.js` (chưa commit, đã chơi thử). Dev xem lại, giữ hoặc viết lại theo cách của Dev, rồi nhận là việc của Dev.*
+- **Hẻm tối: giữ nối tia 3 món như cũ, chỉ làm cho bóng tối có lý do.** Lý do: tấm bạt che nắng trên đầu, hẻm nằm trong **bóng râm của bạt**, không phải trời tối. Hiện lớp tối xanh đen phủ cả hẻm, cả trời, cả bạt, trông như ban đêm, nên chưa hợp lý.
+  - Trời, dây điện, quạ và mặt bạt **không bị tối**: vẫn sáng nắng như sân sau.
+  - Bóng chỉ phủ **từ mép dưới bạt trở xuống** (tường dưới bạt và mặt đất), mép trên bóng bám theo mép dưới bạt, mép bóng mềm. Hai bên ngoài bạt (đầu hẻm trái, ống nước phải) nhạt hơn hoặc sáng.
+  - Màu bóng nâu xám ấm, nhạt vừa (không xanh đen kiểu đêm); vẫn đủ tối để mắt vàng Mun dưới gầm và chấm nắng lọt qua lỗ bạt nổi rõ.
+  - Cuộn bạt: bóng **rút lên theo bạt** (mép bóng chạy lên cùng lúc bạt cuộn), không chỉ mờ dần.
+  - Giữ bong bóng suy nghĩ mặt trời bị che khi vào hẻm lần đầu.
+- **Tia nắng đầu tiên (bạt → A):** bỏ dải nắng rộng `l5_sunbeam`, thay bằng **một đường thẳng nhỏ** cùng kiểu, cùng độ dày với các tia phản chiếu A→B, B→C. Tia đi từ mép bạt (chỗ bạt vừa cuộn) xuống đốm sáng ở A. Đốm sáng ở A giữ nguyên.
+- Dev báo lại bằng ảnh trong game: hẻm lúc còn bạt, lúc vừa cuộn bạt (tia đầu), lúc nối đủ 3 tia.
+
+**G5-26 (GD, chủ dự án 2026-10-30). Bạt to che kín đầu hẻm, tia nắng qua một lỗ thủng có ngay từ đầu, bỏ kéo bạt.** Thay phần "Hẻm tối" và "Tia nắng đầu" của G5-25. Đã sửa `levels/levels-01-10.md`, `levels/states-01-10.md` (Level 5).
+- **Bạt (`l5_awning_down`, Art vẽ lại):** một tấm bạt to căng ngang trên đầu hẻm, **che kín hết bề ngang màn hình** (cả hai mép trái phải, cả khung 2:3 rộng hơn), cùng màu sọc đỏ kem như bạt cũ. Có **đúng một lỗ thủng nhỏ** ở phía trên điểm A (bên trái hẻm, gần x 220 trong phòng hẻm). Bỏ các lỗ thủng li ti cũ. Phải tách từ demo hẻm: Art tính cách vẽ (sửa demo hay vẽ mới để chủ dự án duyệt trước).
+- **Bỏ hẳn:** dây kéo (`l5_awning_cord`), bạt cuộn (`l5_awning_rolled`), dải nắng `l5_sunbeam`, chấm nắng li ti, bong bóng mặt trời bị che, luật "thả đồ khi chưa kéo bạt". Bước bắt buộc còn 7.
+- **Bóng râm:** cả hẻm dưới bạt trong bóng râm từ đầu đến hết màn, màu nâu xám ấm (không xanh đen kiểu đêm), đủ tối để mắt vàng Mun và các tia nổi rõ. Không còn "hẻm sáng lên".
+- **Tia nắng đầu:** có ngay khi vào hẻm. **Một đường thẳng nhỏ**, cùng kiểu, cùng độ dày tia A→B, B→C, từ lỗ thủng trên bạt xuống đốm sáng ở A. Đốm sáng ở A hiện từ đầu.
+- **Chạm bạt:** ✨ bạt phồng gió nhẹ, tia qua lỗ rung rinh, tiếng "phành phạch".
+- **Quạ:** đậu trên mép bạt (hoặc dây điện nếu còn thấy), Art đặt theo bố cục mới.
+- Dev chờ ảnh bạt mới của Art; trong lúc chờ làm bằng khối/ảnh cũ kéo giãn. Báo lại bằng ảnh trong game: lúc vừa vào hẻm, lúc nối đủ 3 tia.
+
+**A5-16 (Art, trả G5-26). Demo hẻm bạt to, chờ chủ dự án duyệt trước khi tách.**
+- Cách làm: Codex **sửa demo hẻm đã duyệt** (`l5_demo_alley_ext.png`, toạ độ trùng phòng 1024x1536), brief `art/review/l5_demo_alley_g26_brief.md`. Ra `art/out/demo/l5_demo_alley_g26.png`. Phần dưới y 410 giữ nguyên demo cũ.
+- Bạt sọc hồng đào–kem như cũ, tràn hết bề ngang (không lộ đầu bạt), mép trên dây căng có mối buộc ở y ≈ 225, mép dưới lượn sóng y ≈ 400–415 (cửa sổ, thạch sùng, móc CD vẫn thấy). Đúng một lỗ thủng tâm ≈ (206, 352), ngay trên đĩa A. Ống thoát nước nằm sau bạt.
+- Đã bỏ: bạt cuộn, dây kéo, dải nắng. Quạ đậu trên dây căng mép trên bạt, x ≈ 320, chân y ≈ 228.
+- Ảnh duyệt: `art/review/l5_art_check/l5_g26_awning_preview.png` (trái: demo cũ; giữa: demo G5-26; phải: cùng demo, phủ bóng râm nâu xám và tia nắng **giả lập** để hình dung, trong game do code vẽ).
+- Màu: trung bình 0,203 (thấp hơn khoảng 0,22–0,25 một chút, tức nhạt hơn, chấp nhận theo O6 "nghi thì nhạt"), p90 0,357.
+- Đã cập nhật `design-art-level5.md` (bỏ `l5_awning_rolled`, `l5_awning_cord`, `l5_sunbeam`, `l5_icon_sun_covered`; số bạt/quạ tạm).
+- Sau khi duyệt: Codex tách `l5_awning_down` từ demo này (vẽ dư hai mép), đo lại vị trí bạt, lỗ, quạ ghi vào bảng, rồi báo Dev nạp.
+
+**D5-23. Dev: G5-25 (phần sân sau, home) và G5-26 (hẻm).** Chưa commit.
+- **Sửa của GD ở `menu.js`, `level5.js`:** Dev đã xem, giữ nguyên, nhận là việc của Dev (home ô số 4 cột giữ khoá màn; `player_call` (720, 1290); `l5_tin_lid` (769, 1277); chạm áo phơi không còn `player_hands_lift`, kẹp tự kẹp lại sau 1,1 giây; bóng `mun_run` từ thùng ×1,5).
+- **Hẻm (G5-26):** bỏ hẳn dây kéo, bạt cuộn, `l5_sunbeam`, chấm nắng li ti, bong bóng mặt trời bị che, luật "thả đồ khi chưa kéo bạt"; bỏ 3 key đó khỏi danh sách nạp ảnh. Gợi ý chỉ còn: đồ đúng kế tiếp → thả vào đốm sáng.
+- **Bóng râm:** từ dưới mép bạt tới đáy màn, nâu xám ấm `#4a3a2e` phủ 50% trên nền (mép trên mờ dần 70px); đồ trong hẻm (xe ba gác, xe đạp, ống nước, CD, vũng nước, thạch sùng, ống bơ) nhuộm tint cùng độ tối. Không nhuộm: bạt, quạ, trời, tia, đốm sáng, đồ đã đặt, Mun. Hằng số `SHADE` đầu `level5.js` để chỉnh độ tối.
+- **Tia nắng đầu:** có ngay khi vào hẻm, cùng kiểu và độ dày tia A→B, B→C, từ lỗ thủng (220, 300) xuống A; đốm A hiện từ đầu (không kêu "sparkle" lúc dựng màn).
+- **Chạm bạt:** bạt phồng xuống nhẹ 2 nhịp (0,6 giây), tia qua lỗ lắc và nhấp nháy, `l5_sfx_canvas_flap`.
+- **Bạt tạm:** ảnh `l5_awning_down` cũ kéo giãn ngang ra 1064 (thừa 20px mỗi bên), lỗ thủng vẽ bằng code (`HOLE_CODE`). Art giao bạt mới thì Dev đặt `AWNING_W` theo bạt mới, tắt `HOLE_CODE`, chỉnh `HOLE` theo lỗ trong ảnh.
+- Ảnh trong game (khung 9:16): `l5_dev_check/v18_01_alley_enter.jpg` (vừa vào hẻm), `v18_02_awning_flap.jpg` (đang chạm bạt), `v18_03_three_rays.jpg` (nối đủ 3 tia, Mun phóng ra). `v18_00_alley_before.jpg`: hẻm trước khi sửa.
+- Đã build lại web.
+
+**A5-17 (Art). Đã tách `l5_awning_down` theo demo G26 chủ dự án duyệt.**
+- Codex tách (brief `art/review/l5_tach_awning_g26_brief.md`) ra `art/out/_sheets/l5src_l5_awning_down_g26.png`, cắt bằng `sheet_cut.py` thành **`art/out/level5/l5_awning_down.png`** (1576x326, ghi đè bản cũ; neo đỉnh ghi trong `anchors.json`).
+- Ảnh vẽ tràn hai mép. Dev đặt **phần vẽ rộng 1040, neo đỉnh (512, 218)**, dư 8px mỗi mép nên khung nào cũng không lộ đầu bạt. Mép dưới lượn sóng tới y ≈ 424.
+- **Lỗ thủng:** tâm (208, 360), rộng ≈ 33, **trong suốt**. Qua lỗ sẽ thấy tường nền, nên Dev đặt gốc tia nắng đầu ở đây và có thể lót một chấm bơ/kem nhạt sau lỗ (lớp 24.5) cho lỗ đọc là "nắng lọt qua".
+- **Quạ:** giữ ảnh cũ, đậu trên dây mép trên bạt: `l5_crow_idle` đáy (320, 231), `l5_crow_far` đáy (760, 233).
+- Ảnh so: `art/review/l5_art_check/l5_g26_awning_cut_check.png` (trái demo, phải bạt cắt đặt lên nền hẻm thật).
+- Đã ghi vào `design-art-level5.md` mục 1 và 5.1.
+
+**D5-24. Dev: ghép bạt G26 (A5-17).** Chưa commit.
+- `l5_awning_down` mới: phần vẽ rộng 1040, neo đỉnh (512, 218); trong game đo được x −8…1032, y 218–424, đúng A5-17. Bỏ kéo giãn tạm, bỏ lỗ vẽ bằng code.
+- Lỗ thủng (208, 360): lót chấm kem nhạt `#fff3c4` sau lỗ (lớp 24.5); tia nắng đầu đi từ tâm lỗ xuống A.
+- Quạ: `l5_crow_idle` đáy (320, 231), `l5_crow_far` đáy (760, 233), đậu trên dây mép trên bạt.
+- Ảnh trong game cạnh demo: `l5_dev_check/v19_01_alley_enter_vs_demo.jpg` (trái game lúc vừa vào hẻm, phải demo G26); `v19_01_alley_enter.jpg`; `v19_03_three_rays.jpg` (nối đủ 3 tia).
+- **Lệch còn lại:** ống nước `l5_drain_pipe` trong game ló lên trên bạt (đỉnh ống ≈ y 160, trên nền trời); demo G26 ống bắt đầu ngay dưới mép bạt. Chờ GD/Art chốt: cắt ngắn ảnh ống, hoặc Dev đặt ống dưới lớp bạt và hạ đỉnh.
+- Đã build lại web.
+
+**G5-27 (GD, 2026-10-30). Ống nước hẻm: cắt bằng code, không vẽ lại.** Ghi giúp GD.
+- Ống nước `l5_drain_pipe` ló lên trên bạt (D5-24). Dev cắt phần trên ảnh ống (setCrop) cho đỉnh ống khuất sau bạt (bạt lớp 25 > ống 24), giống demo G26: ống bắt đầu ngay dưới mép bạt, trên bạt chỉ có trời.
+- Giữ nguyên chân ống, vị trí và vùng chạm 🎁; vùng chạm chỉ phần ống thấy được.
+
+**D5-25. Dev: G5-27.** Chưa commit.
+- Ống cắt từ y 300 lên (`PIPE_CUT_Y`), mép cắt nằm sau bạt (bạt tới y 424). Chân ống, vị trí không đổi.
+- Vùng chạm ống: từ mép dưới bạt (y ≈ 424) tới chân ống (y ≈ 1098). Đã thử: chạm thân ống ra 5 cá khô; chạm vào bạt chỗ trên ống không trúng ống.
+- Ảnh: `l5_dev_check/v20_01_alley_enter_vs_demo.jpg` (trái game lúc vừa vào hẻm, phải demo G26), `v20_01_alley_enter.jpg`.
+- Đã build lại web.
+
+**G5-28 (GD, chủ dự án 2026-10-30). Chỉnh sau khi chơi thử.** Giao Dev.
+- **Mun ở cảnh cuối** (lộ diện: chạy đuổi đốm sáng, vồ, đè đốm sáng, nhìn chân) to hơn một chút, khoảng ×1,15. Cảnh bế giữ cỡ như Sữa (A5-15).
+- **Tia từ đĩa CD (C):** vẽ **trên** xe ba gác, không còn đi sau thùng xe. Thay G5-17.
+- **Bong bóng đầu tiên lúc mở màn** (bong bóng nhiệm vụ mặt mèo ?): cao hơn và nhỏ lại, đặt ở **phía trên bên phải đầu nhân vật**, rồi vẫn bay về góc như cũ.
+- **Nhân vật lúc mở màn** thấp xuống thêm, cho chân **không đè lên thùng giấy**: chân đứng hẳn trên sàn trước thùng, không chồng lên phần vẽ của thùng. Dev đo trong game, lấy chỗ thấp nhất mà không vướng túi đồ.
+
+**D5-26. Dev: G5-28.** Chưa commit.
+- **Mun cảnh cuối ×1,15:** `mun_run` rộng 276, `mun_pounce` 253, `mun_pin_light` 184, `mun_look_paw` 223. Cảnh bế (`mun_held`) giữ cỡ. Bóng chui ra từ thùng ở sân sau giữ đúng cỡ đã duyệt (×1,5 cỡ cũ).
+- **Tia đĩa CD:** mọi tia vẽ trên xe ba gác (lớp 21 > xe 20), bỏ lớp tia sau thùng xe (thay G5-17).
+- **Bong bóng mở màn (chỉ L5):** bật ra ở (850, 640) phía trên bên phải đầu nhân vật, nảy 0 → 0,9 → 0,7 (cũ 1,3 → 1), rồi về góc như cũ. Base thêm tuỳ chọn `introBubbleAt`; L1–L4 không đổi.
+- **Nhân vật mở màn:** `player_call` (720, 1385), cũ (720, 1290). Đỉnh chân ≈ y 1253, thấp hơn đáy thùng giấy (1244); đáy chân 1372–1379, vẫn trên dải banner ở khung 2:3 (1386). Lúc mở màn túi đồ chưa hiện.
+- Ảnh: `l5_dev_check/v21_01_intro.jpg` (mở màn, 9:16), `v21_01_intro_2x3.jpg` (mở màn, 2:3), `v21_00_intro_before.jpg` (trước khi sửa), `v21_02_chase_cd_ray.jpg` (Mun đuổi đốm sáng, tia CD trên xe), `v21_04_reveal_end.jpg` (Mun nhìn chân).
+- Đã build lại web.
+
+**G5-29 (GD, chủ dự án 2026-10-30).** Giao Dev.
+- **Mun dưới gầm xe khớp bóng gầm xe ba gác:** đôi mắt (`mun_eyes_dark`, cả lúc mở to), mặt ló (`mun_peek_out`) và bàn chân vồ (`mun_paw_reach`) đang lệch so với mảng bóng tối dưới thùng xe. Dời cả ba vào **giữa mảng bóng gầm xe** (theo phần tối vẽ trong ảnh `l5_cart`): mắt nằm trong bóng, mặt ló và chân thò ra từ mép bóng, không lòi ra ngoài bóng hay chồng lên bánh xe. Điểm F (trước gầm) và đốm sáng dời theo nếu cần.
+- **Thùng giấy lúc đầu thỉnh thoảng nhún, rung** (có mèo bên trong): trước khi chạm, cứ 3–5 giây thùng nhún nhẹ một nhịp rồi rung nhẹ, kèm tiếng sột soạt nhỏ. Chạm thùng rồi thì thôi. Không lấn động tác gợi ý 💡.
+
+**G5-30 (GD, chủ dự án 2026-10-30). Vẽ lại Mun dễ thương hơn.** Giao Art.
+- Lời chủ dự án: "vẽ lại mèo đen dễ thương hơn".
+- Làm ảnh tham chiếu mới `mun_ref` trước, gửi chủ dự án duyệt. Hướng: đầu to tròn hơn so với thân, mắt vàng to tròn long lanh, má phồng, má hồng nhẹ, mũi miệng nhỏ, lông đen mềm xù nhẹ (đen ấm, không đen kịt), dáng tròn mũm mĩm như Sữa. Giữ đúng phong cách bút chì pastel (style.md), cùng tỉ lệ với Sữa.
+- Duyệt xong mới vẽ lại mọi tư thế `mun_*` (mắt dưới gầm, ló mặt, thò chân, chạy, vồ, đè đốm sáng, nhìn chân, bế, mặt trong bong bóng) theo ref mới, giữ cỡ hiển thị và neo hiện tại để Dev chỉ cần nạp lại.
+
+**D5-27. Dev: G5-29.** Chưa commit.
+- **Bóng gầm xe ba gác** đo theo phần tối trong ảnh `l5_cart`: x 530–720, y 1054–1091 (phòng hẻm); bánh sau tới x ≈ 530, bánh trước từ x ≈ 793. Vùng gầm `GAP` cũ (520–790, 1050–1105) lấn ra ngoài bóng nên Mun lệch.
+- **Mắt** `mun_eyes_dark` (625, 1070), cả lúc mở to vẫn trong bóng. **Mặt ló** `mun_peek_out` đáy (650, 1143): đỉnh tai trong bóng (y 1058), cằm và hai chân chạm đất, giữa hai bánh.
+- **Chân vồ** `mun_paw_reach`: thò ra từ mép dưới bóng, phía gần đốm sáng; góc chĩa xuống đất (phải 45–90°, trái 90–135°) nên không chồng bánh xe.
+- **Điểm F** dời (800, 1122) → (740, 1130): trên đất trước mép phải bóng, không chạm bánh trước. Mun phóng ra từ mép phải bóng.
+- **Thùng giấy** trước khi chạm: cứ 3–5 giây nhún nhẹ một nhịp rồi rung nhẹ, tiếng sột soạt nhỏ; bỏ nhịp khi thùng đang động (gợi ý 💡) hoặc màn đang khoá; chạm thùng rồi thì thôi.
+- Ảnh: `l5_dev_check/v22_00_mun_under_cart_zoom.jpg` (phóng to: mắt, mắt mở to, chân vồ, mặt ló), ảnh cả màn `v22_01_eyes.jpg`, `v22_02_eyes_wide.jpg`, `v22_03_paw.jpg`, `v22_04_peek.jpg`, `v22_06_run_out.jpg` (Mun ra ở F).
+- Đã build lại web.
+
+**A5-18 (Art, trả G5-30). `mun_ref` mới chờ chủ dự án duyệt.**
+- Bản đề xuất: **`art/out/cats/mun_ref_e.png`** (Codex 2 lượt: `mun_ref_d` vẽ mới theo dáng Sữa, `mun_ref_e` sửa từ d cho mắt to thêm ~25%, 2 chấm sáng, lông đen hơn). Brief `art/review/l5_mun_ref_d_brief.md`, `l5_mun_ref_e_brief.md`. Chưa ghi đè `mun_ref.png`.
+- So sánh: `art/review/l5_art_check/l5_g30_mun_ref_compare.png` (trên: Mun cũ; giữa: Mun mới; dưới: Sữa).
+- Thay đổi: đầu to tròn hơn thân, thân hạt đậu, chân ngắn mập, má phồng hồng, mắt vàng to long lanh 2 chấm sáng, tai bo tròn, đuôi mập hơn, lông đen ấm mềm xù nhẹ (trung bình ≈ #5C4A44, cũ #63504B). Bỏ "dáng thon, chân dài" cũ trong style.md mục 3 (sẽ sửa khi duyệt).
+- **Duyệt xong:** ghi đè `mun_ref.png` bằng bản này, sửa style.md mục 3, rồi vẽ lại 9 tư thế theo ref mới, giữ cỡ hiển thị và neo hiện tại (quy tắc QUY-TRINH mục 6, cỡ file ≤ 1,5 lần hiển thị):
+
+| Key | Hiển thị (game) | Cỡ file ra (≈ 1,5×) |
+|---|---|---|
+| `mun_eyes_dark` | rộng 57 | ≈ 86 rộng |
+| `mun_peek_out` | rộng 106 | ≈ 160 rộng |
+| `mun_paw_reach` | **ngắn lại** (G5-30 GD: chân ngắn tròn, thò ra đoạn ngắn khỏi bóng gầm x 530–720, y 1054–1091, đệm hồng to; cỡ chốt cùng Dev, dự kiến rộng ≈ 70) | ≈ 105 rộng |
+| `mun_pin_light` | rộng 184 | ≈ 276 rộng |
+| `mun_run` | rộng 276 | ≈ 414 rộng |
+| `mun_pounce` | rộng 253 | ≈ 380 rộng |
+| `mun_look_paw` | rộng 223 | ≈ 335 rộng |
+| `mun_held` | như `sua_held` (cao 631) | cùng cỡ file `sua_held` (551x946) |
+| `mun_face_icon` | rộng 300 | ≈ 450 rộng |
+
+**A5-19 (Art, rà cỡ ảnh L5 theo QUY-TRINH mục 6).** Số đo: cỡ file / cỡ hiển thị trong game (FIT ở level5.js).
+- Phần lớn sprite 1,36–1,66 lần: đạt (sheet_cut xuất 1,5 lần cỡ ở bảng tờ; game co thêm chút).
+- Quá 1,6 lần nhưng file nhỏ (< 100KB, lợi ít): `l5_clothespin` 3,1 (6KB), `l5_cd_hanging` 1,9, `l5_wind_chime` 1,8, `l5_gecko` 1,8, `mun_eyes_dark` 1,8, `l5_milk_can` 1,8, `l5_crow_idle/far` 1,7, `l5_mirror_placed` 1,7, `l5_cactus_pot` 1,7, `l5_light_spot` 1,65, `mun_peek_out` 1,65, `l5_cd_placed` 1,64, `l5_shirt` 1,63, `l5_tin_lid_placed` 1,62, `mun_paw_reach` 1,61. Art có thể cắt lại bằng sheet_cut theo đúng cỡ game nếu GD muốn.
+- Đáng kể: `l5_bike` 638x382, 450KB, tỉ lệ 1,81 (game co ×0,85). Cắt lại theo rộng 353 thì còn ≈ 530 rộng.
+- **Nặng nhất là 2 nền** `l5_bg_alley` (3,0MB) và `l5_bg_backyard` (2,3MB), 1024x2304 PNG không trong suốt. Không dùng lại được nền L1–L4 (L5 là ngoài trời: sân sau, hẻm). Đề xuất Dev: bản build đổi nền có nền đặc sang JPG/WebP (giảm cỡ nhiều lần, không cần vẽ lại).
+- Ảnh nặng khác: `mun_held` 894KB (sẽ vẽ lại theo cỡ `sua_held`), `l5_awning_down` 787KB (1576 rộng = 1,5 lần), 3 ảnh cửa sổ quán ≈ 1,6MB (`l5_cafe_window` có thể thừa nếu game chỉ dùng back + frame: Dev kiểm).
+- Không còn dùng (G5-26), game không tải: `l5_awning_cord`, `l5_awning_rolled`, `l5_sunbeam`, `l5_icon_sun_covered` (≈ 730KB trên đĩa). Để nguyên, xoá khi GD đồng ý.
+
+**D5-28. Dev: QUY-TRINH mục 6 (code dùng lại) áp cho G5-29; rà code chép L1–L5.** Chưa commit.
+- **Nhún rung định kỳ thành hàm chung** `fidget(s, { min, max, sfx, gain, until })` trong `base.js`: cứ 3–5 giây nhún một nhịp rồi rung nhẹ, tiếng nhỏ tuỳ chọn, dừng khi `until()` đúng; bỏ nhịp khi đồ đang có tween (gợi ý) hoặc màn khoá. L5 gọi `this.fidget(this.box, { sfx: 'sfx_cloth', until: () => this.boxDone })`, bỏ hàm riêng trong `level5.js`.
+- Chơi thử lại: L1–L4 vào màn, mở màn xong bình thường, không lỗi; L5 thùng nhún ở 3,6 / 8,6 giây…, chạm thùng rồi không nhún nữa.
+- **Build:** 224 file, 73,6 MB. Ảnh lớn nhất: `l5_bg_alley` 2,90 MB, `l5_bg_backyard` 2,14 MB, `l1_bg_living_room` 2,03 MB, `l2_bg_bedroom` 1,89 MB, `l4_bg_bedroom` 1,71 MB.
+- **Code đang bị chép giữa các màn (đề xuất gom, chờ GD chốt):**
+  1. Gợi ý bàn chân trong 💡 (bấm bóng đèn + tay chạm + ẩn sau 2,5 giây): chép ở L1 (4 chỗ), L2, L3; `rooms.js` đã có `pawAt` → chuyển lên `base.js`. ~20 phút, không rủi ro.
+  2. Bảng cỡ mặc định FIT trong `resetLevel` (L3, L4, L5) → getter `fitDefaults` ở base. ~15 phút.
+  3. Viền sáng chỗ trốn khi lộ diện: L2, L3 chép y `base.glowOn` chỉ đổi vật → `glowOn` nhớ vật, `startEnding` gỡ theo đó. ~30 phút, thử lại cảnh cuối L2, L3.
+  4. Bảng mượn tiếng `SFX_ALIAS` chỉ có ở L5 → đưa vào `sfx.js`, màn nào cũng dùng. ~20 phút.
+  5. Bộ đếm gợi ý 8 / 16 giây trong `update()` chép ở L3, L4, L5 (L1 dạng yếu) → `idleHints()` ở base, phần mũi tên ở `rooms.js`. ~1 giờ.
+  6. Bong bóng suy nghĩ có hình: L3, L4, L5 ba bản gần giống → `think(icon, x, y, opts)` ở base. ~45 phút.
+  7. Khối tạm (ảnh vẽ bằng code): bảng màu, `kid()`, `bg()`, `ui_thought_bubble` chép ở L2–L5 → file chung `fbdraw.js`. Lớn nhất, ~2–3 giờ, rủi ro thấp (chỉ ảnh tạm).
+- **Ảnh trùng:** `l4_book_stack.png` và `l4_stack_books.png` giống hệt từng byte (cùng md5), cả hai đều được nạp. Hỏi Art: tháp sách có cần ảnh riêng không; nếu không thì dùng chung một key. Các bộ `ui_bag_bar`, `ui_bag_slot`, `ui_thought_bubble`, `ui_room_arrow` cùng một file, chỉ khai lặp trong `assets.js` (không nhân bản file), có thể gom thành hằng chung.
+- Thứ tự đề xuất: 1, 2, 3, 4 (nhanh, an toàn, ~1,5 giờ) → 5, 6 → 7.
+
+**G5-31 (GD, 2026-10-30). Chốt D5-28.** Ghi giúp GD.
+- Duyệt hàm chung `fidget()`.
+- Dev làm ngay gom code mục (1)–(6) đúng thứ tự đề xuất ở D5-28. Gom xong mỗi mục thì chơi thử lại các màn bị đụng tới. Hành vi trong game không đổi.
+- Mục (7) khối tạm: để sau, khi L5 xong ảnh Mun mới GD sẽ báo.
+- Ảnh trùng `l4_book_stack` / `l4_stack_books`: GD đang hỏi Art, Dev chưa sửa.
+- Đổi nền sang JPG/WebP khi build: chờ chủ dự án chốt (Art đề xuất). Dev chuẩn bị sẵn cách làm và ước tính bản build còn bao nhiêu MB, chưa áp.
+
+**A5-20 (Art). Cắt lại xe đạp về 1,5 lần cỡ hiển thị (GD đồng ý).** Bảng 5.1: `l5_bike` rộng 415 → **353**, `l5_bike_wheel` rộng 150 → **128** (cùng hệ số 0,85 vì bánh co theo khung, FIT_HEAD). Ra `l5_bike.png` 546x328 (356KB, trước 638x382 450KB), `l5_bike_wheel.png` 208x207 (100KB, trước 125KB), anchors.json cập nhật. Game giữ FIT 353 thì cỡ hiển thị không đổi (khung 353, bánh ≈ 128). Dev sửa chú thích "Art vẽ 415, game thu ×0,85" thành "Art cắt đúng 353".
+
+**G5-32 (GD, chủ dự án 2026-10-30).**
+- **Mun (thay hướng G5-30):** chủ dự án thích **Mun cũ** hơn `mun_ref_e`, chỉ muốn **mặt tròn hơn**. Giữ nguyên Mun cũ (dáng, thân, chân, tai, mắt, màu lông), chỉ sửa đầu/mặt cho tròn hơn. Gửi ref sửa cho chủ dự án duyệt, rồi sửa **mọi ảnh Mun** (`mun_*`, mặt trong bong bóng, bế…) cho đồng bộ mặt tròn, giữ cỡ và neo. Bỏ `mun_ref_e`. Chân vồ vẫn làm ngắn, tròn như GD bổ sung.
+- **Nền sang JPG khi build:** đồng ý. Dev đổi các ảnh nền đặc (không cần trong suốt) sang JPG trong bản build, giữ chất lượng đủ để không thấy vệt nén. Báo dung lượng trước/sau.
+- **Xoá 4 ảnh thừa** theo G5-26 (dây kéo, bạt cuộn, dải nắng, icon mặt trời): đồng ý, Art xoá.
+
+**D5-29. Dev: G5-31 (gom code (1)–(6)), A4-39, A5-20, ước tính nền JPG/WebP.** Chưa commit.
+- **(1) Gợi ý bàn chân 💡:** `pressBulb()` và `pawAt(pt)` chuyển lên `base.js` (trước `pawAt` ở `rooms.js`); L1 (4 chỗ), L2, L3, `rooms.js` gọi lại. Đã thử: bấm 💡 ở L1–L5 bàn chân hiện đúng chỗ, tắt sau 2,5 giây.
+- **(2) FIT mặc định:** màn khai báo `get fitDefaults()`, `base.js` điền trước `resetLevel()`; bỏ 3 bản chép ở L3, L4, L5. Đã thử: L3 13 key, L4 20, L5 32, như cũ.
+- **(3) Viền sáng chỗ trốn:** `glowOn(s)` nhớ vật (`glowAt`), `startEnding` gỡ đúng vật đó; L2 (giỏ), L3 (hộp) gọi `glowOn`, bỏ bản chép và phần gỡ trong `beforeEnding`. Đã thử: L2, L3 lộ diện có viền sáng, chạm mèo sang cảnh bế thì viền tắt, tới màn thưởng không lỗi.
+- **(4) Mượn tiếng:** `SFX_ALIAS` chuyển từ `level5.js` sang `sfx.js`, `playSfx` dùng cho mọi màn (có file thật thì dùng file thật). Bỏ `sfx()` riêng của L5.
+- **(5) Gợi ý 8 / 16 giây:** `idleHints(time, gap)` ở `base.js`, phần lấp lánh của màn nhiều phòng `idleSparkle()` ở `rooms.js`; L3, L4, L5 gọi lại (L3 tự có `idleSparkle`). Đã thử: L3 8 giây rồi 16, 18, 20… (2 giây), L4 như L3, L5 16, 19, 22… (3 giây), như cũ. L1 giữ riêng (gợi ý chỉ ở bước lon, khác điều kiện).
+- **(6) Bong bóng suy nghĩ:** `thinkBubble(icon, x, y, opts)` và `thinkHide()` ở `base.js`; L3 (kéo lúc mở màn, hiện tới khi nhân vật lui), L4 (vali trên kệ), L5 (đốm sáng khi chạm gầm xe) gọi lại. Đã thử: cỡ bong bóng, icon, vị trí, thời gian tự tắt như cũ (L4 170/85, L5 190/94, L3 theo FIT).
+- **Tháp sách L4 (A4-39):** tầng sách trên tháp dùng ảnh `l4_book_stack`, co theo nhóm tầng tháp; bỏ `l4_stack_books` khỏi danh sách nạp, `STACK`, `FIT_HEAD`, khối tạm. Đã thử: tầng sách rộng 200,4 × cao 92,6, neo như cũ. Art có thể xoá `l4_stack_books.png` và mục trong `anchors.json`.
+- **Xe đạp L5 (A5-20):** ảnh mới nạp đúng, phần vẽ rộng 353, bánh trước 128 như cũ; sửa chú thích FIT.
+- **Build:** 223 file, 73,4 MB. Ảnh lớn nhất `l5_bg_alley` 2,90 MB.
+- **Ước tính đổi định dạng khi build (chưa áp, chờ chủ dự án chốt):**
+  - Chỉ nền (8 ảnh, 16,2 MB PNG, không có trong suốt): JPG q85 còn 1,3 MB, WebP q85 còn 0,6 MB → bản build ≈ 58,1 MB (JPG) / 57,4 MB (WebP).
+  - Mọi ảnh sang WebP (nền q85, sprite q90 giữ kênh trong suốt): 73 MB ảnh còn ≈ 8,3 MB → bản build ≈ 8,7 MB.
+  - Cách làm: thêm tuỳ chọn vào `game/tools/build_web.py` đổi ảnh khi chép vào `dist/` và ghi đường dẫn mới vào `manifest.json`; ảnh gốc PNG trong `art/out/` và server chơi thử không đổi. Phaser nạp WebP được trên trình duyệt hiện nay (iOS 14+). Cần soi lại chất chì sau khi nén trước khi đăng.
+
+**A5-21 (Art, trả G5-32). Mun cũ mặt tròn, chờ duyệt.**
+- Bỏ `mun_ref_e`. Codex sửa từ Mun cũ (brief `art/review/l5_mun_ref_f_brief.md`): **`art/out/cats/mun_ref_f.png`**. Chỉ đổi đầu và mặt: viền đầu gần tròn, má phình đều hai bên, cằm bo. Tai, mắt, mũi, miệng, ria, màu lông, đuôi, tư thế giữ như cũ (thân hơi đầy hơn chút do Codex).
+- Ảnh so: `art/review/l5_art_check/l5_g32_mun_round_compare.png` (trên: Mun cũ; dưới: Mun mặt tròn).
+- Duyệt xong: ghi đè `mun_ref.png`, sửa mọi ảnh Mun (9 tư thế `mun_*` gồm mặt trong bong bóng, cảnh bế) cho mặt tròn, giữ cỡ hiển thị và neo, cỡ file ≈ 1,5 lần (bảng A5-18). `mun_paw_reach` chân ngắn tròn đệm hồng to.
+- Xoá 4 ảnh thừa G5-26: **chưa xoá**. Lệnh xoá bị bộ lọc quyền của phiên Art chặn (sự đồng ý đến qua GD, không phải chủ dự án trực tiếp trong phiên Art). Chờ chủ dự án xác nhận ở phiên Art hoặc tự xoá: `art/out/level5/l5_awning_cord.png`, `l5_awning_rolled.png`, `l5_sunbeam.png`, `l5_icon_sun_covered.png` (+ mục trong `anchors.json`).
+
+**D5-30. Dev: G5-32 (nền JPG trong bản build).** Chưa commit.
+- `game/tools/build_web.py`: ảnh nền đặc (key có `_bg_`, không có điểm trong suốt) chép vào `dist/` dạng JPG chất lượng 92, giữ đủ màu 4:4:4 (không giảm màu, tránh vệt ở trời và tường nhạt); manifest trỏ `.jpg`. Ảnh gốc PNG trong `art/out/` và server chơi thử không đổi. Áp cho 8 nền: L1, L2, L3, L4 (3 phòng), L5 (2 phòng).
+- **So JPG với PNG:** lệch màu trung bình mỗi kênh dưới 0,25 / 255, sai khác trung bình 0,9–1,5 / 255, PSNR 42–46 dB. Phóng to 3 lần vùng trời hẻm, tường L1, tường L4, trời sân sau: không thấy vệt nén, không lệch màu (`l5_dev_check/v23_bg_png_vs_jpg_zoom.jpg`, trái PNG, phải JPG).
+- **Chạy bản build** (`game/dist/`): L1–L5 nạp đúng nền `.jpg` (nền cao 2304 của L5 vẫn đặt đúng), không lỗi (`l5_dev_check/v23_build_all_levels.jpg`).
+- **Dung lượng:** trước 73,4 MB → sau 60,0 MB (223 file). 8 nền từ 16,2 MB còn 2,75 MB (lớn nhất `l5_bg_alley.jpg` 0,54 MB). Ảnh lớn nhất còn lại: `player_hands_lift.png` 1,19 MB, `l4_curtain.png` 1,13 MB, `l3_cat_tree_player.png` 1,03 MB.
+- Phần còn nặng là ảnh nhân vật, đồ vật (PNG trong suốt, ~57 MB); đổi sang WebP giữ trong suốt thì bản build còn khoảng 9 MB (D5-29), chờ chủ dự án nếu muốn.
+- Tháp sách L4 (A4-39) đã đổi ở D5-29, đã báo Art xoá file thừa.
+
+**G5-33 (GD, chủ dự án 2026-10-30). Không đổi ảnh sang WebP.** Ghi giúp GD.
+- Chủ dự án: "không". Giữ như D5-30: trong bản build chỉ nền là JPG, ảnh có nền trong suốt vẫn để PNG.
+- Lý do: sau này dự án import sang Unity sẽ dùng PNG gốc trong `art/out/`.
+- GD đã xem D5-30, đạt. Dev chờ Art giao ảnh Mun mặt tròn rồi nạp lại.
+
+**A5-22 (Art, trả G5-34). Quy tắc cắt sát.**
+- Đã thêm vào `AGENTS.md`: mục Cách vẽ (chọn khung theo dáng món, món lấp gần kín khung, lề ≈ 40px, không để món nhỏ giữa khung to) và mục Vẽ theo tờ (lấp gần kín ô; trạng thái cùng nhóm giữ tỉ lệ với món to nhất). `codex-draw.mjs` và mọi brief đều bắt Codex đọc AGENTS.md nên tự áp.
+- `sheet_cut.py` **đã cắt sát** phần vẽ, chừa lề `PAD = 8` px. Ngoại lệ có chủ ý: các trạng thái **cùng Nhóm** dùng **chung một khung** (để đổi ảnh không nhảy neo), nên trạng thái nhỏ hơn có viền trống. Không cần Dev sửa tool.
+- Rà L1–L5 (ảnh có alpha trong `art/out/`): mọi ảnh đứng riêng đều lề 8px. Viền trống lớn (> 40px) chỉ ở ảnh trong nhóm. Lớn nhất (lề trên/dưới px ở cỡ file):
+  - `l2_pampas_vase_pot` 230x492, trống trên 353 · `l2_pampas_plume` trống dưới 139 · `l2_pampas_vase` dưới 139
+  - `l3_tree_p1/p2/p3` 512x811, trống 418 / 150+300 / 568
+  - `l4_mattress_fallen` 706x734, trống trên 516 · `l4_mattress_standing` hai bên 158 · `l4_suitcase_folded` trên 260 · `l4_stack_pillow` trên 69
+  - `l1_sofa_cushion_flat` trên 182 · `l1_sofa_cushion_bulge` trên 151 · `l1_pate_can_closed` trên 118 · `l1_box_closed` trên 95 · `l1_pillow_white_idle` trên 89
+  - `l3_box_upside_down`, `l3_gift_box_taped` trên ≈ 100 · `sua_curtain_*` 217x331, trống 40–70 · `sua_meow_up`, `sua_sit_stare` trái 75–80 · `player_sad` trái 159 · `player_shrug` trên 115 · `l2_wardrobe_closed` hai bên 70–88
+- Cắt sát các ảnh này được (phần trong suốt nén PNG rất nhẹ, lợi chủ yếu là RAM texture), nhưng phải **dời neo (ax, ay) trong anchors.json** cho đúng chỗ, và Dev phải kiểm chỗ code đọc thẳng cỡ ảnh (ví dụ `l1_sofa_cushion_lifted` kéo theo tỉ lệ cao/rộng, lát cắt tầng `l4_book_stack` đo trên ảnh 301x139, `HELD_PIT`). Chờ GD quyết làm hay không.
+
+**G5-35 (GD chốt A5-22, Art ghi giúp).**
+- L1–L5: **chưa cắt lại** các ảnh nhóm trạng thái (lợi chỉ là RAM, phải dời neo, Dev kiểm nhiều chỗ, dễ hỏng màn đã duyệt). Danh sách A5-22 để dành cho lúc chuyển sang Unity.
+- Từ màn mới: nhóm trạng thái vẫn dùng chung khung, nhưng khung **sát phần bao chung của mọi trạng thái** trong nhóm (ví dụ đệm đổ + đệm dựng: khung vừa cả hai), không để trống lớn ngoài phần bao.
+- Art: `sheet_cut.py` đã làm đúng như vậy (khung = phần bao chung canh theo neo + lề `PAD = 8`; xem dòng tính `left/up/right/down`). Khoảng trống lớn ở L1–L4 là do các trạng thái trong nhóm khác dáng nhau (đệm nằm vs đứng), tức nằm trong phần bao chung. Đã ghi ý này vào `AGENTS.md` mục Vẽ theo tờ.
+
+**A5-23 (Art, trả G5-32). Mun mặt tròn: đã thay ref và sửa đủ 9 ảnh Mun.**
+- `mun_ref.png` = bản mặt tròn đã duyệt (bản cũ cất `art/out/_refs/mun_ref_old_g16.png`). `style.md` mục 3 thêm "đầu và mặt tròn".
+- Codex 2 lượt (brief `art/review/l5_mun_g32_a_brief.md` kèm demo hẻm G26, `l5_mun_g32_b_brief.md` kèm demo lộ diện), mỗi món sửa từ ảnh nguồn cũ, giữ dáng, chỉ đổi đầu mặt tròn. Chân vồ vẽ mới: ngắn, mũm mĩm, đệm hồng to. Mắt dưới gầm Art lấy từ ảnh ló mặt mới bằng mặt nạ tròn quanh hai mắt.
+- Ảnh so trước/sau: `art/review/l5_art_check/l5_g32_mun_poses_compare.png`; ảnh đã cắt: `l5_g32_mun_cut.png`.
+- Cắt bằng sheet_cut (bảng 5.2, tờ `l5src_mun_*_g32`), cỡ file ≈ 1,5 lần FIT trong game:
+
+| Key | Hiển thị (FIT) | File | Neo (px trên file) |
+|---|---|---|---|
+| `mun_eyes_dark` | rộng **55** (cũ 57) | 98x51 | tâm (50, 26) |
+| `mun_peek_out` | rộng 106 | 175x141 | đáy (91, 134) |
+| `mun_paw_reach` | rộng **75** (cũ 150) | 128x81 | gốc chân (8, 45) |
+| `mun_run` | rộng 276 | 430x226 | đáy (328, 219) |
+| `mun_pounce` | rộng 253 | 396x332 | đáy (71, 324) |
+| `mun_pin_light` | rộng 184 | 292x343 | đáy (157, 336) |
+| `mun_look_paw` | rộng 223 | 350x343 | đáy (181, 336) |
+| `mun_held` | cao 631 (như cũ) | 589x962 | đỉnh (307, 8) |
+| `mun_face_icon` | rộng 300 | 466x408 | tâm (233, 204) |
+
+- Dev cần sửa: FIT `mun_paw_reach` 150 → **75**, `mun_eyes_dark` 57 → **55**; `LOOK_PAW_SPOT` đo lại trên ảnh mới 350x343 (mu bàn chân giơ lên ≈ **(195, 210)**, Dev soi lại); `HELD_PIT` 0,43 giữ (ảnh bế cùng tỉ lệ). Vị trí mắt dưới gầm và ló mặt theo G5-29 của Dev.
+
+**D5-31. Dev: nạp 9 ảnh Mun mặt tròn (A5-23).** Chưa commit.
+- `level5.js`: FIT `mun_paw_reach` 150 → 75, `mun_eyes_dark` 57 → 55; `LOOK_PAW_SPOT` (170, 182) → (197, 214) theo ảnh `mun_look_paw` mới 350x343 (soi trên ảnh: mu bàn chân giơ lên). `HELD_PIT` 0,43 và các FIT khác giữ nguyên.
+- Chơi thử từ đầu tới cảnh bế, không lỗi. Mắt, mặt ló vẫn khớp bóng gầm xe (G5-29); chân vồ ngắn mũm mĩm, chỉ thò một đoạn ngắn từ mép dưới bóng, không chồng bánh; đốm sáng nằm đúng mu bàn chân lúc nhìn chân.
+- Ảnh trong game: `l5_dev_check/v24_00_mun_round_all.jpg` (9 dáng cả màn: mắt dưới gầm, ló mặt, chân vồ, chạy, vồ, đè đốm sáng, nhìn chân, bế, mặt trong bong bóng), `v24_00_mun_round_zoom.jpg` (phóng to 7 dáng quanh xe). Ảnh lẻ: `v24_01_eyes`, `v24_02_peek`, `v24_03_paw`, `v24_k_mun_run`, `v24_k_mun_pounce`, `v24_k_mun_pin_light`, `v24_07_look_paw`, `v24_08_held`, `v24_09_face_bubble`.
+- Đã build lại web.
+- Tin báo GD chưa gửi được (phiên Dev bị tạm chặn gửi tin cho phiên khác tới khi chủ dự án nhắn trong phiên Dev); GD xem mục này.
+
+**A5-24 (Art, trả G5-36). Vẽ mới 3 dáng Mun, chờ duyệt.** Dáng thứ 5 trong ảnh so G32 đúng là `mun_pin_light`.
+- Codex vẽ mới (brief `art/review/l5_mun_g36_brief.md`, kèm demo lộ diện), mẫu tỉ lệ `sua_run`, `sua_pounce`, thiết kế theo `mun_ref` mặt tròn. `mun_pin_light` sửa thêm 1 lượt để xoá 4 nét sáng vàng cạnh chân (`l5_mun_pin_g36b_brief.md`).
+- Ảnh nguồn: `art/out/_sheets/l5src_mun_run_g36.png` (1536x1024), `l5src_mun_pounce_g36.png` (1024x1536), `l5src_mun_pin_light_g36b.png` (1024x1024).
+- Ảnh so: `art/review/l5_art_check/l5_g36_mun_compare.png`. Cột trái: Sữa mẫu (chạy, vồ) và `mun_ref` (ngồi); giữa: Mun đang trong game; phải: Mun mới. Hàng 1 chạy, hàng 2 vồ, hàng 3 đè đốm sáng.
+- Đổi: đầu to gần bằng thân, thân ngắn tròn, chân mũm mĩm đệm hồng, đuôi to xù, mặt hào hứng miệng há. Chạy có vệt gió; vồ bật cao giơ hai chân trước (dáng dọc như `sua_pounce`); đè đốm sáng ngồi tròn chụm hai chân, cười.
+- Duyệt xong: cắt sát, giữ FIT run 276 và pin 184; `mun_pounce` giờ là dáng dọc nên Art đề xuất cỡ theo cỡ đầu bằng các dáng khác, Dev chỉnh nhẹ. Neo đáy.
+
+**A5-25 (Art). Đã cắt 3 dáng Mun G5-36 (chủ dự án duyệt).** Cỡ hiển thị chọn để **mắt bằng các dáng khác** (tròng vàng ≈ 25px trên màn, đo theo `mun_look_paw` rộng 223), bảng 5.2 đã đổi sang tờ `_g36`:
+
+| Key | Hiển thị đề xuất (FIT) | File | Neo |
+|---|---|---|---|
+| `mun_run` | rộng **320** (cũ 276) | 496x256 | đáy (314, 248) |
+| `mun_pounce` | rộng **185**, cao ≈ 231 (dáng dọc; cũ 253 ngang) | 294x364 | đáy (96, 356) |
+| `mun_pin_light` | rộng **196** (cũ 184) | 310x312 | đáy (155, 304) |
+
+Ảnh đã cắt cạnh `mun_look_paw`: `art/review/l5_art_check/l5_g36_mun_cut.png`. `mun_run` có 3 vệt gió sau đuôi nằm trong ảnh. Dev chỉnh nhẹ nếu cần cho khớp đường chạy và chỗ đốm sáng.
+
+**D5-32. Dev: nạp 3 dáng Mun vẽ lại G5-36 (A5-25).** Chưa commit.
+- FIT: `mun_run` 276 → 320, `mun_pounce` 253 → 185 (dáng dọc, cao 232 trên màn), `mun_pin_light` 184 → 196. Mắt ba dáng bằng các dáng khác.
+- Bóng Mun chui ra từ thùng ở sân sau dùng chung ảnh `mun_run`: cố định rộng 360 như đã duyệt (G5-25 ×1,5), không to theo FIT mới (`SHADOW_W`).
+- Đè đốm sáng: đốm đặt sát đáy Mun, ngay dưới hai bàn chân chụm (trước bị thân che, tia chiếu vào ngực); sáng lộ quanh hai bàn chân, tia từ đĩa CD bám theo. Đường chạy, cung vồ giữ như cũ, khớp ảnh mới.
+- Chơi thử từ thùng giấy tới cảnh bế, không lỗi. Ảnh: `l5_dev_check/v25_00_all.jpg` (bóng chạy ra từ thùng, chạy, vồ, đè đốm sáng, nhìn chân, bế), `v25_00_zoom.jpg` (phóng to chạy, vồ, đè, nhìn chân). Các dáng còn lại (mắt, ló mặt, chân vồ, mặt trong bong bóng) không đổi so với D5-31 (`v24_00_mun_round_all.jpg`).
+- Đã build lại web.
+
+**A5-26 (Art, G-SCREEN). Nối nền cho khung 9:16, 9:19,5 và 3:4.** Game giữ 1024 ngang, kéo cao tới 2304 (MAX_H); khung 3:4 cần rộng 1366. Cỡ đích chung **1366x2304**, vùng gốc 1024x1536 nằm ở **(171, 384)**, giữ nguyên từng điểm ảnh (công cụ `tools/bg_widen.py` tự kiểm). Codex vẽ vào dải xám trên canvas đúng cỡ thật; Art ghép, bù lệch màu mép, vá móc thừa L2.
+
+| Nền | Cỡ cũ | Thiếu | Cỡ mới | Trạng thái |
+|---|---|---|---|---|
+| `l1_bg_living_room` | 1024x1536 | trên dưới + hai bên | 1366x2304 | xong, `art/out/_wide/` |
+| `l2_bg_bedroom` | 1024x1536 | trên dưới + hai bên | 1366x2304 | xong |
+| `l3_bg_living_room_afternoon` | 1024x1536 | trên dưới + hai bên | 1366x2304 | xong |
+| `l4_bg_bedroom`, `l4_bg_living`, `l4_bg_study` | 1024x1536 | trên dưới + hai bên | 1366x2304 | xong |
+| `l5_bg_backyard`, `l5_bg_alley` | 1024x2304 | hai bên | 1366x2304 | **chờ Codex** (hết hạn mức tới 7:33 PM) |
+
+Không nền nào đủ cả 3 khung trước đó. Ảnh mới để ở `art/out/_wide/<tên>.png`; Dev đổi code nạp nền rộng rồi mới thay vào `art/out/level*/`.
+
+**D5-33. Dev: nạp nền rộng G-SCREEN (trả A5-26).** Chưa commit.
+- `base.js`: nền tự nhận cỡ vẽ dư. Ảnh nền tỉ lệ ≈ 1366:2304 hiển thị rộng 1366 (ảnh 1024 ngang vẫn rộng 1024); `buildBg` đặt lệch để vùng chơi 1024x1536 khớp (x … x + 1024, 0 … 1536): nền rộng lùi (−171, −384), nền cao L5 hiện tại lùi (0, −384) như cũ. Dải mép kéo giãn chỉ hiện ở phần màn nền chưa phủ tới; nền 1366x2304 phủ đủ 9:16, 9:19,5, 3:4 nên không còn dải kéo giãn. Màn nhiều phòng: phòng cách nhau 1366 nên nền rộng các phòng nối khít, không chồng.
+- Thử bằng cách nạp 6 nền từ `art/out/_wide/` trong phiên thử (chưa chuyển file): L1, L2, L3, L4 (3 phòng) ở khung 3:4 và 9:19,5: nền đặt đúng (lệch 171 / 384), đồ vật khớp như cũ, không lỗi, chuyển phòng L4 không lộ mép. Ảnh: `art/review/screen_check/v2_nen_rong_tong_hop.jpg`, ảnh lẻ `v2_3x4_l*.jpg`, `v2_9x19_5_l*.jpg`, `v2_3x4_l4_study.jpg`, `v2_3x4_l4_bedroom.jpg`.
+- Code đã sẵn cho cả L5 sân sau, hẻm khi Art giao bản 1366x2304 (gốc ở (171, 0)): cùng quy tắc lùi (−171, −384).
+- Việc tiếp: Art chuyển 6 ảnh từ `_wide/` vào `art/out/level*/` (ghi đè bản 1024); không cần sửa code thêm. Bản build vẫn đổi nền sang JPG như D5-30.
+
+**D5-34. Dev: build lại sau khi Art chuyển 6 nền rộng vào `art/out/level*/`.** Chưa commit.
+- 6 nền 1366x2304 (L1, L2, L3, L4 ba phòng) đã vào bản build dạng JPG (1366x2304). Bản build 225 file, 61,8 MB (trước 60,2 MB). Ảnh lớn nhất vẫn `player_hands_lift.png` 1,2 MB.
+- Chạy bản build (`game/dist/?unlock=1`) ở khung 3:4: L1, L4 nạp nền JPG rộng, đặt lệch đúng (171 / 384), không còn dải kéo giãn, không lỗi. Ảnh: `art/review/screen_check/v3_build_3x4_l1.jpg`, `v3_build_3x4_l4.jpg`.
+- Hai nền L5 vẫn 1024x2304 (dùng dải kéo giãn hai bên như trước) tới khi Art giao bản rộng.

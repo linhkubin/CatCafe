@@ -28,7 +28,7 @@ Hiển thị = cỡ trong game trên khung phòng 1024x1536. TS = trong suốt.
 | `l4_sofa` | level4 | rộng 560 | TS | đáy | `l4_living_sheet` |
 | `l4_stack_mattress` | level4 | rộng 295 | TS | đáy | `l4_stack_sheet` (stack) |
 | `l4_stack_suitcase` | level4 | theo nhóm | TS | đáy | `l4_stack_sheet` (stack) |
-| `l4_stack_books` | level4 | theo nhóm | TS | đáy | `l4_stack_sheet` (stack) |
+| ~~`l4_stack_books`~~ | – | – | – | – | **bỏ key (A4-39):** tháp dùng chính ảnh `l4_book_stack` |
 | `l4_stack_pillow` | level4 | theo nhóm | TS | đáy | `l4_stack_sheet` (stack) |
 | `l4_bed` | level4 | rộng 600 | TS | đáy | `l4_bedroom_sheet` |
 | `l4_pillow` | level4 | rộng 175 | TS | đáy | `l4_bedroom_sheet` |
@@ -241,7 +241,7 @@ Cùng tỉ lệ thật: thanh rèm dài hơn cửa sổ một chút; tấm rèm 
 **Cùng tỉ lệ thật** (rộng hiển thị đệm 340 : vali 260 : sách 180 : gối 150; cao 100 : 115 : 90 : 65). Mỗi món nằm ngang ngay ngắn: mặt trước dải dày, **mặt trên phẳng** (dải mỏng), dải hông phải hẹp; chồng thẳng hàng, đáy phẳng, giữa ô theo chiều ngang. Code chồng món sau lên mặt trên món trước.
 - `l4_stack_mattress`: đệm gấp đôi nằm ngang (khối dày bo góc), vải kem chần quả trám, viền xanh trời; cùng đệm với `l4_mattress_*`.
 - `l4_stack_suitcase`: vali xanh da trời nhạt **nằm ngang đã gập dẹt** (như `l4_suitcase_folded` nhưng dày hơn chút), 2 đai kem, tay kéo nằm sát.
-- `l4_stack_books`: chồng 5–6 cuốn sách vuông vức, gáy pastel, như `l4_book_stack` thấp hơn.
+- `l4_stack_books`: **bỏ (A4-39)**, tầng sách trên tháp dùng chính ảnh `l4_book_stack`.
 - `l4_stack_pillow`: gối trắng kem viền hồng phấn nằm phồng, như `l4_pillow`; mặt trên hơi lõm (chỗ nhân vật đứng).
 
 ### 5.4 Tờ `l4_bedroom_sheet` — Giường, gối, đèn ngủ, tất (1536x1024)
@@ -353,7 +353,7 @@ Hai tư thế cùng cỡ, cùng đường đáy (chân đứng trên mặt gối
 ### 5.13 Vòng 6–7: tách lại theo ảnh cắt demo (G4-22, G4-26)
 
 Các tờ `l4v6_*` thay các dòng tờ cũ của cùng key (đã bỏ khỏi mục 5.1–5.12). Ảnh đầu vào: ảnh cắt đúng món từ demo (`art/ref/l4_v6_input/`), Codex chỉnh sửa từ ảnh (nền trong suốt, bỏ đồ đè, vẽ bù phần che), lời giao `art/review/l4_v6_*_brief.md`, mỗi lượt kèm ảnh demo gốc. Ô = khung thật đo trên tờ. Tờ Sữa: 5 tư thế lấn khung nhau nên Art tách theo mặt nạ từng mảng sang `l4v6_sua_split_sheet` (giãn cách 400px) rồi cắt.
-- **Cùng món cùng ảnh:** `l4_suitcase_folded` và `l4_stack_suitcase` cùng một ảnh (vali gập), `l4_book_stack` và `l4_stack_books` cùng một ảnh (chồng 3 cuốn trên tháp demo). **Vòng 8 (G4-30, G4-32, A4-34):** sách rơi là **3 cuốn trái nhất ở HÀNG TRÊN CÙNG** của kệ: hồng, bạc hà, vàng bơ. `l4_book_single` (hồng), `l4_book_single_mint`, `l4_book_single_yellow` (thay `_lavender`); chồng sách (`l4_book_stack` = `l4_stack_books`) từ trên xuống: hồng, bạc hà, vàng bơ (Codex đổi màu từ tờ cũ, tờ `l4v8_books_sheet`). `l4_bookshelf_after` = chính ảnh `_full`, chỉ thay vùng 3 cuốn đó bằng lưng kệ trống do Codex vẽ liền (Art ghép đúng vùng, lệch 0px); hàng dưới đầy như `_full` (tờ `l4v8_shelf_sheet`).
+- **Cùng món cùng ảnh:** `l4_suitcase_folded` và `l4_stack_suitcase` cùng một ảnh (vali gập), `l4_book_stack` và `l4_stack_books` cùng một ảnh (chồng 3 cuốn trên tháp demo). **Vòng 8 (G4-30, G4-32, A4-34):** sách rơi là **3 cuốn trái nhất ở HÀNG TRÊN CÙNG** của kệ: hồng, bạc hà, vàng bơ. `l4_book_single` (hồng), `l4_book_single_mint`, `l4_book_single_yellow` (thay `_lavender`); chồng sách (`l4_book_stack`, cũng là tầng sách trên tháp; key `l4_stack_books` bỏ theo A4-39 vì trùng từng byte) từ trên xuống: hồng, bạc hà, vàng bơ (Codex đổi màu từ tờ cũ, tờ `l4v8_books_sheet`). `l4_bookshelf_after` = chính ảnh `_full`, chỉ thay vùng 3 cuốn đó bằng lưng kệ trống do Codex vẽ liền (Art ghép đúng vùng, lệch 0px); hàng dưới đầy như `_full` (tờ `l4v8_shelf_sheet`).
 - Tất và sách lẻ có cỡ hiển thị tính theo cùng tỉ lệ với đèn / chồng sách trên tờ.
 
 | Tờ | Ô | Key | Thư mục | Nhóm | Neo | Hiển thị | Nét |
@@ -373,7 +373,6 @@ Các tờ `l4v6_*` thay các dòng tờ cũ của cùng key (đã bỏ khỏi m�
 | l4v6_suitcase_sheet | 875,501,641,268 | l4_suitcase_folded | level4 | suitcase | đáy |  | 5 |
 | l4v6_suitcase_sheet | 875,501,641,268 | l4_stack_suitcase | level4 |  | đáy | rộng 235 | 5 |
 | l4v8_books_sheet | 54,93,809,362 | l4_book_stack | level4 |  | đáy | rộng 190 | 5 |
-| l4v8_books_sheet | 54,93,809,362 | l4_stack_books | level4 |  | đáy | rộng 190 | 5 |
 | l4v8_books_sheet | 92,465,366,486 | l4_book_single | level4 |  | tâm | rộng 85 | 5 |
 | l4v8_books_sheet | 626,466,315,485 | l4_book_single_mint | level4 |  | tâm | rộng 73 | 5 |
 | l4v8_books_sheet | 1150,458,314,491 | l4_book_single_yellow | level4 |  | tâm | rộng 73 | 5 |

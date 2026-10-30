@@ -2,13 +2,13 @@
 
 > Đọc kèm `style.md`. Bút chì màu, pastel nhạt theo `art/ref/owner_l1_style_ref.png` (O6), nét mảnh đậm nhạt (O5), cute, tối giản, **không chữ**.
 >
-> **Phòng:** **Sân sau** (bắt đầu) ► **Con hẻm**, buổi chiều. **Mèo:** Mun (theo `cats/mun_ref.png`, lần đầu xuất hiện), Sữa cameo ở cửa sổ quán. **Ý chính:** Mun nấp dưới gầm xe ba gác trong hẻm râm. Người chơi lấy 3 đồ sáng (nắp thiếc, gương, đĩa CD), kéo bạt cho nắng xuống, rồi nối tia nắng A → B → C tới trước gầm xe. Đốm sáng nhảy nhót, Mun phóng ra đuổi 2 vòng, đè đốm sáng.
+> **Phòng:** **Sân sau** (bắt đầu) ► **Con hẻm**, buổi chiều. **Mèo:** Mun (theo `cats/mun_ref.png`, lần đầu xuất hiện), Sữa cameo ở cửa sổ quán. **Ý chính:** Mun nấp dưới gầm xe ba gác trong hẻm râm. Người chơi lấy 3 đồ sáng (nắp thiếc, gương, đĩa CD), rồi nối tia nắng (lọt qua một lỗ thủng trên tấm bạt che kín đầu hẻm, có từ đầu) A → B → C tới trước gầm xe (G5-26). Đốm sáng nhảy nhót, Mun phóng ra đuổi 2 vòng, đè đốm sáng.
 
 Áp dụng mọi quy tắc đã chốt ở Level 1–4: vẽ theo tờ, đặt tên V23, cột Nét, vùng chạm ≥ 115px, neo theo công cụ, `anchors.json`, **góc nhìn chung** (`style.md` mục 2b), màu O6, túi đồ như level 3–4, **nền chỉ phòng trống, mọi đồ là sprite riêng** (từ L4).
 
 Nguồn gameplay: `levels/levels-01-10.md` và `levels/states-01-10.md` mục Level 5; G5-1…G5-16, D5-1…D5-9, A5-1… trong `art/review/level5-thread.md`. Vị trí, cỡ, lớp lấy từ bản khối đã duyệt: `art/review/l5_dev_check/l5_block_layout.md` (ảnh `layout/l5_block_*_clean.png`, `_grid.png`).
 
-**Ánh sáng (G5-3):** đốm sáng `l5_light_spot` và dải nắng `l5_sunbeam` là ảnh **phẳng có vân chì**, không glow. Quầng sáng, độ chói, tia phản chiếu, chấm nắng li ti, lớp tối hẻm (alpha 0,42), gợn nước, giọt bắn: **code vẽ**, Art không vẽ.
+**Ánh sáng (G5-3, G5-26):** đốm sáng `l5_light_spot` là ảnh **phẳng có vân chì**, không glow. Tia nắng đầu (đường thẳng nhỏ từ lỗ bạt xuống A), quầng sáng, độ chói, tia phản chiếu, bóng râm hẻm (nâu xám ấm), gợn nước, giọt bắn: **code vẽ**, Art không vẽ. Bỏ dải nắng `l5_sunbeam` và chấm nắng li ti (G5-26).
 
 **Màu buổi chiều (A5-3):** vẫn bảng màu khóa. Chiều chỉ thể hiện bằng tường kem hơi ấm (mật ong nhạt) và trời xanh nhạt pha kem; không cam, không hoàng hôn. Hẻm tối do code phủ, nên nền hẻm vẽ **sáng như lúc đã có nắng**.
 
@@ -48,7 +48,6 @@ Vẽ vào nền sân sau (không phải sprite): hàng rào gỗ, cửa sau quá
 |---|---|---|---|---|
 | `l5_bg_alley` | 1024x1536, có nền | trên-trái | 0 | ảnh lẻ |
 | `l5_puddle` | rộng 150 | tâm (105, 1125) | 9 | `l5_alley_sheet` |
-| `l5_sunbeam` | 120x780 | đáy (180, 1020) | 10 | `l5_light_sheet` |
 | `l5_gecko` | 60x120 | tâm (330, 470) | 11 | `l5_alley_sheet` |
 | `l5_milk_can` | rộng 50 | đáy (708, 545) | 11 | `l5_alley_sheet` |
 | `l5_bike` | rộng 240 | đáy (750, 905) | 15 | `l5_bike_sheet` |
@@ -60,13 +59,13 @@ Vẽ vào nền sân sau (không phải sprite): hàng rào gỗ, cửa sau quá
 | `l5_cd_placed` | rộng ≈ 82 | đáy (842, 786), miệng giỏ (D5-12) | 21.1 | `l5_shiny_sheet` |
 | `l5_light_spot` | 96x96 | tâm | 21.4 | `l5_light_sheet` |
 | `l5_drain_pipe` | 90x760 | đáy (975, 1170) | 24 | `l5_cart_sheet` |
-| `l5_awning_down` | 860x170 | đỉnh (512, 210) | 25 | `l5_awning_sheet` (awning) |
-| `l5_awning_rolled` | 860x60 | đỉnh (512, 210) | 25 | `l5_awning_sheet` (awning) |
-| `l5_awning_cord` | 60x360 | đỉnh (820, 372) | 28 | `l5_awning_sheet` |
-| `l5_crow_idle` | rộng 110 | đáy (300, 192) | 26 | `l5_alley_sheet` (crow) |
-| `l5_crow_far` | rộng 90 | đáy (820, 192) | 26 | `l5_alley_sheet` (crow) |
+| `l5_awning_down` | rộng 1040 (phần vẽ, dư 8 mỗi mép), cao ≈ 206 (y 218–424) | đỉnh (512, 218) | 25 | `l5src_l5_awning_down_g26` |
+| `l5_crow_idle` | rộng 98 | đáy (320, 231), đậu trên dây mép trên bạt | 26 | `l5_alley_sheet` (crow) |
+| `l5_crow_far` | rộng 90 | đáy (760, 233), đậu trên dây mép trên bạt | 26 | `l5_alley_sheet` (crow) |
 
-Vẽ vào nền hẻm: trời (y 0–200), **dây điện** cong (y ≈ 175–190), tường đối diện (y 200–790, gạch từ y 400), **bậu tường B** (x 410–630, y 605–627), **cửa sổ hẻm** (x 645–775, y 420–532) và bậu (x 632–788, y 532–546), **móc tường** treo CD (≈ 95, 455), sàn hẻm (từ y 790).
+**G5-26:** bỏ `l5_awning_rolled`, `l5_awning_cord`, `l5_sunbeam`, `l5_icon_sun_covered`. Số đo trên demo đã duyệt `l5_demo_alley_g26.png` (A5-17). **Lỗ thủng** tâm (208, 360), rộng ≈ 33, trong suốt: gốc tia nắng đầu đặt ở đây. Dây mép trên y ≈ 228 ở hai mép, võng xuống ≈ 233 ở giữa.
+
+Vẽ vào nền hẻm: trời (y 0–200, phần lớn bị bạt che), **dây điện** cong (y ≈ 175–190, bị bạt che), tường đối diện (y 200–790, gạch từ y 400), **bậu tường B** (x 410–630, y 605–627), **cửa sổ hẻm** (x 645–775, y 420–532) và bậu (x 632–788, y 532–546), **móc tường** treo CD (≈ 95, 455), sàn hẻm (từ y 790).
 
 ### Mun (tham chiếu `cats/mun_ref.png`, sau khi chủ dự án duyệt)
 
@@ -89,7 +88,6 @@ Vẽ vào nền hẻm: trời (y 0–200), **dây điện** cong (y ≈ 175–19
 | `sua_press_window` | Sữa áp mặt và hai bàn chân vào kính, nhìn ra hẻm, tò mò | `l5_sua_sheet` |
 | `player_cover_nose` | Bịt mũi, nhăn mặt (trồi lên từ mép dưới khi chạm túi rác) | `player_l5_sheet` |
 | `player_hands_lift` | Có sẵn (G5-18): lúc kẹp lại kẹp áo dùng tư thế hai tay giơ lên, thay `player_surprised`. Không vẽ tư thế mới | – |
-| `l5_icon_sun_covered` | Bong bóng nhân vật: mặt trời bị đám mây che, 120x100 | `l5_light_sheet` |
 
 ---
 
@@ -101,7 +99,7 @@ Vẽ vào nền hẻm: trời (y 0–200), **dây điện** cong (y ≈ 175–19
   - **Bỏ thanh dọc giữa kính** của bản khối, vì nó cắt qua mặt Sữa ở x 250. Thay bằng một thanh ngang ở 1/3 trên (y ≈ 480), trên đầu Sữa kể cả lúc Sữa ngóc +16px.
   - Bậu dưới khung che chân và đáy Sữa, để Sữa nảy không lộ mép cắt.
 - **Dây phơi, cột, bậc cửa, móc CD, dây điện, bậu tường B, cửa sổ hẻm:** vẽ vào nền như Dev đề xuất.
-- **Bạt:** 2 trạng thái cùng mép trên, cùng bề ngang 860 (cùng nhóm, vẽ chung một tờ). Bạt thả có 4–5 lỗ thủng nhỏ (lỗ trong suốt hoặc kem nhạt). Dây kéo riêng: dây thừng mảnh, vòng tròn ở cuối (y ≈ 680–730 trong toạ độ phòng). Đỉnh dây khớp mép dưới bạt ở x 820.
+- **Bạt (G5-26):** một trạng thái. Tấm bạt to căng ngang đầu hẻm, **tràn hết bề ngang** (vẽ dư quá hai mép, khung nào cũng không lộ đầu bạt), sọc dọc hồng đào và kem như bạt cũ, mép trên thanh căng có mối buộc, mép dưới lượn sóng, không xuống dưới y 430 (cửa sổ, thạch sùng, móc CD còn thấy). **Đúng một lỗ thủng nhỏ** (rộng ≈ 30) tâm ≈ (220, 360), ngay trên A; lỗ trong suốt để code đặt gốc tia nắng. Không dây kéo, không bạt cuộn. Chạm bạt: code làm bạt phồng nhẹ (đề xuất Dev: co giãn dọc nhẹ quanh mép trên).
 - **Xe đạp:** khung gồm bánh sau, ghi đông, chuông, yên, **giỏ đan mây** ở đầu xe (x ≈ 818–866, y ≈ 781–809, là điểm C, miệng giỏ đủ rộng để đĩa CD gác vào). Bánh trước tách riêng, tâm khớp trục (818, 873). Trên khung chỉ vẽ trục bánh trước, không vẽ bánh.
 - **Xe ba gác:** 1 ảnh, gầm tối (x 485–795, y 1080–1165) tô nâu than ấm đậm, có vân chì, **không đen tuyền**, để mắt và mặt Mun nổi lên.
 - **Đồ đã đặt (3 key):** vẽ sẵn độ nghiêng ~20°, mặt sáng quay về phía tia tới. Nắp thiếc dựng nghiêng trên đất. Gương nhỏ có chân đứng trên bậu. Đĩa CD gác nghiêng trong giỏ xe (phần dưới đĩa khuất trong giỏ, nên ảnh `l5_cd_placed` chỉ vẽ phần đĩa thò lên trên miệng giỏ, đáy cắt thẳng ngang theo miệng giỏ).
@@ -122,8 +120,8 @@ Vẽ vào nền hẻm: trời (y 0–200), **dây điện** cong (y ≈ 175–19
 - Túi rác đen than (cùng màu than ấm như Mun, cuộn tròn như mèo, có nút buộc như tai) bên trái dưới cửa sổ.
 - Thùng giấy cũ giữa sàn, nắp thiếc tròn dựa bên phải thùng, dép tổ ong xanh da trời bên trái thùng.
 
-**Hẻm** (chân tường y 790): trời y 0–200, dây điện cong, quạ đậu trái.
-- Bạt mái hiên sọc to 3–5 sọc (hồng đào và kem) y 212–378 (thả) hoặc cuộn y 212–268.
+**Hẻm** (chân tường y 790): trời y 0–200 bị bạt che gần hết, quạ đậu mép trên bạt bên trái.
+- Bạt sọc to (hồng đào và kem) tràn hết bề ngang, y ≈ 200–425, một lỗ thủng trên A (G5-26).
 - Tường gạch kem hồng nhạt (gạch to, ít, nhạt).
 - Thạch sùng trên tường.
 - CD treo móc tường trái.
@@ -152,11 +150,11 @@ Bảng ô (`x,y,w,h`), Nhóm, Nét cụ thể **viết sau khi chủ dự án du
 - `l5_yard_sheet`: cửa sổ (back, frame), chuông gió, áo, kẹp, chậu xương rồng, hoa, bàn trang điểm.
 - `l5_yard_b_sheet`: túi rác 2 trạng thái, dép 2 trạng thái, thùng giấy.
 - `l5_shiny_sheet`: gương, nắp thiếc, CD treo, 3 đồ đã đặt.
-- `l5_light_sheet`: đốm sáng, dải nắng, icon mặt trời bị che.
+- `l5_light_sheet`: đốm sáng.
 - `l5_alley_sheet`: vũng nước, thạch sùng, ống bơ, quạ 2 trạng thái.
 - `l5_bike_sheet`: khung xe đạp, bánh trước.
 - `l5_cart_sheet`: xe ba gác, ống thoát nước.
-- `l5_awning_sheet`: bạt thả, bạt cuộn, dây kéo.
+- Bạt `l5_awning_down`: ảnh riêng tách từ demo G5-26 (bỏ bạt cuộn, dây kéo).
 - `l5_mun_sheet`, `l5_mun_b_sheet`: tư thế Mun.
 - `l5_sua_sheet`: Sữa áp kính.
 - `player_l5_sheet`: bịt mũi.
@@ -184,13 +182,11 @@ Mỗi món một ảnh `art/out/_sheets/l5src_<key>.png` (Codex tách từ demo 
 | l5src_l5_slippers_flipped | 0,0,1536,1024 | l5_slippers_flipped | level5 |  | đáy | rộng 255 | 5 |
 | l5src_l5_crow_idle | 0,0,1254,1254 | l5_crow_idle | level5 |  | đáy | rộng 100 | 5 |
 | l5src_l5_crow_far | 0,0,1254,1254 | l5_crow_far | level5 |  | đáy | rộng 97 | 5 |
-| l5src_l5_awning_rolled | 0,0,1904,826 | l5_awning_rolled | level5 |  | đỉnh | rộng 757 | 5 |
-| l5src_l5_awning_down | 0,0,1536,1024 | l5_awning_down | level5 |  | đỉnh | rộng 757 | 5 |
-| l5src_l5_awning_cord | 0,0,1024,1536 | l5_awning_cord | level5 |  | đỉnh | cao 250 | 5 |
+| l5src_l5_awning_down_g26 | 0,0,1536,1024 | l5_awning_down | level5 |  | đỉnh | rộng 1040 | 5 |
 | l5src_l5_gecko | 0,0,1254,1254 | l5_gecko | level5 |  | tâm | rộng 58 | 5 |
 | l5src_l5_milk_can | 0,0,1254,1254 | l5_milk_can | level5 |  | đáy | rộng 74 | 5 |
-| l5src_l5_bike | 0,0,1536,1024 | l5_bike | level5 |  | đáy | rộng 415 | 5 |
-| l5src_l5_bike_wheel | 0,0,1254,1254 | l5_bike_wheel | level5 |  | tâm | rộng 150 | 5 |
+| l5src_l5_bike | 0,0,1536,1024 | l5_bike | level5 |  | đáy | rộng 353 | 5 |
+| l5src_l5_bike_wheel | 0,0,1254,1254 | l5_bike_wheel | level5 |  | tâm | rộng 128 | 5 |
 | l5src_l5_cd_placed | 0,0,1536,1024 | l5_cd_placed | level5 |  | đáy | rộng 90 | 5 |
 | l5src_l5_cd_hanging | 0,0,1254,1254 | l5_cd_hanging | level5 |  | đỉnh | rộng 90 | 5 |
 | l5src_l5_cart | 0,0,1774,887 | l5_cart | level5 |  | đáy | rộng 536 | 5 |
@@ -206,18 +202,16 @@ Như 5.1. Tư thế Mun vẽ riêng từng ảnh nên không chung nhóm: cỡ h
 |---|---|---|---|---|---|---|---|
 | l5src_l5_mirror_placed | 0,0,1254,1254 | l5_mirror_placed | level5 |  | đáy | rộng 90 | 5 |
 | l5src_l5_tin_lid_placed | 0,0,1254,1254 | l5_tin_lid_placed | level5 |  | đáy | rộng 130 | 5 |
-| l5src_l5_sunbeam | 0,0,1024,1536 | l5_sunbeam | level5 |  | đáy | cao 700 | 5 |
 | l5src_l5_light_spot | 0,0,1254,1254 | l5_light_spot | level5 |  | tâm | rộng 106 | 5 |
-| l5src_l5_icon_sun_covered | 0,0,1254,1254 | l5_icon_sun_covered | level5 |  | tâm | rộng 120 | 5 |
-| l5src_mun_peek_out | 0,0,1254,1254 | mun_peek_out | cats |  | đáy | rộng 106 | 5 |
-| l5src_mun_pin_light | 0,0,1254,1254 | mun_pin_light | cats |  | đáy | rộng 160 | 5 |
-| l5src_mun_eyes_dark | 0,0,1254,1254 | mun_eyes_dark | cats |  | tâm | rộng 57 | 5 |
-| l5src_mun_paw_reach | 0,0,1254,1254 | mun_paw_reach | cats |  | 121,635 | rộng 150 | 5 |
-| l5src_mun_run | 0,0,1254,1254 | mun_run | cats |  | đáy | rộng 240 | 5 |
-| l5src_mun_pounce | 0,0,1254,1254 | mun_pounce | cats |  | đáy | rộng 220 | 5 |
-| l5src_mun_look_paw | 0,0,1254,1254 | mun_look_paw | cats |  | đáy | rộng 194 | 5 |
-| l5src_mun_held | 0,0,1024,1536 | mun_held | cats |  | đỉnh | cao 631 | 5 |
-| l5src_mun_face_icon | 0,0,1254,1254 | mun_face_icon | cats |  | tâm | rộng 300 | 5 |
+| l5src_mun_peek_out_g32 | 0,0,1254,1254 | mun_peek_out | cats |  | đáy | rộng 106 | 5 |
+| l5src_mun_pin_light_g36b | 0,0,1254,1254 | mun_pin_light | cats |  | đáy | rộng 196 | 5 |
+| l5src_mun_eyes_dark_g32 | 0,0,1254,1254 | mun_eyes_dark | cats |  | tâm | rộng 55 | 5 |
+| l5src_mun_paw_reach_g32 | 0,0,1254,1254 | mun_paw_reach | cats |  | 271,704 | rộng 75 | 5 |
+| l5src_mun_run_g36 | 0,0,1536,1024 | mun_run | cats |  | đáy | rộng 320 | 5 |
+| l5src_mun_pounce_g36 | 0,0,1024,1536 | mun_pounce | cats |  | đáy | rộng 185 | 5 |
+| l5src_mun_look_paw_g32 | 0,0,1254,1254 | mun_look_paw | cats |  | đáy | rộng 223 | 5 |
+| l5src_mun_held_g32 | 0,0,1024,1536 | mun_held | cats |  | đỉnh | cao 631 | 5 |
+| l5src_mun_face_icon_g32 | 0,0,1254,1254 | mun_face_icon | cats |  | tâm | rộng 300 | 5 |
 | l5src_sua_press_window | 0,0,1254,1254 | sua_press_window | cats |  | đáy | rộng 205 | 5 |
 | l5src_player_cover_nose | 0,0,1024,1536 | player_cover_nose | player |  | đáy | cao 452 | 5 |
 
@@ -232,7 +226,7 @@ Tranh dựng cảnh, không dùng trong game, lưu ở `art/out/demo/`. **Từ G
 Giao diện như L4: ♥ + 6 vòng trống, bong bóng nhiệm vụ mèo đen dấu hỏi, ⏸, túi đồ 4 ô, 💡, mũi tên chuyển phòng.
 
 - `l5_demo_yard`: sân sau lúc mở màn, đủ đồ, Sữa áp kính. Mũi tên ►. Túi trống.
-- `l5_demo_alley`: hẻm lúc **đã kéo bạt** (bạt cuộn), có:
+- `l5_demo_alley`: hẻm lúc **đã kéo bạt** (bạt cuộn), có (**G5-26 thay bằng `l5_demo_alley_g26`: bạt to che kín đầu hẻm, một lỗ thủng trên A, không dây kéo, không dải nắng, quạ trên mép bạt**):
   - dải nắng xuống A;
   - 3 đồ đã đặt: nắp ở A, gương ở B, CD trong giỏ xe;
   - đốm sáng ở F trước gầm;

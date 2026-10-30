@@ -20,6 +20,7 @@
 //   }
 //
 // Thả đồ từ túi vào cảnh: khai báo get dropSpots() → [{ when?, rect, want, place(it), wrong?(it) }] (xem onBagDrop).
+// Kéo đồ có sẵn trong cảnh tới chỗ đặt (không qua túi đồ): sceneDraggable(name, {...}) (xem bên dưới).
 import { BaseLevel, D, MIN_HIT } from './base.js';
 
 // Các kiểu chạm có sẵn. `this` là màn chơi, p = { def, s, name, state, done }.
@@ -63,7 +64,7 @@ const TAPS = {
       const b = p.s.getBounds();
       this.fishBurst(b.centerX, b.top + 20, p.def.secret);
     }
-    if (p.def.react) this.react(p.def.react, p.s.x - this.camX);
+    if (p.def.react) this.react(p.def.react, this.bandX(p.s.x));
     if (p.def.onFlip) p.def.onFlip.call(this, p);
   },
 
@@ -86,7 +87,12 @@ export class ObjectLevel extends BaseLevel {
   create() {
     this.props = {};
     this.got = {}; // món đã nhặt (resetLevel của màn có thể đặt lại)
+    this.sceneDrags = {};
+    this.sdrag = null;
     super.create();
+    this.input.on('gameobjectdown', (p, obj) => this.sceneDragStart(obj.zoneName, p));
+    this.input.on('pointermove', (p) => this.sceneDragMove(p));
+    this.input.on('pointerup', () => this.sceneDragEnd());
   }
 
   // ---------- dựng đồ vật từ khai báo ----------
@@ -157,6 +163,81 @@ export class ObjectLevel extends BaseLevel {
       return true;
     }
     return false;
+  }
+
+  // ---------- kéo đồ có sẵn trong cảnh tới chỗ đặt (G6-1, dùng chung) ----------
+  // sceneDraggable(name, opts): sprite this[name] (vùng chạm cùng tên) kéo được trong cảnh.
+  //   opts.spots(): [{ id, at: [x, y] }] chỗ đang nhận món này (toạ độ đặt sprite); trống = không chỗ nào nhận.
+  //   opts.when(): còn cho kéo không (mặc định luôn); opts.snap: thả cách chỗ đặt ≤ snap px là khớp (mặc định 110);
+  //   opts.place(spot, s): đã khớp vào chỗ; opts.sfx: tiếng khi khớp; opts.depth: lớp sau khi khớp (mặc định lớp cũ).
+  // Đang kéo: chỗ hợp lệ hiện viền mờ đúng cỡ món. Thả ngoài: món trượt về chỗ cũ, lắc một nhịp, "sai".
+  // Chạm không kéo vẫn là chạm thường (tapProp / handleLevel).
+  sceneDraggable(name, opts) { this.sceneDrags[name] = opts; }
+
+  sceneDragStart(name, p) {
+    const d = name && this.sceneDrags[name], s = d && this[name];
+    if (!s || this.locked || this.introBusy || this.phase !== 'search' || this.drag || this.sdrag || (d.when && !d.when())) return;
+    this.sdrag = { name, d, s, x0: p.worldX, y0: p.worldY, dx: s.x - p.worldX, dy: s.y - p.worldY, home: [s.x, s.y], depth: s.depth, moved: false };
+  }
+
+  sceneDragMove(p) {
+    const sd = this.sdrag;
+    if (!sd) return;
+    if (!sd.moved) {
+      if (Math.hypot(p.worldX - sd.x0, p.worldY - sd.y0) < 12) return;
+      sd.moved = true;
+      this.press = null; // kéo thì không tính là chạm
+      this.touch();
+      this.handHide();
+      this.handHide('paw');
+      sd.s.setDepth(D.fx - 1);
+      sd.spots = sd.d.spots();
+      sd.ghost = this.sceneGhosts(sd.s, sd.spots);
+    }
+    sd.s.setPosition(p.worldX + sd.dx, p.worldY + sd.dy);
+  }
+
+  // Viền mờ đúng cỡ phần vẽ của món, đặt ở từng chỗ hợp lệ; nhấp nháy nhẹ.
+  sceneGhosts(s, spots) {
+    const r = this.artRect(s), ox = r.x - s.x, oy = r.y - s.y, g = this.add.graphics().setDepth(D.fx - 2);
+    for (const { at: [x, y] } of spots) {
+      g.fillStyle(0xffffff, 0.18).fillRoundedRect(x + ox, y + oy, r.width, r.height, 14);
+      g.lineStyle(4, 0xffffff, 0.8).strokeRoundedRect(x + ox, y + oy, r.width, r.height, 14);
+    }
+    this.tweens.add({ targets: g, alpha: 0.45, duration: 450, yoyo: true, repeat: -1 });
+    return g;
+  }
+
+  sceneDragEnd() {
+    const sd = this.sdrag;
+    if (!sd) return;
+    this.sdrag = null;
+    if (!sd.moved) return;
+    this.tweens.killTweensOf(sd.ghost);
+    sd.ghost.destroy();
+    const { s, d, name } = sd, snap = d.snap || 110;
+    const spot = sd.spots.find(({ at: [x, y] }) => Math.hypot(s.x - x, s.y - y) <= snap);
+    if (spot) {
+      this.tweens.add({ targets: s, x: spot.at[0], y: spot.at[1], duration: 160, ease: 'Quad.out', onComplete: () => {
+        s.setDepth(d.depth ?? sd.depth);
+        this.squash(s);
+        if (d.sfx) this.sfx(d.sfx);
+        if (this.zones[name]) this.zoneTo(name, s);
+        d.place(spot, s);
+      } });
+      return;
+    }
+    this.sfx('sfx_wrong');
+    this.tweens.add({ targets: s, x: sd.home[0], y: sd.home[1], duration: 250, ease: 'Quad.out', onComplete: () => {
+      s.setDepth(sd.depth);
+      this.wiggle(s, 4, 1, 240);
+    } });
+  }
+
+  // Điểm giữa phần vẽ của món name nếu đặt ở `at` (cho bàn chân 💡 kéo mẫu tới chỗ đặt).
+  sceneSpotCenter(name, at) {
+    const s = this[name], r = this.artRect(s);
+    return [at[0] + r.centerX - s.x, at[1] + r.centerY - s.y];
   }
 
   // ---------- chỗ trốn: lộ diện mặc định ----------

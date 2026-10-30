@@ -6,7 +6,7 @@
 // thả lần lượt vào đốm sáng ở A → B → C, mỗi lần tia phản chiếu bật sang điểm kế, gần Mun hơn; tới trước gầm thì Mun phóng ra.
 // ?level=5&debug=1: đánh dấu 3 điểm A, B, C và điểm trước gầm xe.
 import { D, BUBBLE_CORNER } from './base.js';
-import { RoomsLevel, ROOM_W } from './rooms.js';
+import { RoomsLevel, ROOM_W, ROOM_PAD } from './rooms.js';
 
 const YARD = 0, ALLEY = 1;
 // Vị trí (toạ độ trong khung phòng, khung 1024x1536). ROOM cho biết key ở phòng nào.
@@ -17,21 +17,22 @@ const DEF = {
   // D5-17: món đã có ảnh thật chỉnh theo so-demo (match trong play_harness, sai lệch ≤ 2px).
   l5_cafe_window: [257, 774], l5_cafe_window_back: [257, 774], l5_cafe_window_frame: [257, 774], sua_press_window: [248, 747], // chân trước tì lên bậu (mặt bậu y 731), như demo
   l5_vanity_table: [711, 1029], l5_mirror_small: [720, 821], l5_trash_bag_idle: [207, 1059], l5_cardboard_box: [471, 1244],
-  l5_tin_lid: [729, 1277], l5_slippers: [186, 1270], player_call: [720, 1250],
+  l5_tin_lid: [769, 1277], l5_slippers: [186, 1270], player_call: [720, 1385], // chủ dự án: nắp thiếc sang phải 40; G5-28: nhân vật xuống tới chân không chồng thùng giấy
   l5_clothesline: [733, 292], l5_shirt: [687, 311], l5_clothespin: [714, 297], l5_wind_chime: [489, 382],
   l5_doorstep: [950, 1100], l5_cactus_pot: [942, 1035],
   // Hẻm: chân tường y 860.
-  l5_crow_idle: [322, 270], l5_crow_far: [760, 258], l5_awning_down: [508, 269], l5_awning_cord: [856, 448],
-  l5_sunbeam: [218, 1040], l5_cd_hanging: [145, 535], l5_gecko: [334, 528], l5_milk_can: [716, 607],
+  l5_crow_idle: [320, 231], l5_crow_far: [760, 233], l5_awning_down: [512, 218], // A5-17: bạt G26 hết bề ngang, quạ đậu dây mép trên bạt
+  l5_cd_hanging: [145, 535], l5_gecko: [334, 528], l5_milk_can: [716, 607],
   // Ảnh xe ba gác và xe đạp neo ở đáy bánh sau (A5-12), không ở giữa khung.
-  l5_cart: [467, 1132], mun_eyes_dark: [690, 1078], mun_peek_out: [698, 1135], l5_drain_pipe: [972, 1098],
+  // G5-29: mắt giữa bóng gầm xe; mặt ló đỉnh trong bóng, cằm chạm đất.
+  l5_cart: [467, 1132], mun_eyes_dark: [625, 1070], mun_peek_out: [650, 1143], l5_drain_pipe: [972, 1098],
   l5_puddle: [167, 1106],
   // G5-22 (chủ dự án): xe đạp nhỏ lại ×0,85 so với demo quanh điểm giữa đáy cũ (667, 940), vẫn đứng sau xe ba gác:
   // neo bánh sau = 667 − 353/2 + 73 (phần vẽ rộng 353, neo cách mép trái 73).
   l5_bike: [564, 940], l5_bike_wheel: [780, 880],
 };
 const ROOM = {
-  l5_crow_idle: ALLEY, l5_crow_far: ALLEY, l5_awning_down: ALLEY, l5_awning_cord: ALLEY, l5_sunbeam: ALLEY, l5_cart: ALLEY,
+  l5_crow_idle: ALLEY, l5_crow_far: ALLEY, l5_awning_down: ALLEY, l5_cart: ALLEY,
   l5_cd_hanging: ALLEY, mun_eyes_dark: ALLEY, mun_peek_out: ALLEY, l5_drain_pipe: ALLEY,
   l5_bike: ALLEY, l5_bike_wheel: ALLEY, l5_puddle: ALLEY, l5_gecko: ALLEY, l5_milk_can: ALLEY,
 };
@@ -41,47 +42,51 @@ const FIT = {
   l5_slippers: 218, l5_cactus_pot: 107, l5_shirt: 150, l5_wind_chime: 60, l5_clothespin: 12,
   l5_crow_idle: 98, l5_puddle: 165, l5_gecko: 57, l5_milk_can: 72, l5_cd_hanging: 80,
   l5_tin_lid_placed: 130, l5_mirror_placed: 90, l5_cd_placed: 92, l5_light_spot: 106,
-  // A5-13: cỡ Mun chọn để mắt bằng nhau ở mọi tư thế.
-  mun_peek_out: 106, mun_pin_light: 160, mun_eyes_dark: 57, mun_paw_reach: 150, mun_run: 240, mun_pounce: 220, mun_look_paw: 194,
-  sua_press_window: 205, l5_cafe_window: 386, l5_cafe_window_back: 386, l5_awning_down: 757, l5_cart: 536,
-  l5_bike: 353, // G5-22: Art vẽ xe đạp đúng cỡ demo (rộng 415), game thu ×0,85; bánh trước co cùng tỉ lệ (FIT_HEAD)
+  // A5-13: cỡ Mun chọn để mắt bằng nhau ở mọi tư thế. A5-23 (mặt tròn): mắt 55, chân vồ ngắn mũm mĩm 75.
+  mun_peek_out: 106, mun_pin_light: 196, mun_eyes_dark: 55, mun_paw_reach: 75, mun_run: 320, mun_pounce: 185, mun_look_paw: 223,
+  // G5-28: Mun cảnh cuối ×1,15; A5-25 (G5-36 vẽ lại chạy, vồ dáng dọc, đè đốm sáng): cỡ chọn để mắt bằng các dáng khác.
+  sua_press_window: 205, l5_cafe_window: 386, l5_cafe_window_back: 386, l5_awning_down: 1040, l5_cart: 536,
+  l5_bike: 353, // G5-22: xe đạp nhỏ lại ×0,85 so với demo; A5-20: Art cắt đúng 353 (ảnh 1,5 lần cỡ hiển thị); bánh trước co cùng tỉ lệ (FIT_HEAD)
 };
 // Món co theo chiều cao phần vẽ đo trên demo (A5-12: ống nước cao 936).
-const FIT_H = { l5_drain_pipe: 936, l5_sunbeam: 700 }; // mun_held: không co riêng, cắt cùng cỡ sua_held (A5-15) // dải nắng cao 700 từ mép bạt xuống A (A5-13)
-const SUNBEAM_ALPHA = 0.6;                            // A5-13: ảnh dải nắng đặc, code cho trong
-// Chỗ đốm sáng trên mu bàn chân trái giơ lên của `mun_look_paw` (px trên ảnh thật 307x301, A5-13).
-const LOOK_PAW_SPOT = [170, 182];
+const FIT_H = { l5_drain_pipe: 936 }; // mun_held: không co riêng, cắt cùng cỡ sua_held (A5-15)
+// G5-26: bạt phủ kín bề ngang phòng hẻm (A5-17: phần vẽ rộng 1040, dư 8px mỗi mép).
+const AWNING_W = 1040;
+// Lỗ thủng trong ảnh bạt (toạ độ phòng hẻm, A5-17: tâm (208, 360), rộng ≈ 33, trong suốt), ngay trên điểm A: gốc tia nắng đầu.
+// Sau lỗ lót chấm kem nhạt (lớp 24.5) cho lỗ đọc là nắng lọt qua, không thấy tường nền.
+const HOLE = [208, 360], HOLE_R = 17;
+const PIPE_CUT_Y = 300; // G5-27: ống nước cắt từ y này lên (mép cắt khuất sau bạt), như demo G26 ống bắt đầu dưới mép bạt
+// Bóng râm của bạt (G5-26): cả hẻm dưới bạt, nâu xám ấm, mép trên mềm. Nền phủ lớp màu; đồ trong hẻm nhuộm tint cùng độ tối.
+const SHADE = { color: 0x4a3a2e, alpha: 0.5, tint: 0xb0a498, fade: 70 };
+// Chỗ đốm sáng trên mu bàn chân trái giơ lên của `mun_look_paw` (px trên ảnh thật 350x343, Mun mặt tròn A5-23).
+const LOOK_PAW_SPOT = [197, 214];
 const HELD_PIT = 0.43;                                // nách Mun trên ảnh `mun_held` (tỉ lệ chiều cao), như `sua_held` neo ở nách
 const FIT_HEAD = { l5_trash_bag_after: 'l5_trash_bag_idle', l5_slippers_flipped: 'l5_slippers', l5_crow_far: 'l5_crow_idle',
-  l5_bike_wheel: 'l5_bike', l5_awning_rolled: 'l5_awning_down', l5_awning_cord: 'l5_awning_down', l5_cafe_window_frame: 'l5_cafe_window_back' };
+  l5_bike_wheel: 'l5_bike', l5_cafe_window_frame: 'l5_cafe_window_back' };
 const GECKO_UP = [333, 400];                          // thạch sùng chạy vụt lên đây (sát dưới bạt)
 // Nối tia (G5-5), toạ độ phòng hẻm (demo): A đất trong vệt nắng dưới đầu trái bạt; B bậu tường giữa hẻm (gương đứng trên bậu);
 // C giỏ xe đạp (đĩa gác trong giỏ, đáy ảnh = miệng giỏ); F ngay trước gầm xe ba gác, dưới khung xanh bên phải.
-// Tia A→B, B→C không cắt gì; tia từ đĩa (C) vẽ SAU thùng xe ba gác (G5-17).
+// Tia A→B, B→C không cắt gì; tia từ đĩa (C) vẽ TRÊN xe ba gác (G5-28, thay G5-17).
 const PTS = [[220, 978], [511, 586], [794, 722]]; // D5-19: A, B chỉnh theo so-demo ảnh thật nắp thiếc, gương
 const PLACE_Y = [1040, 645, 760];                     // đáy đồ đặt ở A (đất), B (mặt bậu), C (miệng giỏ)
-const FRONT = [800, 1122];
+const FRONT = [740, 1130];                           // G5-29: trên đất trước mép phải bóng gầm, chưa chạm bánh trước
 const LEDGE = { x: 388, y: 640, w: 232, h: 32 };       // bậu tường (vẽ trong nền hẻm), đồ đặt ở B đứng trên bậu
 const HIT = 110;                                      // thả đồ cách đốm sáng ≤ 110px là trúng
-const GAP = { x: 520, y: 1050, w: 270, h: 55 };       // vùng tối dưới thùng xe ba gác (Mun nấp ở đây)
-const SPECKS = [[150, 930], [320, 960], [280, 1080], [110, 1190], [430, 1190], [880, 1180]]; // chấm nắng li ti lọt qua lỗ bạt
+// G5-29: bóng gầm dưới thùng xe ba gác (Mun nấp ở đây), đo phần tối trong ảnh `l5_cart`: x 530–720, y 1054–1091.
+// Bánh sau tới x ≈ 530, bánh trước từ x ≈ 793.
+const GAP = { x: 535, y: 1054, w: 180, h: 37 };
 // Cảnh lộ diện (G5-22, chủ dự án: "ánh sáng chạy quanh phía dưới khu vực map còn trống hơn, bên dưới xe ba gác"):
 // đốm sáng từ F xuống khoảng sàn trống dưới xe ba gác, chạy đúng 2 vòng elip (x 370–830, y 1175–1255), Mun đuổi; hết vòng 2
 // là vồ đè luôn ở điểm thấp nhất (600, 1255), đáy Mun y 1295 (khung 9:16: thanh túi đồ bắt đầu ≈ y 1300).
 // Mỗi vòng 1 giây; Mun ra tới lúc đè ≈ 2,7 giây.
 const LOOP = { x: 600, y: 1215, rx: 230, ry: 40, ms: 2000, lead: 450 };
+const SHADOW_W = 360;                                // bóng Mun chui ra từ thùng ở sân sau: rộng 360 (= 240 × 1,5 đã duyệt)
 const MUN_FOOT = 40;                                  // đáy Mun thấp hơn đốm sáng (Mun chạy trên mặt đất, đốm sáng dưới chân)
+const PIN_SPOT_UP = 10;                               // lúc đè đốm sáng: đốm ở ngay trên đáy Mun (dưới hai bàn chân chụm)
 // Đồ sáng: key trong túi → key lúc đặt (dựng nghiêng ở điểm nối tia).
 const SHINY = { l5_mirror_small: 'l5_mirror_placed', l5_tin_lid: 'l5_tin_lid_placed', l5_cd_hanging: 'l5_cd_placed' };
 const SHINY_ROOM = { l5_mirror_small: YARD, l5_tin_lid: YARD, l5_cd_hanging: ALLEY };
 const ORDER = ['l5_tin_lid', 'l5_mirror_small', 'l5_cd_hanging']; // G5-12: A chỉ nhận nắp thiếc, B gương, C đĩa CD
-// Âm thanh chưa có: mượn tiếng gần giống có sẵn.
-const SFX_ALIAS = {
-  mun_sfx_scamper: 'sfx_cloth', l5_sfx_glass_ting: 'sfx_clink', l5_sfx_plastic: 'sfx_leaves', l5_sfx_canvas_flap: 'sfx_cloth_drop',
-  mun_sfx_hiss_tiny: 'sua_sfx_chirp', l5_sfx_crow: 'l1_sfx_cuckoo', mun_sfx_meow: 'sua_sfx_meow', mun_sfx_meow_cute: 'sua_sfx_meow_cute',
-  l5_sfx_pop: 'sfx_pop_can', l5_sfx_wind: 'sfx_cloth', l5_sfx_chime: 'sfx_sparkle', l5_sfx_flop: 'sfx_cushion_soft',
-  l5_sfx_bike_bell: 'l3_sfx_doorbell', l5_sfx_splash: 'sfx_drop', l5_sfx_gecko: 'sua_sfx_blep', l5_sfx_can_clunk: 'l3_sfx_clack',
-};
 
 // ---------- khối có nhãn (canvas) ----------
 const C = { brown: '#6b4a3a', cream: '#fdf6e8', kraft: '#d9a86c', wood: '#d6a472', black: '#2a2626', dark: '#3d3838', gold: '#f7d23e',
@@ -189,21 +194,6 @@ const FB = {
   l5_awning_down: [757, 170, 'đỉnh', (c, w, h) => {
     rr(c, 4, 4, w - 8, h - 8, C.canvas, 6);
     c.fillStyle = 'rgba(255,255,255,0.4)'; for (let x = 40; x < w; x += 100) c.fillRect(x, 4, 46, h - 8);
-    c.fillStyle = '#fff6c8'; [[110, 120], [260, 60], [420, 130], [580, 80], [190, 40]].forEach(([x, y]) => { c.beginPath(); c.arc(x, y, 6, 0, Math.PI * 2); c.fill(); }); // lỗ thủng
-  }],
-  l5_awning_rolled: [757, 140, 'đỉnh', (c, w, h) => { // A5-11: bạt cuộn có luôn đoạn dây ngắn có vòng ở đầu phải (như demo)
-    rr(c, 4, 4, w - 8, 50, C.canvas, 24);
-    c.strokeStyle = '#8a6a4a'; c.lineWidth = 4; c.beginPath(); c.moveTo(728, 54); c.lineTo(728, 112); c.stroke();
-    c.beginPath(); c.arc(728, 124, 11, 0, Math.PI * 2); c.lineWidth = 6; c.strokeStyle = '#c98a3a'; c.stroke();
-  }],
-  l5_awning_cord: [44, 96, 'đỉnh', (c, w, h) => {
-    c.strokeStyle = '#8a6a4a'; c.lineWidth = 4; c.beginPath(); c.moveTo(w / 2, 0); c.lineTo(w / 2, h - 30); c.stroke();
-    c.beginPath(); c.arc(w / 2, h - 16, 12, 0, Math.PI * 2); c.lineWidth = 6; c.strokeStyle = '#c98a3a'; c.stroke();
-  }],
-  l5_sunbeam: [160, 702, 'đáy', (c, w, h) => { // G5-9: dải hẹp từ mép bạt xuống A
-    c.fillStyle = 'rgba(255,236,150,0.42)'; c.beginPath();
-    c.moveTo(w / 2 - 22, 0); c.lineTo(w / 2 + 22, 0); c.lineTo(w - 4, h - 34); c.lineTo(4, h - 34); c.fill();
-    el(c, w / 2, h - 34, w / 2 - 4, 30, C.sun, 'rgba(230,190,90,0.9)', 3);
   }],
   l5_light_spot: [96, 96, 'tâm', (c, w, h) => {
     const g = c.createRadialGradient(w / 2, h / 2, 6, w / 2, h / 2, w / 2);
@@ -269,12 +259,6 @@ const FB = {
     c.moveTo(w / 2 + 115, h / 2); c.lineTo(w / 2 + 95, 10); c.lineTo(w / 2 + 25, h / 2 - 60); c.fill();
     el(c, w / 2 - 45, h / 2 + 20, 26, 30, C.gold, null); el(c, w / 2 + 45, h / 2 + 20, 26, 30, C.gold, null);
     el(c, w / 2 - 45, h / 2 + 20, 8, 22, C.black, null); el(c, w / 2 + 45, h / 2 + 20, 8, 22, C.black, null);
-  }],
-  // Bong bóng nhân vật: mặt trời bị mây che (chỉ code, không có ảnh riêng trong đặc tả).
-  l5_icon_sun_covered: [120, 100, 'tâm', (c, w, h) => {
-    el(c, 46, 42, 30, 30, C.gold, '#d9a520', 3);
-    for (let i = 0; i < 8; i++) { const a = (i * Math.PI) / 4; c.strokeStyle = '#d9a520'; c.lineWidth = 4; c.beginPath(); c.moveTo(46 + 38 * Math.cos(a), 42 + 38 * Math.sin(a)); c.lineTo(46 + 46 * Math.cos(a), 42 + 46 * Math.sin(a)); c.stroke(); }
-    el(c, 70, 70, 40, 22, '#cfd6de', '#8a96a3', 3); el(c, 52, 64, 22, 18, '#cfd6de', null); el(c, 84, 58, 22, 18, '#cfd6de', null);
   }],
   player_cover_nose: kid('bịt mũi', '#fde3a7'),
   // ---------- đồ thêm (G5-11) ----------
@@ -344,19 +328,18 @@ export class Level5 extends RoomsLevel {
   // Bản đồ mini: sân = bàn trang điểm, hẻm = xe ba gác (tạm, tới khi Art vẽ ui_map_yard / ui_map_alley).
   get roomIcons() { return [['ui_map_yard', 'l5_vanity_table'], ['ui_map_alley', 'l5_cart']]; }
   get suaHand() { return false; }
-  // Bong bóng nhiệm vụ mở màn nảy mạnh hơn (0 → 1,3 → 1).
-  get bubblePop() { return { peak: 1.3, up: 260, rest: 1, down: 160 }; }
+  // Bong bóng nhiệm vụ mở màn nảy mạnh hơn, nhỏ lại (G5-28: 0 → 0,9 → 0,7), cao hơn, phía trên bên phải đầu nhân vật.
+  get bubblePop() { return { peak: 0.9, up: 260, rest: 0.7, down: 160 }; }
+  get introBubbleAt() { return [850, 640 + this.Y0]; }
 
-  sfx(key, gain = 1) { super.sfx(this.cache.audio.exists(key) ? key : SFX_ALIAS[key] || key, gain); }
+  get fitDefaults() { return FIT; }
 
   resetLevel() {
     const A = this.A;
-    A.fit = A.fit || {};
-    if (!A.fit[5] || !Object.keys(A.fit[5]).length) A.fit[5] = { ...FIT }; // chưa có cột "Rộng demo" trong design-art: dùng số đo demo
     Object.assign(this, { room: YARD, moving: false, secrets: 0, taught: {}, arrowPulse: null, got: {},
-      boxDone: false, metMun: false, rolled: false, step: 0, chased: false, trashDone: false, pipeDone: false, crowFar: false, slipDone: false, canDone: false, geckoUp: false,
-      eyesAway: false, munStage: 'eyes', pawOut: false, trail: [], chaseOn: false, rays: [], spotAt: null, cordAmp: 4, spotAmp: 3,
-      blinkEv: null, eyesEv: null, thinkB: null, thinkIcon: null, specks: [], dark: null, pawDone: null });
+      boxDone: false, metMun: false, step: 0, chased: false, trashDone: false, pipeDone: false, crowFar: false, slipDone: false, canDone: false, geckoUp: false,
+      eyesAway: false, munStage: 'eyes', pawOut: false, trail: [], chaseOn: false, rays: [], spotAt: null, spotAmp: 3, sunRay: null, flapK: 0,
+      blinkEv: null, eyesEv: null, pawDone: null });
     this.debug = new URLSearchParams(location.search).get('debug') === '1';
     // Ảnh `mun_held` neo đỉnh (A5-13); cảnh bế chung cần neo ở nách (điểm hai tay nắm), như `sua_held`.
     const he = A.entries.mun_held;
@@ -377,12 +360,9 @@ export class Level5 extends RoomsLevel {
     return s;
   }
 
-  shinyInBag() { return this.bag ? this.bag.items.filter((o) => o && SHINY[o.key]) : []; }
-
   // ---------- dựng hai phòng ----------
   buildRoom() {
-    this.buildRoomBgs(); // nền thật cao 1024x2304 (G5-21): rooms.js đặt lệch cho vùng chơi khớp y 0–1536
-    this.makeFallback('l5_icon_sun_covered');
+    this.buildRoomBgs(); // nền thật cao 1024x2304 (G5-21): buildBg chung đặt lệch cho vùng chơi khớp y 0–1536
     const P = (k) => this.P(k);
 
     // Sân sau: nền → cửa sổ quán (+ Sữa) → bàn trang điểm + gương → thùng giấy + nắp thiếc → túi rác → giao diện.
@@ -410,13 +390,9 @@ export class Level5 extends RoomsLevel {
     this.shadow = this.img('mun_run', 0, 0, 15).setVisible(false);
     this.player = this.img('player_call', ...P('player_call'), D.player).setVisible(false);
 
-    // Hẻm: nền → chấm nắng → vệt nắng → xe (+ gầm) → đồ đặt ở A/B/C, tia, đốm sáng (trên xe, G5-14) → Mun → ống nước → bạt → quạ.
-    // Lớp tối (bóng râm) phủ cả hẻm tới khi cuộn bạt; mắt Mun, dây kéo, chấm nắng nằm trên lớp tối để vẫn nổi.
-    this.sunbeam = this.img('l5_sunbeam', ...P('l5_sunbeam'), 10).setAlpha(0);
-    this.rayG = this.add.graphics().setDepth(21);
-    // G5-17: tia từ đĩa trong giỏ xe đạp (sát tường, xa hơn xe ba gác) vẽ SAU thùng xe ba gác (trên xe đạp, dưới xe ba gác):
-    // lúc đốm sáng ở đất bên trái xe, tia đi sau thùng xe rồi ló ra ở mép trái.
-    this.rayBack = this.add.graphics().setDepth(19);
+    // Hẻm: nền → bóng râm → xe (+ gầm) → đồ đặt ở A/B/C, tia, đốm sáng (trên xe, G5-14) → Mun → ống nước → bạt → quạ.
+    // G5-26: cả hẻm dưới bạt trong bóng râm từ đầu tới hết màn; tia nắng, đốm sáng, đồ sáng đã đặt, mắt Mun không bị nhuộm nên nổi.
+    this.rayG = this.add.graphics().setDepth(21); // mọi tia trên xe ba gác (lớp 20), kể cả tia từ đĩa CD (G5-28)
     this.halo = this.add.circle(0, 0, 58, 0xfff3b0, 0.35).setDepth(21.2).setVisible(false);
     this.spot = this.img('l5_light_spot', 0, 0, 21.4).setVisible(false);
     this.cart = this.img('l5_cart', ...P('l5_cart'), 20);
@@ -429,17 +405,7 @@ export class Level5 extends RoomsLevel {
     this.milkCan = this.img('l5_milk_can', ...P('l5_milk_can'), 11);
     this.bike = this.img('l5_bike', ...P('l5_bike'), 15);
     this.wheel = this.img('l5_bike_wheel', ...P('l5_bike_wheel'), 15.5);
-    this.dark = this.add.rectangle(ROOM_W, -1200, ROOM_W, 4000, 0x1c2230, 0.42).setOrigin(0, 0).setDepth(27);
-    this.specks = SPECKS.map(([x, y], i) => {
-      const s = this.add.circle(x + ROOM_W, y, 7, 0xfff3b0, 0.9).setDepth(28);
-      this.tweens.add({ targets: s, alpha: 0.25, scale: 0.6, duration: 600 + i * 90, yoyo: true, repeat: -1, delay: i * 140 });
-      return s;
-    });
-    this.cord = this.img('l5_awning_cord', ...P('l5_awning_cord'), 28);
-    { // Dây dài treo ở mép dưới bạt thả, đầu phải (theo phần vẽ thật của bạt, A5-12), lệch vào trong như dây ngắn của bạt cuộn.
-      const ar = this.artRect(this.awning);
-      this.cord.setPosition(ar.right - (this.P('l5_awning_down')[0] + 378 - this.P('l5_awning_cord')[0]), ar.bottom - 10);
-    }
+    this.buildShade();
     this.eyes = this.img('mun_eyes_dark', ...P('mun_eyes_dark'), 28).setVisible(false);
     this.eyesHome = [this.eyes.x, this.eyes.y];
     this.peek = this.img('mun_peek_out', ...P('mun_peek_out'), 28).setVisible(false);
@@ -457,8 +423,6 @@ export class Level5 extends RoomsLevel {
     this.zone('box', this.artRect(this.box), D.zone + 3);
     this.zone('lid', this.artRect(this.lid), D.zone + 4);
     this.zone('awning', this.artRect(this.awning), D.zone + 2);
-    const cr = this.artRect(this.cord);
-    this.zone('cord', new Phaser.Geom.Rectangle(cr.centerX - 70, cr.y + 40, 140, cr.height + 20), D.zone + 4);
     this.zone('crow', this.artRect(this.crow), D.zone + 3);
     this.zone('shirt', this.artRect(this.shirt), D.zone + 1);
     this.zone('chime', this.artRect(this.chime), D.zone + 3);
@@ -468,12 +432,16 @@ export class Level5 extends RoomsLevel {
     this.zone('gecko', this.artRect(this.gecko), D.zone + 3);
     this.zone('milkCan', this.artRect(this.milkCan), D.zone + 3);
     this.zone('bike', this.artRect(this.bike), D.zone + 2);
-    this.zone('pipe', this.artRect(this.pipe), D.zone + 2);
+    { // vùng chạm ống: chỉ phần thấy được dưới mép bạt (G5-27)
+      const r = this.artRect(this.pipe), y0 = Math.max(r.y, this.artRect(this.awning).bottom);
+      this.zone('pipe', new Phaser.Geom.Rectangle(r.x, y0, r.width, r.bottom - y0), D.zone + 2);
+    }
     this.zone('cart', this.artRect(this.cart), D.zone + 1);
     this.zone('cd', this.artRect(this.cd), D.zone + 4);
     this.zone('eyes', this.R(ALLEY, GAP), D.zone + 3);
     this.zone('munPaw', new Phaser.Geom.Rectangle(0, 0, 120, 120), D.zone + 5).disableInteractive();
     this.arrowZones();
+    this.fidget(this.box, { sfx: 'sfx_cloth', until: () => this.boxDone }); // G5-29: thùng có mèo bên trong, nhún rung tới khi chạm
     if (this.debug) this.buildDebug();
   }
 
@@ -497,8 +465,7 @@ export class Level5 extends RoomsLevel {
       case 'table': this.wiggle(this.table, 1.5, 2, 240); this.sfx('sfx_tap'); break;
       case 'trash': this.trashTap(); break;
       case 'window': this.windowTap(); break;
-      case 'awning': this.awningTap(g, -1); break;
-      case 'cord': this.awningTap(g, 1); break;
+      case 'awning': this.awningTap(); break;
       case 'crow': this.crowTap(); break;
       case 'pipe': this.pipeTap(); break;
       case 'cactus': this.cactusTap(); break;
@@ -524,10 +491,6 @@ export class Level5 extends RoomsLevel {
 
   mapBlinkOnEnter() { return this.firstAlley; }
 
-  onRoomEnter(r) {
-    if (r === ALLEY) this.sunThought();
-  }
-
   // (1) Thùng giấy: lần đầu rung mạnh, bóng đen vụt ra chạy sang phải (sang hẻm), mũi tên ► nhấp nháy; Mun nấp dưới gầm xe.
   boxTap() {
     if (this.boxDone) { this.wiggle(this.box, 3, 2, 240); this.sfx('sfx_tap'); return; }
@@ -535,7 +498,9 @@ export class Level5 extends RoomsLevel {
     this.wiggle(this.box, 9, 4, 420);
     this.time.delayedCall(250, () => {
       const r = this.artRect(this.box), s = this.shadow;
-      s.setVisible(true).setPosition(r.centerX, r.bottom - 10).setAlpha(1);
+      s.setVisible(true).setPosition(r.centerX, r.bottom - 10).setAlpha(1).setScale(s.base, s.baseY);
+      const k = SHADOW_W / this.artRect(s).width; // chủ dự án: bóng chui ra to ×1,5 cỡ chạy cũ, không đổi theo FIT mun_run
+      s.setScale(s.base * k, s.baseY * k);
       this.sfx('mun_sfx_scamper');
       this.tweens.add({ targets: s, x: ROOM_W + 120, duration: 500, ease: 'Quad.in', onComplete: () => s.setVisible(false) });
       this.tweens.add({ targets: s, y: s.y - 14, duration: 90, yoyo: true, repeat: 2 });
@@ -596,7 +561,7 @@ export class Level5 extends RoomsLevel {
     if (this.trashDone) { this.squash(this.trash); return; }
     this.trashDone = true;
     this.squash(this.trash, () => this.swap(this.trash, 'l5_trash_bag_after', () => this.zoneTo('trash', this.trash)));
-    this.react('player_cover_nose', this.artRect(this.trash).centerX - this.camX + 120, 1000);
+    this.react('player_cover_nose', this.bandX(this.artRect(this.trash).centerX) + 120, 1000);
   }
 
   // (4) Cửa sổ quán ✨: Sữa nảy nhỏ, "Meo?".
@@ -608,57 +573,59 @@ export class Level5 extends RoomsLevel {
     this.time.delayedCall(400, () => (this.busy.win = false));
   }
 
-  // (6) Bạt + dây kéo: vuốt xuống trên dây (dir 1) hoặc vuốt lên trên bạt (dir -1) thì bạt cuộn, hẻm sáng, nắng rơi xuống A.
-  // Chạm (không vuốt): dây đung đưa mạnh một nhịp.
-  awningTap(g, dir) {
-    if (this.rolled) return;
-    const ok = g && g.swipe && g.dy * dir > 20 && Math.abs(g.dy) >= Math.abs(g.dx) * 0.6;
-    if (!ok) { this.cordKick(10); this.sfx('sfx_cloth', 0.5); return; }
-    this.rollAwning();
-  }
-
-  cordKick(amp) { this.cordAmp = Math.max(this.cordAmp, amp); }
-
-  rollAwning() {
-    this.rolled = true;
-    this.zones.cord.disableInteractive();
+  // (6) ✨ Bạt (G5-26): bạt phồng gió nhẹ, tia nắng qua lỗ thủng rung rinh, "phành phạch".
+  awningTap() {
+    if (this.busy.awning) return;
+    this.busy.awning = true;
     this.sfx('l5_sfx_canvas_flap');
-    // Dây dài giật xuống rồi ẩn; ảnh bạt cuộn có sẵn đoạn dây ngắn treo ở đầu phải (A5-11, như demo).
-    const c = this.cord;
-    c.setAngle(0);
-    this.tweens.chain({ targets: c, tweens: [{ y: c.y + 40, duration: 120, ease: 'Quad.out' }, { alpha: 0, duration: 100 }], onComplete: () => c.setVisible(false) });
-    this.time.delayedCall(140, () => this.swap(this.awning, 'l5_awning_rolled', () => this.zoneTo('awning', this.awning)));
-    this.tweens.add({ targets: this.dark, alpha: 0, duration: 500, delay: 150 });
-    this.tweens.add({ targets: this.specks, alpha: 0, duration: 300, onComplete: () => this.specks.forEach((s) => { this.tweens.killTweensOf(s); s.setVisible(false); }) });
-    this.tweens.add({ targets: this.sunbeam, alpha: SUNBEAM_ALPHA, duration: 500, delay: 150, onComplete: () => this.showSpot(this.W(ALLEY, PTS[0])) });
+    const aw = this.awning, by = aw.baseY; // neo đỉnh: phồng xuống dưới
+    this.tweens.chain({ targets: aw, tweens: [
+      { scaleY: by * 1.08, duration: 160, ease: 'Sine.out' }, { scaleY: by * 0.97, duration: 160, ease: 'Sine.inOut' },
+      { scaleY: by * 1.04, duration: 140, ease: 'Sine.inOut' }, { scaleY: by, duration: 160, ease: 'Sine.in' },
+    ], onComplete: () => (this.busy.awning = false) });
+    this.tweens.addCounter({ from: 0, to: 1, duration: 700, onUpdate: (tw) => (this.flapK = Math.sin(Math.PI * tw.getValue())),
+      onComplete: () => { this.flapK = 0; this.drawRays(); } });
   }
 
-  // Có đồ sáng trong túi mà hẻm còn tối: lúc sang hẻm, bong bóng nhân vật hình mặt trời bị che (một lần).
-  sunThought() {
-    if (this.rolled || this.taught.sun || !this.shinyInBag().length) return;
-    this.taught.sun = true;
-    const r = this.artRect(this.cord);
-    this.think('l5_icon_sun_covered', r.centerX - 150, r.y + 140, 1.0);
+  // G-SCREEN: màn rộng hơn 9:16 thì bạt phải che cả phần dư hai bên. Tạm kéo giãn ngang ảnh bạt quanh giữa phòng (tới khi Art
+  // vẽ bạt dư hai bên); lỗ thủng và gốc tia nắng đầu dời theo chỗ lỗ trên ảnh đã giãn.
+  layout() {
+    super.layout();
+    const aw = this.awning;
+    if (!aw || !this.awningSX) return;
+    const k = Math.max(1, (AWNING_W + 2 * this.X0) / AWNING_W), [hx, hy] = this.W(ALLEY, [512 + (HOLE[0] - 512) * k, HOLE[1]]);
+    aw.setScale(this.awningSX * k, aw.scaleY);
+    this.holeDot.setPosition(hx, hy);
+    this.sunRay.from = [hx, hy];
+    this.drawRays();
   }
 
-  // Bong bóng suy nghĩ của nhân vật có hình (icon) bên trong.
-  think(icon, x, y, k = 1) {
-    if (this.busy.think) return;
-    this.busy.think = true;
-    if (!this.thinkB) this.thinkB = this.img('ui_thought_bubble', 0, 0, D.player + 1).setVisible(false);
-    if (this.thinkIcon) this.thinkIcon.destroy();
-    const t = this.thinkB, ic = this.thinkIcon = this.add.image(0, 0, icon).setDepth(D.player + 2).setVisible(false);
-    this.fitWidth(t, 190);
-    const base = t.base;
-    t.setPosition(x, y).setVisible(true).setAlpha(1).setScale(0);
-    this.tweens.add({ targets: t, scale: base, duration: 260, ease: 'Back.out', onComplete: () => {
-      const tb = t.getBounds();
-      ic.setPosition(tb.x + tb.width * 0.55, tb.y + tb.height * 0.36).setVisible(true).setAlpha(1);
-      this.fitWidth(ic, tb.width * 0.45 * k); // ảnh thật và khối cùng cỡ trong bong bóng
-    } });
-    this.time.delayedCall(1700, () => this.tweens.add({ targets: [t, ic], alpha: 0, duration: 220, onComplete: () => {
-      t.setVisible(false); ic.setVisible(false); this.busy.think = false;
-    } }));
+  // G5-26: bạt kéo hết bề ngang, lỗ thủng trên A, bóng râm dưới bạt (cả màn), tia nắng đầu qua lỗ xuống A, đốm sáng A hiện sẵn.
+  buildShade() {
+    const aw = this.awning, k = AWNING_W / this.artRect(aw).width;
+    aw.setX(ROOM_W + 512).setScale(aw.base * k, aw.baseY); // ảnh đúng cỡ thì k = 1
+    aw.base *= k;
+    this.awningSX = aw.scaleX;
+    const ar = this.artRect(aw), y0 = ar.y + 20, { color, alpha, tint, fade } = SHADE;
+    // Mép trên mềm: canvas 8 px rộng, mờ dần theo chiều dọc, kéo ngang hết phòng; dưới là khối màu đặc tới đáy nền cao.
+    if (!this.textures.exists('l5_shade_edge')) {
+      const t = this.textures.createCanvas('l5_shade_edge', 8, 64), c = t.getContext(), gr = c.createLinearGradient(0, 0, 0, 64);
+      const rgb = `${(color >> 16) & 255},${(color >> 8) & 255},${color & 255}`;
+      gr.addColorStop(0, `rgba(${rgb},0)`); gr.addColorStop(1, `rgba(${rgb},1)`);
+      c.fillStyle = gr; c.fillRect(0, 0, 8, 64); t.refresh();
+    }
+    const sx = ROOM_W - ROOM_PAD, sw = 1024 + 2 * ROOM_PAD; // phủ cả phần dư hai bên (màn rộng, G-SCREEN)
+    this.add.image(sx, y0, 'l5_shade_edge').setOrigin(0, 0).setDisplaySize(sw, fade).setAlpha(alpha).setDepth(D.bg + 0.5);
+    this.add.rectangle(sx, y0 + fade, sw, 3000, color, alpha).setOrigin(0, 0).setDepth(D.bg + 0.5);
+    // G5-27: cắt phần trên ống nước (ống lớp 24 dưới bạt 25) cho đỉnh ống khuất sau bạt, trên bạt chỉ còn trời.
+    const pp = this.pipe, top = pp.y - pp.originY * pp.height * pp.scaleY, cy = Math.max(0, (this.W(ALLEY, [0, PIPE_CUT_Y])[1] - top) / pp.scaleY);
+    pp.setCrop(0, cy, pp.width, pp.height - cy);
+    [this.cart, this.cd, this.pipe, this.puddle, this.gecko, this.milkCan, this.bike, this.wheel].forEach((s) => s.setTint(tint));
+    const [hx, hy] = this.W(ALLEY, HOLE);
+    this.holeDot = this.add.circle(hx, hy, HOLE_R + 2, 0xfff3c4).setDepth(24.5);
+    this.sunRay = { from: [hx, hy], to: this.W(ALLEY, PTS[0]) };
+    this.drawRays();
+    this.showSpot(this.W(ALLEY, PTS[0]), true);
   }
 
   // (10) Quạ 🎭: bay cong sang chỗ kia trên dây rồi đậu lại.
@@ -693,7 +660,7 @@ export class Level5 extends RoomsLevel {
       { scale: 0, duration: 220, delay: 700, ease: 'Quad.in' }], onComplete: () => { f.setVisible(false); this.busy.cactus = false; } });
   }
 
-  // ✨ Dây phơi áo: áo phồng gió bay phấp phới, cái kẹp bật ra; hai tay nhân vật (player_hands_lift, G5-18) trồi lên rồi kẹp lại.
+  // ✨ Dây phơi áo: áo phồng gió bay phấp phới, cái kẹp bật ra rồi tự kẹp lại (chủ dự án: bỏ hai tay nhân vật trồi lên).
   shirtTap() {
     if (this.busy.shirt) return;
     this.busy.shirt = true;
@@ -707,9 +674,9 @@ export class Level5 extends RoomsLevel {
       const k = tw.getValue();
       pin.setPosition(px + 70 * k, py - 90 * Math.sin(Math.PI * k) + 60 * k * k).setAngle(300 * k);
     } });
-    this.time.delayedCall(600, () => this.react('player_hands_lift', 512, 500, () => {
+    this.time.delayedCall(1100, () => {
       this.tweens.add({ targets: pin, x: px, y: py, angle: 0, duration: 220, ease: 'Quad.out', onComplete: () => { this.sfx('sfx_tap'); this.busy.shirt = false; } });
-    }));
+    });
   }
 
   // ✨ Chuông gió cửa quán: đung đưa leng keng; Sữa trong cửa sổ ngóc đầu nhìn theo.
@@ -818,7 +785,7 @@ export class Level5 extends RoomsLevel {
     this.sfx('mun_sfx_hiss_tiny', 0.6);
     this.eyesBack(this.munStage === 'peek' ? 1000 : 2000);
     const r = this.artRect(this.cart);
-    this.think('l5_light_spot', r.x + 40, r.top - 20, 1.1);
+    this.thinkBubble('l5_light_spot', r.x + 40, r.top - 20, { w: 190, iconK: 0.45 * 1.1 });
   }
 
   eyesBack(ms = 2000) {
@@ -839,12 +806,6 @@ export class Level5 extends RoomsLevel {
   // ---------- (7) nối tia: thả đồ sáng vào đốm sáng ----------
   onBagDrop(it, x, y) {
     if (!SHINY[it.key] || this.room !== ALLEY) return false;
-    if (!this.rolled) { // hẻm còn tối: đồ về túi, dây kéo giật nhẹ và lấp lánh
-      this.bagReturn(it);
-      this.cordKick(12);
-      this.sparkle(this.cord);
-      return true;
-    }
     // Trượt đốm sáng, hoặc sai đồ (G5-12: A chỉ nhận nắp thiếc, B gương, C đĩa CD): đồ bay thẳng về ô trong túi rồi lắc,
     // "sai" (bagReturn chung, như G4-43); đốm sáng nháy 2 lần.
     if (!this.spotAt || this.step >= 3 || it.key !== ORDER[this.step] || Math.hypot(x - this.spotAt[0], y - this.spotAt[1]) > HIT) {
@@ -882,20 +843,24 @@ export class Level5 extends RoomsLevel {
     this.touch();
   }
 
-  // Tia phản chiếu (code): ba nét chồng nhau cho có quầng sáng.
+  // Tia nắng qua lỗ bạt và tia phản chiếu (code): ba nét chồng nhau cho có quầng sáng, cùng độ dày (G5-25).
+  // Chạm bạt: tia qua lỗ rung rinh (đầu trên lắc, sáng nhấp nháy theo flapK).
   drawRays() {
     this.rayG.clear();
-    this.rayBack.clear();
+    const line = (g, x0, y0, x1, y1, a = 1) => {
+      g.lineStyle(26, 0xfff3b0, 0.18 * a).lineBetween(x0, y0, x1, y1);
+      g.lineStyle(12, 0xfff3b0, 0.4 * a).lineBetween(x0, y0, x1, y1);
+      g.lineStyle(4, 0xffffff, 0.9 * a).lineBetween(x0, y0, x1, y1);
+    };
+    const sr = this.sunRay, f = this.flapK, t = this.time.now;
+    if (sr) line(this.rayG, sr.from[0] + 9 * f * Math.sin(t / 45), sr.from[1], sr.to[0] + 4 * f * Math.sin(t / 60), sr.to[1], 1 - 0.45 * f * (0.5 + 0.5 * Math.sin(t / 35)));
     this.rays.forEach((r, i) => {
-      const g = i === 2 ? this.rayBack : this.rayG;
-      const [x0, y0] = r.from, x1 = x0 + (r.to[0] - x0) * r.k, y1 = y0 + (r.to[1] - y0) * r.k;
-      g.lineStyle(26, 0xfff3b0, 0.18).lineBetween(x0, y0, x1, y1);
-      g.lineStyle(12, 0xfff3b0, 0.4).lineBetween(x0, y0, x1, y1);
-      g.lineStyle(4, 0xffffff, 0.9).lineBetween(x0, y0, x1, y1);
+      const [x0, y0] = r.from;
+      line(this.rayG, x0, y0, x0 + (r.to[0] - x0) * r.k, y0 + (r.to[1] - y0) * r.k);
     });
   }
 
-  showSpot([x, y]) {
+  showSpot([x, y], quiet = false) {
     const s = this.spot;
     this.spotAt = [x, y];
     s.setVisible(true).setPosition(x, y).setScale(0).setAlpha(1);
@@ -904,7 +869,7 @@ export class Level5 extends RoomsLevel {
     this.tweens.add({ targets: this.halo, scale: 1, duration: 300, ease: 'Back.out', onComplete: () => {
       this.tweens.add({ targets: this.halo, scale: 1.25, duration: 700, yoyo: true, repeat: -1, ease: 'Sine.inOut' });
     } });
-    this.sfx('sfx_sparkle', 0.6);
+    if (!quiet) this.sfx('sfx_sparkle', 0.6);
   }
 
   hideSpot() {
@@ -934,8 +899,10 @@ export class Level5 extends RoomsLevel {
   pawReach([x, y], done) {
     this.pawOut = true;
     const g = this.R(ALLEY, GAP);
-    const x0 = x > g.centerX ? g.right - 10 : g.left + 10, y0 = g.centerY; // vồ từ phía gầm gần đốm sáng hơn
-    const p = this.munPaw, ang = Phaser.Math.RadToDeg(Math.atan2(y - y0, x - x0));
+    // G5-29: thò ra từ mép dưới bóng gầm, phía gần đốm sáng hơn; góc chĩa xuống đất (phải 45–90°, trái 90–135°) để không chồng bánh xe.
+    const right = x > g.centerX, x0 = right ? g.right - 20 : g.left + 25, y0 = g.bottom - 8;
+    const raw = Phaser.Math.RadToDeg(Math.atan2(y - y0, x - x0)), ang = right ? Phaser.Math.Clamp(raw, 45, 90) : Phaser.Math.Clamp(raw < -90 ? raw + 360 : raw, 90, 135);
+    const p = this.munPaw;
     const reach = Math.min(1, Math.max(0.55, (Math.hypot(x - x0, y - y0) - 30) / 150));
     p.setPosition(x0, y0).setAngle(ang).setVisible(true).setScale(0.1, p.base);
     this.sfx('sfx_cloth', 0.4);
@@ -1036,7 +1003,7 @@ export class Level5 extends RoomsLevel {
       m.setFlipX(false).setPosition(x1, y1);
       this.squash(m);
       this.sfx('sfx_drop', 0.6);
-      s.setDepth(28); // đốm sáng nằm dưới hai chân trước
+      s.setDepth(28).setPosition(x1, y1 - PIN_SPOT_UP); // đốm sáng nằm dưới hai chân trước, lộ quanh bàn chân (A5-25: ngồi chụm chân giữa đáy ảnh)
       this.armMun();
       this.time.delayedCall(800, () => {
         if (this.phase !== 'found') return;
@@ -1069,49 +1036,36 @@ export class Level5 extends RoomsLevel {
   endingHide() { this.mun.setVisible(false); }
 
   // ---------- gợi ý ----------
-  // Bước kế tiếp: thùng giấy → đồ sáng ở phòng đang đứng → kéo dây bạt → thả đồ sáng vào đốm sáng → sang phòng còn việc.
+  // Bước kế tiếp: thùng giấy → đồ sáng kế tiếp theo thứ tự → thả vào đốm sáng → sang phòng còn việc.
   hintStep() {
     if (this.phase === 'found') return { sprite: this.mun };
     if (this.step >= 3) return null;
     const room = this.room, arrow = (r) => ({ arrow: r === ALLEY ? 'right' : 'left' });
     if (!this.boxDone) return room === YARD ? { sprite: this.box } : arrow(YARD);
     const sprites = { l5_mirror_small: this.mirror, l5_tin_lid: this.lid, l5_cd_hanging: this.cd };
-    const left = Object.keys(SHINY).filter((k) => !this.got[k]);
-    const here = left.find((k) => SHINY_ROOM[k] === room);
-    const inBag = this.shinyInBag();
-    // Đã có nắng: chỉ đúng đồ kế tiếp theo thứ tự nắp thiếc → gương → đĩa CD (G5-12).
-    if (this.rolled) {
-      const need = ORDER[this.step], it = this.bagItem(need);
-      if (it) return room === ALLEY ? (this.spotAt ? { item: it, spot: true } : null) : arrow(ALLEY);
-      return room === SHINY_ROOM[need] ? { sprite: sprites[need] } : arrow(SHINY_ROOM[need]);
-    }
-    // Hẻm còn tối, có đồ sáng trong túi: kéo dây trước, đồ còn lại lấy sau.
-    if (room === ALLEY && inBag.length) return { sprite: this.cord, cord: true };
-    if (here) return { sprite: sprites[here] };
-    if (inBag.length && room !== ALLEY) return arrow(ALLEY);
-    if (left.length) return arrow(SHINY_ROOM[left[0]]);
-    return null;
+    // Chỉ đúng đồ kế tiếp theo thứ tự nắp thiếc → gương → đĩa CD (G5-12); nắng qua lỗ bạt có sẵn từ đầu (G5-26).
+    const need = ORDER[this.step], it = this.bagItem(need);
+    if (it) return room === ALLEY ? (this.spotAt ? { item: it, spot: true } : null) : arrow(ALLEY);
+    return room === SHINY_ROOM[need] ? { sprite: sprites[need] } : arrow(SHINY_ROOM[need]);
   }
 
 
-  // 8 giây: mắt vàng chớp chớp; hẻm còn tối thì dây đung đưa mạnh hơn; đã có nắng thì đốm sáng nhảy mạnh hơn. Còn lại rung nhẹ đồ cần chạm.
+  // 8 giây: mắt vàng chớp chớp; đốm sáng nhảy mạnh hơn. Còn lại rung nhẹ đồ cần chạm.
   hint1() {
     const h = this.hintStep();
     if (this.boxDone && this.room === ALLEY && !this.eyesAway && !this.chased) {
       const e = this.munStage === 'peek' ? this.peek : this.eyes;
       this.tweens.add({ targets: e, scaleY: e.scaleY * 0.15, duration: 80, yoyo: true, repeat: 1, repeatDelay: 120 });
     }
-    if (this.room === ALLEY && !this.rolled) this.cordKick(12);
     if (this.room === ALLEY && this.spotAt) this.spotAmp = 10;
     if (!h) return;
     if (h.arrow) this.nudgeArrow(h.arrow);
-    else if (h.sprite && !h.cord) this.wiggle(h.sprite, 3, 3, 300);
+    else if (h.sprite) this.wiggle(h.sprite, 3, 3, 300);
   }
 
-  // 💡 dây bạt: bàn chân làm mẫu kéo dây xuống; đồ sáng trong túi: kéo vào đốm sáng (mũi tên, đồ cần chạm: strongHint chung).
+  // 💡 đồ sáng trong túi: bàn chân làm mẫu kéo vào đốm sáng (mũi tên, đồ cần chạm: strongHint chung).
   strongHintStep(h) {
     if (h.arrow) return false;
-    if (h.cord) { const r = this.artRect(this.cord); this.handDrag([r.centerX, r.y + 60], [r.centerX, r.bottom + 40], 'hint', 'paw', 2); return true; }
     if (h.item) { this.handDrag(this.slotPos(h.item.i), this.spotAt, 'hint', 'paw', 2); return true; }
     return false;
   }
@@ -1128,11 +1082,7 @@ export class Level5 extends RoomsLevel {
 
   update(time, delta) {
     if (this.frozen) return;
-    // Dây kéo đung đưa liên tục (đồ duy nhất trong hẻm tự chuyển động); gợi ý làm dây đung đưa mạnh hơn rồi dịu dần.
-    if (this.cord.visible && !this.rolled) {
-      this.cordAmp += (4 - this.cordAmp) * Math.min(1, delta / 1500);
-      this.cord.angle = this.cordAmp * Math.sin(time / 420);
-    }
+    if (this.flapK > 0) this.drawRays(); // chạm bạt: tia qua lỗ rung rinh
     // Đốm sáng nhảy nhót nhẹ ±3px ở chỗ đặt kế tiếp (gợi ý 8 giây: mạnh hơn rồi dịu dần).
     if (this.spotAt && !this.chased) {
       this.spotAmp += (3 - this.spotAmp) * Math.min(1, delta / 1500);
@@ -1151,16 +1101,6 @@ export class Level5 extends RoomsLevel {
     // G5-8: đặt xong ở C thì tia từ C bám theo đốm sáng mỗi khung (lượn trước gầm, Mun đuổi, Mun đè chân, nhìn chân).
     const last = this.rays[2];
     if (last && last.k >= 1 && this.spot.visible) { last.to = [this.spot.x, this.spot.y]; this.drawRays(); }
-    if (this.locked || this.moving || this.phase !== 'search' || this.drag || (this.bag && this.bag.busy)) return;
-    const idle = (time - this.lastTouch) / 1000, H = this.hints;
-    if (idle >= 8 && !H.h1) { H.h1 = true; this.hint1(); }
-    if (idle >= 16 && time - H.sparkleAt > 3000) {
-      H.sparkleAt = time;
-      const h = this.hintStep();
-      if (!h) return;
-      if (h.arrow) { const [x, y] = this.arrowWorld(h.arrow); this.sparkle({ getBounds: () => new Phaser.Geom.Rectangle(x - 50, y - 70, 100, 140) }); }
-      else if (h.item) this.hop(h.item.s, 22, 300); // đã có nắng: icon đồ sáng trong túi nảy lên
-      else if (h.sprite) this.sparkle(h.sprite);
-    }
+    this.idleHints(time, 3000); // 16 giây: mũi tên / icon đồ sáng kế tiếp nảy lên / đồ cần chạm lấp lánh (rooms.js)
   }
 }

@@ -31,6 +31,7 @@ Mỗi level có một file thảo luận `art/review/level<N>-thread.md`; mọi 
 - Lời giao việc dán thẳng khối quy tắc style + góc nhìn; Codex **nhắc lại quy tắc trước khi vẽ** và **tự kiểm** cuối lượt (thiếu thì coi như lượt hỏng). Xem `AGENTS.md`.
 - Gửi demo cho chủ dự án, kèm ảnh đặt cạnh ảnh mẫu level 1.
 - **Khung màn hình 1080x1920 (9:16), chủ dự án chốt từ Level 5:** demo và mọi ảnh kiểm (ảnh chụp trong game của Dev, Art, GD) trình theo khung 1080x1920. Game giữ 1024 ngang; trên màn 9:16 khung game là 1024x1820, vùng chơi chính 1024x1536 ở giữa, trên và dưới mỗi bên dư 142px. **Nền vẽ dư trên dưới** cho phần này (trời, tường, sàn kéo dài), không để trống. Demo đặt đúng thanh tim và nút tạm dừng ở mép trên, túi đồ và nút 💡 ngay trên dải banner 150px ở mép dưới. Dev chụp trong game ở khung 540x960 hoặc 1080x1920.
+- **Co giãn theo màn (chủ dự án chốt 2026-10-30, G-SCREEN):** khung chuẩn 1080x1920 (toạ độ trong code vẫn 1024x1820, cùng tỉ lệ). Màn **dài hơn** 9:16: giữ đủ chiều ngang, mở thêm trên dưới. Màn **rộng hơn** 9:16: giữ đủ chiều dọc 1820, mở thêm hai bên, **tới tối đa 3:4** (rộng 1365, mỗi bên dư ~171). Rộng hơn 3:4 thì viền màu nền hai bên. Đồ tương tác chỉ nằm trong khung 1024 giữa; phần dư hai bên chỉ là cảnh nền. Giao diện (tim, tạm dừng, túi đồ, 💡) bám mép màn thật. **Mọi nền vẽ dư hai bên** cho đủ 3:4: rộng ≥ 1366 (ví dụ 1366x2304), cảnh kéo dài tự nhiên. Ảnh kiểm trình thêm khung 3:4 (1440x1920).
 
 ### Quy tắc giữ màu (chủ dự án chốt, O6; áp cho mọi lượt vẽ: demo, tờ, ảnh lẻ)
 
@@ -60,3 +61,19 @@ Mỗi level có một file thảo luận `art/review/level<N>-thread.md`; mọi 
   - Dev đặt đồ: vị trí và cỡ đo trên demo; mỗi phòng **chồng ảnh game lên demo** (play_harness `compare`) và sửa tới khi khớp.
   - **Không ai báo xong bằng ảnh ghép tĩnh.** Art và Dev gửi GD ảnh chụp **trong game** từng phòng đặt cạnh demo, mọi trạng thái chính (trước/sau khi chạm, cao trào). **GD tự mở game chơi hết màn**, soi từng đồ với demo, rồi mới báo chủ dự án.
 - Commit bằng tiếng Việt và push. **Chỉ đăng lên link online khi chủ dự án yêu cầu.**
+
+## 6. Tối ưu dung lượng và dùng lại (chủ dự án chốt 2026-10-30, áp từ nay cho mọi màn)
+
+**Art: mô tả kỹ, đúng cỡ, dùng lại ảnh lớn**
+- **Mỗi ảnh một dòng yêu cầu rõ ràng** trong `design-art-level<N>.md` và trong lời giao việc: món gì, trạng thái nào, phần nào lấy, phần nào không, **cỡ hiển thị trong game** và **cỡ file cần ra**.
+- **Cỡ file vừa đủ, không làm ảnh quá lớn:** cắt sát phần vẽ (bỏ viền trong suốt thừa), cỡ file không quá ~1,5 lần cỡ hiển thị trong game. Đồ nhỏ (cốc, đĩa, chìa khoá…) ra ảnh nhỏ tương ứng, không để mỗi món một khung 1024. Tờ to chỉ là ảnh nguồn để cắt, không đưa vào game.
+- **Ảnh lớn dùng lại từ level cũ, không vẽ mới nếu có thể:** bầu trời, nền nhà (tường, sàn, trần, phòng trống), hàng rào, hẻm… Màn mới chỉ **thay đồ đạc và bố cục** trên nền cũ. Chỉ vẽ nền mới khi bối cảnh thật sự khác, và phải nói lý do trong thread cho GD duyệt.
+- **Ảnh sát, ít nền trong suốt (chủ dự án chốt, G5-34):** lời giao việc cho Codex luôn yêu cầu món đồ **lấp gần kín khung**, lề trong suốt quanh món chỉ vừa đủ (khoảng 40px), chọn khung ngang/dọc/vuông theo dáng món. Sau khi cắt, ảnh đưa vào game phải sát phần vẽ, gần như không còn viền trong suốt thừa.
+- Đồ dùng chung giữa các màn (cùng một món) dùng lại đúng ảnh cũ, không vẽ bản mới.
+- Trước khi tách asset, Art liệt kê trong thread: ảnh nào dùng lại, ảnh nào vẽ mới, cỡ từng ảnh.
+
+**Dev: tách code dùng lại, không chép code**
+- Logic giống nhau giữa các màn (chuyển phòng, túi đồ, kéo-thả, phản ứng nhân vật, bong bóng, rung/nhún, tia sáng, khối tạm…) **đưa vào code chung** (`base.js`, `rooms.js`, `objects.js` hoặc file chung mới), các màn gọi lại. **Không copy một đoạn code sang màn khác rồi sửa.**
+- Gặp đoạn đã bị chép ở nhiều màn thì gom về một chỗ khi sửa tới nó. Màn cũ phải chạy y như trước sau khi gom (chơi thử lại các màn bị đụng).
+- Ảnh dùng lại giữa các màn: nạp chung một key, không nhân bản file.
+- Mỗi lần build, Dev báo tổng dung lượng bản build và ảnh lớn nhất để GD theo dõi.

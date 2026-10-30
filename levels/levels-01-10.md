@@ -24,7 +24,7 @@
 | 3 | Dạy | 60 | Sữa | Quà xịn, hộp còn xịn hơn | Mua đồ chơi xịn, mèo chơi vài giây rồi chui vào cái hộp | 5 | Nhặt, Ghép, Đặt |
 | 4 | 🟡 Normal | 90 | Sữa | Quả chuối trên rèm | Leo rèm giỏi nhưng không biết xuống; rơi luôn tiếp đất bằng bốn chân | 4 món + xếp tháp | Chuyển phòng, Xếp theo hình dáng |
 | 5 | 🔴 Hard | 150 | Mun | Đốm sáng | Thấy đốm sáng chạy là không nhịn được | 7 | Điều khiển đốm sáng, Bản đồ mini |
-| 6 | 🟢 Easy | 60 | Mun | Túi giấy sột soạt | Túi giấy rỗng là của mèo | 3 | — |
+| 6 | 🟡 Normal* | 90 | Mun | Xuống đây nào, Mun! (G6-1) | Hoảng thì leo lên cao, xuống thì sợ; đồ ăn dụ được | 8 | Kéo đồ trong cảnh, xếp đường |
 | 7 | 🟡 Normal | 90 | Mun | Đồ rơi khỏi kệ | Thấy đồ ở mép bàn là phải hất xuống | 5 | Cận cảnh |
 | 8 | 🟡 Normal | 90 | Mun | Gối cỏ mèo | Ngửi cỏ mèo là phê, nằm ngửa bụng | 5 | Mèo tự chạy |
 | 9 | 🟢 Easy | 60 | Mun | Ô vuông băng dính | Thấy ô vuông trên sàn là phải vào ngồi | 3 | — |
@@ -478,7 +478,7 @@ PHÒNG NGỦ                     PHÒNG KHÁCH (bắt đầu)          PHÒNG L�
 | Mèo | **Mun** (♥ 1/6), lần đầu xuất hiện |
 | Phòng | 2: Sân sau ⇄ Con hẻm, buổi chiều |
 | Dạy | Nối tia nắng bằng đồ sáng bóng (kéo-thả từ túi), Mèo nhút nhát |
-| Bước bắt buộc | 8 (thùng giấy, 3 đồ sáng, kéo bạt, đặt 3 điểm nối tia) |
+| Bước bắt buộc | 7 (thùng giấy, 3 đồ sáng, đặt 3 điểm nối tia; G5-26 bỏ kéo bạt) |
 
 **Sự thật về mèo:** mèo nào thấy **đốm sáng chạy trên tường** cũng không nhịn được, kể cả con nhút nhát nhất.
 
@@ -489,14 +489,14 @@ PHÒNG NGỦ                     PHÒNG KHÁCH (bắt đầu)          PHÒNG L�
 ```
 SÂN SAU (bắt đầu)                    CON HẺM
 ┌──────────────────────────┐  ┌──────────────────────────┐
-│ ♥Mun ○○○○○○ [Bản đồ]  ⏸ │  │ ═(10) DÂY ĐIỆN, QUẠ 🎭═  │
-│ ┌──────────┐             │  │ ▓▓(6) TẤM BẠT MÁI HIÊN▓▓ │
+│ ♥Mun ○○○○○○ [Bản đồ]  ⏸ │  │ ▓(6) TẤM BẠT CHE KÍN ĐẦU │
+│ ┌──────────┐             │  │ ▓▓ HẺM, 1 LỖ THỦNG ▓▓▓▓▓ │
 │ │(4) CỬA SỔ│  (2) BÀN    │  │ ┌──────────────────────┐ │
 │ │QUÁN: Sữa │  TRANG ĐIỂM │  │ │(7) BỨC TƯỜNG đối diện│ │
 │ │ nhìn ra  │  (2a) gương │  │ │  (đốm sáng hiện ở đây)│ │
 │ └──────────┘             │◄►│ └──────────────────────┘ │
-│                          │  │ (9) chỗ vệt nắng rơi     │
-│ (3) TÚI RÁC ĐEN 🎭       │  │     (sau khi kéo bạt)    │
+│                          │  │ (9) tia nắng qua lỗ thủng│
+│ (3) TÚI RÁC ĐEN 🎭       │  │     rơi xuống điểm A     │
 │                          │  │ ┌─────────────┐          │
 │ (1) THÙNG GIẤY CŨ        │  │ │(8) XE BA GÁC│ (11) ỐNG │
 │                          │  │ └──┬───────┬──┘  THOÁT   │
@@ -514,7 +514,7 @@ SÂN SAU (bắt đầu)                    CON HẺM
 | 2c | Đĩa CD cũ treo lủng lẳng trên móc tường **bên trái hẻm**, xa xe ba gác (G5-7) | Hẻm | 🎒 | Chạm | Đĩa vào túi, lóe sáng | "Tinh" |
 | 3 | Túi rác đen tròn | Sân sau | 🎭 | Chạm | Trông như mèo đen cuộn tròn, chỉ là túi rác. Nhân vật bịt mũi | "Sột soạt" |
 | 4 | Cửa sổ quán | Sân sau | ✨ | Chạm | Sữa áp mặt vào kính, tò mò nhìn ra hẻm | "Meo?" (giọng Sữa) |
-| 6 | Tấm bạt mái hiên + **sợi dây kéo có vòng tròn** thả xuống | Hẻm | 🔑 | Vuốt xuống trên dây (hoặc vuốt bạt lên) | Bạt cuộn lên, **nắng chiếu xuống** điểm A trên đất hẻm; hẻm sáng lên | Bạt "phành phạch" |
+| 6 | Tấm bạt **to che kín cả đầu hẻm** (hết bề ngang màn hình), có **một lỗ thủng nhỏ** (G5-26) | Hẻm | ✨ | Chạm | Bạt phồng gió nhẹ, tia nắng qua lỗ rung rinh | Bạt "phành phạch" |
 | 7 | 3 điểm nối tia A → B → C | Hẻm | 🎯 | Kéo đồ sáng từ túi thả vào **đốm sáng đang hiện** | Xem "Cơ chế nối tia" | "Ting" mỗi lần nối |
 | 8a | Gầm xe ba gác | Hẻm | 🔑 | Chạm | Đôi mắt vàng, Mun rúc sâu hơn. Bong bóng nhân vật: hình đốm sáng | "Khè" rất nhỏ |
 | 10 | Con quạ trên dây điện | Hẻm | 🎭 | Chạm | Bóng đen hóa ra là quạ, bay đi rồi đậu lại | "Quạ!" |
@@ -528,15 +528,10 @@ SÂN SAU (bắt đầu)                    CON HẺM
 | 18 | Thạch sùng trên tường | Hẻm | 🎭 | Chạm | Bóng nhỏ trông như đuôi mèo, hóa ra thạch sùng chạy vụt lên cao | "Tặc tặc" |
 | 19 | Ống bơ sữa trên bậu cửa sổ hẻm | Hẻm | 🎁 | Chạm | Ống bơ nghiêng, cá khô rơi ra: 5 Cá khô | "Lốc cốc" |
 
-**Dấu hiệu phải kéo bạt** (hẻm lúc đầu nằm trong bóng râm, hơi tối):
-- Bạt có vài lỗ thủng nhỏ, **lọt mấy chấm nắng li ti lấp lánh** trên đất hẻm, nhắc rằng phía trên có nắng.
-- **Sợi dây kéo có vòng tròn** thả từ mép bạt xuống, **đung đưa nhẹ trong gió** liên tục (đồ duy nhất trong hẻm tự chuyển động), ngang tầm tay nhân vật.
-- Có ít nhất 1 đồ sáng trong túi mà hẻm còn tối: lúc sang hẻm, bong bóng nhân vật hiện **hình mặt trời bị che** một lần.
-- Thả đồ sáng xuống đất khi chưa kéo bạt: đồ bay về túi, sợi dây giật nhẹ và lấp lánh.
-- Gợi ý 8 giây: dây đung đưa mạnh hơn; 16 giây: dây lấp lánh.
+**Vì sao hẻm tối (G5-25, G5-26, chủ dự án):** một tấm bạt to căng ngang trên đầu hẻm, che kín cả bề ngang màn hình, nên cả hẻm nằm trong **bóng râm của bạt** (nâu xám ấm, không phải trời tối). Bạt có **một lỗ thủng nhỏ**: ngay khi vào hẻm đã thấy **một tia nắng mảnh** lọt qua lỗ, chiếu thẳng xuống **điểm A**. Không có dây kéo, không cuộn bạt. Con quạ đậu trên mép bạt.
 
 **Cơ chế nối tia (G5-5):**
-- Kéo bạt xong: **một dải nắng hẹp** (vừa đủ rộng hơn đốm sáng một chút, G5-9) chiếu xuống **điểm A** (đất hẻm, xa xe ba gác nhất), thấy rõ một **đốm sáng nhảy nhót** ở đó.
+- Từ lúc vào hẻm: **một tia nắng mảnh** (đường thẳng nhỏ, cùng độ dày với các tia phản chiếu, G5-25) từ lỗ thủng trên bạt chiếu xuống **điểm A** (đất hẻm, xa xe ba gác nhất), thấy rõ một **đốm sáng nhảy nhót** ở đó.
 - **Đốm sáng luôn là chỗ đặt kế tiếp** (gợi ý tự nhiên, không cần ô mờ). Đồ phải lắp **đúng thứ tự: nắp thiếc ở A → gương ở B → đĩa CD ở C** (G5-10, sửa ở G5-12). Thả đúng đồ vào đốm sáng: đồ dựng nghiêng ở đó, **tia sáng bật ra** và đốm sáng chạy tới điểm kế tiếp, gần Mun hơn. **Thả sai đồ**: đồ bay thẳng về ô của nó trong túi rồi lắc lắc một nhịp (như level 4, G4-43), đốm sáng nháy:
   - Đặt ở **A** → tia lên tường, đốm sáng tới **điểm B** (bậu tường giữa hẻm). Mun: đôi mắt mở to, nhìn theo đốm sáng.
   - Đặt ở **B** → tia chiếu tới **điểm C: giỏ (hoặc yên) xe đạp cũ dựng tường** (G5-15, thay G5-14). Mun: **bàn chân đen thò ra vồ hụt**, rồi ló cả mặt.
@@ -544,7 +539,7 @@ SÂN SAU (bắt đầu)                    CON HẺM
   - Từ lúc này tới hết cảnh lộ diện, **tia từ đồ ở C luôn bám theo đốm sáng** (đầu tia di chuyển cùng đốm sáng khi lượn, khi Mun đuổi và khi Mun đè), không để đốm sáng chạy rời khỏi tia (G5-8).
 - Thả đồ không trúng đốm sáng: đồ bay về túi, đốm sáng nháy hai lần.
 - Đồ đã đặt không nhặt lại được. Chỉ 3 đồ, đủ đúng 3 điểm.
-- Gợi ý 16 giây khi đã có nắng: icon **đồ đúng kế tiếp** trong túi nảy lên.
+- Gợi ý 16 giây: icon **đồ đúng kế tiếp** trong túi nảy lên.
 
 **Luồng giải:**
 
@@ -552,16 +547,14 @@ SÂN SAU (bắt đầu)                    CON HẺM
 |---|---|---|
 | 0–10 | Chạm **thùng giấy (1)** | Bóng đen vụt chạy ra hẻm. Bong bóng nhiệm vụ nảy mạnh |
 | 10–30 | Chạm **gương (2a)**, **nắp thiếc (2b)** | Hai đồ vào túi |
-| 30–45 | Sang hẻm, chạm **gầm xe (8a)** | Đôi mắt vàng, Mun rúc sâu. Bong bóng: hình đốm sáng. Hẻm đang trong bóng râm, dây kéo đung đưa |
+| 30–45 | Sang hẻm, chạm **gầm xe (8a)** | Đôi mắt vàng, Mun rúc sâu. Bong bóng: hình đốm sáng. Hẻm trong bóng râm của bạt, tia nắng qua lỗ thủng đã chiếu xuống A |
 | 45–55 | Chạm **đĩa CD (2c)** | Đĩa vào túi, đôi mắt giật mình |
-| 55–65 | Vuốt **dây kéo bạt (6)** | Bạt cuộn lên, nắng xuống điểm A |
-| 65–110 | Thả **nắp thiếc → A, gương → B, đĩa CD → C** | Tia nắng nối dần tới gầm xe; Mun mở to mắt → thò chân vồ → ló mặt |
+| 55–110 | Thả **nắp thiếc → A, gương → B, đĩa CD → C** | Tia nắng nối dần tới gầm xe; Mun mở to mắt → thò chân vồ → ló mặt |
 | 110–130 | (xem) | **Mun phóng ra đuổi đốm sáng.** Lộ diện |
 | 130–140 | Chạm **Mun** | Cảnh bế chung |
 
 **Chạm sai và làm khác thứ tự:**
 - Lấy 3 đồ sáng theo thứ tự nào cũng được; chưa gặp Mun cũng lấy được.
-- Thả đồ khi chưa kéo bạt: đồ bay về túi, dây kéo giật nhẹ, lấp lánh.
 - Thả đồ ra ngoài đốm sáng: đồ bay về túi, đốm sáng nháy hai lần.
 - Chạm bàn chân Mun lúc đang vồ: Mun rụt lại (Lẩn tránh), không mất gì.
 - Chạm Mun lúc đang đuổi đốm sáng: **thắng ngay**.
@@ -587,85 +580,113 @@ SÂN SAU (bắt đầu)                    CON HẺM
 
 ---
 
-### Level 6 — Túi giấy sột soạt
+### Level 6 — Xuống đây nào, Mun!
+
+> **G6-1 (chủ dự án chốt 2026-10-30):** thay màn "Túi giấy sột soạt" cũ. Chủ đề **làm thân**, bối cảnh **ngoài nhà**: Mun bị chó dọa, kẹt trên mái nhà kho; cho chó xương, xếp 4 bậc đường xuống, đặt xúc xích lên bàn dụ Mun xuống ăn (G6-5: đổi từ ghế sang bàn).
 
 | | |
 |---|---|
-| Độ khó | 🟢 **Easy · 60 giây** |
+| Độ khó | 🟡 **Normal · 90 giây** (ngoại lệ: luật chung đặt level 6 là Easy 60 giây, màn này có 8 bước; chủ dự án chốt lại sau khi chơi bản khối) |
 | Mèo | Mun (♥ 2/6) |
-| Phòng | 1: Sân trước nhà, buổi sáng |
-| Dạy | không có thao tác mới (màn nghỉ sau màn Hard) |
-| Bước bắt buộc | 3 (chạm túi bánh mì, vuốt túi xuống sân, vuốt tạo tiếng sột soạt) |
+| Phòng | 1: Sân sau nhà hàng xóm, buổi chiều. **Dùng lại nền sân sau L5** (trời, hàng rào, sân), chỉ thay đồ đạc; nhà kho là sprite riêng |
+| Dạy | Kéo đồ có sẵn trong cảnh tới đúng chỗ để xếp đường (không qua túi đồ) |
+| Bước bắt buộc | 8 (lấy xương, cho Lu, lấy xúc xích, 4 bậc đường xuống, đặt xúc xích lên bàn) |
 
-**Sự thật về mèo:** túi giấy rỗng là **của mèo**. Đặt xuống sàn chưa được một giây là mèo đã chui vào, và tiếng sột soạt làm mèo mê mẩn.
+**Sự thật về mèo:** mèo hoảng là leo vọt lên chỗ cao, nhưng tới lúc xuống thì run, đứng ở mép kêu meo meo mãi không dám bước. Chỉ có đồ ăn ngon mới dụ được nó xuống.
 
-**Trạng thái mèo:** Mun **Lẩn tránh** trong bụi hoa, chỉ thấy đôi mắt. Chạm vào: Mun lùi sâu, lá rung. Khi Mun đã chui vào túi giấy (kể cả lúc túi đang chạy lạch bạch), Mun **Lộ diện**: chạm là thắng.
+**Nhân vật phụ:** **Lu**, chó vàng to của nhà hàng xóm. Không dữ, chỉ muốn chơi: ngồi dưới mái kho vẫy đuôi sủa lên.
+
+**Trạng thái mèo:** Mun **Lẩn tránh** trên mái kho (thấy rõ nhưng ngoài tầm tay). Chạm Mun: Mun lùi ra sau ống khói, ló lại sau 2 giây. Khi Lu còn sủa, Mun nằm rạp, tai cụp, không ra mép mái. Khi Mun **đã nhảy lên bàn** (đang ăn xúc xích), Mun **Lộ diện**: chạm là thắng.
 
 **Bố cục màn hình:**
 
 ```
 ┌──────────────────────────────┐
 │ ♥Mun ●○○○○○              ⏸  │
-│  (4) CHUÔNG GIÓ   (6) Cổng   │
-│                              │
-│ ┌────────────┐               │
-│ │(1) BỤI HOA │   ┌────────┐  │
-│ │ đôi mắt    │   │(2) GHẾ │  │
-│ │ vàng ẩn    │   │(2a) TÚI│  │
-│ └────────────┘   │BÁNH MÌ │  │
-│                  └────────┘  │
-│ (3) ỦNG ĐEN 🎭               │
-│ ░░░░(5) SÂN GẠCH░░░░░░░░░░░  │
+│              ┌─────────────┐ │
+│ (9)CHUÔNG GIÓ│(1) MÁI KHO  │ │
+│              │ Mun + ống   │ │
+│ (8)CÂY+ổ chim│   khói      │ │
+│              │ NHÀ KHO GỖ  │ │
+│ (7)GĂNG TAY  │ [A]  [B]    │ │
+│  đen 🎭      │        [C]  │ │
+│ (3)BÀN+GIỎ   └─────────────┘ │
+│  picnic   (2)LU   (5)BỤI RAU │
+│ (4a)PHUY (4b)HỘP (4c)THÙNG   │
+│ (4d)GHẾ ĐẨU  (6)CHUỒNG LU    │
 ├──────────────────────────────┤
 │ [ ][ ][ ][ ][ ][ ]       💡  │
 └──────────────────────────────┘
 ```
 
+A, B, C: 3 chỗ đặt, thấp dần từ mép mái xuống đất. A sát tường kho, cao nhất: thùng phuy rồi hộp dụng cụ nhỏ đậy lên (2 bước). B: thùng gỗ. C: ghế đẩu, thấp nhất, **sát cạnh bàn** để từ ghế Mun nhảy lên bàn. Tổng 4 bước xếp đường. Bàn đặt gần chân đường xuống (dời bàn nếu cần), giỏ picnic nằm **mép trái mặt bàn**, chừa chỗ trống bên phải cho xúc xích (G6-5).
+
 **Đồ vật:**
 
 | Số | Đồ vật | Vị trí | Loại | Thao tác | Phản hồi | Âm thanh |
 |---|---|---|---|---|---|---|
-| 1 | Bụi hoa | Giữa trái | — | Chạm | Lá rung, đôi mắt vàng lùi sâu. Bong bóng nhân vật: hình túi giấy | Lá xào xạc |
-| 2a | Túi bánh mì trên ghế | Giữa phải | 🔑 | Chạm | Ổ bánh mì bay vào túi đồ, **túi giấy rỗng** còn lại trên ghế | "Sột" |
-| 2a' | Túi giấy rỗng | Trên ghế | 🔑 | Vuốt xuống | Túi rơi xuống sân, **tự nằm nghiêng**, miệng túi hướng về bụi hoa | "Bộp" giấy |
-| 5 | Túi giấy trên sân | Sân | 🔑 | Vuốt qua lại | "Sột soạt, sột soạt". Lần 2 thì Mun lao ra | **"Sột soạt"** to rõ |
-| 3 | Ủng đen | Dưới trái | 🎭 | Chạm | Trông như mèo đen ngồi, ủng đổ, ếch nhảy ra | "Ộp" |
-| 4 | Chuông gió | Trên trái | ✨ | Chạm | Leng keng, Mun trong bụi hoa vẫy tai | Leng keng |
-| 6 | Cổng | Trên phải | ✨ | Chạm | Cổng kẽo kẹt mở ra rồi đóng | Kẽo kẹt |
+| 1 | Mun trên mái kho | Trên phải | — | Chạm | Mun lùi ra sau ống khói, ló lại sau 2 giây | "Meo" run run |
+| 2 | Lu | Giữa, dưới mái | — | Chạm | Lu vẫy đuôi sủa to hơn, Mun nằm rạp. Bong bóng nhân vật: hình khúc xương | "Gâu gâu" |
+| 5 | Bụi rau (có khúc xương) | Dưới phải | 🔑 | Chạm | Lá rau rẽ ra, **khúc xương** bay vào túi đồ. Lu cứ ngoái nhìn bụi rau (gợi ý tự nhiên) | Lá xào xạc |
+| 2' | Lu (nhận xương) | — | 🎯 | Kéo xương từ túi thả vào Lu | Lu ngậm xương, chạy về chuồng (6), chui hẳn vào trong, chỉ thò đầu ra cửa chuồng gặm xương vui vẻ, **thôi sủa**. Mun ngóc đầu dậy | "Gâu!" vui, rồi tiếng gặm |
+| 3 | Giỏ picnic trên bàn | Giữa trái | 🔑 | Chạm | Nắp giỏ bật, **xúc xích** bay vào túi đồ | "Tách" |
+| 4a | Thùng phuy nước | Dưới trái | 🔑 | Kéo tới chỗ **A** | Phuy lăn tới sát tường kho, dựng đứng. Mun ra mép nhìn xuống, thấy nước sóng sánh, lùi lại | "Lộc cộc" |
+| 4b | Hộp dụng cụ nhỏ | Dưới, giữa | 🔑 | Kéo đậy lên **miệng phuy ở A** (chỉ được khi phuy đã ở A) | Hộp dụng cụ đặt khít, đậy kín miệng phuy, thành bậc đầu tiên | "Cộp" |
+| 4c | Thùng gỗ | Dưới, giữa phải | 🔑 | Kéo tới chỗ **B** (bậc giữa) | Thùng đặt vào, thành bậc giữa | "Cộp" |
+| 4d | Ghế đẩu | Dưới trái | 🔑 | Kéo tới chỗ **C** (bậc thấp nhất, gần đất) | Ghế đặt vào, thành bậc cuối | "Cạch" |
+| 4' | Mặt bàn (chỗ trống bên phải giỏ) | Cạnh chỗ C | 🎯 | Kéo **xúc xích** từ túi thả lên bàn | Xem Khoảnh khắc lộ diện | "Pặc" |
+| 6 | Chuồng Lu | Dưới phải | ✨ | Chạm (khi Lu đang gặm) | Lu lăn ra khoe bụng rồi gặm tiếp | "Ư ử" |
+| 7 | Găng tay làm vườn đen trên hàng rào | Giữa trái | 🎭 | Chạm | Trông như mèo đen ngồi, hoá ra găng tay: găng rơi xuống đất dưới hàng rào và nằm yên ở đó. Lu (nếu rảnh) **chạy tới chỗ găng**, ngậm lắc lắc, vờn một lúc rồi bỏ găng tại chỗ, chạy về chỗ cũ. Lu đang gặm trong chuồng thì chỉ ngẩng đầu nhìn | "Phịch" |
+| 8 | Cây + ổ chim | Trên trái | 🎁 | Chạm | Ổ chim lắc, 5 Cá khô rơi ra | Chim ríu rít |
+| 9 | Chuông gió | Trên trái | ✨ | Chạm | Leng keng, Mun trên mái vểnh tai | Leng keng |
+| 10 | Bình tưới | Cạnh bụi rau | 🎁 | Chạm | Bình nghiêng, nước chảy ra cùng 5 Cá khô | "Ồ ồ" |
 
-Ổ bánh mì trong túi đồ không dùng để giải đố. Nếu người chơi đặt bánh mì xuống sân, một chú chim sẻ sà xuống mổ (trang trí).
+**Luật xếp đường xuống (4 bậc):**
+- Kéo đồ có sẵn trong cảnh (không qua túi đồ). Khi đang kéo một món, chỗ đặt hợp lệ hiện **viền mờ**; thả gần viền là đồ tự khớp vào, thả chỗ khác thì đồ trượt về chỗ cũ.
+- Mỗi chỗ chỉ nhận đúng món hợp chiều cao: A nhận phuy (rồi hộp dụng cụ), B nhận thùng gỗ, C nhận ghế đẩu. Thả nhầm món: món trượt về chỗ cũ, lắc một nhịp.
+- Thứ tự tự do, trừ hộp dụng cụ nhỏ phải đặt sau thùng phuy.
+- Mỗi lần thêm một bậc, Mun bò ra mép mái nhìn xuống, run, rồi lùi vào: **Mun vẫn sợ, không tự xuống**, kể cả khi đủ 4 bậc. Chỉ xúc xích trên bàn mới dụ được.
+
+**Luật Lu (logic chặn):**
+- Khi Lu còn rảnh (chưa có xương): kéo xúc xích thả lên bàn thì Lu chồm tới hít, sủa đòi, xúc xích bay về túi. Bong bóng nhân vật: hình khúc xương. Đặt đồ xếp đường vẫn được.
+- Lu đang gặm xương thì không quan tâm gì nữa.
 
 **Luồng giải:**
 
 | Giây | Người chơi làm | Game phản hồi |
 |---|---|---|
-| 0–5 | (xem) | Mun chạy vụt vào bụi hoa |
-| 6–15 | Chạm **bụi hoa (1)** | Đôi mắt vàng lùi sâu. Bong bóng: hình túi giấy |
-| 16–28 | Chạm **túi bánh mì (2a)** | Bánh mì vào túi đồ, túi giấy rỗng còn trên ghế |
-| 29–38 | Vuốt **túi giấy** xuống | Túi rơi xuống sân, nằm nghiêng |
-| 39–50 | Vuốt qua lại trên **túi giấy** | "Sột soạt". Mun lao ra (xem Khoảnh khắc lộ diện) |
-| 50–55 | Chạm **Mun** (đầu thò ra khỏi túi) | Cảnh bế chung |
+| 0–8 | (xem) | Lu đuổi Mun chạy **một vòng quanh sân**; hết vòng Mun nhảy lên **bàn → thùng gỗ → cột điện → mái kho** (G6-6). Lu ngồi dưới mái sủa |
+| 5–15 | Chạm **Mun**, **Lu** | Mun lùi sau ống khói. Bong bóng: khúc xương |
+| 15–25 | Chạm **bụi rau (5)** | Có khúc xương |
+| 25–32 | Thả **xương vào Lu** | Lu về chuồng gặm, thôi sủa |
+| 32–40 | Chạm **giỏ picnic (3)** | Có xúc xích |
+| 40–75 | Kéo **phuy → A, hộp dụng cụ → A, thùng gỗ → B, ghế → C** | Đường xuống thành hình; mỗi bậc Mun ra mép nhìn rồi lùi |
+| 75–85 | Thả **xúc xích lên bàn** | Mun xuống từng bậc, từ ghế nhảy lên bàn ăn (Lộ diện) |
+| 85–90 | Chạm **Mun** | Cảnh bế chung |
 
 **Chạm sai và làm khác thứ tự:**
-- Chạm túi giấy trên sân (thay vì vuốt): túi kêu "sột" một tiếng nhỏ, đôi mắt vàng ló ra rồi lại thụt vào; vuốt qua lại mới đủ.
-- Chạm bụi hoa nhiều lần: Mun rúc sâu hơn, lần 3 một bông hoa rơi lên đầu nhân vật.
-- Đặt bánh mì xuống sân: chim sẻ sà xuống mổ, không ảnh hưởng.
+- Đặt xúc xích lên bàn khi Lu còn rảnh: Lu chồm tới, xúc xích về túi.
+- Đặt xúc xích lên bàn khi đường chưa đủ 4 bậc: Mun ra mép, kêu, không xuống được; xúc xích ở lại trên bàn, đặt nốt bậc thì Mun xuống ngay.
+- Thả xúc xích chỗ khác (đất, thùng gỗ): xúc xích bay về túi, bàn lấp lánh.
+- Đặt hộp dụng cụ khi phuy chưa ở A: hộp trượt về.
+- Chạm Mun trên mái: Mun lùi sau ống khói (Lẩn tránh).
 
 **Thang gợi ý:**
-1. *8 giây:* đôi mắt vàng trong bụi hoa liếc về phía túi bánh mì.
-2. *16 giây:* túi bánh mì (hoặc túi giấy trên sân) lấp lánh.
-3. *💡:* bàn chân mèo làm mẫu: vuốt qua lại trên túi giấy.
+1. *8 giây:* Lu ngoái nhìn bụi rau (khi chưa có xương); Mun nhìn xuống chỗ còn thiếu bậc (khi đã cho xương).
+2. *16 giây:* đồ cần làm tiếp lấp lánh (bụi rau → giỏ picnic → món xếp đường còn thiếu → bàn).
+3. *💡:* bàn chân mèo làm mẫu bước kế tiếp.
 
-**Khoảnh khắc lộ diện:** sau tiếng "sột soạt" thứ hai, đôi mắt vàng mở to trong bụi hoa. Mun **phóng vụt** như mũi tên, chui tọt vào túi giấy. Túi giấy **tự chạy lạch bạch** quanh sân hai vòng: chỉ thấy bốn cái chân đen và cái đuôi thò ra, va nhẹ vào ghế, rồi dừng lại. Mun thò đầu ra khỏi miệng túi, đôi mắt vàng nhìn bạn, không thèm chui ra.
+**Khoảnh khắc lộ diện:** xúc xích vừa đặt lên bàn, mũi Mun khịt khịt. Mun bò ra mép mái, ngập ngừng… bước xuống hộp dụng cụ, **ngoái lại nhìn bạn**, xuống thùng gỗ, xuống ghế, rồi **nhún người nhảy phốc lên bàn**, ngấu nghiến xúc xích cạnh giỏ picnic. Ăn xong Mun liếm mép, ngẩng lên nhìn bạn. Lu thò đầu ra khỏi chuồng, Mun xù lông một giây rồi **nép sát vào chân bạn**: lần đầu Mun coi bạn là chỗ an toàn.
 
-**Chạm Mun (đầu thò ra khỏi túi) → cảnh bế chung.** Túi giấy tuột khỏi người Mun, ở lại trên sân.
+**Chạm Mun → cảnh bế chung.**
 
 **Ghi chú vẽ, hoạt hình, âm thanh:**
-- Hoạt hình túi giấy chạy lạch bạch là điểm nhấn: túi phồng xẹp theo bước chân, hơi nghiêng khi rẽ.
-- Âm "sột soạt" phải rõ và có độ vang, vì đó là "mồi" chính của màn.
-- Màn ngắn, sáng sủa, nhạc vui để người chơi thư giãn sau màn Hard.
+- Dùng lại nền sân sau L5 (QUY-TRINH mục 6); nhà kho gỗ mái tôn, ống khói là sprite riêng to, đặt bên phải.
+- Lu: nhân vật mới, cùng phong cách bút chì pastel, tròn trịa dễ thương, không đáng sợ. Tư thế: ngồi sủa, ngậm xương chạy, nằm gặm, lăn khoe bụng, thò đầu khỏi chuồng.
+- Mun cần thêm dáng: nằm rạp tai cụp trên mái, nhìn xuống mép mái run run, bước xuống bậc, nhảy lên bàn, ăn trên bàn.
+- Âm Lu sủa vui, không gắt. Nhạc: căng nhẹ khi Lu sủa, chuyển ấm áp khi Mun xuống ăn.
 
-**Thưởng:** 20 Cá khô · Mun ♥ 2/6.
+**Thưởng:** 30 Cá khô (+5 mỗi bí mật: ổ chim, bình tưới) · Mun ♥ 2/6.
 
 ---
 
@@ -1041,3 +1062,41 @@ BẾP
 - Nhạc: căng thẳng nhẹ ở đầu (Sữa khè), ấm áp dần, cao trào nhẹ nhàng ở cảnh hai mèo một hộp.
 
 **Thưởng:** 50 Cá khô · Mun vào quán.
+
+---
+
+## 3. Ý tưởng nháp (chưa xếp số level)
+
+### Nháp — Về nhà thôi, Mun!
+
+> **Nháp 2026-10-30, đang bàn, chưa chốt.** Chưa có số level, chưa giao Dev/Art. Ý từ chủ dự án: đổi góc nhìn, Mun **tự tìm đường về nhà nhân vật** giữa đêm mưa bão, người chơi dọn đường cho Mun.
+
+| | |
+|---|---|
+| Mèo | Mun |
+| Bối cảnh | Đêm mưa bão. 3 cảnh nối nhau: **góc hẻm** (dùng lại nền hẻm L5, thêm mưa) → **trước quán** → **nhà nhân vật** |
+| Cách chơi | Đồ nằm sẵn trong cảnh; người chơi kéo đồ vào **ô sáng** (vị trí giải đố). Đặt đúng: Mun đi tiếp tới chướng ngại sau rồi ngồi chờ. Đặt sai: đồ nảy về chỗ cũ |
+| Bước bắt buộc | 9 (3 mỗi cảnh) |
+
+**Mở màn:** hẻm L5, mưa bão. Gió quật **gãy tấm bạt**, bạt sụp xuống. Mun giật mình chui **nấp dưới xe ba gác**, run. Bong bóng nghĩ: căn nhà sáng đèn của nhân vật → Mun muốn về đó.
+
+**Cảnh 1 — Góc hẻm**
+1. Bạt gãy đè sát gầm xe, Mun không ra được → **cây chổi** chống bạt lên, mở khe hở.
+2. Vũng nước lớn giữa hẻm → **nắp thùng sơn** làm cầu.
+3. Máng xối xả nước như thác ở đầu hẻm → **ô hỏng** che dòng nước, Mun chạy qua dưới ô.
+
+**Cảnh 2 — Trước quán** (quán nước ven đường đã đóng cửa)
+1. Biển quảng cáo đổ chắn lối, quá cao → **két nhựa** làm bậc.
+2. Gió ngang thổi Mun lùi lại → dựng **bảng thực đơn gập** làm vách chắn gió.
+3. Nước cống trào ngập mặt đường → chồng **2 ghế nhựa** sát tường; Mun nhảy lên ghế, lên bậu cửa sổ, đi qua.
+
+**Cảnh 3 — Nhà nhân vật**
+1. Cổng sắt đóng, khe hẹp → **thùng xốp** sát tường, Mun leo lên bờ tường.
+2. Chậu cây đổ chắn bờ tường → **tấm ván** bắc từ bờ tường sang mái hiên.
+3. Tới cửa sổ nhưng trong nhà không ai nghe → treo **chuông gió** vào móc. Mun khều chuông, đèn bật, nhân vật mở cửa, ôm Mun vào, quấn khăn. Hết màn.
+
+**Còn phải chốt:**
+- "Quán" là quán nước ven đường hay quán cafe mèo (quán cafe nên để dành cho L10)?
+- Nhân vật chỉ xuất hiện ở cảnh cuối?
+- Giữ 3 bước mỗi cảnh, hay cảnh 1 chỉ 2 bước cho mở đầu nhẹ?
+- Xếp vào level mấy (L7 đang tính dùng "Gối cỏ mèo"), độ khó, số giây.

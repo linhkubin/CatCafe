@@ -123,9 +123,18 @@ Vẽ **ảnh tham chiếu** cho từng nhân vật trước tiên, tải về r�
 
 ### Mun — mèo đen hàng xóm (level 5–10)
 - Mèo đen than ấm (`#3E3838`, không đen tuyền), dáng thon hơn Sữa, chân dài hơn.
+- **Đầu và mặt tròn** (G5-32): viền đầu gần tròn, má phình đều hai bên, cằm bo tròn, không thon nhọn về cằm. Ảnh chuẩn `art/out/cats/mun_ref.png` (bản mặt tròn, 2026-10-30).
 - Mắt tròn to **màu vàng mật ong**, rất nổi bật. Tai hơi cụp xuống (nhút nhát).
 - Đuôi dài, mảnh. Mũi hồng xám nhỏ.
 - Tính cách: nhút nhát, hay rụt người, mắt nhìn lén.
+
+### Lu — chó vàng nhà hàng xóm (level 6+)
+- Chó con lớn mũm mĩm kiểu chibi, **chỉ to hơn Mun một chút, ≈ 1,1 lần** (Lu ngồi rộng ≈ 230 trên màn, Mun ≈ 210; G6-16). Đầu to tròn gần bằng thân, chân ngắn mập, bàn chân tròn to (chân trước khi nằm cũng ngắn).
+- Lông vàng mật ong nhạt (`#F2C796`, sáng kem, khuất caramel nhạt), hơi xù ở má, ngực, đuôi. Tai cụp mềm caramel nhạt.
+- Mặt hiền vui: mõm kem, mũi tròn to nâu ấm, mắt tròn đen nâu nhỏ hiền, má hồng, cười há lưỡi hồng. Không nanh, không dữ.
+- Đuôi to xù cong, đầu đuôi kem. Vòng cổ vải hồng đào có khoen tròn vàng bơ (không chữ).
+- Tính cách: hiền, ham chơi, vụng về; sủa vui chứ không gắt.
+- Ảnh chuẩn: `art/out/dogs/lu_ref.png` (chủ dự án duyệt 2026-10-30). Asset Lu tham chiếu ảnh này.
 
 ### Nhân vật chính (người chơi)
 - Một bạn nhỏ, **tóc xoăn bồng màu nâu caramel** (mái tóc xù tròn nhiều lọn xoăn nhỏ, như trong tranh `art/out/demo/l1_demo_start.png`; O1), không rõ nam hay nữ.

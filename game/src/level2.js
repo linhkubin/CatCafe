@@ -268,7 +268,7 @@ export class Level2 extends ObjectLevel {
   get fallbacks() { return FB; }
 
   resetLevel() {
-    Object.assign(this, { shoeOpened: false, snore: null, kids: [], socks: 0, lastBasket: 0, basketBreath: null, zzz: null, glowFx: null, shoeMoved: false, underTaps: 0, sockTargets: [],
+    Object.assign(this, { shoeOpened: false, snore: null, kids: [], socks: 0, lastBasket: 0, basketBreath: null, zzz: null, shoeMoved: false, underTaps: 0, sockTargets: [],
       plume: null, pampasAwake: false, pampasSway: null });
   }
 
@@ -681,14 +681,7 @@ export class Level2 extends ObjectLevel {
     // Sữa "ảo" (không vẽ) để cảnh bế chung lấy chỗ và cỡ.
     this.sua = this.add.image(bb.centerX, bb.top + bb.height * 0.55, 'sua_face_icon').setVisible(false);
     this.fitWidth(this.sua, 200);
-    this.time.delayedCall(300, () => {
-      if (this.renderer.type === Phaser.WEBGL && b.preFX) {
-        this.glowFx = b.preFX.addGlow(SUN, 0, 0, false, 0.1, 14);
-        this.tweens.add({ targets: this.glowFx, outerStrength: 4, duration: 700, onComplete: () => {
-          this.glowTw = this.tweens.add({ targets: this.glowFx, outerStrength: 1.5, duration: 1000, yoyo: true, repeat: -1 });
-        } });
-      }
-    });
+    this.time.delayedCall(300, () => this.glowOn(b));
     this.time.delayedCall(1000, () => { if (this.phase === 'found') this.bubbleFound(); });
     // Sữa vẽ liền trong giỏ (A2-4): hé mắt, ngáp bằng cách đổi ảnh giỏ cùng khung với _reveal.
     const pose = (key, at, dur, sfx) => this.time.delayedCall(at, () => {
@@ -716,9 +709,6 @@ export class Level2 extends ObjectLevel {
   beforeEnding() {
     if (this.zzz) this.zzz.remove();
     if (this.snore) this.snore.remove();
-    if (this.glowTw) this.glowTw.stop();
-    if (this.glowFx) { this.basket.preFX.remove(this.glowFx); this.glowFx = null; }
-    this.glow = null;
   }
 
   // Sữa được bế ra khỏi giỏ; giỏ còn tất ở lại cảnh nền.
@@ -727,10 +717,8 @@ export class Level2 extends ObjectLevel {
   suaPoint() { const b = this.basket.getBounds(); return [b.centerX - 60, b.top + 30]; }
 
   strongHint() {
-    this.tweens.add({ targets: this.bulb, scale: this.bulb.base * 0.9, duration: 90, yoyo: true });
-    const pt = this.phase === 'found' ? this.suaPoint() : this.tipOf(this.basket);
-    this.handTap(pt, 'hint', 'paw');
-    this.pawTimer = this.time.delayedCall(2500, () => this.handHide('paw'));
+    this.pressBulb();
+    this.pawAt(this.phase === 'found' ? this.suaPoint() : this.tipOf(this.basket));
   }
 
   // G2-2: không có gợi ý tự động theo giờ.

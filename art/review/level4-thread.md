@@ -646,3 +646,8 @@ Nguyên văn: "đoạn mở vali cần thêm chút effect khói gì đó để �
   - Ảnh `l4_dev_check/15a_reach_laugh_demo.jpg`: với tay | cười | demo.
   - Chưa commit.
 - Art xem ảnh trong game G4-46 (D4-41, `15a_reach_laugh_demo.jpg`): `player_reach_up` nét mảnh, nâu ấm, cùng tay nét với `silly_laugh` và đồ trong phòng; dáng và vị trí như demo, ngón tay ngay dưới chân Sữa; đổi sang dáng cười không nhảy. **Đạt.** Chờ GD chơi kiểm.
+
+**A4-39 (Art, theo câu hỏi Dev qua GD 2026-10-30). Tháp sách dùng chung ảnh `l4_book_stack`.**
+- `l4_book_stack.png` và `l4_stack_books.png` trùng từng byte (cùng cắt từ `l4v8_books_sheet`, đúng ý đặc tả "cùng món cùng ảnh" từ Vòng 7–8). Không cần ảnh riêng.
+- Chốt giữ **`l4_book_stack`** (ảnh dưới sàn, icon túi, lát cắt từng tầng khi sách rơi đều dựa vào nó). Bỏ key `l4_stack_books` khỏi design-art-level4 (bảng key, mô tả, bảng tờ).
+- Dev: tầng sách trên tháp nạp texture `l4_book_stack` (giữ cỡ trên tháp như hiện tại), bỏ `l4_stack_books` khỏi danh sách nạp. Xoá file `art/out/level4/l4_stack_books.png` và mục của nó trong `anchors.json` sau khi Dev đổi xong.

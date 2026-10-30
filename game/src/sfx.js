@@ -211,13 +211,30 @@ const RECIPES = {
   sfx_wind: (c) => { hiss(c, { t: 0.9, vol: 0.05, f: 700, type: 'bandpass', q: 0.8 }); hiss(c, { t: 0.6, vol: 0.03, at: 0.25, f: 1100, type: 'bandpass', q: 1 }); }, // gió lùa nhẹ
   sfx_sneeze: (c) => { hiss(c, { t: 0.18, vol: 0.03, f: 1500, type: 'bandpass', q: 1 }); note(c, { type: 'triangle', f: 520, t: 0.12, vol: 0.12, at: 0.2, glide: [[300, 0.1]], vib: 0, attack: 0.004 }); hiss(c, { t: 0.15, vol: 0.12, at: 0.2, f: 3000 }); }, // "hắt xì"
   sua_sfx_yawn: (c) => note(c, { f: 700, t: 0.6, vol: 0.08, glide: [[900, 0.2], [500, 0.58]], vibDepth: 0.02 }), // ngáp
+  // G6-1 bản khối (tạm, tới khi có file thật): chó Lu.
+  l6_sfx_dog_bark: (c) => [0, 0.2].forEach((at) => note(c, { type: 'triangle', f: 330, t: 0.11, vol: 0.13, at, glide: [[220, 0.1]], vib: 0, attack: 0.005 })), // "gâu gâu"
+  l6_sfx_dog_happy: (c) => note(c, { type: 'triangle', f: 392, t: 0.16, vol: 0.12, glide: [[587, 0.14]], vib: 0, attack: 0.005 }), // "gâu!" vui
+  l6_sfx_dog_chew: (c) => [0, 0.14, 0.28].forEach((at) => rustle(c, { t: 0.06, vol: 0.03, at, f: 1200 })), // gặm rộp rộp
+  l6_sfx_dog_whine: (c) => note(c, { f: 740, t: 0.32, vol: 0.08, glide: [[520, 0.3]], vibDepth: 0.02 }), // "ư ử"
   l3_sfx_creak: (c) => { for (let i = 0; i < 2; i++) note(c, { type: 'sawtooth', f: 180 + i * 30, t: 0.18, vol: 0.03, at: i * 0.25, glide: [[260 + i * 30, 0.16]], vib: 0 }); }, // cót két
 };
 
 export const SOUND_KEYS = Object.keys(RECIPES);
 
+// Âm thanh chưa có file: mượn tiếng gần giống có sẵn (mọi màn; trước ở level5.js). Có file thật thì dùng file thật.
+export const SFX_ALIAS = {
+  mun_sfx_scamper: 'sfx_cloth', l5_sfx_glass_ting: 'sfx_clink', l5_sfx_plastic: 'sfx_leaves', l5_sfx_canvas_flap: 'sfx_cloth_drop',
+  mun_sfx_hiss_tiny: 'sua_sfx_chirp', l5_sfx_crow: 'l1_sfx_cuckoo', mun_sfx_meow: 'sua_sfx_meow', mun_sfx_meow_cute: 'sua_sfx_meow_cute',
+  l5_sfx_pop: 'sfx_pop_can', l5_sfx_wind: 'sfx_cloth', l5_sfx_chime: 'sfx_sparkle', l5_sfx_flop: 'sfx_cushion_soft',
+  l5_sfx_bike_bell: 'l3_sfx_doorbell', l5_sfx_splash: 'sfx_drop', l5_sfx_gecko: 'sua_sfx_blep', l5_sfx_can_clunk: 'l3_sfx_clack',
+  // L6 (bản khối G6-1)
+  l6_sfx_barrel_roll: 'l1_sfx_can_roll', l6_sfx_wood_clack: 'l4_sfx_books_land', l6_sfx_stool: 'l3_sfx_clack', l6_sfx_basket: 'sfx_lid',
+  l6_sfx_sausage_drop: 'l4_sfx_teddy_flop', l6_sfx_glove_flop: 'l4_sfx_teddy_flop', l6_sfx_bird: 'sfx_sparkle', l6_sfx_water: 'sfx_drop',
+};
+
 // opt: tham số riêng cho tiếng tổng hợp (ví dụ { step } cho tiếng xoay ống cao dần).
 export function playSfx(scene, key, gain = 1, opt) {
+  if (scene && !scene.cache.audio.exists(key) && SFX_ALIAS[key]) key = SFX_ALIAS[key];
   if (scene && scene.cache.audio.exists(key)) {
     scene.sound.play(key, { volume: MASTER * gain });
     return;

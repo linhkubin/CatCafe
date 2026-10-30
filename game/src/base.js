@@ -6,7 +6,7 @@
 // update(time); tuỳ chọn: onIntro(), blockInput(name), beforeEnding(), endingHide(),
 // fallbacks (bảng ảnh tạm vẽ bằng code, xem makeFallback), defaultPos, rewardFish, callSfx, introPose (tư thế mở màn),
 // bubblePop (cỡ bong bóng nhiệm vụ lúc bật ra), suaHand (tay chỉ vào mèo khi lộ diện),
-// fitHead (trạng thái → key đầu nhóm, co cùng tỉ lệ), túi đồ: onBagDrop(item, x, y), onBagCombine(a, b), onBagTap(item).
+// fitHead (trạng thái → key đầu nhóm, co cùng tỉ lệ), fitDefaults (bề rộng phần vẽ đo trên demo, dùng khi design-art chưa có cột "Rộng demo"), túi đồ: onBagDrop(item, x, y), onBagCombine(a, b), onBagTap(item).
 // Toạ độ "thế giới" là khung 1024x1536; máy dài hơn 2:3 thì camera lùi lên (Y0) và nền được kéo dài.
 import { playSfx } from './sfx.js';
 import { KEYS, phUrl } from './assets.js';
@@ -34,7 +34,8 @@ export function finalizeEntries(scene, keys) {
     if (!e || !e.auto || e.done || !scene.textures.exists(key)) continue;
     const src = scene.textures.get(key).getSourceImage();
     e.done = true;
-    if (/_bg_/.test(key)) { Object.assign(e, { ax: 0, ay: 0, res: src.width / 1024 }); continue; }
+    // Nền: ảnh 1024 ngang (1024x1536, 1024x2304) hiển thị rộng 1024; nền rộng G-SCREEN (1366x2304, tỉ lệ ≈ 0,59) rộng 1366.
+    if (/_bg_/.test(key)) { const wide = Math.abs(src.width / src.height - 1366 / 2304) < 0.02; Object.assign(e, { ax: 0, ay: 0, res: src.width / (wide ? 1366 : 1024) }); continue; }
     const info = A.info[key] || {};
     const neo = info.neo || 'đáy';
     // Neo "x,y ..." chưa ghi tay: Sữa bế lấy nách ở 42% chiều cao, còn lại lấy giữa đáy.
@@ -111,21 +112,47 @@ export class BaseLevel extends Phaser.Scene {
 
   endingHide() { if (this.sua) this.sua.setVisible(false); }
 
-  // Nền đặt ở x (màn nhiều phòng: mỗi phòng một nền), kèm dải trên/dưới kéo dài khi máy dài hơn 2:3.
-  // Nền đầu tiên (x = 0) gán vào this.bg / bgTop / bgBottom.
+  // Nền đặt ở x (màn nhiều phòng: mỗi phòng một nền), kèm dải mép kéo dài (G-SCREEN): máy dài thì dải trên/dưới,
+  // máy rộng hơn 9:16 thì dải trái/phải và 4 góc (tạm, tới khi Art vẽ nền dư hai bên). Nền đầu tiên gán vào this.bg.
   buildBg(key, x = 0) {
     const bg = this.img(key, x, 0, D.bg);
     bg.setOrigin(0, 0);
     const tex = this.textures.get(key);
-    const src = tex.getSourceImage();
-    const strip = Math.round(src.height * 0.05);
-    if (!tex.has('top')) tex.add('top', 0, 0, 0, src.width, strip);
-    if (!tex.has('bottom')) tex.add('bottom', 0, 0, src.height - strip, src.width, strip);
-    const top = this.add.image(x, 0, key, 'top').setOrigin(0, 1).setDepth(D.bg);
-    const bottom = this.add.image(x, 1536, key, 'bottom').setOrigin(0, 0).setDepth(D.bg);
-    if (x === 0) Object.assign(this, { bg, bgTop: top, bgBottom: bottom });
-    return { b: bg, top, bottom };
+    const src = tex.getSourceImage(), sw = src.width, sh = src.height;
+    const sy = Math.round(sh * 0.05), sx = Math.round(sw * 0.03);
+    const frame = (name, fx, fy, fw, fh) => { if (!tex.has(name)) tex.add(name, 0, fx, fy, fw, fh); };
+    frame('top', 0, 0, sw, sy); frame('bottom', 0, sh - sy, sw, sy);
+    frame('left', 0, 0, sx, sh); frame('right', sw - sx, 0, sx, sh);
+    frame('tl', 0, 0, sx, sy); frame('tr', sw - sx, 0, sx, sy); frame('bl', 0, sh - sy, sx, sy); frame('br', sw - sx, sh - sy, sx, sy);
+    const part = (f) => this.add.image(x, 0, key, f).setDepth(D.bg).setVisible(false);
+    // Nền vẽ dư (G5-21 cao 1024x2304; G-SCREEN rộng 1366x2304): vùng chơi 1024x1536 nằm giữa ảnh, đặt lệch cho vùng chơi khớp
+    // (x … x + 1024, 0 … 1536). Dải mép kéo giãn chỉ hiện ở phần màn mà nền chưa phủ tới (layoutBg).
+    const dw = bg.displayWidth, dh = bg.displayHeight, tall = dh > 1536 + 100;
+    bg.setOrigin(Math.max(0, (dw - 1024) / 2) / dw, Math.max(0, (dh - 1536) / 2) / dh);
+    const rec = { b: bg, x, tall, top: part('top'), bottom: part('bottom'), left: part('left'), right: part('right'),
+      tl: part('tl'), tr: part('tr'), bl: part('bl'), br: part('br') };
+    (this.bgRecs = this.bgRecs || []).push(rec);
+    if (x === 0) Object.assign(this, { bg, bgTall: tall });
+    return rec;
   }
+
+  // Đặt các dải mép của một nền theo khung hiện tại: dải dài Y0 phía trên/dưới (nền 1536), X0 hai bên.
+  layoutBg(k) {
+    const { b } = k, w = b.displayWidth, h = b.displayHeight;
+    const left = b.x - b.originX * w, right = left + w, top = -b.originY * h, bottom = top + h;
+    // Phần màn chưa có nền: hai bên (X0 trừ phần nền đã dư), trên/dưới (Y0 trừ phần nền đã dư).
+    const X = Math.max(0, this.X0 - b.originX * w + 0.5), Y = Math.max(0, this.Y0 - b.originY * h + 0.5);
+    const side = X > 1, vert = Y > 1, ext = (img, ew, eh) => img.setScale(ew / img.width, eh / img.height);
+    k.top.setOrigin(0, 1).setPosition(left, top).setVisible(vert); ext(k.top, w, Y + 2);
+    k.bottom.setOrigin(0, 0).setPosition(left, bottom).setVisible(vert); ext(k.bottom, w, Y + 2);
+    k.left.setOrigin(1, 0).setPosition(left, top).setVisible(side); ext(k.left, X + 2, h);
+    k.right.setOrigin(0, 0).setPosition(right, top).setVisible(side); ext(k.right, X + 2, h);
+    k.tl.setOrigin(1, 1).setPosition(left, top).setVisible(side && vert); ext(k.tl, X + 2, Y + 2);
+    k.tr.setOrigin(0, 1).setPosition(right, top).setVisible(side && vert); ext(k.tr, X + 2, Y + 2);
+    k.bl.setOrigin(1, 0).setPosition(left, bottom).setVisible(side && vert); ext(k.bl, X + 2, Y + 2);
+    k.br.setOrigin(0, 0).setPosition(right, bottom).setVisible(side && vert); ext(k.br, X + 2, Y + 2);
+  }
+
 
   // ---------- tiện ích ----------
   get A() { return this.registry.get('assets'); }
@@ -152,6 +179,7 @@ export class BaseLevel extends Phaser.Scene {
     s.baseY = s.base * sy;
     s.setScale(s.base, s.baseY);
     s.key = key;
+    if (s.mirrorBlock) this.face(s, true); // khối đang quay trái: đổi dáng vẫn giữ hướng
     return s;
   }
 
@@ -241,6 +269,23 @@ export class BaseLevel extends Phaser.Scene {
     this.tweens.add({ targets: s, y: y - h, duration: dur / 2, yoyo: true, ease: 'Quad.out', onComplete: () => (s.y = y) });
   }
 
+  // Đồ tự động định kỳ (G5-29, dùng chung mọi màn): cứ min–max ms nhún nhẹ một nhịp rồi rung nhẹ, kèm tiếng nhỏ (sfx tuỳ chọn).
+  // Dừng hẳn khi until() đúng. Bỏ nhịp khi đồ đang có tween (gợi ý 💡 đang rung nó) hoặc màn đang khoá, chưa vào tìm.
+  fidget(s, { min = 3000, max = 5000, sfx, gain = 0.35, until = () => false } = {}) {
+    const next = () => this.time.delayedCall(Phaser.Math.Between(min, max), () => {
+      if (until() || !s.active) return;
+      if (this.phase === 'search' && !this.locked && !this.frozen && !this.tweens.isTweening(s)) {
+        const by = s.baseY || s.base || s.scaleY;
+        this.tweens.chain({ targets: s, tweens: [
+          { scaleY: by * 0.94, duration: 110, ease: 'Quad.out' }, { scaleY: by, duration: 200, ease: 'Back.out' },
+        ], onComplete: () => { if (!until()) this.wiggle(s, 2.5, 2, 260); } });
+        if (sfx) this.sfx(sfx, gain);
+      }
+      next();
+    });
+    next();
+  }
+
   nudge(s) {
     const x = s.x;
     this.tweens.add({ targets: s, x: x + 4, angle: 2, duration: 100, yoyo: true, onComplete: () => { s.x = x; s.angle = 0; } });
@@ -321,15 +366,18 @@ export class BaseLevel extends Phaser.Scene {
 
   // Camera đang ở đâu theo chiều ngang (màn một phòng luôn 0).
   get camX() { return this.cameras.main.scrollX; }
+  // Toạ độ thế giới → toạ độ trong khung 1024 đang nhìn (bỏ phần dư màn rộng và phòng đang đứng). Dùng cho react().
+  bandX(wx) { return wx - this.camX - this.X0; }
 
   // ---------- dựng cảnh ----------
   create() {
     this.prepareAssets();
     this.time.paused = false; // đồng hồ của Scene giữ trạng thái qua lần khởi động lại: vào màn luôn chạy
     // Khoá mở màn (leveldesign "Mở màn chung"): từ lúc vào màn tới khi bong bóng nhiệm vụ thu về góc xong, mọi cú chạm
-    // (đồ vật, mèo, túi đồ, mũi tên, 💡, ⏸) bị bỏ qua, không phản hồi, không tính gợi ý. Dự phòng: tự mở sau 8 giây.
+    // (đồ vật, mèo, túi đồ, mũi tên, 💡, ⏸) bị bỏ qua, không phản hồi, không tính gợi ý. Dự phòng: tự mở sau introLockMax
+    // (mặc định 8 giây; màn có cảnh diễn trước khi nhân vật gọi đặt dài hơn).
     this.introBusy = true;
-    this.time.delayedCall(8000, () => this.endIntroLock());
+    this.time.delayedCall(this.introLockMax || 8000, () => this.endIntroLock());
     this.zones = {};
     this.phase = 'intro';
     this.locked = true;
@@ -338,9 +386,15 @@ export class BaseLevel extends Phaser.Scene {
     this.hints = { h1: false, h2: false, sparkleAt: 0 };
     this.busy = {};
     // scene.restart() dùng lại cùng đối tượng Scene: xoá trạng thái của lượt trước.
-    Object.assign(this, { qHopLoop: null, glow: null, glowTw: null, endCt: null,
+    Object.assign(this, { qHopLoop: null, glow: null, glowTw: null, glowAt: null, endCt: null, thoughtB: null, thoughtIcon: null,
       handMode: null, press: null, handTimer: null, pawTimer: null, sua: null, dim: null, endButtons: null, bag: null, drag: null,
-      pausedState: null, pauseUI: null, reactMask: null });
+      pausedState: null, pauseUI: null, reactMask: null, bgRecs: [] });
+    // Bề rộng phần vẽ mặc định của màn: chỉ dùng khi design-art chưa có cột "Rộng demo" cho màn này.
+    const A = this.A, fd = this.fitDefaults;
+    if (fd) {
+      A.fit = A.fit || {};
+      if (!A.fit[this.levelNo] || !Object.keys(A.fit[this.levelNo]).length) A.fit[this.levelNo] = { ...fd };
+    }
     this.resetLevel();
 
     this.buildRoom();
@@ -357,11 +411,50 @@ export class BaseLevel extends Phaser.Scene {
     this.intro();
   }
 
-  // Lật ngang quanh điểm neo (giữ chân đứng đúng chỗ): đổi flipX và lấy đối xứng gốc theo chiều ngang.
+  // Quay mặt: ảnh vẽ nhìn sang phải, left = true thì lật ngang quanh điểm neo (giữ chân đứng đúng chỗ).
+  // Khối tạm canvas có nhãn chữ (bản khối, G6-15): dùng bản vẽ ngược riêng (hình lật, chữ vẫn xuôi) thay cho flipX.
   face(s, left) {
-    const e = this.A.entries[s.key];
+    left = !!left;
+    s.faceLeft = left;
+    const key = s.key, e = this.A.entries[key];
+    if (e && !e.real && this.fallbackCanvas && this.fallbacks && this.fallbacks[key]) {
+      s.mirrorBlock = left;
+      s.setTexture(left ? this.mirrorFallback(key) : key, '__BASE').setFlipX(false);
+      return s;
+    }
     const ox = e ? e.ax / s.width : 0.5;
     s.setFlipX(left).setOrigin(left ? 1 - ox : ox, s.originY);
+    return s;
+  }
+
+  // Quay mặt theo hướng đi tới x (đứng gần như tại chỗ thì giữ hướng cũ).
+  faceToward(s, x) { if (Math.abs(x - s.x) > 1) this.face(s, x < s.x); return s; }
+
+  // Di chuyển s tới (x, y) trong ms, mặt tự quay theo hướng đi (G6-15, dùng chung). arc > 0: nhảy vồng (đỉnh cao arc px).
+  // opts: ease, onUpdate, onComplete. Trả về tween.
+  moveTo(s, x, y, ms, { ease = 'Sine.inOut', arc = 0, onUpdate, onComplete } = {}) {
+    const x0 = s.x, y0 = s.y;
+    this.faceToward(s, x);
+    return this.tweens.addCounter({ from: 0, to: 1, duration: ms, ease, onUpdate: (tw) => {
+      const k = tw.getValue();
+      s.setPosition(x0 + (x - x0) * k, y0 + (y - y0) * k - arc * Math.sin(Math.PI * k));
+      if (onUpdate) onUpdate();
+    }, onComplete });
+  }
+
+  // Nhảy vồng tới (x, y): moveTo đều tốc, đỉnh vồng arc px.
+  hopTo(s, x, y, ms, done, arc = 80) { return this.moveTo(s, x, y, ms, { ease: 'Linear', arc, onComplete: done }); }
+
+  // Bản vẽ ngược của khối tạm canvas: hình lật ngang, nhãn chữ vẽ xuôi (blocks.js label đọc ctx.__mirrorW).
+  mirrorFallback(key) {
+    const mk = key + '~m';
+    if (this.textures.exists(mk)) return mk;
+    const [w, h, , draw] = this.fallbacks[key];
+    const t = this.textures.createCanvas(mk, w, h), c = t.getContext();
+    c.translate(w, 0); c.scale(-1, 1); c.__mirrorW = w;
+    draw(c, w, h);
+    t.refresh();
+    return mk;
   }
 
   dust(x, y) {
@@ -435,28 +528,29 @@ export class BaseLevel extends Phaser.Scene {
     for (let i = Math.max(0, filled); i < HB.n; i++) { g.fillCircle(HB.x0 + i * HB.step, 60, HB.r); g.strokeCircle(HB.x0 + i * HB.step, 60, HB.r); }
   }
 
+  // Khung (G-SCREEN): vùng chơi 1024x1536 ở giữa; X0 = phần dư mỗi bên (máy rộng hơn 9:16), Y0 = phần dư trên/dưới.
+  // Camera lùi (X0, Y0) để toạ độ đồ vật không đổi. Giao diện bám mép màn thật: trái giữ nguyên, phải tính từ W.
   layout() {
-    const H = this.scale.height;
+    const W = this.scale.width, H = this.scale.height;
+    this.X0 = (W - 1024) / 2;
     this.Y0 = (H - 1536) / 2;
     this.worldBottom = 1536 + this.Y0;
-    this.cameras.main.setScroll(0, -this.Y0);
-    const s = this.bg.scaleX;
-    this.bgTop.setScale(s, Math.max(0.001, (this.Y0 + 2) / this.bgTop.height));
-    this.bgBottom.setScale(s, Math.max(0.001, (this.Y0 + 2) / this.bgBottom.height));
-    this.bgTop.setVisible(this.Y0 > 0);
-    this.bgBottom.setVisible(this.Y0 > 0);
-    this.bulb.setPosition(1024 - 90, H - BANNER - 80); // ngay trên dải banner
+    this.cameras.main.setScroll(-this.X0, -this.Y0);
+    (this.bgRecs || []).forEach((k) => this.layoutBg(k));
+    this.pauseBtn.setPosition(W - 73, 66);
+    this.zones.pause.setPosition(W - 73, 66);
+    this.bulb.setPosition(W - 90, H - BANNER - 80); // ngay trên dải banner
     if (this.zones.bulb) this.zones.bulb.setPosition(this.bulb.x, this.bulb.y);
     else this.zone('bulb', this.bulb.getBounds(), D.uiZone, true);
     if (!this.zones.bubble) this.zone('bubble', new Phaser.Geom.Rectangle(380, 10, 150, 110), D.uiZone, true).disableInteractive();
     // Bong bóng như lời nhân vật đang gọi: phía trên bên phải đầu nhân vật, đuôi chĩa xuống trái về phía đầu (toạ độ màn hình).
-    this.bubbleCenter = [700, 760 + this.Y0];
+    this.bubbleCenter = [700 + this.X0, 760 + this.Y0];
     if (this.bubble.home === 'center') this.bubble.ct.setPosition(...this.bubbleCenter);
     if (this.bag && this.bag.shown) this.bagLayout();
     if (this.pauseUI) {
       const [dim, ...btns] = this.pauseUI;
-      dim.setPosition(512, H / 2).setSize(1024, H);
-      btns.forEach((b) => b.setY(H / 2));
+      dim.setPosition(W / 2, H / 2).setSize(W, H);
+      btns.forEach((b) => b.setPosition(b.bx + this.X0, H / 2));
     }
   }
 
@@ -538,8 +632,10 @@ export class BaseLevel extends Phaser.Scene {
   }
 
   // Mèo lộ diện phát sáng nhẹ (sáng lên rồi thở đều) tới khi được bế.
+  // Viền sáng nhịp nhàng quanh chỗ lộ diện (mèo, hoặc chỗ trốn như giỏ L2, hộp L3); startEnding gỡ đúng vật đó.
   glowOn(s = this.sua) {
     if (this.renderer.type !== Phaser.WEBGL || !s.preFX || this.glow) return;
+    this.glowAt = s;
     this.glow = s.preFX.addGlow(SUN, 0, 0, false, 0.1, 14);
     this.tweens.add({ targets: this.glow, outerStrength: 4, duration: 700, onComplete: () => {
       this.glowTw = this.tweens.add({ targets: this.glow, outerStrength: 1.5, duration: 1000, yoyo: true, repeat: -1 });
@@ -549,7 +645,7 @@ export class BaseLevel extends Phaser.Scene {
   // 🎁 n con cá khô bung ra từ (x, y) rồi bay về góc phải trên (như màn thưởng). drop: rơi ra thấp (lọ hoa nghiêng, L3).
   fishBurst(x, y, n, drop = false) {
     this.sfx('sfx_clink');
-    const tx = this.camX + 1024 - 80, ty = 62 - this.Y0;
+    const tx = this.camX + this.scale.width - 80, ty = 62 - this.Y0;
     for (let i = 0; i < n; i++) {
       const f = this.img('ui_dried_fish', x, y, D.fx).setOrigin(0.5, 0.5);
       this.fitWidth(f, 56);
@@ -569,18 +665,31 @@ export class BaseLevel extends Phaser.Scene {
   }
 
   // ---------- nhân vật ----------
+  // Mở màn: onIntro() của màn (cảnh diễn riêng) chạy ngay; nhân vật gọi + bong bóng nhiệm vụ (introCall) chạy ngay sau,
+  // trừ màn khai báo introCallLater = true thì màn tự gọi this.introCall() khi cảnh diễn xong (L6, G6-7).
   intro() {
     this.cameras.main.fadeIn(300, 0, 0, 0);
+    if (this.onIntro) this.onIntro();
+    if (!this.introCallLater) this.introCall();
+  }
+
+  // Nhân vật vào gọi mèo (đi vào từ mép trái màn thật; introRise = true thì trồi lên từ mép dưới), bong bóng nhiệm vụ bật ra
+  // sau 2 giây rồi thu về góc (mở khoá chạm).
+  introCall() {
     const pose = this.introPose || 'player_call';
     const p = this.player, [x, y] = this.P(pose);
     this.applyKey(p, pose);
-    p.setVisible(true).setPosition(-260, y);
-    this.time.delayedCall(300, () => {
-      this.tweens.add({ targets: p, x, duration: 900, ease: 'Sine.out' });
-      this.tweens.add({ targets: p, y: y - 14, angle: 3, duration: 150, yoyo: true, repeat: 2 });
-    });
+    if (this.introRise) {
+      p.setVisible(true).setPosition(x, this.worldBottom + p.displayHeight);
+      this.tweens.add({ targets: p, y, duration: 500, delay: 200, ease: 'Back.out' });
+    } else {
+      p.setVisible(true).setPosition(this.camX - 260, y); // vào từ mép trái màn thật
+      this.time.delayedCall(300, () => {
+        this.tweens.add({ targets: p, x, duration: 900, ease: 'Sine.out' });
+        this.tweens.add({ targets: p, y: y - 14, angle: 3, duration: 150, yoyo: true, repeat: 2 });
+      });
+    }
     this.time.delayedCall(1150, () => { this.sfx(this.callSfx || 'l1_sfx_player_call'); this.hop(p, 10, 300); });
-    if (this.onIntro) this.onIntro();
     this.time.delayedCall(2300, () => { if (this.phase === 'search' && p.key === pose) this.hop(p, 10, 300); });
     // Nhân vật đứng gọi tới khi bong bóng nhiệm vụ thu về góc rồi mới lui xuống mép dưới,
     // để lúc bong bóng bật ra (2 giây) vẫn thấy người đang gọi.
@@ -605,13 +714,13 @@ export class BaseLevel extends Phaser.Scene {
     this.applyKey(p, key);
     p.setScale(p.base * 1.2, (p.baseY || p.base) * 1.2); // to hơn cỡ đứng trong cảnh một chút (chủ dự án)
     const h = p.displayHeight;
-    const px = Phaser.Math.Clamp(x, 200, 824);
+    const px = this.camX + this.X0 + Phaser.Math.Clamp(x, 200, 824); // x: toạ độ trong khung 1024 đang nhìn
     // Trồi lên từ mép trên dải banner (không lấn vào dải banner), nằm trên túi đồ và các nút (chủ dự án).
     const floor = this.worldBottom - BANNER;
     const hidden = floor + h * (1 - p.originY) + h * p.originY + 10;
     const shown = floor + h * 0.45;
     if (!this.reactMask) this.reactMask = this.make.graphics({ x: 0, y: 0 }, false);
-    this.reactMask.clear().fillStyle(0xffffff).fillRect(0, floor - 4000, 1024, 4000);
+    this.reactMask.clear().fillStyle(0xffffff).fillRect(this.camX, floor - 4000, this.scale.width, 4000);
     p.setMask(this.reactMask.createGeometryMask());
     p.setVisible(true).setAngle(0).setPosition(px, hidden).setDepth(D.ui + 8);
     this.tweens.chain({ targets: p, tweens: [
@@ -625,10 +734,12 @@ export class BaseLevel extends Phaser.Scene {
   // Bong bóng bật ra: phóng tới `peak` trong `up` ms rồi về `rest` trong `down` ms.
   get bubblePop() { return { peak: 1.15, up: 230, rest: 1, down: 120 }; }
 
+  // introBubbleAt (tuỳ chọn, toạ độ màn hình): chỗ bong bóng bật ra lúc mở màn nếu khác bubbleCenter (L5, G5-28).
   bubbleIntro() {
     const B = this.bubble, k = this.bubblePop;
     B.home = 'center';
-    B.ct.setVisible(true).setPosition(...this.bubbleCenter).setScale(0);
+    const at = this.introBubbleAt;
+    B.ct.setVisible(true).setPosition(...(at ? [at[0] + this.X0, at[1]] : this.bubbleCenter)).setScale(0);
     this.sfx('sfx_meow_question');
     this.tweens.chain({ targets: B.ct, tweens: [
       { scale: k.peak, duration: k.up, ease: 'Quad.out' }, { scale: k.rest, duration: k.down },
@@ -729,8 +840,9 @@ export class BaseLevel extends Phaser.Scene {
 
   // ---------- túi đồ (D3-1, G3-2, G3-3): dải bám mép dưới, 4 ô; kéo món từ ô thả vào cảnh hoặc lên món khác ----------
   // Bộ số chung BAG (G4-33): mọi level cùng chỗ, cùng cỡ như level 3; tâm ô cao hơn đáy dải 90.
-  get bagSlotX() { return BAG.slotX; }
-  bagX() { return BAG.barX; }
+  // Túi bám mép trái màn thật và đi theo camera (D4-13, G-SCREEN).
+  get bagSlotX() { return BAG.slotX.map((x) => x + this.camX); }
+  bagX() { return BAG.barX + this.camX; }
   // Đáy dải túi ngay trên dải banner (cách mép dưới màn hình BANNER + 6).
   bagY() { return this.worldBottom - BANNER - 6; }
   slotPos(i) { return [this.bagSlotX[i], this.bagY() - 90]; }
@@ -755,7 +867,7 @@ export class BaseLevel extends Phaser.Scene {
 
   bagLayout() {
     const B = this.bag;
-    B.bar.setY(this.bagY());
+    B.bar.setPosition(this.bagX(), this.bagY());
     B.slots.forEach((o, i) => { o.s.setPosition(...this.slotPos(i)); o.z.setPosition(...this.slotPos(i)); });
     B.items.forEach((it) => { if (it && it !== (this.drag && this.drag.item)) it.s.setPosition(...this.slotPos(it.i)); });
   }
@@ -889,6 +1001,49 @@ export class BaseLevel extends Phaser.Scene {
   // Từ level 4 không hiện bàn tay hướng dẫn `ui_hand_pointer` (G4-19, leveldesign 6.4); bàn chân 💡 vẫn dùng.
   get showHand() { return this.levelNo < 4; }
 
+  // Bong bóng suy nghĩ của nhân vật có hình (icon) bên trong (mọi màn). hold > 0: tự tắt sau hold ms, đang hiện thì bỏ qua lần gọi mới;
+  // hold 0: hiện tới khi gọi thinkHide(). w: bề rộng bong bóng (bỏ trống: giữ cỡ theo bảng FIT của màn). frame: khung ảnh icon.
+  thinkBubble(icon, x, y, { w, iconK = 0.45, iconX = 0.55, frame, hold = 1700, dur = 260, sfx, gain = 1, fade = 220 } = {}) {
+    if (hold && this.busy.think) return;
+    if (hold) this.busy.think = true;
+    if (!this.thoughtB) this.thoughtB = this.img('ui_thought_bubble', 0, 0, D.player + 1).setVisible(false);
+    if (this.thoughtIcon) this.thoughtIcon.destroy();
+    const t = this.thoughtB, ic = this.thoughtIcon = this.add.image(0, 0, icon, frame).setDepth(D.player + 2).setVisible(false);
+    if (w) this.fitWidth(t, w);
+    t.setPosition(x, y).setVisible(true).setAlpha(1).setScale(0);
+    this.tweens.add({ targets: t, scale: t.base, duration: dur, ease: 'Back.out', onComplete: () => {
+      const tb = t.getBounds();
+      ic.setPosition(tb.x + tb.width * iconX, tb.y + tb.height * 0.36).setVisible(true).setAlpha(1);
+      this.fitWidth(ic, tb.width * iconK);
+    } });
+    if (sfx) this.sfx(sfx, gain);
+    if (hold) this.time.delayedCall(hold, () => this.thinkHide(fade));
+  }
+
+  thinkHide(fade = 220) {
+    const t = this.thoughtB, ic = this.thoughtIcon;
+    if (!t) return;
+    this.tweens.add({ targets: [t, ic], alpha: 0, duration: fade, onComplete: () => { t.setVisible(false); ic.setVisible(false); this.busy.think = false; } });
+  }
+
+  // Gợi ý tự động khi người chơi đứng yên (mọi màn): 8 giây gọi hint1() một lần; từ 16 giây cứ gap ms gọi idleSparkle().
+  // Màn tự lọc điều kiện riêng rồi gọi trong update(); ở đây chỉ chặn lúc khoá, đang chuyển phòng, đang kéo, túi đồ bận.
+  idleHints(time, gap = 2000) {
+    if (this.frozen || this.locked || this.moving || this.phase !== 'search' || this.drag || (this.bag && this.bag.busy)) return;
+    const idle = (time - this.lastTouch) / 1000, H = this.hints;
+    if (idle >= 8 && !H.h1) { H.h1 = true; this.hint1(); }
+    if (idle >= 16 && time - H.sparkleAt > gap) { H.sparkleAt = time; this.idleSparkle(); }
+  }
+
+  // Nút 💡 lún xuống một nhịp khi bấm (mọi màn).
+  pressBulb() { this.tweens.add({ targets: this.bulb, scale: this.bulb.base * 0.9, duration: 90, yoyo: true }); }
+
+  // Bàn chân 💡 nhấp vào điểm pt trong 2,5 giây rồi ẩn (mọi màn).
+  pawAt(pt) {
+    this.handTap(pt, 'hint', 'paw');
+    this.pawTimer = this.time.delayedCall(2500, () => this.handHide('paw'));
+  }
+
   handTap([x, y], mode = 'hint', which = 'hand', flip = false) {
     if (which === 'hand' && !this.showHand) return;
     this.handHide(which);
@@ -960,10 +1115,11 @@ export class BaseLevel extends Phaser.Scene {
     const ctx = this.sound.context;
     if (ctx && ctx.state === 'running') ctx.suspend();
 
-    const H = this.scale.height, d = D.end + 30;
-    const dim = this.add.rectangle(512, H / 2, 1024, H, 0x000000, 0.45).setScrollFactor(0).setDepth(d).setInteractive(); // chạm ngoài 3 nút: không làm gì
+    const W = this.scale.width, H = this.scale.height, d = D.end + 30;
+    const dim = this.add.rectangle(W / 2, H / 2, W, H, 0x000000, 0.45).setScrollFactor(0).setDepth(d).setInteractive(); // chạm ngoài 3 nút: không làm gì
     const btn = (key, x, fn) => {
-      const b = this.img(key, x, H / 2, d + 1, true).setOrigin(0.5, 0.5);
+      const b = this.img(key, x + this.X0, H / 2, d + 1, true).setOrigin(0.5, 0.5); // x trong khung 1024 giữa
+      b.bx = x;
       this.fitWidth(b, 180);
       b.setInteractive().on('pointerup', fn);
       const k = b.base;
@@ -1027,11 +1183,11 @@ export class BaseLevel extends Phaser.Scene {
     this.handHide('paw');
     if (this.beforeEnding) this.beforeEnding();
     if (this.glowTw) this.glowTw.stop();
-    if (this.glow) this.sua.preFX.remove(this.glow);
+    if (this.glow) (this.glowAt || this.sua).preFX.remove(this.glow);
     this.sua.setAngle(0);
 
     const H = this.scale.height;
-    this.dim = this.add.rectangle(512, H / 2, 1024, H, 0x000000, 1).setScrollFactor(0).setDepth(D.end).setAlpha(0);
+    this.dim = this.add.rectangle(this.scale.width / 2, H / 2, this.scale.width, H, 0x000000, 1).setScrollFactor(0).setDepth(D.end).setAlpha(0);
     this.tweens.add({ targets: this.dim, alpha: 0.4, duration: 300 });
 
     // Cảnh bế (leveldesign 6.2). Ảnh tay mới: cẳng tay ngắn chéo vào từ hai góc dưới, ống tay chạm mép dưới và hai mép
@@ -1049,9 +1205,9 @@ export class BaseLevel extends Phaser.Scene {
     const bottom = wb + 24;
     let k = (bottom - (wt + 0.55 * H)) / Math.max(1, L - c);
     // Không phóng quá 1,6 lần (màn dài thì Sữa nằm thấp hơn giữa một chút, thay vì tay và mèo to quá khổ).
-    k = Phaser.Math.Clamp(k, 1060 / hands.displayWidth, 1.6);
+    k = Phaser.Math.Clamp(k, (this.scale.width + 36) / hands.displayWidth, 1.6); // ảnh tay rộng hơn màn thật
     const A = bottom - L * k;                                        // toạ độ nách = điểm nắm
-    const cx = this.cameras.main.scrollX + 512;                       // giữa màn hình theo camera (màn nhiều phòng trượt ngang)
+    const cx = this.cameras.main.scrollX + this.scale.width / 2;      // giữa màn hình theo camera (màn nhiều phòng trượt ngang)
     const ct = this.add.container(cx, A).setDepth(D.end + 5);
     hands.setScale(hands.base * k).setPosition(0, L * k + hands.displayHeight + 60);
     const hb = held.base, sitScale = Math.min(1, sb.height / held.displayHeight);
@@ -1094,7 +1250,8 @@ export class BaseLevel extends Phaser.Scene {
     if (this.endCt) this.tweens.add({ targets: this.endCt.ct, alpha: 0, duration: 300 });
     this.sfx('sfx_win');
 
-    const face = this.img(this.catFace, 512, H * 0.38, D.end + 10, true).setOrigin(0.5, 0.5);
+    const cx = this.scale.width / 2; // giữa màn thật
+    const face = this.img(this.catFace, cx, H * 0.38, D.end + 10, true).setOrigin(0.5, 0.5);
     this.fitWidth(face, 300);
     const fb = face.base;
     face.setScale(0);
@@ -1106,7 +1263,7 @@ export class BaseLevel extends Phaser.Scene {
     this.slots.setDepth(D.end + 9);
     for (const h of this.heartFills) h.setDepth(D.end + 10);
     if (this.heartBadge) this.heartBadge.setDepth(D.end + 10);
-    const slot = this.img('ui_heart', 512, H * 0.38, D.end + 12, true).setOrigin(0.5, 0.5);
+    const slot = this.img('ui_heart', cx, H * 0.38, D.end + 12, true).setOrigin(0.5, 0.5);
     this.fitWidth(slot, HB.heart);
     const sb = slot.base;
     slot.setScale(0);
@@ -1119,10 +1276,10 @@ export class BaseLevel extends Phaser.Scene {
     ] });
 
     // Cá khô (level 1: 10, level 2: 15) bay vào góc phải trên.
-    const pile = this.img('ui_dried_fish', 1024 - 80, 62, D.end + 10, true).setOrigin(0.5, 0.5);
+    const pile = this.img('ui_dried_fish', this.scale.width - 80, 62, D.end + 10, true).setOrigin(0.5, 0.5);
     this.fitWidth(pile, 90);
     for (let i = 0; i < (this.rewardFish || 10); i++) {
-      const f = this.img('ui_dried_fish', 512 + Phaser.Math.Between(-60, 60), H * 0.38 + Phaser.Math.Between(-40, 60), D.end + 11, true).setOrigin(0.5, 0.5);
+      const f = this.img('ui_dried_fish', cx + Phaser.Math.Between(-60, 60), H * 0.38 + Phaser.Math.Between(-40, 60), D.end + 11, true).setOrigin(0.5, 0.5);
       this.fitWidth(f, 60);
       f.setAlpha(0);
       this.tweens.add({ targets: f, alpha: 1, x: pile.x, y: pile.y, scale: f.base * 0.6, delay: 700 + i * 90, duration: 500, ease: 'Quad.in',
@@ -1133,7 +1290,7 @@ export class BaseLevel extends Phaser.Scene {
       if (this.phase !== 'reward') return;
       const y = H * 0.38 + 290, next = this.nextLevelNo;
       const btn = (key, x, fn, i) => {
-        const b = this.img(key, x, y, D.end + 13, true).setOrigin(0.5, 0.5);
+        const b = this.img(key, x + this.X0, y, D.end + 13, true).setOrigin(0.5, 0.5); // x trong khung 1024 giữa
         this.fitWidth(b, 180);
         b.setInteractive().on('pointerup', () => { if (this.endButtons) { this.endButtons = null; this.sfx('sfx_tap'); fn(); } });
         const k = b.base;

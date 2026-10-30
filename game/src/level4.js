@@ -3,7 +3,7 @@
 // camera trượt ngang; túi đồ của L3 đi theo camera; xếp tháp kéo-thả theo hình dáng (đệm → vali → sách → gối).
 // KHUNG ẢNH TẠM: chưa có ảnh thật, mọi key mới tự vẽ bằng makeFallback; vị trí theo bảng design-art-level4.md mục 6.
 import { D, BROWN } from './base.js';
-import { RoomsLevel, ROOM_W } from './rooms.js';
+import { RoomsLevel, ROOM_W, ROOM_PAD } from './rooms.js';
 
 const BED = 0, LIVING = 1, STUDY = 2;               // phòng ngủ x 0–1024, khách 1024–2048 (bắt đầu), làm việc 2048–3072
 // Vị trí dự phòng (= bảng vị trí design-art-level4.md mục 6, toạ độ đúng demo G4-27), toạ độ trong khung phòng; ROOM cho biết key ở phòng nào.
@@ -30,11 +30,11 @@ const FIT = {
 };
 // Trạng thái cùng nhóm co cùng tỉ lệ với key đầu nhóm.
 const FIT_HEAD = {
-  l4_stack_suitcase: 'l4_stack_mattress', l4_stack_books: 'l4_stack_mattress', l4_stack_pillow: 'l4_stack_mattress',
+  l4_stack_suitcase: 'l4_stack_mattress', l4_stack_pillow: 'l4_stack_mattress',
   l4_bookshelf_after: 'l4_bookshelf_full', l4_suitcase_folded: 'l4_suitcase_full',
 };
 const ORDER = ['l4_mattress_fallen', 'l4_suitcase_folded', 'l4_book_stack', 'l4_pillow'];   // đệm → vali → sách → gối
-const STACK = { l4_mattress_fallen: 'l4_stack_mattress', l4_suitcase_folded: 'l4_stack_suitcase', l4_book_stack: 'l4_stack_books', l4_pillow: 'l4_stack_pillow' };
+const STACK = { l4_mattress_fallen: 'l4_stack_mattress', l4_suitcase_folded: 'l4_stack_suitcase', l4_book_stack: 'l4_book_stack', l4_pillow: 'l4_stack_pillow' }; // A4-39: tầng sách dùng chung ảnh sách dưới sàn
 const HOME = { l4_mattress_fallen: BED, l4_pillow: BED, l4_book_stack: STUDY, l4_suitcase_folded: STUDY };
 // Xếp tháp (A4-28): món sau đặt đáy = đỉnh phần vẽ món trước + chồng mép; nhân vật đứng lún vào gối 8px.
 const OVERLAP = [14, 14, 10], FEET_SINK = 8;
@@ -100,10 +100,6 @@ const FB = {
   // Tháp: cao 100 / 115 / 90 / 65 để mặt trên rơi đúng 1040 / 925 / 835 / 770 (A4-12).
   l4_stack_mattress: [340, 100, 'đáy', box(WHITE, 26)],
   l4_stack_suitcase: [260, 115, 'đáy', (g, w, h) => { box(CORAL, 16)(g, w, h); g.lineStyle(4, BROWN).strokeRect(w / 2 - 30, 4, 60, 18); }],
-  l4_stack_books: [180, 90, 'đáy', (g, w, h) => {
-    const c = [SKY, BUTTER, MINT, PINK];
-    for (let i = 0; i < 4; i++) g.lineStyle(3, BROWN).fillStyle(c[i]).fillRect(4 + (i % 2) * 6, 2 + i * 22, w - 14, 21).strokeRect(4 + (i % 2) * 6, 2 + i * 22, w - 14, 21);
-  }],
   l4_stack_pillow: [150, 65, 'đáy', box(WHITE, 30)],
   l4_bed: [520, 260, 'đáy', (g, w, h) => {
     g.lineStyle(4, BROWN).fillStyle(WOOD).fillRect(4, 4, 40, h - 8).strokeRect(4, 4, 40, h - 8);
@@ -275,10 +271,9 @@ export class Level4 extends RoomsLevel {
   // Bong bóng nhiệm vụ mở màn nhỏ hơn bản chung (G4-31).
   get bubblePop() { return { peak: BUBBLE.k * 1.15, up: 230, rest: BUBBLE.k, down: 120 }; }
 
+  get fitDefaults() { return FIT; }
+
   resetLevel() {
-    const A = this.A;
-    A.fit = A.fit || {};
-    if (!A.fit[4] || !Object.keys(A.fit[4]).length) A.fit[4] = { ...FIT };
     Object.assign(this, { room: LIVING, moving: false, poseIdx: 0, stack: [],
       got: {}, secrets: 0, sockState: 'hidden', duckDone: false, taught: {}, arrowPulse: null, meowEv: null, climax: false,
       sleepEv: null });
@@ -328,7 +323,7 @@ export class Level4 extends RoomsLevel {
     this.zone('curtain', this.artRect(this.curtain), D.zone + 1);
     this.zone('suaHang', this.artRect(this.hangCat), D.zone + 2);
     const sr = this.artRect(this.sofa); // vùng chạm sofa không lố sang phòng làm việc
-    this.zone('sofa', new Phaser.Geom.Rectangle(sr.x, sr.y, Math.min(sr.right, (LIVING + 1) * ROOM_W) - sr.x, sr.height), D.zone + 1);
+    this.zone('sofa', new Phaser.Geom.Rectangle(sr.x, sr.y, Math.min(sr.right, LIVING * ROOM_W + 1024) - sr.x, sr.height), D.zone + 1);
     this.zone('mattress', this.artRect(this.mattress), D.zone + 2);
     this.zone('pillow', this.artRect(this.pillow), D.zone + 3);
     this.zone('teddy', this.artRect(this.teddy), D.zone + 2);
@@ -346,7 +341,7 @@ export class Level4 extends RoomsLevel {
 
   layout() {
     super.layout();
-    this.bubbleCenter = [BUBBLE.x, BUBBLE.y + this.Y0]; // G4-31: bong bóng nhiệm vụ cao hơn
+    this.bubbleCenter = [BUBBLE.x + this.X0, BUBBLE.y + this.Y0]; // G4-31: bong bóng nhiệm vụ cao hơn
     if (this.bubble.home === 'center') this.bubble.ct.setPosition(...this.bubbleCenter);
   }
 
@@ -398,7 +393,7 @@ export class Level4 extends RoomsLevel {
     s.base = s.scaleX; s.baseY = s.scaleY;
     s.x += LIVING * ROOM_W + SOFA.left - this.artRect(s).x;
     const g = this.make.graphics({ x: 0, y: 0 }, false);
-    g.fillStyle(0xffffff).fillRect(LIVING * ROOM_W, -2000, ROOM_W, 6000);
+    g.fillStyle(0xffffff).fillRect(LIVING * ROOM_W, -2000, 1024 + ROOM_PAD, 6000); // tới hết phần dư bên phải (màn rộng)
     s.setMask(g.createGeometryMask());
   }
 
@@ -691,26 +686,9 @@ export class Level4 extends RoomsLevel {
   shelfLocked() {
     this.wiggle(this.shelf, 1, 2, 240);
     this.sfx('sfx_tap');
-    if (this.busy.think) return;
-    this.busy.think = true;
-    if (!this.think) {
-      this.think = this.img('ui_thought_bubble', 0, 0, D.player + 1).setVisible(false);
-      this.thinkIcon = this.add.image(0, 0, 'l4_suitcase_folded', this.iconFrame('l4_suitcase_folded')).setDepth(D.player + 2).setVisible(false);
-    }
-    const t = this.think, ic = this.thinkIcon, r = this.artRect(this.shelf);
-    this.fitWidth(t, 170);
-    const base = t.base;
-    t.setPosition(r.right - 70, r.top + 150).setVisible(true).setAlpha(1).setScale(0);
-    ic.setVisible(false);
-    this.sfx('sfx_meow_question', 0.6);
-    this.tweens.add({ targets: t, scale: base, duration: 260, ease: 'Back.out', onComplete: () => {
-      const tb = t.getBounds();
-      ic.setPosition(tb.x + tb.width * 0.55, tb.y + tb.height * 0.36).setVisible(true).setAlpha(1);
-      this.fitWidth(ic, tb.width * 0.5);
-    } });
-    this.time.delayedCall(1500, () => this.tweens.add({ targets: [t, ic], alpha: 0, duration: 220, onComplete: () => {
-      t.setVisible(false); ic.setVisible(false); this.busy.think = false;
-    } }));
+    const r = this.artRect(this.shelf);
+    this.thinkBubble('l4_suitcase_folded', r.right - 70, r.top + 150,
+      { w: 170, iconK: 0.5, frame: this.iconFrame('l4_suitcase_folded'), hold: 1500, sfx: 'sfx_meow_question', gain: 0.6 });
   }
 
   // Vali: chạm lần 1 bung nắp, đồ bay ra rơi khắp phòng, vali tự gấp lại; chạm lần 2 vào túi.
@@ -833,6 +811,9 @@ export class Level4 extends RoomsLevel {
     const [x, y] = this.towerTop(), key = STACK[it.key], i = this.stack.length;
     this.bagRemove(it, false);
     const s = this.img(key, x, y - 90, 30 + i);
+    // A4-39: tầng sách dùng ảnh `l4_book_stack`, co cùng tỉ lệ nhóm tầng tháp (đầu nhóm `l4_stack_mattress`) như các tầng khác.
+    const fw = (this.A.fit[4] || {}).l4_stack_mattress;
+    if (STACK[it.key] === it.key && fw) { s.base = s.baseY = fw / this.trimWidth('l4_stack_mattress'); s.setScale(s.base); }
     this.stack.push(s);
     this.tweens.add({ targets: s, y, duration: 220, ease: 'Quad.in', onComplete: () => {
       this.squash(s);
@@ -977,16 +958,6 @@ export class Level4 extends RoomsLevel {
 
   update(time) {
     this.followKids();
-    if (this.frozen || this.locked || this.moving || this.phase !== 'search' || this.drag || (this.bag && this.bag.busy)) return;
-    const idle = (time - this.lastTouch) / 1000, H = this.hints;
-    if (idle >= 8 && !H.h1) { H.h1 = true; this.hint1(); }
-    if (idle >= 16 && time - H.sparkleAt > 2000) {
-      H.sparkleAt = time;
-      const h = this.hintStep();
-      if (!h) return;
-      if (h.arrow) { const [x, y] = this.arrowWorld(h.arrow); this.sparkle({ getBounds: () => new Phaser.Geom.Rectangle(x - 50, y - 70, 100, 140) }); }
-      else if (h.item) this.hop(h.item.s, 22, 300); // đủ đồ: icon món cần xếp kế tiếp nảy lên
-      else if (h.sprite) this.sparkle(h.sprite);
-    }
+    this.idleHints(time); // 16 giây: mũi tên / icon món cần xếp kế tiếp nảy lên / đồ cần chạm lấp lánh (rooms.js)
   }
 }

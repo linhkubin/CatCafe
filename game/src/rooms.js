@@ -1,4 +1,5 @@
-// Màn nhiều phòng (L4, L5): các phòng xếp ngang, mỗi phòng rộng 1024; camera trượt ngang khi bấm mũi tên ◄ ►.
+// Màn nhiều phòng (L4, L5): các phòng xếp ngang, mỗi phòng rộng 1024, cách nhau ROOM_W (chừa chỗ dư hai bên khi màn rộng,
+// G-SCREEN); camera trượt ngang khi bấm mũi tên ◄ ►.
 // Màn con khai báo:
 //   get roomBgs()  – ảnh nền từng phòng theo thứ tự trái → phải, ví dụ ['l4_bg_bedroom', 'l4_bg_living', 'l4_bg_study'];
 //   get roomOf()   – { key: số phòng } cho P(key) (key không có trong bảng nằm ở phòng 0);
@@ -12,11 +13,15 @@
 import { D, BROWN } from './base.js';
 import { ObjectLevel } from './objects.js';
 
-export const ROOM_W = 1024;
-const ARROW = { right: [960, 760], left: [64, 760] }; // mũi tên chuyển phòng (A4-4), toạ độ màn hình (y cộng Y0)
+// Khoảng cách giữa hai phòng: rộng 1024 + dư tối đa mỗi bên khi màn rộng 3:4 (1365 − 1024) / 2 ≈ 171, để phần dư của phòng
+// này (nền kéo giãn) không chồng lên phòng bên cạnh.
+export const ROOM_PAD = 171;
+export const ROOM_W = 1024 + 2 * ROOM_PAD;
+const ARROW = { right: 64, left: 64, y: 760 };       // mũi tên chuyển phòng (A4-4): cách mép màn thật 64, y màn hình (cộng Y0)
 const ARROW_W = 110;
 // Bản đồ mini góc trên (giữa thanh ♥ và nút ⏸): mỗi phòng một ô x0 + i·step, ô rộng w cao h; icon gói trong iw × ih.
-const MAP = { x0: 560, y: 62, step: 84, w: 76, h: 48, iw: 64, ih: 36 };
+// x0 tính từ mép phải màn thật (bám nút ⏸): ô đầu cách mép phải 464.
+const MAP = { right: 464, y: 62, step: 84, w: 76, h: 48, iw: 64, ih: 36 };
 
 export class RoomsLevel extends ObjectLevel {
   get roomOf() { return {}; }
@@ -30,26 +35,10 @@ export class RoomsLevel extends ObjectLevel {
   // Vùng chạm đặt lại theo phần vẽ thật của sprite.
   zoneRect(s) { return this.artRect(s); }
 
-  // Nhân vật đi vào từ mép trái phòng đang đứng.
-  intro() {
-    super.intro();
-    this.player.setX(this.camX - 260);
-  }
-
-  // ---------- túi đồ đi theo camera (D4-13) ----------
-  get bagSlotX() { return super.bagSlotX.map((x) => x + this.camX); }
-  bagX() { return super.bagX() + this.camX; }
-  bagLayout() { super.bagLayout(); this.bag.bar.setX(this.bagX()); }
-
   // ---------- nền các phòng ----------
-  // Nền thật cao (G5-21: 1024x2304, vùng chơi 1536 ở giữa): đặt lệch lên cho vùng chơi khớp y 0–1536, không kéo giãn dải mép.
+  // Nền cao 2304 (G5-21) đặt lệch trong buildBg chung.
   buildRoomBgs() {
     this.roomBg = this.roomBgs.map((key, i) => this.buildBg(key, i * ROOM_W));
-    this.tallBg = {};
-    this.roomBgs.forEach((key, i) => {
-      const src = this.textures.get(key).getSourceImage(), h = (src.height * 1024) / src.width;
-      if (h > 1536 + 100) { this.roomBg[i].b.setOrigin(0, (h - 1536) / 2 / h); this.tallBg[key] = true; }
-    });
   }
 
   // ---------- mũi tên chuyển phòng ----------
@@ -64,7 +53,7 @@ export class RoomsLevel extends ObjectLevel {
   buildMap() {
     const g = this.add.graphics().setScrollFactor(0).setDepth(D.ui);
     const cells = this.roomIcons.map(([key, stand], i) => {
-      const k = this.has(key) ? key : stand, t = this.add.image(MAP.x0 + MAP.w / 2 + i * MAP.step, MAP.y, k, this.iconFrame(k));
+      const k = this.has(key) ? key : stand, t = this.add.image(0, MAP.y, k, this.iconFrame(k));
       return t.setScale(Math.min(MAP.iw / t.width, MAP.ih / t.height)).setScrollFactor(0).setDepth(D.ui + 1);
     });
     this.map = { g, cells, blink: null, blinkRoom: -1 };
@@ -74,8 +63,10 @@ export class RoomsLevel extends ObjectLevel {
 
   drawMap(flash = 0) {
     const g = this.map.g.clear();
+    const x0 = this.scale.width - MAP.right;
     this.map.cells.forEach((c, r) => {
-      const x = MAP.x0 + r * MAP.step, on = r === this.room, lit = flash && r === this.map.blinkRoom;
+      const x = x0 + r * MAP.step, on = r === this.room, lit = flash && r === this.map.blinkRoom;
+      c.setX(x + MAP.w / 2);
       g.fillStyle(lit ? 0xffd36b : on ? 0xfce39a : 0xfffcf4, 1).lineStyle(4, BROWN, 1);
       g.fillRoundedRect(x, MAP.y - MAP.h / 2, MAP.w, MAP.h, 10).strokeRoundedRect(x, MAP.y - MAP.h / 2, MAP.w, MAP.h, 10);
       c.setAlpha(on || lit ? 1 : 0.45);
@@ -108,7 +99,8 @@ export class RoomsLevel extends ObjectLevel {
     if (this.map) this.drawMap();
   }
 
-  arrowWorld(side) { return this.W(this.room, ARROW[side]); }
+  // Chỗ mũi tên trong toạ độ thế giới (bàn chân 💡, lấp lánh).
+  arrowWorld(side) { return [this.camX + (side === 'right' ? this.scale.width - ARROW.right : ARROW.left), ARROW.y]; }
 
   // ---------- gợi ý ----------
   // Mũi tên rung ngang ba nhịp về phía phòng cần sang (gợi ý 8 giây).
@@ -117,18 +109,21 @@ export class RoomsLevel extends ObjectLevel {
     this.tweens.add({ targets: a, x: a.x + (side === 'right' ? 14 : -14), duration: 160, yoyo: true, repeat: 2 });
   }
 
-  // Bàn chân 💡 nhấp vào điểm pt trong 2,5 giây (không có bàn tay hướng dẫn từ L4).
-  pawAt(pt) {
-    this.handTap(pt, 'hint', 'paw');
-    this.pawTimer = this.time.delayedCall(2500, () => this.handHide('paw'));
-  }
-
   strongHint() {
-    this.tweens.add({ targets: this.bulb, scale: this.bulb.base * 0.9, duration: 90, yoyo: true });
+    this.pressBulb();
     const h = this.hintStep();
     if (!h || (this.strongHintStep && this.strongHintStep(h))) return;
     if (h.arrow) this.pawAt(this.arrowWorld(h.arrow));
     else if (h.sprite) this.pawAt(this.tipOf(h.sprite));
+  }
+
+  // Gợi ý 16 giây (idleHints): lấp lánh ở mũi tên phòng cần sang, hoặc icon món kế tiếp trong túi nảy lên, hoặc đồ cần chạm.
+  idleSparkle() {
+    const h = this.hintStep();
+    if (!h) return;
+    if (h.arrow) { const [x, y] = this.arrowWorld(h.arrow); this.sparkle({ getBounds: () => new Phaser.Geom.Rectangle(x - 50, y - 70, 100, 140) }); }
+    else if (h.item) this.hop(h.item.s, 22, 300);
+    else if (h.sprite) this.sparkle(h.sprite);
   }
 
   // Mũi tên nhấp nháy mời chuyển phòng (side 'left' | 'right'); tắt khi chuyển phòng.
@@ -139,19 +134,15 @@ export class RoomsLevel extends ObjectLevel {
 
   layout() {
     super.layout();
-    this.cameras.main.setScroll(this.room * ROOM_W, -this.Y0);
-    this.roomBg.forEach((k, i) => {
-      const s = k.b.scaleX, show = this.Y0 > 0 && !this.tallBg[this.roomBgs[i]];
-      k.top.setScale(s, Math.max(0.001, (this.Y0 + 2) / k.top.height)).setVisible(show);
-      k.bottom.setScale(s, Math.max(0.001, (this.Y0 + 2) / k.bottom.height)).setVisible(show);
-    });
-    const ay = ARROW.right[1] + this.Y0;
-    this.arrowR.setPosition(ARROW.right[0], ay);
-    this.arrowL.setPosition(ARROW.left[0], ay);
+    this.cameras.main.setScroll(this.room * ROOM_W - this.X0, -this.Y0);
+    const ay = ARROW.y + this.Y0, rx = this.scale.width - ARROW.right;
+    this.arrowR.setPosition(rx, ay);
+    this.arrowL.setPosition(ARROW.left, ay);
     this.fitWidth(this.arrowR, ARROW_W);
     this.fitWidth(this.arrowL, ARROW_W);
-    this.zones.arrowR.setPosition(ARROW.right[0], ay);
-    this.zones.arrowL.setPosition(ARROW.left[0], ay);
+    this.zones.arrowR.setPosition(rx, ay);
+    this.zones.arrowL.setPosition(ARROW.left, ay);
+    if (this.map) this.drawMap();
     if (this.bag) this.bagLayout();
   }
 
@@ -179,7 +170,7 @@ export class RoomsLevel extends ObjectLevel {
     this.room = r;
     this.sfx('sfx_tap');
     this.showArrows();
-    this.tweens.add({ targets: this.cameras.main, scrollX: r * ROOM_W, duration: 400, ease: 'Sine.inOut',
+    this.tweens.add({ targets: this.cameras.main, scrollX: r * ROOM_W - this.X0, duration: 400, ease: 'Sine.inOut',
       onUpdate: () => { if (this.bag) this.bagLayout(); },
       onComplete: () => {
         this.moving = false;
