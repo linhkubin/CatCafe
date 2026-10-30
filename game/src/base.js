@@ -12,6 +12,7 @@ import { playSfx } from './sfx.js';
 import { KEYS, phUrl } from './assets.js';
 import { Progress, LEVELS } from './progress.js';
 import { catOf } from './cats.js';
+import { attachFrame916 } from './frame916.js';
 
 export const D = {
   bg: 0, pend: 9, clock: 10, bird: 11, rug: 12, plant: 13, fly: 14, box: 20, canHidden: 25, cushion: 30, pillow: 31,
@@ -19,6 +20,7 @@ export const D = {
 };
 export const MIN_HIT = 115;            // vùng chạm tối thiểu (P6)
 export const BANNER = 150;             // dải banner quảng cáo ở đáy màn hình: không đặt UI hay đồ chạm được (leveldesign, quy ước chung)
+const HELD_PIT = 0.43;                 // nách Mun trên ảnh `mun_held` (tỉ lệ chiều cao), như `sua_held` neo ở nách
 export const SWIPE = 40;               // px: dài hơn là vuốt
 // Túi đồ dùng chung mọi level (G4-33: giống hệt L3, đo trên l3_demo_reveal): thanh neo đáy x 409, phần vẽ rộng 688;
 // tâm 4 ô x 205/348/492/635, ô rộng 136. Không đọc từ bảng vị trí từng level.
@@ -413,6 +415,7 @@ export class BaseLevel extends Phaser.Scene {
       this.game.events.off('hidden', this.onHidden, this);
     });
     this.setupInput();
+    attachFrame916(this); // xem trước khung 9:16 (?frame916=1, phím G)
     this.intro();
   }
 
@@ -628,6 +631,14 @@ export class BaseLevel extends Phaser.Scene {
   // Bật vùng chạm mèo khi cảnh lộ diện xong; gọi lại thì dời vùng chạm sang rect mới (mèo chạy chỗ khác, L5).
   // Tay hướng dẫn chỉ vào mèo tới lần chạm kế tiếp (suaHand: L1, L2; từ L3 không chỉ, nút 💡 vẫn chỉ được).
   get suaHand() { return true; }
+
+  // Ảnh `mun_held` neo đỉnh (A5-13); cảnh bế chung cần neo ở nách (điểm hai tay nắm), như `sua_held`. Dùng chung L5, L6 (G6-26).
+  fixHeldAnchor(key) {
+    const he = this.A.entries[key];
+    if (key !== 'mun_held' || !he || !he.real || !this.textures.exists(key) || he.ay >= 30) return;
+    const src = this.textures.get(key).getSourceImage();
+    Object.assign(he, { ax: src.width / 2, ay: Math.round(src.height * HELD_PIT) });
+  }
 
   armSua(rect) {
     if (this.phase !== 'found' || this.ending || !rect) return;
@@ -1216,6 +1227,7 @@ export class BaseLevel extends Phaser.Scene {
     const wb = this.worldBottom, wt = wb - H;
     const hk = 'player_hands_lift', he = this.A.entries[hk] || {};
     const hands = this.img(hk, 0, 0, 0);
+    this.fixHeldAnchor(this.heldKey);
     const held = this.img(this.heldKey, 0, 0, 0).setVisible(false);
     const gy = he.grip ? he.grip[1] / hands.height : 0.25;           // điểm nắm (giữa hai lòng bàn tay), tính từ đỉnh ảnh
     const L = (hands.originY - gy) * hands.displayHeight;             // từ điểm nắm tới đáy ảnh tay (k = 1)

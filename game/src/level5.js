@@ -60,7 +60,6 @@ const PIPE_CUT_Y = 300; // G5-27: ống nước cắt từ y này lên (mép c�
 const SHADE = { color: 0x4a3a2e, alpha: 0.5, tint: 0xb0a498, fade: 70 };
 // Chỗ đốm sáng trên mu bàn chân trái giơ lên của `mun_look_paw` (px trên ảnh thật 350x343, Mun mặt tròn A5-23).
 const LOOK_PAW_SPOT = [197, 214];
-const HELD_PIT = 0.43;                                // nách Mun trên ảnh `mun_held` (tỉ lệ chiều cao), như `sua_held` neo ở nách
 const FIT_HEAD = { l5_trash_bag_after: 'l5_trash_bag_idle', l5_slippers_flipped: 'l5_slippers', l5_crow_far: 'l5_crow_idle',
   l5_bike_wheel: 'l5_bike', l5_cafe_window_frame: 'l5_cafe_window_back' };
 const GECKO_UP = [333, 400];                          // thạch sùng chạy vụt lên đây (sát dưới bạt)
@@ -341,12 +340,7 @@ export class Level5 extends RoomsLevel {
       eyesAway: false, munStage: 'eyes', pawOut: false, trail: [], chaseOn: false, rays: [], spotAt: null, spotAmp: 3, sunRay: null, flapK: 0,
       blinkEv: null, eyesEv: null, pawDone: null });
     this.debug = new URLSearchParams(location.search).get('debug') === '1';
-    // Ảnh `mun_held` neo đỉnh (A5-13); cảnh bế chung cần neo ở nách (điểm hai tay nắm), như `sua_held`.
-    const he = A.entries.mun_held;
-    if (he && he.real && this.textures.exists('mun_held') && he.ay < 30) {
-      const src = this.textures.get('mun_held').getSourceImage();
-      Object.assign(he, { ax: src.width / 2, ay: Math.round(src.height * HELD_PIT) });
-    }
+    this.fixHeldAnchor('mun_held'); // neo nách cho cảnh bế (base.js)
   }
 
   // Như base, thêm co theo chiều cao phần vẽ cho món trong FIT_H.

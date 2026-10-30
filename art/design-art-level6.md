@@ -95,7 +95,7 @@ Mỗi món một ảnh `art/out/_sheets/l6src_<key>.png` (Codex tách, brief `ar
 | l6src_l6_glove_black_fallen | 0,0,1536,1024 | l6_glove_black_fallen | level6 | glove | đáy | rộng 124 | 5 |
 | l6src_l6_bone | 0,0,1536,1024 | l6_bone | level6 |  | tâm | rộng 80 | 5 |
 | l6src_l6_sausage | 0,0,1536,1024 | l6_sausage | level6 |  | tâm | rộng 90 | 5 |
-| l6src_l6_dog_chew | 0,0,1254,1254 | l6_dog_chew | level6 |  | đáy | rộng 210 | 5 |
+| l6src_l6_dog_chew | 0,0,1254,1254 | l6_dog_chew | level6 |  | đáy | rộng 190 | 5 |
 | l6src_mun_roof_crouch_ears_up | 0,0,1536,1024 | mun_roof_crouch_ears_up | cats | mun_roof | đáy | rộng 245 | 2.5 |
 | l6src_mun_roof_crouch | 0,0,1536,1024 | mun_roof_crouch | cats | mun_roof | đáy | rộng 241 | 2.5 |
 | l6src_l6_dog_bark | 0,0,1254,1254 | l6_dog_bark | level6 |  | đáy | rộng 240 | 2.5 |
@@ -175,3 +175,21 @@ Mỗi món một ảnh `art/out/_sheets/l6src_<key>.png` (Codex tách, brief `ar
 - `mun_eat` (lượt `mun`): Mun đứng bốn chân, nhìn sang phải, **cúi đầu gặm** (không vẽ xúc xích), mắt híp sung sướng, má hồng, tai dựng, đuôi dựng cong. Đáy phẳng. **Không lấy:** KHÔNG lấy xúc xích, bàn, giỏ.
 - `mun_sit_look` (lượt `mun`): Mun **ngồi**, mặt quay ba phần tư sang phải rồi **ngẩng nhìn người chơi**, lưỡi hồng **liếm mép**, mắt vàng tròn hài lòng, đuôi quấn quanh chân.
 - `mun_climb` (lượt `mun`): Mun **bám leo** một cột thẳng đứng (không vẽ cột): thân dựng đứng, bốn chân ôm vào trục giữa như ôm cột, đầu ngoái nhìn sang phải, tai cụp, mắt to hoảng, đuôi thõng xuống.
+
+### 5.1 Tờ `l6_mun_hop_sheet`: Mun nhảy xuống bậc (G6-23)
+
+Chủ dự án chê đoạn Mun xuống bậc "trông ngượng, như chỉ chạy bằng 2 chân trước" vì cả cú nhảy dùng một dáng `mun_step_down`. Vẽ thêm 2 dáng; `mun_step_down` giữ làm dáng chuẩn bị (cúi nhìn mép). Cùng nhịp: `mun_step_down` → `mun_hop_down` (bay) → `mun_land` (đáp). Cả ba quay mặt sang phải, cùng cỡ đầu, cùng nét (Dev lật khi cần).
+
+| Tờ | Ô | Key | Thư mục | Nhóm | Neo | Hiển thị | Nét |
+|---|---|---|---|---|---|---|---|
+| l6_mun_hop_sheet | 0,0,845,1024 | mun_hop_down | cats |  | tâm | rộng 289 | 2.5 |
+| l6_mun_hop_sheet | 845,0,691,1024 | mun_land | cats |  | đáy | rộng 241 | 2.5 |
+
+| Tờ hoặc key | Demo gốc | Vị trí trong demo |
+|---|---|---|
+| l6_mun_hop_sheet | art/out/demo/l6_demo_path_916.png | (không có trong demo; Mun trên mái x 300–420, y 140–235 của vùng chơi art/out/demo/l6_demo_path_play.png làm mẫu thiết kế, màu, nét) |
+
+**Bố cục:** ô trái (x 0–900) Mun đang bay; ô phải (x 900–1536) Mun vừa đáp. Mỗi ô một Mun, to gần kín ô, lề trong suốt khoảng 40px (G5-34). **Hai dáng cùng cỡ đầu** (đầu Mun rộng như nhau), cùng cỡ đầu với `art/out/_sheets/l6src_mun_step_down.png`.
+
+- `mun_hop_down`: Mun **đang bay giữa cú nhảy xuống**, nhìn nghiêng sang phải. Thân duỗi dài chéo xuống phía trước (đầu thấp bên phải, mông cao bên trái). **Hai chân trước duỗi thẳng ra trước, xuống dưới để đón đất**, bàn chân hơi xoè; **hai chân sau duỗi về sau, lên trên như vừa đạp rời bậc**. **Thấy rõ cả bốn chân**, tách nhau, không chân nào bị thân che. Đuôi dựng cong lên phía sau để giữ thăng bằng. Tai hơi cụp ra sau, mắt vàng tròn nhìn xuống chỗ đáp (phía dưới bên phải), miệng nhỏ. Dáng nhẹ nhàng, uyển chuyển, mềm như mèo thật nhảy, không cứng, không chổng mông. Không vẽ bậc, đất. Neo tâm.
+- `mun_land`: Mun **vừa đáp xuống**, nhìn nghiêng sang phải. **Cả bốn chân chạm đất trên một đường đáy phẳng ngang**, hai chân trước gần nhau phía trước, hai chân sau phía sau; thân **hơi co, nhún xuống** (lưng cong mềm, khuỷu chân hơi gập), đuôi cong lên. Đầu ngẩng bình thường, **mặt tỉnh bơ** (mắt tròn nửa khép, miệng nhỏ thẳng). Tai dựng. Không vẽ bậc, đất, bóng. Neo đáy, giữa bốn chân.

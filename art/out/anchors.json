@@ -1802,16 +1802,16 @@
   "w": 474
  },
  "l6_dog_chew": {
-  "ax": 179,
-  "ay": 247,
+  "ax": 153,
+  "ay": 227,
   "file": "level6/l6_dog_chew.png",
   "group": "l6_dog_chew",
-  "h": 254,
-  "ox": 0.5408,
-  "oy": 0.9724,
+  "h": 234,
+  "ox": 0.5083,
+  "oy": 0.9701,
   "res": 1.5,
   "sheet": "l6src_l6_dog_chew",
-  "w": 331
+  "w": 301
  },
  "l6_dog_house": {
   "ax": 247,
@@ -2077,6 +2077,30 @@
   "res": 1.5,
   "sheet": "l5src_mun_held_g32",
   "w": 589
+ },
+ "mun_hop_down": {
+  "ax": 225,
+  "ay": 240,
+  "file": "cats/mun_hop_down.png",
+  "group": "mun_hop_down",
+  "h": 480,
+  "ox": 0.5,
+  "oy": 0.5,
+  "res": 1.5,
+  "sheet": "l6_mun_hop_sheet",
+  "w": 450
+ },
+ "mun_land": {
+  "ax": 176,
+  "ay": 354,
+  "file": "cats/mun_land.png",
+  "group": "mun_land",
+  "h": 362,
+  "ox": 0.4656,
+  "oy": 0.9779,
+  "res": 1.5,
+  "sheet": "l6_mun_hop_sheet",
+  "w": 378
  },
  "mun_look_paw": {
   "ax": 181,

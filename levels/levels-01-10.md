@@ -588,7 +588,7 @@ SÂN SAU (bắt đầu)                    CON HẺM
 |---|---|
 | Độ khó | 🟡 **Normal · 90 giây** (ngoại lệ: luật chung đặt level 6 là Easy 60 giây, màn này có 8 bước; chủ dự án chốt lại sau khi chơi bản khối) |
 | Mèo | Mun (♥ 2/6) |
-| Phòng | 1: Sân sau nhà hàng xóm, buổi chiều. **Dùng lại nền sân sau L5** (trời, hàng rào, sân), chỉ thay đồ đạc; nhà kho là sprite riêng |
+| Phòng | 1: Sân sau nhà hàng xóm, buổi chiều. Nền riêng `l6_bg_backyard` 1366x2304 (trời, hàng rào, sân, đủ rộng cho khung 3:4; A6-12), mọi đồ là sprite riêng |
 | Dạy | Kéo đồ có sẵn trong cảnh tới đúng chỗ để xếp đường (không qua túi đồ) |
 | Bước bắt buộc | 8 (lấy xương, cho Lu, lấy xúc xích, 4 bậc đường xuống, đặt xúc xích lên bàn) |
 
@@ -596,7 +596,7 @@ SÂN SAU (bắt đầu)                    CON HẺM
 
 **Nhân vật phụ:** **Lu**, chó vàng to của nhà hàng xóm. Không dữ, chỉ muốn chơi: ngồi dưới mái kho vẫy đuôi sủa lên.
 
-**Trạng thái mèo:** Mun **Lẩn tránh** trên mái kho (thấy rõ nhưng ngoài tầm tay). Chạm Mun: Mun lùi ra sau ống khói, ló lại sau 2 giây. Khi Lu còn sủa, Mun nằm rạp, tai cụp, không ra mép mái. Khi Mun **đã nhảy lên bàn** (đang ăn xúc xích), Mun **Lộ diện**: chạm là thắng.
+**Trạng thái mèo:** Mun **Lẩn tránh** trên mái kho (thấy rõ nhưng ngoài tầm tay). Chạm Mun: Mun lùi lại khoảng 40px về phía sau mái rồi tiến về chỗ cũ, meo nhỏ (G6-22). Mun cùng một cỡ suốt màn: trên mái, lúc xuống, lúc chạy, lúc ăn (G6-21). Khi Lu còn sủa, Mun nằm rạp, tai cụp, không ra mép mái. Khi Mun **đã nhảy lên bàn** (đang ăn xúc xích), Mun **Lộ diện**: chạm là thắng.
 
 **Bố cục màn hình:**
 
@@ -619,24 +619,24 @@ SÂN SAU (bắt đầu)                    CON HẺM
 └──────────────────────────────┘
 ```
 
-A, B, C: 3 chỗ đặt, thấp dần từ mép mái xuống đất. A sát tường kho, cao nhất: thùng phuy rồi hộp dụng cụ nhỏ đậy lên (2 bước). B: thùng gỗ. C: ghế đẩu, thấp nhất, **sát cạnh bàn** để từ ghế Mun nhảy lên bàn. Tổng 4 bước xếp đường. Bàn đặt gần chân đường xuống (dời bàn nếu cần), giỏ picnic nằm **mép trái mặt bàn**, chừa chỗ trống bên phải cho xúc xích (G6-5).
+A, B, C: 3 chỗ đặt, thấp dần từ mép mái xuống đất. A sát tường kho, cao nhất: thùng phuy rồi hộp dụng cụ nhỏ đậy lên (2 bước). B: thùng gỗ. C: ghế đẩu, thấp nhất, **sát cạnh bàn** để từ ghế Mun nhảy lên bàn. Tổng 4 bước xếp đường. Bàn đặt gần chân đường xuống (dời bàn nếu cần), giỏ picnic lúc đầu nằm **trên nắp thùng gỗ** (G6-22); lấy xúc xích xong giỏ bay nhẹ lên và mờ dần biến mất. Xúc xích đặt **giữa mặt bàn**, cỡ bằng xúc xích đang cầm.
 
 **Đồ vật:**
 
 | Số | Đồ vật | Vị trí | Loại | Thao tác | Phản hồi | Âm thanh |
 |---|---|---|---|---|---|---|
-| 1 | Mun trên mái kho | Trên phải | — | Chạm | Mun lùi ra sau ống khói, ló lại sau 2 giây | "Meo" run run |
+| 1 | Mun trên mái kho | Trên phải | — | Chạm | Mun lùi lại một chút rồi tiến về chỗ cũ (G6-22) | "Meo" run run |
 | 2 | Lu | Giữa, dưới mái | — | Chạm | Lu vẫy đuôi sủa to hơn, Mun nằm rạp. Bong bóng nhân vật: hình khúc xương | "Gâu gâu" |
 | 5 | Bụi rau (có khúc xương) | Dưới phải | 🔑 | Chạm | Lá rau rẽ ra, **khúc xương** bay vào túi đồ. Lu cứ ngoái nhìn bụi rau (gợi ý tự nhiên) | Lá xào xạc |
-| 2' | Lu (nhận xương) | — | 🎯 | Kéo xương từ túi thả vào Lu | Lu ngậm xương, chạy về chuồng (6), chui hẳn vào trong, chỉ thò đầu ra cửa chuồng gặm xương vui vẻ, **thôi sủa**. Mun ngóc đầu dậy | "Gâu!" vui, rồi tiếng gặm |
-| 3 | Giỏ picnic trên bàn | Giữa trái | 🔑 | Chạm | Nắp giỏ bật, **xúc xích** bay vào túi đồ | "Tách" |
+| 2' | Lu (nhận xương) | — | 🎯 | Kéo xương từ túi thả vào Lu | Lu ngậm xương, đi **một đường cong liền, mềm, tốc độ đều**, vòng sát mép chuồng ra **trước cửa** rồi chui vào (không đi xuyên chuồng; G6-21, G6-22). Lu thò đầu ra **giữa cửa chuồng** gặm xương vui vẻ, **thôi sủa**. Mun ngóc đầu dậy | "Gâu!" vui, rồi tiếng gặm |
+| 3 | Giỏ picnic **trên nắp thùng gỗ** (G6-22) | Giữa trái | 🔑 | Chạm | Nắp giỏ bật, **xúc xích** bay vào túi đồ; giỏ bay nhẹ lên ~60px, mờ dần trong 0,6 giây rồi biến mất. Kéo thùng gỗ trước thì giỏ đi theo thùng, vẫn chạm được | "Tách" |
 | 4a | Thùng phuy nước | Dưới trái | 🔑 | Kéo tới chỗ **A** | Phuy lăn tới sát tường kho, dựng đứng. Mun ra mép nhìn xuống, thấy nước sóng sánh, lùi lại | "Lộc cộc" |
 | 4b | Hộp dụng cụ nhỏ | Dưới, giữa | 🔑 | Kéo đậy lên **miệng phuy ở A** (chỉ được khi phuy đã ở A) | Hộp dụng cụ đặt khít, đậy kín miệng phuy, thành bậc đầu tiên | "Cộp" |
 | 4c | Thùng gỗ | Dưới, giữa phải | 🔑 | Kéo tới chỗ **B** (bậc giữa) | Thùng đặt vào, thành bậc giữa | "Cộp" |
 | 4d | Ghế đẩu | Dưới trái | 🔑 | Kéo tới chỗ **C** (bậc thấp nhất, gần đất) | Ghế đặt vào, thành bậc cuối | "Cạch" |
-| 4' | Mặt bàn (chỗ trống bên phải giỏ) | Cạnh chỗ C | 🎯 | Kéo **xúc xích** từ túi thả lên bàn | Xem Khoảnh khắc lộ diện | "Pặc" |
+| 4' | Mặt bàn | Cạnh chỗ C | 🎯 | Kéo **xúc xích** từ túi thả lên bàn (vùng thả gồm cả mặt bàn và ghế C chồng lên) | Xúc xích nằm **giữa mặt bàn**, cỡ bằng lúc đang cầm. Xem Khoảnh khắc lộ diện | "Pặc" |
 | 6 | Chuồng Lu | Dưới phải | ✨ | Chạm (khi Lu đang gặm) | Lu lăn ra khoe bụng rồi gặm tiếp | "Ư ử" |
-| 7 | Găng tay làm vườn đen trên hàng rào | Giữa trái | 🎭 | Chạm | Trông như mèo đen ngồi, hoá ra găng tay: găng rơi xuống đất dưới hàng rào và nằm yên ở đó. Lu (nếu rảnh) **chạy tới chỗ găng, cúi ngửi ngửi** (mũi khịt khịt, đuôi vẫy) rồi chạy về chỗ cũ; không ngậm, không vờn (G6-21). Lu đang gặm trong chuồng thì chỉ ngẩng đầu nhìn | "Phịch" |
+| 7 | Găng tay làm vườn đen trên hàng rào | Giữa trái | 🎭 | Chạm | Trông như mèo đen ngồi, hoá ra găng tay: găng **rơi thẳng xuống, nhanh dần, không nảy** (G6-22), chạm đất có chút bụi, nằm yên dưới hàng rào. Lu (nếu rảnh) **chạy tới chỗ găng, cúi ngửi ngửi** (mũi khịt khịt, đuôi vẫy) rồi chạy về chỗ cũ; không ngậm, không vờn (G6-21). Lu đang gặm trong chuồng thì chỉ ngẩng đầu nhìn | "Phịch" |
 | 8 | Cây + ổ chim | Trên trái | 🎁 | Chạm | Ổ chim lắc, 5 Cá khô rơi ra | Chim ríu rít |
 | 9 | Chuông gió | Trên trái | ✨ | Chạm | Leng keng, Mun trên mái vểnh tai | Leng keng |
 | 10 | Bình tưới | Cạnh bụi rau | 🎁 | Chạm | Bình nghiêng, nước chảy ra cùng 5 Cá khô | "Ồ ồ" |
@@ -655,11 +655,11 @@ A, B, C: 3 chỗ đặt, thấp dần từ mép mái xuống đất. A sát tư�
 
 | Giây | Người chơi làm | Game phản hồi |
 |---|---|---|
-| 0–8 | (xem) | Lu đuổi Mun chạy **một vòng quanh sân**; hết vòng Mun nhảy lên **bàn → thùng gỗ → cột điện → mái kho** (G6-6). Lu ngồi dưới mái sủa |
-| 5–15 | Chạm **Mun**, **Lu** | Mun lùi sau ống khói. Bong bóng: khúc xương |
+| 0–8 | (xem) | Lu đuổi Mun: chạy ngang **dải trước** (trước mọi đồ) từ phải sang trái, ra ngoài mép trái, vòng lên **dải sau** chạy sang phải; không xuyên qua đồ nào (G6-21). Mun **vồ lên thùng gỗ** rồi **phóng theo đường cong lên mép mái** (bỏ dáng bám cột, G6-21). Lu dừng ở chân bàn lúc Mun bắt đầu nhảy, Mun lên mái rồi Lu mới chạy tới chỗ ngồi sủa (G6-14). Mọi tương tác khoá tới khi bong bóng nhiệm vụ thu về góc |
+| 5–15 | Chạm **Mun**, **Lu** | Mun lùi lại một chút rồi tiến về chỗ cũ (G6-22). Bong bóng: khúc xương |
 | 15–25 | Chạm **bụi rau (5)** | Có khúc xương |
 | 25–32 | Thả **xương vào Lu** | Lu về chuồng gặm, thôi sủa |
-| 32–40 | Chạm **giỏ picnic (3)** | Có xúc xích |
+| 32–40 | Chạm **giỏ picnic (3)** trên nắp thùng gỗ | Có xúc xích; giỏ bay nhẹ lên, mờ dần, biến mất (G6-22) |
 | 40–75 | Kéo **phuy → A, hộp dụng cụ → A, thùng gỗ → B, ghế → C** | Đường xuống thành hình; mỗi bậc Mun ra mép nhìn rồi lùi |
 | 75–85 | Thả **xúc xích lên bàn** | Mun xuống từng bậc, từ ghế nhảy lên bàn ăn (Lộ diện) |
 | 85–90 | Chạm **Mun** | Cảnh bế chung |
@@ -669,21 +669,22 @@ A, B, C: 3 chỗ đặt, thấp dần từ mép mái xuống đất. A sát tư�
 - Đặt xúc xích lên bàn khi đường chưa đủ 4 bậc: Mun ra mép, kêu, không xuống được; xúc xích ở lại trên bàn, đặt nốt bậc thì Mun xuống ngay.
 - Thả xúc xích chỗ khác (đất, thùng gỗ): xúc xích bay về túi, bàn lấp lánh.
 - Đặt hộp dụng cụ khi phuy chưa ở A: hộp trượt về.
-- Chạm Mun trên mái: Mun lùi sau ống khói (Lẩn tránh).
+- Chạm Mun trên mái: Mun lùi lại một chút rồi tiến về chỗ cũ (Lẩn tránh, G6-22).
 
 **Thang gợi ý:**
 1. *8 giây:* Lu ngoái nhìn bụi rau (khi chưa có xương); Mun nhìn xuống chỗ còn thiếu bậc (khi đã cho xương).
 2. *16 giây:* đồ cần làm tiếp lấp lánh (bụi rau → giỏ picnic → món xếp đường còn thiếu → bàn).
 3. *💡:* bàn chân mèo làm mẫu bước kế tiếp.
 
-**Khoảnh khắc lộ diện:** xúc xích vừa đặt lên bàn, mũi Mun khịt khịt. Mun bò ra mép mái, ngập ngừng… bước xuống hộp dụng cụ, **ngoái lại nhìn bạn**, xuống thùng gỗ, xuống ghế, rồi **nhún người nhảy phốc lên bàn**, ngấu nghiến xúc xích cạnh giỏ picnic. Ăn xong Mun liếm mép, ngẩng lên nhìn bạn. Lu thò đầu ra khỏi chuồng, Mun xù lông một giây rồi **nép sát vào chân bạn**: lần đầu Mun coi bạn là chỗ an toàn.
+**Khoảnh khắc lộ diện:** xúc xích vừa đặt lên bàn, mũi Mun khịt khịt. Mun bò ra mép mái, ngập ngừng… rồi xuống từng bậc hộp dụng cụ → thùng gỗ → ghế, **ngoái lại nhìn bạn** ở bậc đầu. **Nhịp mỗi bậc (G6-23):** ra mép cúi nghiêng nhìn xuống một nhịp (`mun_roof_edge` trên mái, `mun_step_down` ở các bậc) → bật nhảy, dáng bay `mun_hop_down` suốt đường cong vồng mềm → chạm bậc bằng `mun_land`, nhún 0,15 giây, "tạch" → bậc kế. Mun quay mặt theo hướng đi. Từ ghế, Mun **vồ lên bàn** (bàn cao hơn ghế rõ, dáng vồ `mun_pounce`), đáp `mun_land`, rồi ngấu nghiến xúc xích giữa bàn. Ăn xong Mun liếm mép, ngẩng lên nhìn bạn. Lu thò đầu ra khỏi chuồng, Mun xù lông một giây rồi **nép sát vào chân bạn**: lần đầu Mun coi bạn là chỗ an toàn.
 
 **Chạm Mun → cảnh bế chung.**
 
 **Ghi chú vẽ, hoạt hình, âm thanh:**
-- Dùng lại nền sân sau L5 (QUY-TRINH mục 6); nhà kho gỗ mái tôn, ống khói là sprite riêng to, đặt bên phải.
+- Nền riêng `l6_bg_backyard` (thay cho nền L5 dùng lại, vì nền L5 có cửa quán và bậc thềm lộ ra ở khung 3:4); nhà kho gỗ mái tôn, ống khói là sprite riêng to, đặt bên phải.
+- Bàn cao, mặt bàn cao hơn mặt ghế C rõ rệt, đặt lệch trái gần chân đường xuống (G6-24); cây gốc chạm nền sân; hộp dụng cụ và thùng gỗ ở chỗ ban đầu không bị túi đồ che ở khung 3:4 (G6-21, G6-22).
 - Lu: nhân vật mới, cùng phong cách bút chì pastel, tròn trịa dễ thương, không đáng sợ. Tư thế: ngồi sủa, ngậm xương chạy, nằm gặm, lăn khoe bụng, thò đầu khỏi chuồng.
-- Mun cần thêm dáng: nằm rạp tai cụp trên mái, nhìn xuống mép mái run run, bước xuống bậc, nhảy lên bàn, ăn trên bàn.
+- Mun cần thêm dáng: nằm rạp tai cụp trên mái, nhìn xuống mép mái run run, cúi nhìn mép bậc (`mun_step_down`), đang bay xuống (`mun_hop_down`), vừa đáp (`mun_land`), vồ lên bàn (`mun_pounce` dùng lại L5), ăn trên bàn.
 - Âm Lu sủa vui, không gắt. Nhạc: căng nhẹ khi Lu sủa, chuyển ấm áp khi Mun xuống ăn.
 
 **Thưởng:** 30 Cá khô (+5 mỗi bí mật: ổ chim, bình tưới) · Mun ♥ 2/6.

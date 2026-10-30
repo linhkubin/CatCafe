@@ -3,6 +3,7 @@
 import { BANNER, SWIPE, CREAM, BROWN } from './base.js';
 import { playSfx } from './sfx.js';
 import { Progress, LEVELS } from './progress.js';
+import { attachFrame916 } from './frame916.js';
 
 export { LEVELS }; // danh sách màn ở progress.js
 
@@ -27,6 +28,7 @@ export class Menu extends Phaser.Scene {
     const cur = this.cards.find((c) => c.open && !c.done) || this.cards[this.cards.length - 1];
     this.cameras.main.setScroll(-this.X0, Phaser.Math.Clamp(cur.y - H / 2, 0, this.maxScroll));
     this.setupInput();
+    attachFrame916(this); // xem trước khung 9:16 (?frame916=1, phím G)
   }
 
   card(n, x, y) {

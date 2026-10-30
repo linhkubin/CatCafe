@@ -386,3 +386,45 @@
 - Lu ngậm xương về chuồng: đi vòng ra trước cửa chuồng rồi chui vào, không đi xuyên qua chuồng.
 
 **A6-13 (Art, trả G6-21: găng tay).** Vẽ lại `l6_glove_black_idle`, `l6_glove_black_fallen` (Codex lượt `l6_glove`, brief `art/review/l6_glove_redo_brief.md`, kèm demo gốc, owner_l1_style_ref, l1_depth_angle_ref, mun_ref). Găng vắt rào: ngón trỏ, ngón út dựng như tai mèo, ngón cái cuộn như đuôi, cổ găng hồng đào như thân ngồi; nhìn kỹ có đường may, nếp vải, vải xù; không mặt. Găng rơi: cùng găng nằm bẹp, năm ngón duỗi. Cỡ, neo giữ nguyên: idle ảnh 128x174 (trước 128x171), neo đỉnh; fallen 202x124, neo đáy. Dev không phải đặt lại.
+
+**G6-22 (GD, chủ dự án góp ý 2026-10-31).** Giao Dev. Chưa commit (chờ chủ dự án).
+- Lu đi vòng về chuồng: đường gọn và mềm hơn.
+- Găng rơi thẳng xuống chỗ nằm, không nảy (bỏ ease bounce/out).
+- Bàn to lên một chút. Thùng gỗ ở chỗ ban đầu thấp xuống một chút.
+- Giỏ picnic lúc đầu nằm trên nắp thùng gỗ. Chạm giỏ lấy xúc xích: giỏ bay nhẹ lên và mờ dần biến mất.
+- Xúc xích đặt giữa mặt bàn, cỡ bằng xúc xích đang cầm.
+- Lu gặm xương ở giữa cửa chuồng (đang lệch trái).
+- Chạm Mun trên mái: lùi lại một chút rồi tiến về chỗ cũ (thay cho lùi sau ống khói).
+
+**G6-23 (GD, chủ dự án góp ý 2026-10-31).** Giao Art và Dev. Chưa commit.
+- Mun nhảy xuống bậc trông ngượng, "như chỉ chạy bằng 2 chân trước" (cả cú nhảy dùng một dáng `mun_step_down`).
+- Art vẽ thêm `mun_hop_down` (đang bay, thân duỗi chéo, 4 chân rõ, đuôi giữ thăng bằng) và `mun_land` (vừa đáp, 4 chân chạm, nhún).
+- Dev đổi nhịp mỗi bậc: cúi nhìn mép → `mun_hop_down` suốt đường cong → `mun_land` nhún 0,15 giây → bậc kế tiếp.
+
+**A6-14 (Art, trả G6-23: Mun nhảy xuống bậc).** Tờ `art/out/_sheets/l6_mun_hop_sheet.png` (Codex, brief `art/review/l6_mun_hop_brief.md`), đặc tả `design-art-level6.md` mục 5.1. `mun_hop_down` (bay: thân chéo xuống, hai chân trước duỗi đón đất, hai chân sau duỗi sau, đuôi dựng, mắt nhìn chỗ đáp) ảnh 450x480 = hiển thị 300x320, neo tâm (225,240). `mun_land` (đáp: bốn chân chạm đất, thân nhún, mặt tỉnh bơ) ảnh 378x362 = 252x241, neo đáy (176,354). Cùng cỡ đầu, cùng hướng phải với `mun_step_down` (433x430). Chưa commit (luật mới G6).
+
+**G6-24 (GD, chủ dự án 2026-10-31).** Bàn cao hơn (mặt bàn nâng thêm ~40–60), dịch trái ~30–50; Mun vồ từ ghế lên bàn. Đã giao Dev, chờ báo.
+Đặc tả L6 trong `levels-01-10.md` đã viết lại theo bản đang chạy (G6-21 → G6-24). Chưa commit.
+
+**G6-25 (GD, chủ dự án góp ý 2026-10-31).** Giao Dev. Chưa commit.
+- Lu gặm: thò hẳn đầu ra ngoài cửa chuồng, dịch trái một chút cho giữa cửa.
+- Lu vòng qua chuồng: gần cửa thì vẽ trước chuồng.
+- Mun mọi dáng trong L6 cùng cỡ với Mun ngồi cuối game; Mun ngồi cuối game dịch xuống cho chạm mặt bàn.
+- Giỏ trên thùng gỗ nhỏ lại một chút.
+- Lấy đà nhảy xuống: bớt nghiêng, 2 chân sau đứng trên bậc.
+- Chạm Mun trên mái: lùi về phía sau mái (đang ngược hướng) rồi tiến về.
+
+**G6-26 (GD, chủ dự án góp ý 2026-10-31).** Chưa commit.
+- Art vẽ lại `l6_dog_chew` cân đối, đẹp hơn (đầu thẳng, tai đều, hai chân trước ôm xương dưới cằm, mũi giữa cửa).
+- Dev: bỏ nhịp lấy đà (dáng cúi, co chân sau) khi Mun xuống bậc; bỏ đoạn Mun phóng to rồi thu nhỏ sau khi ăn; cảnh bế đặt Mun khớp tay như L1–L5.
+
+**A6-15 (Art, trả G6-26: Lu gặm xương).** Vẽ lại `l6_dog_chew` (Codex lượt `l6_chew2`, brief `art/review/l6_chew2_brief.md`, ảnh khung cửa mờ `art/ref/l6_cut/chew_door_guide.png`): đầu thẳng đối xứng, hai tai rủ đều, xương ngang dưới cằm, hai chân trước song song ôm xương, mắt híp. Hiển thị rộng 190 (mặt bằng cỡ bản cũ, tai lấp hai mép cửa, khung `l6_dog_house_front` che mép tai). Trục giữa ảnh = mũi, neo đáy giữa: đặt **x 856 (đúng tâm chuồng), y 1160**. Ảnh so cũ/mới: `art/review/l6_g626_chew_vs.jpg`. Chưa commit.
+
+**G6-24 chốt (chủ dự án 2026-10-31):** bàn giữ nguyên chỗ hiện tại (phương án a), không dịch trái, không dời chỗ Mun ăn.
+
+**G6-26 chốt (chủ dự án 2026-10-31):** Lu gặm vẽ trên khung cửa chuồng (đầu, tai, bàn chân, xương thò hẳn ra ngoài), không để khung che tai.
+
+**G6-27 (GD, chủ dự án góp ý 2026-10-31).** Giao Dev. Chưa commit.
+- Chạm Mun trên mái: chỉ lùi theo trục x rồi về, không scale.
+- Giỏ dịch phải và thấp xuống một chút. Thùng gỗ ×0,95.
+- Xúc xích khi ăn thu nhỏ đều hai chiều.
