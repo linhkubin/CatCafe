@@ -347,3 +347,8 @@
 - Đã kiểm ở cổng 8080, khung 9:16: mở màn, xếp đủ 4 món, Mun xuống bậc, sang bàn ăn. Không lỗi.
 - Ảnh: `l6_dev_check/g6_19_strip.jpg`. Toạ độ cho Art: `l6_block_layout.md` mục 15.
 - Chưa build lại bản web.
+
+**G6-20 (GD, chủ dự án 2026-10-31). Chốt bố cục bản khối, Art vẽ demo L6.** Lời chủ dự án: "báo art vẽ demo nhé".
+- Bố cục chuẩn cho demo: bản khối D6-18 + D6-19 (bố cục G6-16, cỡ đồ G6-17, bàn thấp G6-19). Toạ độ: `l6_dev_check/l6_block_layout.md` mục 14–15, ảnh `l6_dev_check/g6_19_strip.jpg`.
+- Thùng gỗ B giữ bề ngang như hiện tại (không làm hẹp).
+- Art vẽ demo các cảnh chính (mở màn, xếp xong đường, Mun trên bàn) khung 1080x1920, kèm ảnh mẫu L1 theo QUY-TRINH bước 4 (màu O6, góc nhìn, nền dư G-SCREEN). Gửi chủ dự án duyệt; chưa duyệt thì chưa tách asset.
