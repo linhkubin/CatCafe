@@ -76,7 +76,7 @@ Mỗi món một ảnh `art/out/_sheets/l6src_<key>.png` (Codex tách, brief `ar
 
 | Tờ | Ô | Key | Thư mục | Nhóm | Neo | Hiển thị | Nét |
 |---|---|---|---|---|---|---|---|
-| l6src_l6_shed | 0,0,1536,1024 | l6_shed | level6 |  | đáy | rộng 560 | 5 |
+| l6src_l6_shed | 0,0,1254,1254 | l6_shed | level6 |  | đáy | rộng 560 | 5 |
 | l6src_l6_shed_chimney | 0,0,1024,1536 | l6_shed_chimney | level6 |  | đáy | rộng 95 | 5 |
 | l6src_l6_table | 0,0,1536,1024 | l6_table | level6 |  | đáy | rộng 320 | 5 |
 | l6src_l6_crate | 0,0,1024,1536 | l6_crate | level6 |  | đáy | rộng 190 | 5 |
@@ -90,22 +90,22 @@ Mỗi món một ảnh `art/out/_sheets/l6src_<key>.png` (Codex tách, brief `ar
 | l6src_l6_watering_can | 0,0,1254,1254 | l6_watering_can | level6 |  | đáy | rộng 205 | 5 |
 | l6src_l6_picnic_basket_open | 0,0,1254,1254 | l6_picnic_basket_open | level6 | basket | đáy | rộng 190 | 5 |
 | l6src_l6_dog_house | 0,0,1254,1254 | l6_dog_house | level6 | dog_house | đáy | rộng 320 | 5 |
-| l6src_l6_picnic_basket_closed | 0,0,1024,1024 | l6_picnic_basket_closed | level6 | basket | đáy |  | 5 |
-| l6src_l6_glove_black_fallen | 0,0,1024,1024 | l6_glove_black_fallen | level6 | glove | đáy |  | 5 |
+| l6src_l6_picnic_basket_closed | 0,0,1254,1254 | l6_picnic_basket_closed | level6 | basket | đáy | rộng 192 | 5 |
+| l6src_l6_glove_black_fallen | 0,0,1254,1254 | l6_glove_black_fallen | level6 | glove | đáy | rộng 124 | 5 |
 | l6src_l6_bone | 0,0,1536,1024 | l6_bone | level6 |  | tâm | rộng 80 | 5 |
 | l6src_l6_sausage | 0,0,1536,1024 | l6_sausage | level6 |  | tâm | rộng 90 | 5 |
 | l6src_l6_dog_chew | 0,0,1024,1024 | l6_dog_chew | level6 |  | đáy | rộng 210 | 5 |
 | l6src_mun_roof_crouch_ears_up | 0,0,1536,1024 | mun_roof_crouch_ears_up | cats | mun_roof | đáy | rộng 245 | 2.5 |
-| l6src_mun_roof_crouch | 0,0,1536,1024 | mun_roof_crouch | cats | mun_roof | đáy |  | 2.5 |
-| l6src_l6_dog_bark | 0,0,1024,1024 | l6_dog_bark | level6 |  | đáy | rộng 240 | 2.5 |
-| l6src_l6_dog_run | 0,0,1536,1024 | l6_dog_run | level6 |  | đáy | rộng 300 | 2.5 |
-| l6src_l6_dog_run_bone | 0,0,1536,1024 | l6_dog_run_bone | level6 |  | đáy | rộng 260 | 2.5 |
-| l6src_l6_dog_beg | 0,0,1024,1024 | l6_dog_beg | level6 |  | đáy | rộng 230 | 2.5 |
-| l6src_l6_dog_belly | 0,0,1536,1024 | l6_dog_belly | level6 |  | đáy | rộng 280 | 2.5 |
-| l6src_mun_roof_edge | 0,0,1536,1024 | mun_roof_edge | cats |  | đáy | rộng 230 | 2.5 |
-| l6src_mun_step_down | 0,0,1024,1024 | mun_step_down | cats |  | đáy | rộng 220 | 2.5 |
-| l6src_mun_eat | 0,0,1024,1024 | mun_eat | cats |  | đáy | rộng 220 | 2.5 |
-| l6src_mun_sit_look | 0,0,1024,1024 | mun_sit_look | cats |  | đáy | rộng 200 | 2.5 |
+| l6src_mun_roof_crouch | 0,0,1536,1024 | mun_roof_crouch | cats | mun_roof | đáy | rộng 241 | 2.5 |
+| l6src_l6_dog_bark | 0,0,1254,1254 | l6_dog_bark | level6 |  | đáy | rộng 240 | 2.5 |
+| l6src_l6_dog_run | 0,0,1536,1024 | l6_dog_run | level6 |  | đáy | rộng 327 | 2.5 |
+| l6src_l6_dog_run_bone | 0,0,1536,1024 | l6_dog_run_bone | level6 |  | đáy | rộng 284 | 2.5 |
+| l6src_l6_dog_beg | 0,0,1254,1254 | l6_dog_beg | level6 |  | đáy | rộng 197 | 2.5 |
+| l6src_l6_dog_belly | 0,0,1536,1024 | l6_dog_belly | level6 |  | đáy | rộng 305 | 2.5 |
+| l6src_mun_roof_edge | 0,0,1536,1024 | mun_roof_edge | cats |  | đáy | rộng 290 | 2.5 |
+| l6src_mun_step_down | 0,0,1254,1254 | mun_step_down | cats |  | đáy | rộng 278 | 2.5 |
+| l6src_mun_eat | 0,0,1254,1254 | mun_eat | cats |  | đáy | rộng 250 | 2.5 |
+| l6src_mun_sit_look | 0,0,1254,1254 | mun_sit_look | cats |  | đáy | rộng 155 | 2.5 |
 | l6src_mun_climb | 0,0,1024,1536 | mun_climb | cats |  | đáy | rộng 150 | 2.5 |
 
 | Tờ hoặc key | Demo gốc | Vị trí trong demo |

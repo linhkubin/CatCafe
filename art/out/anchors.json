@@ -1741,6 +1741,18 @@
   "sheet": "l6src_l6_bird_nest",
   "w": 121
  },
+ "l6_bone": {
+  "ax": 69,
+  "ay": 32,
+  "file": "level6/l6_bone.png",
+  "group": "l6_bone",
+  "h": 64,
+  "ox": 0.5074,
+  "oy": 0.5,
+  "res": 1.5,
+  "sheet": "l6src_l6_bone",
+  "w": 136
+ },
  "l6_crate": {
   "ax": 141,
   "ay": 385,
@@ -1752,6 +1764,42 @@
   "res": 1.5,
   "sheet": "l6src_l6_crate",
   "w": 301
+ },
+ "l6_dog_bark": {
+  "ax": 214,
+  "ay": 331,
+  "file": "level6/l6_dog_bark.png",
+  "group": "l6_dog_bark",
+  "h": 339,
+  "ox": 0.5691,
+  "oy": 0.9764,
+  "res": 1.5,
+  "sheet": "l6src_l6_dog_bark",
+  "w": 376
+ },
+ "l6_dog_beg": {
+  "ax": 172,
+  "ay": 338,
+  "file": "level6/l6_dog_beg.png",
+  "group": "l6_dog_beg",
+  "h": 345,
+  "ox": 0.5513,
+  "oy": 0.9797,
+  "res": 1.5,
+  "sheet": "l6src_l6_dog_beg",
+  "w": 312
+ },
+ "l6_dog_belly": {
+  "ax": 225,
+  "ay": 232,
+  "file": "level6/l6_dog_belly.png",
+  "group": "l6_dog_belly",
+  "h": 240,
+  "ox": 0.4747,
+  "oy": 0.9667,
+  "res": 1.5,
+  "sheet": "l6src_l6_dog_belly",
+  "w": 474
  },
  "l6_dog_house": {
   "ax": 247,
@@ -1765,6 +1813,42 @@
   "sheet": "l6src_l6_dog_house",
   "w": 496
  },
+ "l6_dog_run": {
+  "ax": 372,
+  "ay": 299,
+  "file": "level6/l6_dog_run.png",
+  "group": "l6_dog_run",
+  "h": 307,
+  "ox": 0.7352,
+  "oy": 0.9739,
+  "res": 1.5,
+  "sheet": "l6src_l6_dog_run",
+  "w": 506
+ },
+ "l6_dog_run_bone": {
+  "ax": 284,
+  "ay": 294,
+  "file": "level6/l6_dog_run_bone.png",
+  "group": "l6_dog_run_bone",
+  "h": 301,
+  "ox": 0.6425,
+  "oy": 0.9767,
+  "res": 1.5,
+  "sheet": "l6src_l6_dog_run_bone",
+  "w": 442
+ },
+ "l6_glove_black_fallen": {
+  "ax": 59,
+  "ay": 116,
+  "file": "level6/l6_glove_black_fallen.png",
+  "group": "glove",
+  "h": 124,
+  "ox": 0.2921,
+  "oy": 0.9355,
+  "res": 1.5,
+  "sheet": "l6src_l6_glove_black_fallen",
+  "w": 202
+ },
  "l6_glove_black_idle": {
   "ax": 52,
   "ay": 8,
@@ -1777,6 +1861,18 @@
   "sheet": "l6src_l6_glove_black_idle",
   "w": 128
  },
+ "l6_picnic_basket_closed": {
+  "ax": 135,
+  "ay": 239,
+  "file": "level6/l6_picnic_basket_closed.png",
+  "group": "basket",
+  "h": 247,
+  "ox": 0.4441,
+  "oy": 0.9676,
+  "res": 1.5,
+  "sheet": "l6src_l6_picnic_basket_closed",
+  "w": 304
+ },
  "l6_picnic_basket_open": {
   "ax": 142,
   "ay": 265,
@@ -1788,6 +1884,30 @@
   "res": 1.5,
   "sheet": "l6src_l6_picnic_basket_open",
   "w": 301
+ },
+ "l6_sausage": {
+  "ax": 76,
+  "ay": 31,
+  "file": "level6/l6_sausage.png",
+  "group": "l6_sausage",
+  "h": 60,
+  "ox": 0.5033,
+  "oy": 0.5167,
+  "res": 1.5,
+  "sheet": "l6src_l6_sausage",
+  "w": 151
+ },
+ "l6_shed": {
+  "ax": 428,
+  "ay": 696,
+  "file": "level6/l6_shed.png",
+  "group": "l6_shed",
+  "h": 704,
+  "ox": 0.5,
+  "oy": 0.9886,
+  "res": 1.5,
+  "sheet": "l6src_l6_shed",
+  "w": 856
  },
  "l6_shed_chimney": {
   "ax": 80,
@@ -1872,6 +1992,30 @@
   "res": 1.5,
   "sheet": "l6src_l6_watering_can",
   "w": 324
+ },
+ "mun_climb": {
+  "ax": 104,
+  "ay": 531,
+  "file": "cats/mun_climb.png",
+  "group": "mun_climb",
+  "h": 538,
+  "ox": 0.4315,
+  "oy": 0.987,
+  "res": 1.5,
+  "sheet": "l6src_mun_climb",
+  "w": 241
+ },
+ "mun_eat": {
+  "ax": 193,
+  "ay": 354,
+  "file": "cats/mun_eat.png",
+  "group": "mun_eat",
+  "h": 362,
+  "ox": 0.4936,
+  "oy": 0.9779,
+  "res": 1.5,
+  "sheet": "l6src_mun_eat",
+  "w": 391
  },
  "mun_eyes_dark": {
   "ax": 50,
@@ -1969,6 +2113,42 @@
   "sheet": "l5src_mun_pounce_g36",
   "w": 294
  },
+ "mun_roof_crouch": {
+  "ax": 187,
+  "ay": 176,
+  "file": "cats/mun_roof_crouch.png",
+  "group": "mun_roof",
+  "h": 184,
+  "ox": 0.4947,
+  "oy": 0.9565,
+  "res": 1.5,
+  "sheet": "l6src_mun_roof_crouch",
+  "w": 378
+ },
+ "mun_roof_crouch_ears_up": {
+  "ax": 201,
+  "ay": 245,
+  "file": "cats/mun_roof_crouch_ears_up.png",
+  "group": "mun_roof",
+  "h": 253,
+  "ox": 0.5234,
+  "oy": 0.9684,
+  "res": 1.5,
+  "sheet": "l6src_mun_roof_crouch_ears_up",
+  "w": 384
+ },
+ "mun_roof_edge": {
+  "ax": 291,
+  "ay": 282,
+  "file": "cats/mun_roof_edge.png",
+  "group": "mun_roof_edge",
+  "h": 290,
+  "ox": 0.6452,
+  "oy": 0.9724,
+  "res": 1.5,
+  "sheet": "l6src_mun_roof_edge",
+  "w": 451
+ },
  "mun_run": {
   "ax": 314,
   "ay": 248,
@@ -1980,6 +2160,30 @@
   "res": 1.5,
   "sheet": "l5src_mun_run_g36",
   "w": 496
+ },
+ "mun_sit_look": {
+  "ax": 78,
+  "ay": 315,
+  "file": "cats/mun_sit_look.png",
+  "group": "mun_sit_look",
+  "h": 323,
+  "ox": 0.3145,
+  "oy": 0.9752,
+  "res": 1.5,
+  "sheet": "l6src_mun_sit_look",
+  "w": 248
+ },
+ "mun_step_down": {
+  "ax": 301,
+  "ay": 422,
+  "file": "cats/mun_step_down.png",
+  "group": "mun_step_down",
+  "h": 430,
+  "ox": 0.6952,
+  "oy": 0.9814,
+  "res": 1.5,
+  "sheet": "l6src_mun_step_down",
+  "w": 433
  },
  "player_call": {
   "ax": 282,
@@ -2652,5 +2856,18 @@
   "res": 1.5,
   "sheet": "ui_thought_sheet",
   "w": 414
+ },
+ "l6_dog_house_front": {
+  "ax": 247,
+  "ay": 478,
+  "file": "level6/l6_dog_house_front.png",
+  "group": "dog_house",
+  "h": 486,
+  "ox": 0.498,
+  "oy": 0.9835,
+  "res": 1.5,
+  "sheet": "l6src_l6_dog_house",
+  "w": 496,
+  "note": "A6-11: cắt từ l6_dog_house, bỏ lòng cửa tối; cùng khung, cùng neo"
  }
 }
