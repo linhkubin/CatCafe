@@ -10,7 +10,7 @@ import { PAL, rr, el, label, block } from './blocks.js';
 const DEF = {
   player_call: [260, 1385],
   // QUY-TRINH bước 5: đồ đứng yên đo trên demo đã duyệt (G6-21, l6_demo_path_play.png, khung 1024x1536), neo theo anchors.json.
-  l6_tree: [100, 880], l6_bird_nest: [132, 480], l5_wind_chime: [330, 380], l6_glove_black_idle: [418, 342], // găng vắt đỉnh rào: neo đỉnh
+  l6_tree: [19, 848], l6_bird_nest: [132, 480], l5_wind_chime: [330, 380], l6_glove_black_idle: [418, 342], // găng vắt đỉnh rào: neo đỉnh
   // G6-18: bố cục như G6-16, đồ to theo G6-17 tại chỗ (neo giữa đáy). Kho 560 × 541 (G6-17) để mặt mái y 475, 4 bậc hụt đều 120;
   // mép mái trái x ≈ 580. Mun nằm mái và ống khói hạ theo mặt mái (−66).
   // Ghép ảnh thật: kho vẽ lại (A6-11) đặt cho đỉnh mái trùng demo (y 447), mép trái 522; Mun nằm mái như demo.
@@ -21,7 +21,7 @@ const DEF = {
   // Bàn Art vẽ thấp hơn bàn trong demo: đặt theo mặt bàn (y ≈ 810 như demo), giỏ trên mặt bàn như demo.
   l6_table: [140, 966], l6_picnic_basket_closed: [123, 848], l6_picnic_basket_open: [123, 848],
   // G6-13/16: Lu ngồi sủa trước kho, bên phải chỗ A. G6-18: nhích phải 55 (phuy rộng 170 ở chỗ đầu che Lu).
-  l6_dog_bark: [700, 975], l6_dog_house: [856, 1167], l6_dog_house_front: [856, 1167], l6_dog_chew: [856, 1167], // đầu Lu thò cửa chuồng
+  l6_dog_bark: [700, 975], l6_dog_house: [856, 1167], l6_dog_house_front: [856, 1167], l6_dog_chew: [856, 1152], // đầu Lu thò cửa chuồng, đáy ở ngưỡng cửa
   l6_dog_belly: [856, 1270], // G6-16: lăn ra nằm ngay trước cửa chuồng
   // G6-4, G6-5: chỗ đầu các món rải rác. Hàng trước sân đáy y 1290 (túi đồ từ y ≈ 1298). Ghế đẩu dưới bàn bên trái.
   // G6-18: hàng trước to lên không đủ 1024 cho 5 món cạnh nhau: hộp dụng cụ nhích trái 20, bụi rau lùi 28 (phuy che nhẹ mép phải),
@@ -133,7 +133,8 @@ export class Level6 extends ObjectLevel {
   get fallbacks() { return FB; }
   get fallbackCanvas() { return true; }
   get defaultPos() { return DEF; }
-  get fitDefaults() { return { mun_run: 320, l5_wind_chime: 60 }; } // ảnh thật dùng lại từ L5, cùng cỡ L5
+  // mun_run, chuông gió: ảnh dùng lại từ L5, cùng cỡ L5. Cây (A6-11) phóng như demo: ngọn y ≈ 120, ổ chim nằm trên cành ngang phải.
+  get fitDefaults() { return { mun_run: 320, l5_wind_chime: 60, l6_tree: 430 }; }
   get rewardFish() { return 30 + 5 * this.secrets; }         // +5 mỗi bí mật (ổ chim, bình tưới)
   get suaHand() { return false; }
   get bubblePop() { return { peak: 0.9, up: 260, rest: 0.7, down: 160 }; }
