@@ -1801,12 +1801,37 @@
   "sheet": "l6src_l6_dog_belly",
   "w": 474
  },
+ "l6_dog_chew": {
+  "ax": 179,
+  "ay": 247,
+  "file": "level6/l6_dog_chew.png",
+  "group": "l6_dog_chew",
+  "h": 254,
+  "ox": 0.5408,
+  "oy": 0.9724,
+  "res": 1.5,
+  "sheet": "l6src_l6_dog_chew",
+  "w": 331
+ },
  "l6_dog_house": {
   "ax": 247,
   "ay": 478,
   "file": "level6/l6_dog_house.png",
   "group": "dog_house",
   "h": 486,
+  "ox": 0.498,
+  "oy": 0.9835,
+  "res": 1.5,
+  "sheet": "l6src_l6_dog_house",
+  "w": 496
+ },
+ "l6_dog_house_front": {
+  "ax": 247,
+  "ay": 478,
+  "file": "level6/l6_dog_house_front.png",
+  "group": "dog_house",
+  "h": 486,
+  "note": "A6-11: cắt từ l6_dog_house, bỏ lòng cửa tối; cùng khung, cùng neo",
   "ox": 0.498,
   "oy": 0.9835,
   "res": 1.5,
@@ -1958,13 +1983,13 @@
   "w": 278
  },
  "l6_tree": {
-  "ax": 192,
-  "ay": 598,
+  "ax": 187,
+  "ay": 722,
   "file": "level6/l6_tree.png",
   "group": "l6_tree",
-  "h": 605,
-  "ox": 0.4324,
-  "oy": 0.9884,
+  "h": 730,
+  "ox": 0.4212,
+  "oy": 0.989,
   "res": 1.5,
   "sheet": "l6src_l6_tree",
   "w": 444
@@ -2856,18 +2881,5 @@
   "res": 1.5,
   "sheet": "ui_thought_sheet",
   "w": 414
- },
- "l6_dog_house_front": {
-  "ax": 247,
-  "ay": 478,
-  "file": "level6/l6_dog_house_front.png",
-  "group": "dog_house",
-  "h": 486,
-  "ox": 0.498,
-  "oy": 0.9835,
-  "res": 1.5,
-  "sheet": "l6src_l6_dog_house",
-  "w": 496,
-  "note": "A6-11: cắt từ l6_dog_house, bỏ lòng cửa tối; cùng khung, cùng neo"
  }
 }

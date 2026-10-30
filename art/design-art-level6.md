@@ -94,7 +94,7 @@ Mỗi món một ảnh `art/out/_sheets/l6src_<key>.png` (Codex tách, brief `ar
 | l6src_l6_glove_black_fallen | 0,0,1254,1254 | l6_glove_black_fallen | level6 | glove | đáy | rộng 124 | 5 |
 | l6src_l6_bone | 0,0,1536,1024 | l6_bone | level6 |  | tâm | rộng 80 | 5 |
 | l6src_l6_sausage | 0,0,1536,1024 | l6_sausage | level6 |  | tâm | rộng 90 | 5 |
-| l6src_l6_dog_chew | 0,0,1024,1024 | l6_dog_chew | level6 |  | đáy | rộng 210 | 5 |
+| l6src_l6_dog_chew | 0,0,1254,1254 | l6_dog_chew | level6 |  | đáy | rộng 210 | 5 |
 | l6src_mun_roof_crouch_ears_up | 0,0,1536,1024 | mun_roof_crouch_ears_up | cats | mun_roof | đáy | rộng 245 | 2.5 |
 | l6src_mun_roof_crouch | 0,0,1536,1024 | mun_roof_crouch | cats | mun_roof | đáy | rộng 241 | 2.5 |
 | l6src_l6_dog_bark | 0,0,1254,1254 | l6_dog_bark | level6 |  | đáy | rộng 240 | 2.5 |
