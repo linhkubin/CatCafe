@@ -1,4 +1,4 @@
-TÁCH TỪ DEMO — lượt `l6_lu` (Level 6, G6-21: Dáng Lu), đúng quy tắc trong AGENTS.md (vai Codex: chỉ vẽ; ngoại lệ "TÁCH TỪ DEMO": mỗi món một lần gọi image_gen, mỗi món một ảnh, 5 món).
+TÁCH TỪ DEMO — lượt `l6_lu` (Level 6, G6-21: Dáng Lu), đúng quy tắc trong AGENTS.md (vai Codex: chỉ vẽ; ngoại lệ "TÁCH TỪ DEMO": mỗi món một lần gọi image_gen, mỗi món một ảnh, 6 món).
 
 **Ảnh demo gốc đã duyệt: art/out/demo/l6_demo_path_916.png** (khung điện thoại); vùng chơi không giao diện: **art/out/demo/l6_demo_path_play.png** (1024x1536, toạ độ bên dưới tính trên ảnh này).
 Chủ dự án chốt demo này; tách từng món đúng như trong demo. Vị trí trong game do Dev sắp, không cần giữ chỗ đứng.
@@ -19,7 +19,7 @@ Chủ dự án chốt demo này; tách từng món đúng như trong demo. Vị 
 3. art/ref/owner_l1_style_ref.png — chuẩn màu và chất chì.
 4. art/ref/l1_depth_angle_ref.png — góc nhìn (sofa L1).
 
-## Danh sách 5 món
+## Danh sách 6 món
 
 ### 1. `l6_dog_bark` → art/out/_sheets/l6src_l6_dog_bark.png (1024x1024, nền trong suốt)
 - **Ảnh demo gốc: art/out/demo/l6_demo_path_916.png, món nằm ở dáng ngồi sủa ở cảnh mở màn art/out/demo/l6_demo_start_play.png x 545–805, y 750–970 trong art/out/demo/l6_demo_path_play.png.**
@@ -50,6 +50,12 @@ Chủ dự án chốt demo này; tách từng món đúng như trong demo. Vị 
 - Ảnh cắt từ demo: art/ref/l6_cut/crops/lu_head.png (đính kèm).
 - Lu **lăn ngửa khoe bụng** kem, bốn chân co lên trời, mắt híp, lưỡi thè, đuôi vẫy, đầu bên phải. Lưng chạm một đường đáy phẳng.
 
+
+### 6. `l6_shed` → art/out/_sheets/l6src_l6_shed.png (1024x1024, nền trong suốt)
+- **Ảnh demo gốc: art/out/demo/l6_demo_path_916.png, món nằm ở x 520–1024 (mép phải bị khung cắt), y 440–950 trong art/out/demo/l6_demo_path_play.png.**
+- Ảnh cắt từ demo: art/ref/l6_cut/crops/shed.png (đính kèm).
+- **VẼ LẠI (lần trước vẽ dẹt quá, được phép ghi đè art/out/_sheets/l6src_l6_shed.png).** Nhà kho gỗ mật ong nhạt, ván dọc, **mái tôn xanh trời nhạt gợn sóng** nhô ra hai bên, mặt mái phẳng thấy rõ; cửa gỗ ván dọc ở nửa phải có núm tròn vàng và bản lề. **Vẽ đủ cả nhà kho**, kể cả phần bên phải bị khung demo cắt (vẽ bù cho cân, mép phải giống mép trái). **Tỉ lệ bắt buộc:** cả nhà kho (kể cả mái) **rộng : cao ≈ 1,05 : 1** (gần vuông, như trong demo: rộng ≈ 560, cao ≈ 535 tính cả mái). Thân kho cao, cửa cao gần hết thân; mái tôn là một dải mỏng trên đỉnh. Dùng khung 1024x1024. Giữ màu, nét, ván, cửa như ảnh art/out/_sheets/l6src_l6_shed.png lần trước, chỉ kéo cao thân kho.
+- **KHÔNG lấy ống khói (món riêng; chỗ ống khói che mái thì vẽ bù mái tôn), KHÔNG lấy Mun, phuy, hộp dụng cụ, chuồng Lu, cột dây phơi, hàng rào.**
 
 ## Khối phong cách (art/style.md mục 1), dán nguyên
 

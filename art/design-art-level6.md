@@ -84,12 +84,12 @@ Mỗi món một ảnh `art/out/_sheets/l6src_<key>.png` (Codex tách, brief `ar
 | l6src_l6_barrel | 0,0,1024,1536 | l6_barrel | level6 |  | đáy | rộng 210 | 5 |
 | l6src_l6_toolbox | 0,0,1536,1024 | l6_toolbox | level6 |  | đáy | rộng 175 | 5 |
 | l6src_l6_tree | 0,0,1024,1536 | l6_tree | level6 |  | đáy | rộng 285 | 5 |
-| l6src_l6_bird_nest | 0,0,1024,1024 | l6_bird_nest | level6 |  | tâm | rộng 70 | 5 |
-| l6src_l6_glove_black_idle | 0,0,1024,1024 | l6_glove_black_idle | level6 | glove | đỉnh | rộng 75 | 5 |
+| l6src_l6_bird_nest | 0,0,1254,1254 | l6_bird_nest | level6 |  | tâm | rộng 70 | 5 |
+| l6src_l6_glove_black_idle | 0,0,1254,1254 | l6_glove_black_idle | level6 | glove | đỉnh | rộng 75 | 5 |
 | l6src_l6_veggie_bed | 0,0,1536,1024 | l6_veggie_bed | level6 |  | đáy | rộng 475 | 5 |
-| l6src_l6_watering_can | 0,0,1024,1024 | l6_watering_can | level6 |  | đáy | rộng 205 | 5 |
-| l6src_l6_picnic_basket_open | 0,0,1024,1024 | l6_picnic_basket_open | level6 | basket | đáy | rộng 190 | 5 |
-| l6src_l6_dog_house | 0,0,1024,1024 | l6_dog_house | level6 | dog_house | đáy | rộng 320 | 5 |
+| l6src_l6_watering_can | 0,0,1254,1254 | l6_watering_can | level6 |  | đáy | rộng 205 | 5 |
+| l6src_l6_picnic_basket_open | 0,0,1254,1254 | l6_picnic_basket_open | level6 | basket | đáy | rộng 190 | 5 |
+| l6src_l6_dog_house | 0,0,1254,1254 | l6_dog_house | level6 | dog_house | đáy | rộng 320 | 5 |
 | l6src_l6_picnic_basket_closed | 0,0,1024,1024 | l6_picnic_basket_closed | level6 | basket | đáy |  | 5 |
 | l6src_l6_glove_black_fallen | 0,0,1024,1024 | l6_glove_black_fallen | level6 | glove | đáy |  | 5 |
 | l6src_l6_bone | 0,0,1536,1024 | l6_bone | level6 |  | tâm | rộng 80 | 5 |
