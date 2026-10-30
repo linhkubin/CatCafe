@@ -352,3 +352,23 @@
 - Bố cục chuẩn cho demo: bản khối D6-18 + D6-19 (bố cục G6-16, cỡ đồ G6-17, bàn thấp G6-19). Toạ độ: `l6_dev_check/l6_block_layout.md` mục 14–15, ảnh `l6_dev_check/g6_19_strip.jpg`.
 - Thùng gỗ B giữ bề ngang như hiện tại (không làm hẹp).
 - Art vẽ demo các cảnh chính (mở màn, xếp xong đường, Mun trên bàn) khung 1080x1920, kèm ảnh mẫu L1 theo QUY-TRINH bước 4 (màu O6, góc nhìn, nền dư G-SCREEN). Gửi chủ dự án duyệt; chưa duyệt thì chưa tách asset.
+
+**A6-10 (Art, trả G6-20). Demo L6 lượt 1: 3 cảnh.**
+- Ảnh trình khung 9:16 (có giao diện): `art/out/demo/l6_demo_start_916.png`, `l6_demo_path_916.png`, `l6_demo_table_916.png`; so với L1: `l6_demo_vs_l1.jpg`. Vùng chơi 1024x1536: `l6_demo_*_play.png`; khung không giao diện 1024x1820: `l6_demo_*_frame.png`.
+- Cách làm: Codex vẽ vùng chơi 1024x1536 (brief `art/review/l6_demo_<cảnh>_g620_brief.md`, ảnh vị trí `art/ref/l6_demo_g620/khoi_*.png`). Art ghép dải trên, dưới 142px lấy từ nền rộng `l5_bg_backyard` (mép nối mềm 24px), lớp giao diện lấy của L5 bỏ chữ "Mun", bản đồ mini và mũi tên, phóng ×1080/1024.
+- Màu (khung 1024x1820): mở màn TB 0,292 / p90 0,490; xếp xong đường 0,291 / 0,486; Mun trên bàn 0,276 / 0,455. Vượt ngưỡng O6 (≤ 0,25 / ≤ 0,46).
+- Lệch bố cục D6-19: Codex vẽ lại nền và dồn hàng đồ trước lên cao (nặng nhất ở mở màn).
+
+**G6-21 (chủ dự án 2026-10-31). Chốt demo `l6_demo_path_916.png` (cảnh xếp xong đường).** Lời chủ dự án: "tôi chốt ảnh này, hãy bàn luận với dev và mô tả thật kỹ để tách từng ảnh theo demo này nhé, còn vị trí thì dev sắp xếp lại, riêng cây thì promt lại cho đẹp hơn như demo 3 nhé, tách xong hãy nhắn dev ghép vào".
+- Demo đã duyệt là chuẩn duy nhất (G4-22) cho thiết kế, màu, nét từng món. Màu theo demo đã duyệt (chủ dự án chốt dù số đo vượt O6).
+- Vị trí: Dev sắp lại theo bản khối D6-19; cỡ đo trên demo.
+- Cây `l6_tree`: vẽ lại đẹp hơn theo cây ở cảnh Mun ăn trên bàn (`l6_demo_table_play.png`, "demo 3").
+- Hai cảnh còn lại (mở màn, Mun trên bàn) không vẽ lại; dùng làm mẫu dáng cho các trạng thái không có trong demo duyệt (Lu ngồi sủa, Mun nằm sợ tai cụp, giỏ đóng, Mun ăn).
+
+**A6-11 (Art, trả G6-21; bước 3 với Dev). Danh sách tách và chốt với Dev.** Phiên Dev chưa mở khi làm, nên Art lấy key và lớp theo code bản khối `game/src/level6.js` (mọi key code đang gọi), ghi ở đây để Dev xác nhận khi ráp:
+- Đặc tả tách: `art/design-art-level6.md` mục 5 (bảng `l6src_<key>`, mô tả từng món, demo gốc). Brief 5 lượt (≤ 7 món, G5-23): `art/review/l6_tach_props_a_brief.md` (kho, ống khói, bàn, thùng gỗ, ghế, phuy, hộp dụng cụ), `_props_b_` (cây, ổ chim, găng, bụi rau, bình tưới, giỏ mở, chuồng), `_states_` (giỏ đóng, găng rơi, xương, xúc xích, Lu gặm, Mun nằm mái tai dựng / tai cụp), `_lu_` (Lu sủa, chạy, ngậm xương chạy, chồm, khoe bụng), `_mun_` (Mun ló mép, bước xuống, ăn, ngồi nhìn, bám cột).
+- **Cỡ:** Hiển thị = bề rộng đo trên vùng chơi demo; khác số khối D6-19 ở vài món (bụi rau 475 thay 330, bình tưới 205 thay 110, phuy 210 thay 170, chuồng 320 thay 265). Dev sắp lại vị trí cho vừa; món nào cần nhỏ lại cho bố cục thì Dev co bằng cỡ hiển thị, báo Art nếu lệch tỉ lệ rõ.
+- **Neo:** giữa đáy, trừ ổ chim, xương, xúc xích (tâm) và găng vắt rào (đỉnh). Mặt đứng của 4 bậc (miệng phuy, nắp hộp, mặt thùng, mặt ghế) và mặt bàn là đỉnh phần vẽ chính; Dev đo lại trên ảnh xuất.
+- **Lớp chuồng:** `l6_dog_house` (lòng cửa tô tối) → `l6_dog_chew` → `l6_dog_house_front` (Art cắt từ `l6_dog_house`, bỏ lòng cửa tối), như cửa sổ quán L5.
+- **Nhóm cùng khung, cùng neo:** giỏ đóng/mở, găng vắt/rơi, Mun nằm mái tai cụp/tai dựng.
+- **Dùng lại:** `l5_wind_chime`, `l5_bg_backyard`, `mun_run`, `mun_held`, `mun_face_icon`. **Bỏ:** `mun_jump_up` (D6-19: Mun bước ngang sang bàn; code chỉ còn khối tạm, không gọi).
