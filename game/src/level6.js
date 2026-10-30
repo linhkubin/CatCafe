@@ -13,21 +13,23 @@ const DEF = {
   l6_tree: [100, 880], l6_bird_nest: [132, 480], l5_wind_chime: [330, 380], l6_glove_black_idle: [418, 342], // găng vắt đỉnh rào: neo đỉnh
   // G6-18: bố cục như G6-16, đồ to theo G6-17 tại chỗ (neo giữa đáy). Kho 560 × 541 (G6-17) để mặt mái y 475, 4 bậc hụt đều 120;
   // mép mái trái x ≈ 580. Mun nằm mái và ống khói hạ theo mặt mái (−66).
-  l6_shed: [820, 1010], l6_shed_chimney: [965, 455], mun_roof_crouch: [690, 477],
+  // Ghép ảnh thật: kho vẽ lại (A6-11) đặt cho đỉnh mái trùng demo (y 447), mép trái 522; Mun nằm mái như demo.
+  l6_shed: [802, 906], l6_shed_chimney: [965, 455], mun_roof_crouch: [720, 474],
   // G6-5: bàn sát cạnh trái ghế đẩu ở chỗ C, giỏ ở mép trái mặt bàn, chỗ trống bên phải đặt xúc xích.
   // G6-18: bàn rộng 320 nhích phải 30 (khỏi lọt mép trái). G6-19: bàn thấp 228 (1,2 Hm), chân bàn xuống 23 (1040 → 1063) để
   // mặt bàn 835 ngang mặt ghế ở C; ghế vẫn đứng trước bàn (chân ghế 1065).
-  l6_table: [140, 1020], l6_picnic_basket_closed: [123, 848], l6_picnic_basket_open: [123, 848],
+  // Bàn Art vẽ thấp hơn bàn trong demo: đặt theo mặt bàn (y ≈ 810 như demo), giỏ trên mặt bàn như demo.
+  l6_table: [140, 966], l6_picnic_basket_closed: [123, 848], l6_picnic_basket_open: [123, 848],
   // G6-13/16: Lu ngồi sủa trước kho, bên phải chỗ A. G6-18: nhích phải 55 (phuy rộng 170 ở chỗ đầu che Lu).
   l6_dog_bark: [700, 975], l6_dog_house: [856, 1167], l6_dog_house_front: [856, 1167], l6_dog_chew: [856, 1167], // đầu Lu thò cửa chuồng
   l6_dog_belly: [856, 1270], // G6-16: lăn ra nằm ngay trước cửa chuồng
   // G6-4, G6-5: chỗ đầu các món rải rác. Hàng trước sân đáy y 1290 (túi đồ từ y ≈ 1298). Ghế đẩu dưới bàn bên trái.
   // G6-18: hàng trước to lên không đủ 1024 cho 5 món cạnh nhau: hộp dụng cụ nhích trái 20, bụi rau lùi 28 (phuy che nhẹ mép phải),
   // phuy nhích phải 25, bình tưới nhích phải 42.
-  l6_stool: [150, 1200],
+  l6_stool: [230, 1110], // trước mép bàn, sau bụi rau; cách chỗ C hơn tầm hút 110
   // Ghép ảnh thật: bụi rau (343, 1242) và bình tưới (705, 1275) theo demo. Phuy đứng hàng trước bên trái (trước bụi rau).
   // Hộp dụng cụ thấp (cao 103) đứng ngoài vùng túi đồ (khung 3:4 túi đồ phủ x 65–753, y ≈ 1210–1380), dưới chuồng, không che cửa.
-  l6_toolbox: [820, 1262], l6_veggie_bed: [343, 1242], l6_barrel: [175, 1296], l6_watering_can: [705, 1275],
+  l6_toolbox: [820, 1262], l6_veggie_bed: [343, 1242], l6_barrel: [80, 1296], l6_watering_can: [705, 1275],
   // G6-6: thùng gỗ đứng riêng cạnh hàng rào, sau bàn, cao hơn bàn (bậc nhảy mở màn bàn → thùng gỗ → cột → mái).
   l6_crate: [275, 880],
 };
