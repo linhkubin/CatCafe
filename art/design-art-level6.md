@@ -86,13 +86,13 @@ Mỗi món một ảnh `art/out/_sheets/l6src_<key>.png` (Codex tách, brief `ar
 | l6src_l6_toolbox | 0,0,1536,1024 | l6_toolbox | level6 |  | đáy | rộng 175 | 5 |
 | l6src_l6_tree | 0,0,1024,1536 | l6_tree | level6 |  | đáy | rộng 285 | 5 |
 | l6src_l6_bird_nest | 0,0,1254,1254 | l6_bird_nest | level6 |  | tâm | rộng 70 | 5 |
-| l6src_l6_glove_black_idle | 0,0,1254,1254 | l6_glove_black_idle | level6 | glove | đỉnh | rộng 75 | 5 |
+| l6src_l6_glove_black_idle | 0,0,1024,1536 | l6_glove_black_idle | level6 | glove | đỉnh | rộng 75 | 5 |
 | l6src_l6_veggie_bed | 0,0,1536,1024 | l6_veggie_bed | level6 |  | đáy | rộng 475 | 5 |
 | l6src_l6_watering_can | 0,0,1254,1254 | l6_watering_can | level6 |  | đáy | rộng 205 | 5 |
 | l6src_l6_picnic_basket_open | 0,0,1254,1254 | l6_picnic_basket_open | level6 | basket | đáy | rộng 190 | 5 |
 | l6src_l6_dog_house | 0,0,1254,1254 | l6_dog_house | level6 | dog_house | đáy | rộng 320 | 5 |
 | l6src_l6_picnic_basket_closed | 0,0,1254,1254 | l6_picnic_basket_closed | level6 | basket | đáy | rộng 192 | 5 |
-| l6src_l6_glove_black_fallen | 0,0,1254,1254 | l6_glove_black_fallen | level6 | glove | đáy | rộng 124 | 5 |
+| l6src_l6_glove_black_fallen | 0,0,1536,1024 | l6_glove_black_fallen | level6 | glove | đáy | rộng 124 | 5 |
 | l6src_l6_bone | 0,0,1536,1024 | l6_bone | level6 |  | tâm | rộng 80 | 5 |
 | l6src_l6_sausage | 0,0,1536,1024 | l6_sausage | level6 |  | tâm | rộng 90 | 5 |
 | l6src_l6_dog_chew | 0,0,1254,1254 | l6_dog_chew | level6 |  | đáy | rộng 210 | 5 |
@@ -153,13 +153,13 @@ Mỗi món một ảnh `art/out/_sheets/l6src_<key>.png` (Codex tách, brief `ar
 - `l6_toolbox` (lượt `props_a`): Hộp dụng cụ hồng đào nhạt, nắp phẳng thấy rõ mặt trên, quai vàng caramel thấp trên nắp, khoá vàng nhỏ ở giữa mặt trước. **Không lấy:** KHÔNG lấy phuy bên dưới.
 - `l6_tree` (lượt `props_b`, vẽ lại lượt `fix`; **trong game Dev phóng lên rộng 430**, ×1,5 so với ảnh xuất 296x487, để ngọn cây cao như demo, D6-20): **Vẽ lại cho đẹp như cây trong cảnh Mun ăn trên bàn** (ảnh tree_table_demo.png): thân gỗ nâu mật ong cong mềm chia 2–3 nhánh, **tán tròn mập nhiều cụm bông xù xanh lá nhạt pha kem**, vài lá nhỏ vẽ nét bên trong tán, một cành ngang bên phải để đặt ổ chim (không vẽ ổ). Tán dày, tròn đều, không lởm chởm. Màu xanh lá nhạt pha kem như mẫu L1, không xanh tươi. **Không lấy:** KHÔNG lấy ổ chim (món riêng), bụi cây dưới gốc, hàng rào, giỏ, Mun.
 - `l6_bird_nest` (lượt `props_b`): Ổ chim rơm vàng caramel nhạt, hình bát tròn, thấy lòng ổ hơi tối, rơm đan vài nét. **Không lấy:** KHÔNG lấy cành cây, lá.
-- `l6_glove_black_idle` (lượt `props_b`): Găng tay vải đen than ấm vắt qua đỉnh rào, **hai ngón dựng như hai tai mèo**, lòng găng tròn, cổ găng viền hồng đào thòng xuống. Vẽ găng như đang vắt trên một mép ngang (phần trên gập qua), nhưng không vẽ hàng rào. **Không lấy:** KHÔNG lấy hàng rào, trời.
+- `l6_glove_black_idle` (lượt `props_b`): Găng tay vải đen than ấm vắt qua đỉnh rào, **hai ngón dựng như hai tai mèo**, lòng găng tròn, cổ găng viền hồng đào thòng xuống. Vẽ găng như đang vắt trên một mép ngang (phần trên gập qua), nhưng không vẽ hàng rào. **Không lấy:** KHÔNG lấy hàng rào, trời. **G6-21 vẽ lại (lượt `l6_glove`, brief `art/review/l6_glove_redo_brief.md`):** găng năm ngón vải đen than ấm, ngón trỏ và ngón út dựng như tai mèo, hai ngón giữa gập, ngón cái cuộn như đuôi, đường may nét đứt, vải xù, cổ găng đan hồng đào; không mặt. Cỡ, neo giữ nguyên (rộng 75, neo đỉnh).
 - `l6_veggie_bed` (lượt `props_b`): Luống rau trong khung gỗ thấp mật ong nhạt, đất nâu, 3 cụm rau xanh lá nhạt (xà lách, cải) tròn mập. **Không lấy:** KHÔNG lấy sàn gạch.
 - `l6_watering_can` (lượt `props_b`): Bình tưới xanh trời nhạt, quai cong trên, vòi dài chĩa phải, sen tưới tròn có lỗ chấm. **Không lấy:** KHÔNG lấy sàn, chuồng.
 - `l6_picnic_basket_open` (lượt `props_b`): Giỏ picnic mây vàng caramel nhạt, **nắp mở lật ra sau**, trong giỏ trống thấy lòng giỏ, quai cầm hai bên. **Không lấy:** KHÔNG lấy mặt bàn, cây.
 - `l6_dog_house` (lượt `props_b`): Chuồng gỗ mật ong nhạt ván dọc, **mái tam giác hồng phấn nhạt** nhô ra, cửa vòm. **Trong cửa vòm để TRỐNG, tô tối nâu ấm đặc** (không có Lu, không xương), ngưỡng cửa gỗ ở đáy. **Không lấy:** KHÔNG lấy Lu, khúc xương, bình tưới, tường kho.
 - `l6_picnic_basket_closed` (lượt `states`): **Chỉnh sửa từ ảnh art/out/_sheets/l6src_l6_picnic_basket_open.png** (giữ nguyên khung, cỡ, vị trí, màu, nét): **nắp đóng** khít, khăn kẻ ô hồng kem thò ra mép nắp, quai cầm trên nắp như giỏ ở cảnh mở màn. **Không lấy:** KHÔNG lấy bàn.
-- `l6_glove_black_fallen` (lượt `states`): **Chỉnh sửa từ ảnh art/out/_sheets/l6src_l6_glove_black_idle.png** (giữ màu, nét, cỡ găng): găng **nằm bẹp dưới đất**, xoè ngang, hai ngón không còn dựng, cổ găng hồng đào lộ ra. Đáy phẳng.
+- `l6_glove_black_fallen` (lượt `states`): **Chỉnh sửa từ ảnh art/out/_sheets/l6src_l6_glove_black_idle.png** (giữ màu, nét, cỡ găng): găng **nằm bẹp dưới đất**, xoè ngang, hai ngón không còn dựng, cổ găng hồng đào lộ ra. Đáy phẳng. **G6-21 vẽ lại (lượt `l6_glove`):** cùng chiếc găng nằm bẹp, cổ găng bên trái, năm ngón duỗi sang phải, ngón cái chìa lên. Cỡ, neo giữ nguyên (rộng 124, neo đáy).
 - `l6_bone` (lượt `states`): Khúc xương kem trắng ấm hai đầu tròn kép, đúng như khúc xương Lu ngậm trong demo. Nằm ngang. **Không lấy:** KHÔNG lấy Lu, chuồng.
 - `l6_sausage` (lượt `states`): Khúc xúc xích hồng đào nhạt bóng nhẹ, hai đầu tròn, cong nhẹ, nguyên vẹn (chưa cắn). Nằm ngang. **Không lấy:** KHÔNG lấy Mun, bàn.
 - `l6_dog_chew` (lượt `states`): Đầu Lu (lu_ref) + hai bàn chân trước, như đang thò ra khỏi cửa chuồng: tai cụp vàng mật ong, mắt híp vui, má hồng, **ngậm khúc xương kem ngang miệng**, hai chân trước tì đất. Đáy phẳng (cắt ngang ở ngưỡng cửa). **Không lấy:** KHÔNG lấy chuồng, cửa vòm tối, ngưỡng cửa.

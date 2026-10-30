@@ -384,3 +384,5 @@
 - Cây hạ thấp để gốc chạm nền sân.
 - Hộp dụng cụ (chỗ ban đầu) thấp xuống và dịch phải một chút.
 - Lu ngậm xương về chuồng: đi vòng ra trước cửa chuồng rồi chui vào, không đi xuyên qua chuồng.
+
+**A6-13 (Art, trả G6-21: găng tay).** Vẽ lại `l6_glove_black_idle`, `l6_glove_black_fallen` (Codex lượt `l6_glove`, brief `art/review/l6_glove_redo_brief.md`, kèm demo gốc, owner_l1_style_ref, l1_depth_angle_ref, mun_ref). Găng vắt rào: ngón trỏ, ngón út dựng như tai mèo, ngón cái cuộn như đuôi, cổ găng hồng đào như thân ngồi; nhìn kỹ có đường may, nếp vải, vải xù; không mặt. Găng rơi: cùng găng nằm bẹp, năm ngón duỗi. Cỡ, neo giữ nguyên: idle ảnh 128x174 (trước 128x171), neo đỉnh; fallen 202x124, neo đáy. Dev không phải đặt lại.

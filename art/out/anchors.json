@@ -1863,25 +1863,25 @@
   "w": 442
  },
  "l6_glove_black_fallen": {
-  "ax": 59,
-  "ay": 116,
+  "ax": 98,
+  "ay": 117,
   "file": "level6/l6_glove_black_fallen.png",
   "group": "glove",
   "h": 124,
-  "ox": 0.2921,
-  "oy": 0.9355,
+  "ox": 0.4851,
+  "oy": 0.9435,
   "res": 1.5,
   "sheet": "l6src_l6_glove_black_fallen",
   "w": 202
  },
  "l6_glove_black_idle": {
-  "ax": 52,
+  "ax": 61,
   "ay": 8,
   "file": "level6/l6_glove_black_idle.png",
   "group": "glove",
-  "h": 171,
-  "ox": 0.4062,
-  "oy": 0.0468,
+  "h": 174,
+  "ox": 0.4766,
+  "oy": 0.046,
   "res": 1.5,
   "sheet": "l6src_l6_glove_black_idle",
   "w": 128
