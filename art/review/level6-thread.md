@@ -372,3 +372,5 @@
 - **Lớp chuồng:** `l6_dog_house` (lòng cửa tô tối) → `l6_dog_chew` → `l6_dog_house_front` (Art cắt từ `l6_dog_house`, bỏ lòng cửa tối), như cửa sổ quán L5.
 - **Nhóm cùng khung, cùng neo:** giỏ đóng/mở, găng vắt/rơi, Mun nằm mái tai cụp/tai dựng.
 - **Dùng lại:** `l5_wind_chime`, `l5_bg_backyard`, `mun_run`, `mun_held`, `mun_face_icon`. **Bỏ:** `mun_jump_up` (D6-19: Mun bước ngang sang bàn; code chỉ còn khối tạm, không gọi).
+
+**A6-12 (Art, trả Dev: nền L6 ở 3:4).** Nền riêng `art/out/level6/l6_bg_backyard.png` 1366x2304 (vùng chơi 1024x1536 ở x 171, y 384), dựng từ điểm ảnh `l5_bg_backyard` (không qua Codex, không đổi màu): bỏ cửa quán và bậc thềm, nới 171px mỗi bên. Trời, rào lật gương quanh khe ván x 822 và x 52 (cột dây phơi thứ hai ở x 1325 ảnh mới, dây võng đối xứng); sàn phải lật theo đường gạch xiên, sàn trái dịch một ô gạch theo phối cảnh, đường gạch liền. Phần vùng chơi giữ nguyên ảnh L5 trừ góc phải (từ đường gạch xiên x ~720 và rào từ x 822 sang phải). Dev đổi key trong `level6.js`, bỏ `bgSideSrc` tạm.

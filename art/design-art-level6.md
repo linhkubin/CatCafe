@@ -10,7 +10,8 @@ Nguồn gameplay: `levels/levels-01-10.md`, `levels/states-01-10.md` mục Level
 
 ## 1. Dùng lại / vẽ mới (QUY-TRINH mục 6)
 
-- **Dùng lại, không vẽ:** nền `l5_bg_backyard` (bản rộng 1366x2304 theo G-SCREEN), `l5_wind_chime`, các dáng Mun đã có (`mun_run`, `mun_held`, `mun_face_icon`, `mun_look_paw`…), giao diện chung.
+- **Nền riêng `l6_bg_backyard`** (`art/out/level6/l6_bg_backyard.png`, **1366x2304**, vùng chơi 1024x1536 ở x 171, y 384; D6 Dev xin, A6-12): dựng từ điểm ảnh `l5_bg_backyard`, không vẽ mới, không đổi màu. Bỏ cửa quán và bậc thềm; trời, rào lật gương quanh khe ván (cột dây phơi thứ hai ở x 1325, dây võng đối xứng); sàn lật theo đường gạch xiên phối cảnh (phải), dịch đúng một ô gạch (trái), nên đường gạch nối liền. Script dựng: `tools/l6_bg_build.py`.
+- **Dùng lại, không vẽ:** `l5_wind_chime`, các dáng Mun đã có (`mun_run`, `mun_held`, `mun_face_icon`, `mun_look_paw`…), giao diện chung.
 - Nền sân L5 có sẵn cửa sổ quán, cửa sau, cột dây phơi: các món L5 không có trong L6 thì không đặt sprite (nền vốn trống).
 - **Vẽ mới:** danh sách mục 2. Không vẽ nền mới.
 
