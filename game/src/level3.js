@@ -731,20 +731,13 @@ export class Level3 extends ObjectLevel {
   fanShow() {
     const T = (ms, fn) => this.time.delayedCall(ms, () => { if (this.phase === 'found') fn(); });
     const p = this.fan, [px, py] = this.P('player_dangle_pompom');
-    const handPom = this.has('player_dangle_pompom') ? null : this.img('l3_pompom', 0, 0, p.depth + 0.001).setVisible(false);
     // 0: chạy vào từ mép phải tới giữa hộp và cột cào.
     p.setVisible(true).setPosition(1024 + 200, py);
     this.tweens.add({ targets: p, x: px, duration: 550, ease: 'Quad.out' });
     this.tweens.add({ targets: p, y: py - 18, duration: 110, yoyo: true, repeat: 2 });
-    // 0,6: lắc quả bông trước mặt Sữa (ảnh tạm: tay cầm quả bông của cột cào), nhún nhảy mời mọc.
+    // 0,6: nhún nhảy mời mọc trước mặt Sữa. G3-31: tay luôn trống, không cầm quả bông (quả bông ở yên trên cột cào).
     T(600, () => {
       this.sfx('l3_sfx_pompom');
-      if (handPom) {
-        const r = this.artRect(p);
-        handPom.setVisible(true).setPosition(r.left + 20, r.top + r.height * 0.35).setScale(this.pompom.scaleX);
-        this.pompom.setVisible(false);
-        this.tweens.add({ targets: handPom, angle: { from: -25, to: 25 }, duration: 220, yoyo: true, repeat: 3, ease: 'Sine.inOut' });
-      }
       this.hop(p, 14, 260);
       this.time.delayedCall(320, () => this.hop(p, 14, 260));
     });
@@ -754,8 +747,6 @@ export class Level3 extends ObjectLevel {
     // 2,5: nhân vật nhìn quả bông, nhìn hộp, rồi leo lên tầng trên cùng cột cào, cuộn tròn.
     T(2500, () => { this.face(p, true); this.time.delayedCall(250, () => this.face(p, false)); });
     T(3000, () => {
-      if (handPom) handPom.destroy();
-      this.pompom.setVisible(true);
       this.curlOnTree(p);
     });
     // 4,0: Sữa ló mắt khỏi hộp nhìn, rồi rụt vào lại.

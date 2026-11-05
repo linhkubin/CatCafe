@@ -21,6 +21,7 @@
 //
 // Thả đồ từ túi vào cảnh: khai báo get dropSpots() → [{ when?, rect, want, place(it), wrong?(it) }] (xem onBagDrop).
 // Kéo đồ có sẵn trong cảnh tới chỗ đặt (không qua túi đồ): sceneDraggable(name, {...}) (xem bên dưới).
+// Ô sáng hiện sẵn ở chỗ đặt (L7): litSlot(id, name, at, look) + sceneDraggable(..., { lit: true }).
 import { BaseLevel, D, MIN_HIT } from './base.js';
 
 // Các kiểu chạm có sẵn. `this` là màn chơi, p = { def, s, name, state, done }.
@@ -89,6 +90,7 @@ export class ObjectLevel extends BaseLevel {
     this.got = {}; // món đã nhặt (resetLevel của màn có thể đặt lại)
     this.sceneDrags = {};
     this.sdrag = null;
+    this.lit = {}; // ô sáng (litSlot)
     super.create();
     this.input.on('gameobjectdown', (p, obj) => this.sceneDragStart(obj.zoneName, p));
     this.input.on('pointermove', (p) => this.sceneDragMove(p));
@@ -168,8 +170,17 @@ export class ObjectLevel extends BaseLevel {
   // ---------- kéo đồ có sẵn trong cảnh tới chỗ đặt (G6-1, dùng chung) ----------
   // sceneDraggable(name, opts): sprite this[name] (vùng chạm cùng tên) kéo được trong cảnh.
   //   opts.spots(): [{ id, at: [x, y] }] chỗ đang nhận món này (toạ độ đặt sprite); trống = không chỗ nào nhận.
-  //   opts.when(): còn cho kéo không (mặc định luôn); opts.snap: thả cách chỗ đặt ≤ snap px là khớp (mặc định 110);
+  //   opts.when(): còn cho kéo không (mặc định luôn); opts.snap: thả cách chỗ đặt ≤ snap px là khớp (mặc định 110;
+  //   spot.area: Rectangle thì thả trong vùng đó là khớp, thay cho snap);
   //   opts.place(spot, s): đã khớp vào chỗ; opts.sfx: tiếng khi khớp; opts.depth: lớp sau khi khớp (mặc định lớp cũ).
+  //   opts.lit: chỗ đặt là ô sáng hiện sẵn (litSlot, id = spot.id): đang kéo thì ô sáng rõ hơn, không vẽ viền mờ tạm.
+  //   opts.litIds(spots): chỉ sáng các ô này khi kéo (mặc định mọi chỗ nhận); thả vào chỗ nhận khác vẫn khớp.
+  //   opts.swipe: [dx, dy] thao tác tại chỗ (L7: dựng xe đạp, xoay đầu ống máng, gạt then cổng): chạm giữ rồi vuốt theo hướng
+  //   (dx, dy) đủ dài |(dx, dy)| là khớp ngay vào chỗ đầu tiên. opts.fixed: món đứng yên khi vuốt (không theo tay); không đặt
+  //   fixed thì vẫn kéo-thả được như thường.
+  //   opts.lag: 0–1, món nặng lết theo tay chậm hơn (mỗi lần di tay chỉ đi được phần lag quãng còn lại; L7 cành cây).
+  //   opts.look: { angle, sy } dáng món khi đặt (ván dựng tường → nằm ngang, nắp cống dựng → nằm dẹt): món đổi sang dáng này
+  //   ngay khi bắt đầu kéo, thả sai thì về dáng cũ.
   // Đang kéo: chỗ hợp lệ hiện viền mờ đúng cỡ món. Thả ngoài: món trượt về chỗ cũ, lắc một nhịp, "sai".
   // Chạm không kéo vẫn là chạm thường (tapProp / handleLevel).
   sceneDraggable(name, opts) { this.sceneDrags[name] = opts; }
@@ -192,9 +203,24 @@ export class ObjectLevel extends BaseLevel {
       this.handHide('paw');
       sd.s.setDepth(D.fx - 1);
       sd.spots = sd.d.spots();
-      sd.ghost = this.sceneGhosts(sd.s, sd.spots);
+      sd.litIds = sd.d.litIds ? sd.d.litIds(sd.spots) : sd.spots.map((o) => o.id);
+      if (sd.d.lit) this.litFocus(sd.litIds, true);
+      else sd.ghost = this.sceneGhosts(sd.s, sd.spots);
+      if (sd.d.look) {
+        const s = sd.s, by = s.baseY || s.base;
+        sd.rest = { angle: s.angle, baseY: by };
+        s.baseY = by * (sd.d.look.sy ?? 1);
+        this.tweens.add({ targets: s, angle: sd.d.look.angle ?? 0, scaleY: s.baseY, duration: 150, ease: 'Quad.out' });
+      }
     }
-    sd.s.setPosition(p.worldX + sd.dx, p.worldY + sd.dy);
+    const sw = sd.d.swipe;
+    if (sw && sd.spots.length) { // thao tác tại chỗ: vuốt đủ dài theo hướng là khớp
+      const len = Math.hypot(sw[0], sw[1]), along = ((p.worldX - sd.x0) * sw[0] + (p.worldY - sd.y0) * sw[1]) / len;
+      if (along >= len) { this.sceneDragEnd(sd.spots[0]); return; }
+    }
+    if (sd.d.fixed) return;
+    const tx = p.worldX + sd.dx, ty = p.worldY + sd.dy, k = sd.d.lag || 1;
+    sd.s.setPosition(sd.s.x + (tx - sd.s.x) * k, sd.s.y + (ty - sd.s.y) * k);
   }
 
   // Viền mờ đúng cỡ phần vẽ của món, đặt ở từng chỗ hợp lệ; nhấp nháy nhẹ.
@@ -208,15 +234,17 @@ export class ObjectLevel extends BaseLevel {
     return g;
   }
 
-  sceneDragEnd() {
+  // force: chỗ đặt khớp luôn (thao tác vuốt tại chỗ, opts.swipe).
+  sceneDragEnd(force) {
     const sd = this.sdrag;
     if (!sd) return;
     this.sdrag = null;
     if (!sd.moved) return;
-    this.tweens.killTweensOf(sd.ghost);
-    sd.ghost.destroy();
+    if (sd.ghost) { this.tweens.killTweensOf(sd.ghost); sd.ghost.destroy(); }
+    if (sd.d.lit) this.litFocus(sd.litIds, false);
     const { s, d, name } = sd, snap = d.snap || 110;
-    const spot = sd.spots.find(({ at: [x, y] }) => Math.hypot(s.x - x, s.y - y) <= snap);
+    // Món đứng yên (opts.fixed) chỉ khớp bằng thao tác vuốt (force); thả tay chưa vuốt đủ: lắc, "sai".
+    const spot = force || (!d.fixed && sd.spots.find(({ at: [x, y], area }) => (area ? area.contains(s.x, s.y) : Math.hypot(s.x - x, s.y - y) <= snap)));
     if (spot) {
       this.tweens.add({ targets: s, x: spot.at[0], y: spot.at[1], duration: 160, ease: 'Quad.out', onComplete: () => {
         s.setDepth(d.depth ?? sd.depth);
@@ -228,10 +256,53 @@ export class ObjectLevel extends BaseLevel {
       return;
     }
     this.sfx('sfx_wrong');
-    this.tweens.add({ targets: s, x: sd.home[0], y: sd.home[1], duration: 250, ease: 'Quad.out', onComplete: () => {
+    const back = sd.rest ? { angle: sd.rest.angle, scaleY: (s.baseY = sd.rest.baseY) } : {};
+    this.tweens.add({ targets: s, x: sd.home[0], y: sd.home[1], ...back, duration: 250, ease: 'Quad.out', onComplete: () => {
       s.setDepth(sd.depth);
-      this.wiggle(s, 4, 1, 240);
+      if (!sd.rest) this.wiggle(s, 4, 1, 240);
+      else this.tweens.add({ targets: s, angle: sd.rest.angle + 4, duration: 80, yoyo: true }); // món dựng nghiêng: lắc quanh dáng cũ
     } });
+  }
+
+  // ---------- ô sáng (L7, dùng chung): chỗ đặt hiện sẵn từ đầu cảnh ----------
+  // Hình món `name` (cùng ảnh, cỡ, hướng; look = { angle, sy, key } dáng / ảnh lúc đặt) ở `at`, tô trắng mờ, nhịp sáng chậm
+  // 1,5 giây; hiện tới khi gọi litOff(id). Lớp: this.litDepth (mặc định dưới món đang kéo). Không dùng preFX (nhiều ô một lúc).
+  // Tuỳ chọn màn: litHeldOnly = true thì ô ẩn hẳn lúc thường, chỉ hiện khi đang cầm đúng món / lúc gợi ý (litFocus, litFlash).
+  litSlot(id, name, at, look = {}) {
+    const s = this[name], g = this.add.image(at[0], at[1], '__WHITE');
+    this.applyKey(g, look.key || s.key);
+    if (s.faceLeft) this.face(g, true);
+    g.setScale(g.base, (g.baseY || g.base) * (look.sy ?? 1)).setAngle(look.angle ?? 0).setDepth(this.litDepth ?? D.fx - 2)
+      .setTintFill(0xfff8e0).setAlpha(0.1);
+    // litHeldOnly: nhịp sáng tạo sẵn ở trạng thái dừng (pause() ngay sau add có lúc vẫn chạy khung đầu) và ẩn hẳn ô.
+    g.pulse = this.tweens.add({ targets: g, alpha: 0.26, duration: 750, yoyo: true, repeat: -1, ease: 'Sine.inOut', paused: !!this.litHeldOnly });
+    if (this.litHeldOnly) g.setAlpha(0).setVisible(false);
+    this.lit[id] = g;
+    return g;
+  }
+
+  // Ô sáng rõ hơn (đang kéo đúng món / gợi ý) hoặc về nhịp thường.
+  litFocus(ids, on) {
+    for (const id of ids) {
+      const g = this.lit[id];
+      if (!g) continue;
+      if (on) { g.pulse.pause(); g.setAlpha(0.55).setVisible(true); } else if (this.litHeldOnly) g.setAlpha(0).setVisible(false); else { g.setAlpha(0.1); g.pulse.restart(); }
+    }
+  }
+
+  // Gợi ý: ô sáng rõ lên một lúc rồi về nhịp thường.
+  litFlash(id, ms = 1400) {
+    if (!this.lit[id]) return;
+    this.litFocus([id], true);
+    this.time.delayedCall(ms, () => { if (!this.sdrag) this.litFocus([id], false); });
+  }
+
+  litOff(id) {
+    const g = this.lit[id];
+    if (!g) return;
+    delete this.lit[id];
+    g.pulse.remove();
+    this.tweens.add({ targets: g, alpha: 0, duration: 250, onComplete: () => g.destroy() });
   }
 
   // Điểm giữa phần vẽ của món name nếu đặt ở `at` (cho bàn chân 💡 kéo mẫu tới chỗ đặt).

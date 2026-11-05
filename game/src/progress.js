@@ -3,7 +3,7 @@
 import { BUILT } from './assets.js';
 
 // Các màn có trong game, theo thứ tự. Thêm màn mới: thêm số vào đây, scene vào main.js, mèo vào cats.js.
-export const LEVELS = [1, 2, 3, 4, 5, 6];
+export const LEVELS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // L9, L10 bản khối
 
 // Bản thử mở khoá mọi màn (chủ dự án, để vào thẳng màn nào cũng được): chạy bằng dev server (chưa build) thì mặc định mở hết;
 // bản build thêm ?unlock=1. Bản build đăng chính thức (không cờ) vẫn khoá như cũ. Không đụng tiến độ đã lưu.

@@ -7,6 +7,29 @@
       "runtimeArgs": ["game/tools/dev_server.py", "8080"],
       "port": 8080,
       "url": "http://127.0.0.1:8080"
+    },
+    {
+      "name": "meo-dev2",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["game/tools/dev_server.py", "8090"],
+      "port": 8090,
+      "url": "http://127.0.0.1:8090"
+    },
+    {
+      "name": "meo-dev2-l9",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["game/tools/dev_server.py", "8093"],
+      "port": 8093,
+      "autoPort": false,
+      "url": "http://127.0.0.1:8093"
+    },
+    {
+      "name": "meo-lan",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-c", "import sys; sys.argv=['dev_server.py','8081']; src=open('game/tools/dev_server.py',encoding='utf-8').read().replace('(\"127.0.0.1\", PORT)','(\"0.0.0.0\", PORT)'); exec(compile(src,'game/tools/dev_server.py','exec'),{'__file__':'game/tools/dev_server.py','__name__':'__main__'})"],
+      "port": 8081,
+      "autoPort": false,
+      "url": "http://127.0.0.1:8081"
     }
   ]
 }

@@ -35,6 +35,7 @@ const FIT_HEAD = {
 };
 const ORDER = ['l4_mattress_fallen', 'l4_suitcase_folded', 'l4_book_stack', 'l4_pillow'];   // đệm → vali → sách → gối
 const STACK = { l4_mattress_fallen: 'l4_stack_mattress', l4_suitcase_folded: 'l4_stack_suitcase', l4_book_stack: 'l4_book_stack', l4_pillow: 'l4_stack_pillow' }; // A4-39: tầng sách dùng chung ảnh sách dưới sàn
+const PILLOW_DX = 15; // G4-27: ô gối (tầng trên cùng) lệch sang phải so với tâm tháp; G4-28: bớt lệch (40 → 15)
 const HOME = { l4_mattress_fallen: BED, l4_pillow: BED, l4_book_stack: STUDY, l4_suitcase_folded: STUDY };
 // Xếp tháp (A4-28): món sau đặt đáy = đỉnh phần vẽ món trước + chồng mép; nhân vật đứng lún vào gối 8px.
 const OVERLAP = [14, 14, 10], FEET_SINK = 8;
@@ -808,7 +809,8 @@ export class Level4 extends RoomsLevel {
 
   // Đúng món kế tiếp: rơi vào đỉnh tháp, nảy nhẹ (drop_in), "cộp".
   placeLayer(it) {
-    const [x, y] = this.towerTop(), key = STACK[it.key], i = this.stack.length;
+    const [tx, y] = this.towerTop(), key = STACK[it.key], i = this.stack.length;
+    const x = tx + (key === 'l4_stack_pillow' ? PILLOW_DX : 0);
     this.bagRemove(it, false);
     const s = this.img(key, x, y - 90, 30 + i);
     // A4-39: tầng sách dùng ảnh `l4_book_stack`, co cùng tỉ lệ nhóm tầng tháp (đầu nhóm `l4_stack_mattress`) như các tầng khác.

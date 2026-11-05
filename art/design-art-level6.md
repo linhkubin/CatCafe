@@ -39,6 +39,8 @@ Hiển thị = cỡ trong khung phòng 1024x1536 theo bản khối. File = cỡ 
 | `l6_stool` | 110x111 | 165x165 | đáy | 11 | ghế đẩu |
 | `l6_bone` | 80x36 | 120x54 | tâm | túi | khúc xương (cũng là icon bong bóng) |
 | `l6_sausage` | 80x32 | 120x48 | tâm | túi / bàn | xúc xích |
+| `l6_grilled_fish` | rộng 90 | ~151x60 | tâm | túi / đĩa | cá nướng cả con, thay `l6_sausage` (G6-28) |
+| `l6_plate` | rộng 125 | ~203x? | đáy | trên mặt bàn | đĩa trắng tròn giữa mặt bàn, cá nằm giữa đĩa (G6-28) |
 | `l6_dog_bark` | rộng ≈ 300 | 450x395 | đáy | 13 | Lu ngồi ngẩng sủa vui, đuôi vẫy (G6-9: 1,4–1,5 lần Mun ngồi) |
 | `l6_dog_run_bone` | rộng ≈ 320 | 480x340 | đáy | 13 | Lu ngậm xương chạy |
 | `l6_dog_chew` | rộng ≈ 225 | 340x240 | đáy (cửa chuồng) | 8.5 | chỉ đầu + chân trước thò khỏi cửa chuồng, gặm xương, mắt híp |
@@ -95,6 +97,8 @@ Mỗi món một ảnh `art/out/_sheets/l6src_<key>.png` (Codex tách, brief `ar
 | l6src_l6_glove_black_fallen | 0,0,1536,1024 | l6_glove_black_fallen | level6 | glove | đáy | rộng 124 | 5 |
 | l6src_l6_bone | 0,0,1536,1024 | l6_bone | level6 |  | tâm | rộng 80 | 5 |
 | l6src_l6_sausage | 0,0,1536,1024 | l6_sausage | level6 |  | tâm | rộng 90 | 5 |
+| l6src_l6_grilled_fish | 0,0,1536,1024 | l6_grilled_fish | level6 |  | tâm | rộng 90 | 5 |
+| l6src_l6_plate | 0,0,1536,1024 | l6_plate | level6 |  | đáy | rộng 125 | 5 |
 | l6src_l6_dog_chew | 0,0,1254,1254 | l6_dog_chew | level6 |  | đáy | rộng 190 | 5 |
 | l6src_mun_roof_crouch_ears_up | 0,0,1536,1024 | mun_roof_crouch_ears_up | cats | mun_roof | đáy | rộng 245 | 2.5 |
 | l6src_mun_roof_crouch | 0,0,1536,1024 | mun_roof_crouch | cats | mun_roof | đáy | rộng 241 | 2.5 |

@@ -7,7 +7,8 @@
 //   resetLevel()   – đặt this.room (phòng bắt đầu) và this.moving = false.
 // Trong buildRoom: buildRoomBgs() thay cho buildBg, buildArrows() chỗ dựng mũi tên, arrowZones() sau cùng các vùng chạm.
 // Tuỳ chọn: onRoomEnter(r) chạy khi camera trượt xong; mapBlinkOnEnter(r) quyết định ô bản đồ có nhấp nháy không
-// (mặc định: lần đầu vào phòng đó).
+// (mặc định: lần đầu vào phòng đó). Màn tự chuyển cảnh (L7: Mun đi tới mép thì khung trượt) bỏ qua buildArrows/arrowZones:
+// không mũi tên, không bản đồ mini; roomSlideMs đặt thời gian trượt (mặc định 400).
 // Gợi ý: màn khai báo hintStep() → { arrow: 'left'|'right' } | { sprite } | { item } … ; nút 💡 (strongHint) chung chỉ
 // bàn chân vào mũi tên hoặc đồ cần chạm; kiểu khác (kéo-thả…) xử lý trong strongHintStep(h) (trả true nếu đã xử lý).
 import { D, BROWN } from './base.js';
@@ -91,6 +92,7 @@ export class RoomsLevel extends ObjectLevel {
 
   // Phòng giữa có cả ◄ ►, phòng đầu chỉ ►, phòng cuối chỉ ◄.
   showArrows() {
+    if (!this.arrowL) return;
     const r = this.room, on = (z, v) => this.zones[z][v ? 'setInteractive' : 'disableInteractive']();
     this.arrowL.setVisible(r > 0);
     this.arrowR.setVisible(r < this.roomCount - 1);
@@ -135,6 +137,8 @@ export class RoomsLevel extends ObjectLevel {
   layout() {
     super.layout();
     this.cameras.main.setScroll(this.room * ROOM_W - this.X0, -this.Y0);
+    if (this.bag) this.bagLayout();
+    if (!this.arrowR) return;
     const ay = ARROW.y + this.Y0, rx = this.scale.width - ARROW.right;
     this.arrowR.setPosition(rx, ay);
     this.arrowL.setPosition(ARROW.left, ay);
@@ -143,7 +147,6 @@ export class RoomsLevel extends ObjectLevel {
     this.zones.arrowR.setPosition(rx, ay);
     this.zones.arrowL.setPosition(ARROW.left, ay);
     if (this.map) this.drawMap();
-    if (this.bag) this.bagLayout();
   }
 
   // Chạm mũi tên: sang phòng bên trái / phải (đang trượt thì bỏ qua). Còn lại: đồ vật khai báo, rồi handleLevel.
@@ -166,18 +169,18 @@ export class RoomsLevel extends ObjectLevel {
       this.fitWidth(this.arrowL, ARROW_W);
       this.fitWidth(this.arrowR, ARROW_W);
     }
-    this.taught.arrow = true;
+    if (this.taught) this.taught.arrow = true;
     this.room = r;
     this.sfx('sfx_tap');
     this.showArrows();
-    this.tweens.add({ targets: this.cameras.main, scrollX: r * ROOM_W - this.X0, duration: 400, ease: 'Sine.inOut',
+    this.tweens.add({ targets: this.cameras.main, scrollX: r * ROOM_W - this.X0, duration: this.roomSlideMs || 400, ease: 'Sine.inOut',
       onUpdate: () => { if (this.bag) this.bagLayout(); },
       onComplete: () => {
         this.moving = false;
         if (this.bag) this.bagLayout();
         this.touch();
-        if (this.mapBlinkOnEnter(r)) this.blinkMap(r);
-        this.visited[r] = true;
+        if (this.map && this.mapBlinkOnEnter(r)) this.blinkMap(r);
+        if (this.visited) this.visited[r] = true;
         if (this.onRoomEnter) this.onRoomEnter(r);
       } });
   }

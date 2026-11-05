@@ -498,6 +498,7 @@ export class Level1 extends ObjectLevel {
       this.glow = s.preFX.addGlow(SUN, 2, 0, false, 0.1, 14);
       this.glowTw = this.tweens.add({ targets: this.glow, outerStrength: 6, duration: 1000, yoyo: true, repeat: -1 });
     }
+    this.catArrowOn(s); // mũi tên chỉ mèo (kết màn chung bước 2), trên đầu, không chồng bàn tay chỉ vào hông
     this.handTap(this.suaPoint(), 'guide', 'hand', true);
   }
 

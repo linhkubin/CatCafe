@@ -217,6 +217,7 @@ const RECIPES = {
   l6_sfx_dog_chew: (c) => [0, 0.14, 0.28].forEach((at) => rustle(c, { t: 0.06, vol: 0.03, at, f: 1200 })), // gặm rộp rộp
   l6_sfx_dog_whine: (c) => note(c, { f: 740, t: 0.32, vol: 0.08, glide: [[520, 0.3]], vibDepth: 0.02 }), // "ư ử"
   l6_sfx_dog_sniff: (c) => [0, 0.16, 0.3, 0.52, 0.66].forEach((at) => hiss(c, { t: 0.07, vol: 0.06, at, f: 2200, type: 'bandpass', q: 1.5 })), // khịt khịt
+  l7_sfx_thunder: (c, g = 1) => { hiss(c, { t: 1.6, vol: 0.09 * g, f: 160, type: 'lowpass', q: 0.5 }); hiss(c, { t: 1.1, vol: 0.05 * g, at: 0.25, f: 120, type: 'lowpass', q: 0.5 }); }, // sấm nhỏ xa
   l3_sfx_creak: (c) => { for (let i = 0; i < 2; i++) note(c, { type: 'sawtooth', f: 180 + i * 30, t: 0.18, vol: 0.03, at: i * 0.25, glide: [[260 + i * 30, 0.16]], vib: 0 }); }, // cót két
 };
 
@@ -231,6 +232,11 @@ export const SFX_ALIAS = {
   // L6 (bản khối G6-1)
   l6_sfx_barrel_roll: 'l1_sfx_can_roll', l6_sfx_wood_clack: 'l4_sfx_books_land', l6_sfx_stool: 'l3_sfx_clack', l6_sfx_basket: 'sfx_lid',
   l6_sfx_sausage_drop: 'l4_sfx_teddy_flop', l6_sfx_glove_flop: 'l4_sfx_teddy_flop', l6_sfx_bird: 'sfx_sparkle', l6_sfx_water: 'sfx_drop',
+  // L7 (bản khối)
+  l7_sfx_tin_rattle: 'l4_sfx_pen_drop', l7_sfx_tin_creak: 'sfx_hinge', l7_sfx_splash: 'sfx_drop', l7_sfx_wood_wet: 'l4_sfx_books_land',
+  l7_sfx_leaves_drag: 'sfx_leaves', l7_sfx_table: 'l3_sfx_clack', l7_sfx_umbrella_open: 'sfx_whoosh', l7_sfx_box: 'l3_sfx_box_thud',
+  l7_sfx_bike_stand: 'l3_sfx_clack', l7_sfx_dog_whimper: 'l6_sfx_dog_whine', l7_sfx_shutter: 'l4_sfx_books_domino',
+  l7_sfx_window: 'sfx_hinge', l7_sfx_knock: 'l3_sfx_box_tap', l7_sfx_tv: 'sfx_sparkle', l7_sfx_wind: 'sfx_wind',
 };
 
 // opt: tham số riêng cho tiếng tổng hợp (ví dụ { step } cho tiếng xoay ống cao dần).

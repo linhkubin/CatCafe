@@ -131,6 +131,7 @@ Mọi màn kết thúc theo **cùng một cảnh**, dùng **một dáng mèo và
 
 1. **Mèo lộ diện** (khoảnh khắc riêng của từng màn), bong bóng nhiệm vụ tô màu thành mặt mèo.
 2. Con mèo **viền sáng nhẹ, nhấp nháy chậm**. Ở level 1 có thêm bàn tay hướng dẫn chỉ vào mèo; từ level 2 người chơi tự chạm.
+   **Mọi level (chủ dự án chốt 2026-11-01):** khi mèo đã chạm được để thắng, trên đầu mèo hiện **mũi tên chỉ xuống có hoạt hình** (nảy lên xuống nhẹ, lặp), đi theo đầu mèo nếu mèo cử động, để người chơi biết phải chạm vào mèo. Mũi tên tắt ngay khi chạm. Không chữ.
 3. **Người chơi chạm vào con mèo.**
 4. **Cảnh bế chung** (khoảng 2 giây, chạm để bỏ qua).
 5. **Màn hình thưởng** bằng biểu tượng (cá khô bay vào túi, thanh ♥ tăng). **Chạm bất kỳ đâu** để sang level tiếp theo (game không có chữ, nên không có nút "Next").

@@ -3,6 +3,17 @@
 Đội: **Claude** (Game Design + PM), **Art 2D** (đặc tả ảnh, chỉ đạo Codex), **Dev** (code, animation), **Codex** (chỉ vẽ).
 Mỗi level có một file thảo luận `art/review/level<N>-thread.md`; mọi quyết định ghi vào đó.
 
+## Nhiều team song song (chủ dự án chốt 2026-10-31)
+
+- Mỗi team một nhóm trên sidebar (`Team 1`, `Team 2`…), gồm GD, Dev, Art 2D cùng số: `GD 1`, `Dev 1`, `Art 2D 1`. Mỗi team làm level riêng; GD 1 kiêm PM chung (luật chung, quy trình, đồ dùng chung, xung đột code chung).
+- Nhắn tin: lấy địa chỉ mới bằng danh sách phiên trước mỗi lần gửi (phiên mở lại là đổi địa chỉ).
+- **Không agent nào tự chơi thử** (xem bước 2); mọi bản chơi được gửi chủ dự án test.
+- **Dev mỗi team một worktree / nhánh git riêng** (`l7`, `l8`…), không hai Dev cùng sửa một thư mục. Gộp về `main` lần lượt từng team, chỉ khi chủ dự án bảo.
+- Code chung (`base.js`, `objects.js`, `rooms.js`, `assets.js`, `progress.js`, `main.js`): Dev sửa thì ghi vào thread level mình để team kia biết.
+- File đặc tả chung (`levels/levels-XX-YY.md`, `states-XX-YY.md`): GD mỗi team chỉ sửa mục level của mình.
+- Máy chủ chạy thử mỗi team một cổng: Team 1 cổng 8080, Team 2 cổng 8090.
+- Lượt vẽ Codex dùng chung một gói: Art các team báo GD 1 trước khi giao lượt lớn, tránh hết lượt cùng lúc.
+
 ## 1. Đọc level, đặc tả kỹ từng đồ vật và trạng thái
 
 - GD đọc mục level trong `levels/levels-XX-YY.md` và `levels/states-XX-YY.md`, chốt các điểm gameplay còn mở.
@@ -17,7 +28,7 @@ Mỗi level có một file thảo luận `art/review/level<N>-thread.md`; mọi 
 - Bản khối phải **chơi được trọn màn**: đủ phòng và chuyển phòng, mọi đồ vật với đúng thao tác (chạm, vuốt, kéo-thả, giữ-kéo), mọi trạng thái (đổi màu/hình khối hoặc đổi nhãn), túi đồ dùng chung, đồ đánh lừa, bí mật, thang gợi ý, chạm sai, cao trào và cảnh thắng. Hiệu ứng chuyển động (rơi, bay, nảy, xoay) làm thật bằng tween để cảm được nhịp.
 - Bố cục khối theo sơ đồ phòng trong đặc tả level; cỡ khối gần đúng cỡ đồ thật để kiểm vùng chạm và độ dễ nhìn.
 - Mở bằng `?level=<N>` như màn thật (hoặc cờ `&proto=1` nếu màn đã có bản vẽ). Code dùng lại được khi thay khối bằng ảnh: đặt tên key, vị trí, lớp đúng đặc tả.
-- **GD tự chơi hết bản khối** trước, rồi gửi chủ dự án link chơi thử. Chủ dự án **duyệt gameplay** (luật, nhịp, độ khó, vị trí đồ) rồi mới sang bước 3 (bàn art) và bước 4 (vẽ demo). Góp ý gameplay sửa ngay trên bản khối, rẻ hơn nhiều so với sửa sau khi đã vẽ.
+- **Không agent nào tự chơi thử** (GD, Dev, Art; chủ dự án chốt 2026-10-31): không mở game trong trình duyệt, không chạy play_harness để chơi. Dev code xong thì báo GD (link, việc đã làm, chỗ chưa rõ); GD chốt câu hỏi rồi gửi chủ dự án link để **chủ dự án tự test**. Cần chụp ảnh hay chơi thử thì nhắn chủ dự án. Chủ dự án **duyệt gameplay** (luật, nhịp, độ khó, vị trí đồ) rồi mới sang bước 3 (bàn art) và bước 4 (vẽ demo). Góp ý gameplay sửa ngay trên bản khối, rẻ hơn nhiều so với sửa sau khi đã vẽ.
 - Kết quả đã duyệt của bản khối (vị trí, cỡ đồ, lớp) là đầu vào cho đặc tả art và demo.
 
 ## 3. Art 2D và Dev cùng phân tích yêu cầu art
@@ -52,14 +63,14 @@ Mỗi level có một file thảo luận `art/review/level<N>-thread.md`; mọi 
 
 - **Chưa duyệt thì không tách asset, không ghép vào game.**
 - Duyệt xong: Art 2D giao Codex vẽ từng tờ (mỗi lượt vẫn kèm demo đã duyệt + ảnh mẫu level 1, theo **Quy tắc giữ màu** ở bước 4), kiểm màu rồi mới cắt bằng `tools/sheet_cut.py`.
-- Dev ráp vào game, đo vị trí theo demo, chơi thử, chụp ảnh để GD/PM kiểm.
+- Dev ráp vào game, đo vị trí theo demo (không tự chơi thử), báo GD; chủ dự án tự test.
 - **Demo đã duyệt là chuẩn duy nhất (G4-22, sau lỗi duyệt level 4):**
   - Art vẽ tờ: lời giao việc của mỗi đồ kèm **ảnh cắt đúng món đó từ demo đã duyệt** và câu "vẽ lại đúng món này: cùng hình dáng, tỉ lệ, màu, chi tiết". Không tự thiết kế lại.
   - **Mọi lượt tách ảnh (vẽ tờ, ảnh lẻ, nền) đều gửi kèm ẢNH DEMO GỐC đã duyệt của phòng đó** (nguyên ảnh `art/out/demo/l<N>_demo_*.png`, không chỉ ảnh cắt), để Codex thấy món đồ nằm trong cảnh: cỡ so với đồ xung quanh, màu, nét, ánh sáng. Lời giao việc ghi rõ "ảnh demo gốc: <đường dẫn>, món cần vẽ nằm ở <vị trí trong demo>". Thiếu ảnh demo gốc thì lượt vẽ coi như hỏng (chủ dự án chốt, G4-26).
   - **Gom món theo demo (chủ dự án chốt, G5-23):** mỗi lượt Codex gửi **một lần ảnh demo** của phòng và giao **tối đa 7 món** cần tách, ra **7 ảnh riêng** (mỗi món một ảnh). Phòng có hơn 7 món thì chia làm 2 lượt (hoặc nhiều hơn), mỗi lượt ≤ 7. Quan trọng nhất là **prompt kỹ từng món**: món nằm ở đâu trong demo (toạ độ/vùng), gồm phần nào, **không lấy** phần nào (đồ chồng lên, bóng, đồ phía sau), trạng thái nào, cỡ ra bao nhiêu. Các trạng thái khác của cùng món (không có trong demo) ghi rõ là "chỉnh sửa từ món vừa tách, chỉ đổi <phần>".
   - **Cùng một món ở nhiều trạng thái hoặc nhiều chỗ** (vali lúc gấp và lúc trên tháp, sách rơi và chồng sách và sách trên tháp, gối trên giường và trên tháp…) phải **cùng thiết kế, cùng màu**; vẽ chung một tờ.
   - Dev đặt đồ: vị trí và cỡ đo trên demo; mỗi phòng **chồng ảnh game lên demo** (play_harness `compare`) và sửa tới khi khớp.
-  - **Không ai báo xong bằng ảnh ghép tĩnh.** Art và Dev gửi GD ảnh chụp **trong game** từng phòng đặt cạnh demo, mọi trạng thái chính (trước/sau khi chạm, cao trào). **GD tự mở game chơi hết màn**, soi từng đồ với demo, rồi mới báo chủ dự án.
+  - **Không ai báo xong bằng ảnh ghép tĩnh.** Art và Dev gửi GD ảnh chụp **trong game** từng phòng đặt cạnh demo, mọi trạng thái chính (trước/sau khi chạm, cao trào). Không agent nào tự chơi thử: cần ảnh trong game hay chơi thử thì nhắn chủ dự án test (chủ dự án chốt 2026-10-31).
 - Commit bằng tiếng Việt và push. **Chỉ đăng lên link online khi chủ dự án yêu cầu.**
 
 ## 6. Tối ưu dung lượng và dùng lại (chủ dự án chốt 2026-10-30, áp từ nay cho mọi màn)
@@ -74,6 +85,6 @@ Mỗi level có một file thảo luận `art/review/level<N>-thread.md`; mọi 
 
 **Dev: tách code dùng lại, không chép code**
 - Logic giống nhau giữa các màn (chuyển phòng, túi đồ, kéo-thả, phản ứng nhân vật, bong bóng, rung/nhún, tia sáng, khối tạm…) **đưa vào code chung** (`base.js`, `rooms.js`, `objects.js` hoặc file chung mới), các màn gọi lại. **Không copy một đoạn code sang màn khác rồi sửa.**
-- Gặp đoạn đã bị chép ở nhiều màn thì gom về một chỗ khi sửa tới nó. Màn cũ phải chạy y như trước sau khi gom (chơi thử lại các màn bị đụng).
+- Gặp đoạn đã bị chép ở nhiều màn thì gom về một chỗ khi sửa tới nó. Màn cũ phải chạy y như trước sau khi gom (báo chủ dự án các màn bị đụng để test lại).
 - Ảnh dùng lại giữa các màn: nạp chung một key, không nhân bản file.
 - Mỗi lần build, Dev báo tổng dung lượng bản build và ảnh lớn nhất để GD theo dõi.

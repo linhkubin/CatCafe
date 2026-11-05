@@ -1,10 +1,13 @@
 // Level 6 – Xuống đây nào, Mun! (G6-1). Bản chơi thử bằng khối (QUY-TRINH bước 2): nền sân sau L5 thật, đồ là khối có nhãn.
 // Luồng theo levels/levels-01-10.md và levels/states-01-10.md (Level 6). Một phòng: sân sau nhà hàng xóm.
-// Mun kẹt trên mái nhà kho, chó Lu sủa dưới. Xương (bụi rau) → Lu về chuồng gặm → xúc xích (giỏ picnic) → kéo 4 món trong cảnh
-// thành đường xuống (phuy → A, hộp dụng cụ đậy phuy, thùng gỗ → B, ghế đẩu → C) → thả xúc xích lên bàn → Mun xuống từng bậc, nhảy lên bàn ăn → chạm thắng (G6-5).
+// Mun kẹt trên mái nhà kho, chó Lu sủa dưới. Xương (bụi rau) → Lu về chuồng gặm → cá nướng (giỏ picnic) → kéo 4 món trong cảnh
+// thành đường xuống (phuy → A, hộp dụng cụ đậy phuy, thùng gỗ → B, ghế đẩu → C) → thả cá nướng lên bàn → Mun xuống từng bậc, nhảy lên bàn ăn → chạm thắng (G6-5).
 import { D } from './base.js';
 import { ObjectLevel } from './objects.js';
 import { PAL, rr, el, label, block } from './blocks.js';
+
+const FISH_DX = 5, FISH_DY = -6; // G6-30: cá lệch lên trên, sang phải một chút so với tâm đĩa
+const PLATE_DY = 38; // G6-29: đĩa hạ xuống so với chỗ đứng trên mặt bàn
 
 // Vị trí (toạ độ khung 1024x1536, neo theo ảnh tạm: đa số giữa đáy). Sân: hàng rào tới y ≈ 872, đất bên dưới.
 const DEF = {
@@ -17,7 +20,7 @@ const DEF = {
   // mép mái trái x ≈ 580. Mun nằm mái và ống khói hạ theo mặt mái (−66).
   // Ghép ảnh thật: kho vẽ lại (A6-11) đặt cho đỉnh mái trùng demo (y 447), mép trái 522; Mun nằm mái như demo.
   l6_shed: [802, 906], l6_shed_chimney: [965, 455], mun_roof_crouch: [720, 474],
-  // G6-5: bàn sát cạnh trái ghế đẩu ở chỗ C, giỏ ở mép trái mặt bàn, chỗ trống bên phải đặt xúc xích.
+  // G6-5: bàn sát cạnh trái ghế đẩu ở chỗ C, giỏ ở mép trái mặt bàn, chỗ trống bên phải đặt cá nướng.
   // G6-18: bàn rộng 320 nhích phải 30 (khỏi lọt mép trái). G6-19: bàn thấp 228 (1,2 Hm), chân bàn xuống 23 (1040 → 1063) để
   // mặt bàn 835 ngang mặt ghế ở C; ghế vẫn đứng trước bàn (chân ghế 1065).
   // Bàn Art vẽ thấp hơn bàn trong demo: đặt theo mặt bàn (y ≈ 810 như demo), giỏ trên mặt bàn như demo.
@@ -56,12 +59,13 @@ const INTRO_LOOP = [[1450, 1430], [-420, 1430], [-420, 1000], [450, 1000]];
 const LU_BRAKE = [480, 1005];                        // G6-14: Lu phanh trên dải sau, ngẩng nhìn Mun nhảy lên thùng gỗ
 // G6-22: Lu ngậm xương về chuồng theo một đường cong liền vòng sát mép trái chuồng ra trước cửa (đáy), tốc độ đều.
 const DOG_DOOR = [[700, 975], [640, 1060], [650, 1170], [740, 1240], [864, 1255]];
-const TREAT_DX = 0;                                   // G6-22: xúc xích giữa mặt bàn
-const EAT_MOUTH = [62, -16];                           // G6-22: miệng Mun ăn (dáng nhìn phải) so với chân; Mun đứng sao cho miệng ở xúc xích
+const TREAT_DX = 0;                                   // G6-22: cá nướng giữa mặt bàn
+const EAT_MOUTH = [62, -16];                           // G6-22: miệng Mun ăn (dáng nhìn phải) so với chân; Mun đứng sao cho miệng ở cá nướng
 const TABLE_LEGS = [150, 230, 68];                     // G6-24: kéo dài chân bàn: hàng ảnh 150–230 (chân) dài thêm 68 px ảnh (≈ 50 trên màn), mặt bàn giữ nguyên
 const JUMP_ARC = 90;                                   // G6-24: ghế → bàn: vồng cao, rõ là nhảy lên
 const STEP_ARC = 40;                                   // G6-2, G6-21: mỗi bậc nhảy vồng mềm (cung thấp, ease in-out), đáp nhún nhẹ
 const MUN_BACK = 30;                                    // G6-27: chạm Mun trên mái: lùi theo x, ngược hướng đang nhìn (về sau mái), rồi về chỗ cũ
+const CHEW_SWAY = 4;                                    // G6-28: Lu gặm: lắc đầu ±4°
 const CRATE_K = 0.95;                                   // G6-27: thùng gỗ nhỏ lại (neo đáy giữ nguyên)
 const BASKET_AT = [18, 24];                             // G6-27: giỏ trên nắp thùng: lệch phải 18, đáy giỏ dưới mép trên thùng 24
 const DOG_FRONT_Y = 1110;                               // G6-25: Lu đi quanh chuồng: chân dưới mức này (gần cửa) vẽ trước chuồng, trên mức này vẽ sau chuồng
@@ -70,7 +74,7 @@ const BASKET_K = 0.75;                                  // G6-25, G6-26: giỏ p
 const ROOF_LEFT = true;                                 // G6-26: Mun trên mái quay mặt sang trái
 const GLOVE_FALLEN = [418, 905];                     // găng rơi xuống đất ngay dưới chỗ vắt trên hàng rào, nằm yên ở đó
 const GLOVE_DOG = [540, 960];                         // chỗ Lu đứng ngửi găng: chân trên mặt sân cạnh găng (găng nằm yên)
-const DOG_BEG = [380, 1110];                           // Lu chồm tới bàn đòi xúc xích
+const DOG_BEG = [380, 1110];                           // Lu chồm tới bàn đòi cá nướng
 
 const dogBody = (txt, pose) => (c, w, h) => {          // Lu khối: thân + đầu + tai, nhãn tư thế
   if (pose === 'lie') { el(c, w * 0.45, h * 0.62, w * 0.42, h * 0.32, PAL.dog); el(c, w * 0.82, h * 0.42, h * 0.3, h * 0.3, PAL.dog); }
@@ -114,7 +118,9 @@ const FB = {
   l6_picnic_basket_closed: block(140, 115, PAL.yellow, 'GIỎ\nPICNIC', { size: 16 }),
   l6_picnic_basket_open: block(140, 130, PAL.yellow, 'GIỎ MỞ', { size: 16, draw: (c, w) => rr(c, 6, 0, w - 12, 18, PAL.cream, 6) }),
   l6_bone: block(110, 48, PAL.cream, 'XƯƠNG', { r: 18, size: 15 }),
-  l6_sausage: block(110, 44, PAL.red, 'XÚC XÍCH', { r: 16, size: 13 }),
+  // G6-28: cá nướng cả con nằm ngang thay xúc xích; đĩa trắng tròn đặt sẵn giữa mặt bàn (gợi ý chỗ đặt cá).
+  l6_grilled_fish: block(130, 46, PAL.wood, 'CÁ NƯỚNG', { r: 20, size: 13 }),
+  l6_plate: block(200, 60, PAL.white, '', { shape: 'ellipse', draw: (c, w, h) => el(c, w / 2, h / 2, w / 2 - 22, h / 2 - 12, PAL.cream) }),
   // G6-9: Lu ngồi rộng ≈ 300 (to hơn Mun rõ), chuồng to theo.
   // A6-2: chuồng 340 × 300, cửa rộng ≈ 220 cho Lu chui vừa.
   // G6-13: chuồng 250 × 220 (vừa đủ Lu chui), cửa ≈ 160.
@@ -165,7 +171,7 @@ export class Level6 extends ObjectLevel {
 
   resetLevel() {
     Object.assign(this, { secrets: 0, dogState: 'bark', placed: {}, sausageOn: false, munHidden: false, nestDone: false, canDone: false,
-      gloveDown: false, introT0: 0 });
+      gloveDown: false, introT0: 0, chewSway: null, chewLoop: null });
   }
 
   // Mun nằm rạp trên mái: tai cụp khi Lu còn sủa, tai dựng khi Lu đã gặm (G6-9).
@@ -201,7 +207,7 @@ export class Level6 extends ObjectLevel {
       { name: 'crate', key: 'l6_crate', depth: 12, zone: D.zone + 4, tap: (p) => this.stepTap(p) },
       { name: 'stool', key: 'l6_stool', depth: 13, zone: D.zone + 4, tap: (p) => this.stepTap(p) },
     ]);
-    // G6-22: bàn to ×1,1 (neo chân giữ nguyên); mặt bàn, chỗ xúc xích, chỗ Mun ăn tính theo phần vẽ mới.
+    // G6-22: bàn to ×1,1 (neo chân giữ nguyên); mặt bàn, chỗ cá nướng, chỗ Mun ăn tính theo phần vẽ mới.
     // G6-24: chân bàn dài hơn, mặt bàn cao thêm ≈ 50.
     this.tallTable(this.table);
     { const t = this.table; t.base *= 1.1; t.baseY *= 1.1; t.setScale(t.base, t.baseY); this.zoneTo('table', t); }
@@ -211,14 +217,16 @@ export class Level6 extends ObjectLevel {
       const cr = this.artRect(this.crate); b.setPosition(this.crate.x + BASKET_AT[0], cr.top + BASKET_AT[1]); this.attachTo(b, this.crate);
       this.zones.basket.setDepth(D.zone + 6); this.zoneTo('basket', this.basket); }
     this.groundDepths();
-    // Mun trên mái (lớp dưới ống khói để lùi ra sau), Lu, món nhặt, xúc xích trên bàn.
+    // Mun trên mái (lớp dưới ống khói để lùi ra sau), Lu, món nhặt, cá nướng trên bàn.
     this.mun = this.img('mun_roof_crouch', ...P('mun_roof_crouch'), this.shed.depth + 0.01).setVisible(false);
     this.zone('mun', this.artRect(this.mun), D.zone + 5).disableInteractive();
     this.dog = this.img('l6_dog_bark', -300, P('l6_dog_bark')[1], 14);
     this.zone('dog', this.artRect(this.dog), D.zone + 4).disableInteractive();
     this.bone = this.img('l6_bone', 0, 0, this.veggie.depth + 0.01).setVisible(false);
-    this.sausage = this.img('l6_sausage', 0, 0, this.basket.depth + 0.01).setVisible(false);
-    this.treat = this.img('l6_sausage', 0, 0, this.table.depth + 0.02).setVisible(false); // xúc xích đặt trên bàn (G6-5)
+    this.sausage = this.img('l6_grilled_fish', 0, 0, this.basket.depth + 0.01).setVisible(false);
+    this.treat = this.img('l6_grilled_fish', 0, 0, this.table.depth + 0.02).setVisible(false); // cá nướng đặt trên bàn (G6-5)
+    { const [px, py] = this.tableTreat; // G6-28: đĩa đặt sẵn giữa mặt bàn, dưới cá; G6-29: hạ xuống PLATE_DY cho nằm trên mặt bàn
+      this.plate = this.img('l6_plate', px, py + PLATE_DY, this.table.depth + 0.015); }
     this.player = this.img('player_call', ...P('player_call'), D.player).setVisible(false);
 
     // 4 món xếp đường: kéo trong cảnh (hàm chung sceneDraggable, objects.js). Mỗi chỗ chỉ nhận đúng món; hộp dụng cụ sau phuy.
@@ -239,7 +247,7 @@ export class Level6 extends ObjectLevel {
 
   // ---------- lớp trước sau theo chiều sâu (G6-13) ----------
   // Đồ đứng trên mặt sân và con vật đang đi trên mặt sân: lớp theo y chân (y-sort), chân thấp hơn (gần người chơi) vẽ trước.
-  // Đồ nằm trên đồ khác theo lớp đồ đỡ nó (giỏ, xúc xích trên bàn; hộp dụng cụ trên phuy; Mun trên mái, trên bậc, trên bàn).
+  // Đồ nằm trên đồ khác theo lớp đồ đỡ nó (giỏ, cá nướng trên bàn; hộp dụng cụ trên phuy; Mun trên mái, trên bậc, trên bàn).
   yDepth(y) { return 5 + y / 100; }
 
   ySort(s, off = 0) { return s.setDepth(this.yDepth(s.y) + off); }
@@ -394,6 +402,7 @@ export class Level6 extends ObjectLevel {
     this.busy.dog = true;
     this.sfx('l6_sfx_dog_whine');
     const d = this.dog, door = this.P('l6_dog_chew');
+    this.chewHappyStop(); // G6-28: lăn khoe bụng thì tạm dừng lắc đầu, nhún
     this.applyKey(d, 'l6_dog_belly');
     d.setPosition(...door);
     this.ySort(d, 0.02);
@@ -404,6 +413,7 @@ export class Level6 extends ObjectLevel {
         this.face(d, false).setPosition(...door).setDepth(this.chewDepth); // ảnh gặm không lật: mũi giữa cửa
         this.zoneTo('dog', d);
         this.busy.dog = false;
+        this.chewHappyStart();
       } }));
     } });
   }
@@ -419,16 +429,16 @@ export class Level6 extends ObjectLevel {
     this.zones.veggie.setInteractive(); // vẫn lắc khi chạm lại
   }
 
-  // 🔑 Giỏ picnic trên nắp thùng gỗ (G6-22): nắp bật, xúc xích bay vào túi; giỏ bay nhẹ lên 60 và mờ dần biến mất (0,6 giây).
+  // 🔑 Giỏ picnic trên nắp thùng gỗ (G6-22): nắp bật, cá nướng bay vào túi; giỏ bay nhẹ lên 60 và mờ dần biến mất (0,6 giây).
   basketTap() {
-    if (this.got.l6_sausage) return;
+    if (this.got.l6_grilled_fish) return;
     const b = this.basket;
     this.sfx('l6_sfx_basket');
     this.detach(b);
     this.basketPose('l6_picnic_basket_open');
     const r = this.artRect(b);
     this.sausage.setPosition(r.centerX, r.top + 10).setDepth(b.depth + 0.01).setVisible(true);
-    this.pickUp('l6_sausage', this.sausage, 'basket');
+    this.pickUp('l6_grilled_fish', this.sausage, 'basket');
     this.tweens.add({ targets: b, y: b.y - 60, alpha: 0, duration: 600, ease: 'Sine.out', onComplete: () => b.setVisible(false) });
   }
 
@@ -563,7 +573,7 @@ export class Level6 extends ObjectLevel {
       { when: () => this.dogState === 'bark', rect: () => this.padRect(this.artRect(this.dog), 40), want: () => 'l6_bone',
         place: (it) => this.giveBone(it) },
       // Món kéo nằm trên ngón tay 70px: vùng bàn kéo dài lên trên 70 và gộp cả ghế đẩu ở chỗ C (đứng sát mép phải bàn).
-      { when: () => !this.sausageOn, rect: () => this.tableDropRect(), want: () => 'l6_sausage',
+      { when: () => !this.sausageOn, rect: () => this.tableDropRect(), want: () => 'l6_grilled_fish',
         place: (it) => this.sausageToTable(it) },
     ];
   }
@@ -576,10 +586,10 @@ export class Level6 extends ObjectLevel {
 
   padRect(r, p) { return new Phaser.Geom.Rectangle(r.x - p, r.y - p, r.width + 2 * p, r.height + 2 * p); }
 
-  // Xúc xích thả chỗ khác (đất, thùng gỗ, ghế…): bay về túi, bàn lấp lánh.
+  // Cá nướng thả chỗ khác (đất, thùng gỗ, ghế…): bay về túi, bàn lấp lánh.
   onBagDrop(it, x, y) {
     if (super.onBagDrop(it, x, y)) return true;
-    if (it.key !== 'l6_sausage') return false;
+    if (it.key !== 'l6_grilled_fish') return false;
     this.bagReturn(it);
     this.sparkle(this.table);
     return true;
@@ -608,7 +618,7 @@ export class Level6 extends ObjectLevel {
       if (!this.busy.mun) this.roofPose(this.crouchKey); // Mun dựng tai
       this.zoneTo('dog', this.dog);
       this.zones.dog.setInteractive();
-      this.chewLoop = this.time.addEvent({ delay: 1600, loop: true, callback: () => { if (!this.frozen) this.sfx('l6_sfx_dog_chew', 0.5); } });
+      this.chewHappyStart();
       this.time.delayedCall(300, () => this.munPeek('look', 1000));
       } });
     });
@@ -635,16 +645,18 @@ export class Level6 extends ObjectLevel {
     this.moveTo(s, p[0], p[1], ms, { ease: 'Linear', onUpdate: () => this.ySort(s), onComplete: () => this.walkPath(s, rest, speed, done) });
   }
 
-  // Thả xúc xích lên bàn (G6-5). Lu rảnh: Lu chồm đòi, xúc xích về túi. Đủ 4 bậc: Mun xuống ăn. Thiếu: Mun ra mép kêu, xúc xích ở lại.
+  // Thả cá nướng lên bàn (G6-5). Lu rảnh: Lu chồm đòi, cá nướng về túi. Đủ 4 bậc: Mun xuống ăn. Thiếu: Mun ra mép kêu, cá nướng ở lại.
   sausageToTable(it) {
     if (this.dogState !== 'chew') { this.dogBeg(it); return; }
     this.bagRemove(it, false);
     this.sausageOn = true;
-    // G6-22: cỡ bằng xúc xích đang cầm khi kéo (icon túi ×1,3), đặt giữa mặt bàn.
-    const fr = this.textures.get('l6_sausage').get(this.iconFrame('l6_sausage'));
-    const k = (116 / Math.max(fr.cutWidth, fr.cutHeight)) * 1.3;
+    // G6-22: cỡ bằng cá nướng đang cầm khi kéo (icon túi ×1,3), đặt giữa mặt bàn.
+    const fr = this.textures.get('l6_grilled_fish').get(this.iconFrame('l6_grilled_fish'));
+    const k = (116 / Math.max(fr.cutWidth, fr.cutHeight)) * 0.75; // G6-29: cá trên đĩa nhỏ lại, rộng khoảng 70% đĩa
     this.treat.base = this.treat.baseY = k;
     this.treat.setScale(k).setPosition(...this.tableTreat).setVisible(true);
+    { const pr = this.artRect(this.plate), fr2 = this.artRect(this.treat); // G6-28: cá nằm giữa đĩa
+      this.treat.x += pr.centerX - fr2.centerX + FISH_DX; this.treat.y += pr.centerY - fr2.centerY + FISH_DY; }
     this.squash(this.treat);
     this.sfx('l6_sfx_sausage_drop');
     if (this.allSteps()) this.time.delayedCall(400, () => this.revealDown());
@@ -716,19 +728,19 @@ export class Level6 extends ObjectLevel {
     this.applyKey(t, key);
   }
 
-  // G6-5, G6-19, G6-24: từ ghế nhảy lên mặt bàn (cao hơn mặt ghế), đáp giữa bàn chỗ xúc xích. Lộ diện ngay khi Mun lên bàn.
+  // G6-5, G6-19, G6-24: từ ghế nhảy lên mặt bàn (cao hơn mặt ghế), đáp giữa bàn chỗ cá nướng. Lộ diện ngay khi Mun lên bàn.
   jumpToTable() {
     const m = this.mun;
     // G6-24: mặt bàn cao hơn mặt ghế ≈ 100: nhún sâu lấy đà rồi phóng lên (dáng vồ, đầu ngóc lên), vồng cao, đáp mun_land.
     this.tweens.add({ targets: m, scaleY: m.baseY * 0.84, scaleX: m.base * 1.04, duration: 170, yoyo: true, hold: 60, onComplete: () => {
-      // G6-19, G6-23: dáng vồ (mun_pounce, chưa có thì mun_hop_down) quay về phía bàn. Miệng Mun ngay chỗ xúc xích giữa bàn.
+      // G6-19, G6-23: dáng vồ (mun_pounce, chưa có thì mun_hop_down) quay về phía bàn. Miệng Mun ngay chỗ cá nướng giữa bàn.
       const [tx, ty] = this.tableTreat, ex = tx - EAT_MOUTH[0];
       this.munPose(m, this.has('mun_pounce') ? 'mun_pounce' : 'mun_hop_down', 'mun_step_down', ex);
       const up = (ex < m.x ? 1 : -1) * 12; // ngóc đầu lên khi phóng, thẳng lại lúc đáp
       this.tweens.add({ targets: m, angle: up, duration: 200, yoyo: true, hold: 60, ease: 'Sine.out' });
       this.sfx('sfx_whoosh', 0.5);
       this.moveTo(m, ex, ty, 480, { ease: 'Sine.out', arc: JUMP_ARC, onComplete: () => { m.setAngle(0); this.munLand(m, () => {
-        m.setDepth(this.table.depth + 0.03); // ngồi trên bàn: trên bàn, giỏ, xúc xích
+        m.setDepth(this.table.depth + 0.03); // ngồi trên bàn: trên bàn, giỏ, cá nướng
         this.phase = 'found';
         this.sua = m;
         this.sfx(this.catMeow);
@@ -740,12 +752,12 @@ export class Level6 extends ObjectLevel {
     } });
   }
 
-  // Ngấu nghiến xúc xích cạnh giỏ, liếm mép, ngẩng nhìn. Lu ngẩng đầu khỏi khúc xương (G6-3): Mun xù lông 0,5 giây rồi ngồi yên.
+  // Ngấu nghiến cá nướng cạnh giỏ, liếm mép, ngẩng nhìn. Lu ngẩng đầu khỏi khúc xương (G6-3): Mun xù lông 0,5 giây rồi ngồi yên.
   munEat() {
     const m = this.mun;
     this.applyKey(m, 'mun_eat');
     this.face(m, false); // quay mặt về phía mặt bàn trống bên phải (giỏ ở bên trái)
-    // Xúc xích giữa bàn ngay trước miệng, vẽ trên Mun (không bị thân che) để thấy rõ đang ăn.
+    // Cá nướng giữa bàn ngay trước miệng, vẽ trên Mun (không bị thân che) để thấy rõ đang ăn.
     this.treat.setDepth(m.depth + 0.01).setVisible(true);
     this.tweens.add({ targets: this.treat, scale: this.treat.base * 0.6, duration: 1500, ease: 'Sine.in' }); // ăn dần: nhỏ đều cả hai chiều (G6-27)
     this.tweens.add({ targets: m, angle: { from: -4, to: 4 }, duration: 150, yoyo: true, repeat: 4, onComplete: () => {
@@ -768,20 +780,48 @@ export class Level6 extends ObjectLevel {
   }
 
   beforeEnding() {
-    if (this.chewLoop) this.chewLoop.remove();
+    this.chewHappyStop();
+  }
+
+  // G6-28: Lu gặm sung sướng: đầu lắc ±CHEW_SWAY° quanh chân ảnh (dưới cằm), 0,5 giây một nhịp; 3–5 giây nhún nảy một cái
+  // kèm tim nhỏ bay lên mờ dần và tiếng gặm. Chạy từ lúc Lu vào chuồng gặm tới hết màn; dừng khi Lu lăn khoe bụng.
+  chewHappyStart() {
+    this.chewHappyStop();
+    const d = this.dog.setAngle(-CHEW_SWAY);
+    this.chewSway = this.tweens.add({ targets: d, angle: CHEW_SWAY, duration: 500, yoyo: true, repeat: -1, ease: 'Sine.inOut' });
+    const next = () => (this.chewLoop = this.time.delayedCall(Phaser.Math.Between(3000, 5000), () => { this.chewBounce(); next(); }));
+    next();
+  }
+
+  chewHappyStop() {
+    if (this.chewSway) { this.chewSway.remove(); this.chewSway = null; }
+    if (this.chewLoop) { this.chewLoop.remove(); this.chewLoop = null; }
+    if (this.dog) this.dog.setAngle(0).setScale(this.dog.base, this.dog.baseY);
+  }
+
+  chewBounce() {
+    const d = this.dog, r = this.artRect(d);
+    this.tweens.add({ targets: d, scaleY: { from: d.baseY * 0.96, to: d.baseY }, duration: 260, ease: 'Back.out' });
+    this.sfx('l6_sfx_dog_chew', 0.5);
+    for (let i = 0; i < 3; i++) {
+      const h = this.img('ui_heart', r.centerX + (i - 1) * 34, r.top + 10, d.depth + 0.01).setOrigin(0.5, 0.5);
+      this.fitWidth(h, 26).setAlpha(0.9);
+      this.tweens.add({ targets: h, x: h.x + (i - 1) * 14, y: h.y - 70 - i * 10, alpha: 0, duration: 900, delay: i * 120, ease: 'Sine.out',
+        onComplete: () => h.destroy() });
+    }
   }
 
   // ---------- gợi ý ----------
-  // Bước kế tiếp: bụi rau → cho Lu xương → giỏ picnic → món xếp đường còn thiếu (theo thứ tự) → xúc xích lên bàn.
+  // Bước kế tiếp: bụi rau → cho Lu xương → giỏ picnic → món xếp đường còn thiếu (theo thứ tự) → cá nướng lên bàn.
   hintStep() {
     if (this.phase === 'found') return { sprite: this.mun };
     if (this.phase !== 'search') return null;
     if (!this.got.l6_bone) return { sprite: this.veggie };
     if (this.dogState === 'bark') { const it = this.bagItem('l6_bone'); return it ? { item: it, to: this.tipOf(this.dog) } : null; }
-    if (!this.got.l6_sausage) return { sprite: this.basket };
+    if (!this.got.l6_grilled_fish) return { sprite: this.basket };
     const k = STEPS.find((n) => !this.placed[n]);
     if (k) return { drag: k, to: this.sceneSpotCenter(k, SPOT[k]) };
-    const it = this.bagItem('l6_sausage');
+    const it = this.bagItem('l6_grilled_fish');
     return it ? { item: it, to: this.tableTreat } : null;
   }
 

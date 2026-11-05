@@ -6,7 +6,13 @@ import { Level3 } from './level3.js';
 import { Level4 } from './level4.js';
 import { Level5 } from './level5.js';
 import { Level6 } from './level6.js';
+import { Level7 } from './level7.js';
+import { Level8 } from './level8.js';
+import { Level9 } from './level9.js';
+import { Level10 } from './level10.js';
 import { Menu, LEVELS, startLevel } from './menu.js';
+import './fps.js'; // ?fps=1: bộ đếm FPS debug
+import './grid.js'; // ?grid=1: lưới toạ độ đỏ debug
 
 const W = 1024, STD_H = 1820, MAX_H = 2304, MAX_W = 1365;
 
@@ -64,7 +70,7 @@ async function start() {
     backgroundColor: '#2b2420',
     scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH, width: gameSize()[0], height: gameSize()[1] },
     input: { activePointers: 2 },
-    scene: [Boot, Menu, Level1, Level2, Level3, Level4, Level5, Level6],
+    scene: [Boot, Menu, Level1, Level2, Level3, Level4, Level5, Level6, Level7, Level8, Level9, Level10],
     callbacks: { preBoot: (g) => { g.registry.set('assets', assets); } },
   });
   window.addEventListener('resize', () => {

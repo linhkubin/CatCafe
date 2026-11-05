@@ -10,6 +10,12 @@
 //   aspect('2:3') về khung 1024x1536 cũ; aspect('3:4') khung rộng 1365x1820, aspect('9:19.5') khung dài 1024x2219 (G-SCREEN).
 const g = window.__meoGame;
 g.loop.sleep();
+// Khung trình duyệt ẩn: bỏ sự kiện 'hidden' của game (màn tự tạm dừng, chạm giả lập có thể trúng nút về menu).
+if (!g.events.__noHidden) {
+  const emit = g.events.emit;
+  g.events.emit = function (e, ...a) { return e === 'hidden' ? false : emit.call(this, e, ...a); };
+  g.events.__noHidden = true;
+}
 Phaser.Tweens.TweenManager.prototype.getDelta = function () { return 16.67; };
 const mc = new MessageChannel();
 const tick = () => new Promise((r) => { mc.port1.onmessage = () => r(); mc.port2.postMessage(0); });

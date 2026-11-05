@@ -26,6 +26,7 @@ export const SWIPE = 40;               // px: dài hơn là vuốt
 // tâm 4 ô x 205/348/492/635, ô rộng 136. Không đọc từ bảng vị trí từng level.
 export const BAG = { barX: 409, barW: 688, slotX: [205, 348, 492, 635], slotW: 136 };
 export const CREAM = 0xfffcf4, BROWN = 0x6b4a3a, SUN = 0xfce39a;
+export const CAT_ARROW = 100;          // chiều cao mũi tên chỉ xuống trên đầu mèo Lộ diện (kết màn chung bước 2)
 export const BUBBLE_CORNER = 0.27;     // cỡ bong bóng mèo "?" khi nằm ở góc trên (so với cỡ giữa màn hình)
 
 // Ảnh thật chưa có điểm neo trong anchors.json: suy neo từ cột Neo, tỉ lệ từ cột Hiển thị của design-art.
@@ -632,10 +633,10 @@ export class BaseLevel extends Phaser.Scene {
   // Tay hướng dẫn chỉ vào mèo tới lần chạm kế tiếp (suaHand: L1, L2; từ L3 không chỉ, nút 💡 vẫn chỉ được).
   get suaHand() { return true; }
 
-  // Ảnh `mun_held` neo đỉnh (A5-13); cảnh bế chung cần neo ở nách (điểm hai tay nắm), như `sua_held`. Dùng chung L5, L6 (G6-26).
+  // Ảnh `mun_held` neo đỉnh (A5-13); cảnh bế chung cần neo ở nách (điểm hai tay nắm), như `sua_held`. Dùng chung L5, L6 (G6-26). L7 mun_held_towel cùng khung (đo: nách cùng tỉ lệ).
   fixHeldAnchor(key) {
     const he = this.A.entries[key];
-    if (key !== 'mun_held' || !he || !he.real || !this.textures.exists(key) || he.ay >= 30) return;
+    if ((key !== 'mun_held' && key !== 'mun_held_towel') || !he || !he.real || !this.textures.exists(key) || he.ay >= 30) return;
     const src = this.textures.get(key).getSourceImage();
     Object.assign(he, { ax: src.width / 2, ay: Math.round(src.height * HELD_PIT) });
   }
@@ -650,12 +651,76 @@ export class BaseLevel extends Phaser.Scene {
   // Mèo lộ diện phát sáng nhẹ (sáng lên rồi thở đều) tới khi được bế.
   // Viền sáng nhịp nhàng quanh chỗ lộ diện (mèo, hoặc chỗ trốn như giỏ L2, hộp L3); startEnding gỡ đúng vật đó.
   glowOn(s = this.sua) {
+    this.catArrowOn(s); // mũi tên chỉ mèo (kết màn chung bước 2), cả khi không có viền sáng (không WebGL)
     if (this.renderer.type !== Phaser.WEBGL || !s.preFX || this.glow) return;
     this.glowAt = s;
     this.glow = s.preFX.addGlow(SUN, 0, 0, false, 0.1, 14);
     this.tweens.add({ targets: this.glow, outerStrength: 4, duration: 700, onComplete: () => {
       this.glowTw = this.tweens.add({ targets: this.glow, outerStrength: 1.5, duration: 1000, yoyo: true, repeat: -1 });
     } });
+  }
+
+  // Kết màn chung bước 2 (leveldesign "Kết màn chung"): mèo Lộ diện (chạm được để thắng) thì trên đầu có mũi tên chỉ xuống,
+  // nảy lên xuống nhẹ và phồng nhẹ lặp liên tục, đi theo đỉnh đầu mèo (cử động, đổi dáng); tắt ngay khi chạm mèo (startEnding).
+  // glowOn tự gọi; màn bật viền sáng riêng (L1) thì tự gọi. s: sprite mèo (hoặc chỗ trốn đang phát sáng, như giỏ L2, hộp L3).
+  catArrowOn(s) {
+    if (this.catArrow || !s) return;
+    if (!this.textures.exists('ui_room_arrow')) { // thiếu ảnh: mũi tên kem viền nâu vẽ bằng code, cùng dáng ảnh (nằm ngang, chỉ phải)
+      const g = this.make.graphics({ add: false });
+      g.fillStyle(BROWN, 1).fillPoints([{ x: 4, y: 34 }, { x: 96, y: 34 }, { x: 96, y: 6 }, { x: 156, y: 70 }, { x: 96, y: 134 }, { x: 96, y: 106 }, { x: 4, y: 106 }], true);
+      g.fillStyle(CREAM, 1).fillPoints([{ x: 14, y: 44 }, { x: 106, y: 44 }, { x: 106, y: 30 }, { x: 142, y: 70 }, { x: 106, y: 110 }, { x: 106, y: 96 }, { x: 14, y: 96 }], true);
+      g.generateTexture('ui_room_arrow', 160, 140);
+      g.destroy();
+    }
+    const a = this.catArrow = this.add.image(0, 0, 'ui_room_arrow').setOrigin(0.5, 0.5).setAngle(90).setDepth(D.hint).setAlpha(0);
+    a.base = CAT_ARROW / a.width; // ảnh nằm ngang: bề rộng ảnh thành chiều cao mũi tên khi xoay chỉ xuống
+    a.setScale(a.base).setTint(0xffd27a); // ấm, nổi trên tường sáng và lông tối; viền nâu giữ nguyên tông UI
+    a.catS = s;
+    this.catArrowFollow();
+    this.tweens.add({ targets: a, alpha: 1, duration: 250 });
+    this.events.on('update', this.catArrowFollow, this);
+    this.events.once('shutdown', this.catArrowOff, this);
+  }
+
+  catArrowOff() {
+    this.events.off('update', this.catArrowFollow, this);
+    if (this.catArrow) { this.catArrow.destroy(); this.catArrow = null; }
+  }
+
+  // Đặt mũi tên trên đỉnh đầu: điểm cao nhất của phần vẽ thật trong ảnh dáng hiện tại, theo vị trí, cỡ, góc, lật của sprite.
+  catArrowFollow() {
+    const a = this.catArrow, s = a && a.catS;
+    if (!a) return;
+    if (!s.active) { this.catArrowOff(); return; }
+    const top = this.headTop(s.texture.key, s.frame.name);
+    let lx = top[0] - s.displayOriginX;
+    if (s.flipX) lx = s.width - top[0] - s.displayOriginX;
+    const p = s.getWorldTransformMatrix().transformPoint(lx, top[1] - s.displayOriginY);
+    const t = this.time.now / 1000, bob = Math.abs(Math.sin(t * Math.PI * 1.2)); // nảy: 1,2 nhịp mỗi giây
+    a.setPosition(p.x, p.y - CAT_ARROW * 0.5 - 14 - bob * 18).setScale(a.base * (1 + 0.06 * Math.sin(t * Math.PI * 2.4)))
+      .setVisible(s.visible);
+  }
+
+  // Đỉnh đầu trong ảnh (px khung): hàng cao nhất có điểm đặc, x = giữa phần đặc trong dải 12% chiều cao tính từ đó. Tính một lần mỗi ảnh.
+  headTop(key, frame) {
+    const id = key + '|' + frame, C = (this.headTopC = this.headTopC || {});
+    if (C[id]) return C[id];
+    const f = this.textures.getFrame(key, frame), w = f.cutWidth, h = f.cutHeight;
+    let res = [w / 2, 0];
+    try {
+      const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+      const cx = cv.getContext('2d', { willReadFrequently: true });
+      cx.drawImage(f.source.image, f.cutX, f.cutY, w, h, 0, 0, w, h);
+      const px = cx.getImageData(0, 0, w, h).data, A = (x, y) => px[(y * w + x) * 4 + 3] > 128;
+      let y0 = -1;
+      for (let y = 0; y < h && y0 < 0; y += 2) for (let x = 0; x < w; x += 2) if (A(x, y)) { y0 = y; break; }
+      if (y0 >= 0) {
+        let x0 = w, x1 = 0;
+        for (let y = y0; y < Math.min(h, y0 + h * 0.12); y += 2) for (let x = 0; x < w; x += 2) if (A(x, y)) { x0 = Math.min(x0, x); x1 = Math.max(x1, x); }
+        res = [(x0 + x1) / 2, y0];
+      }
+    } catch (e) { /* ảnh không đọc được điểm ảnh: lấy giữa mép trên khung */ }
+    return (C[id] = res);
   }
 
   // 🎁 n con cá khô bung ra từ (x, y) rồi bay về góc phải trên (như màn thưởng). drop: rơi ra thấp (lọ hoa nghiêng, L3).
@@ -751,6 +816,7 @@ export class BaseLevel extends Phaser.Scene {
   get bubblePop() { return { peak: 1.15, up: 230, rest: 1, down: 120 }; }
 
   // introBubbleAt (tuỳ chọn, toạ độ màn hình): chỗ bong bóng bật ra lúc mở màn nếu khác bubbleCenter (L5, G5-28).
+  // bubbleHold (tuỳ chọn): bong bóng đứng giữa màn bao lâu trước khi thu về góc (mặc định 1900 ms; L7 dài hơn để đổi hình).
   bubbleIntro() {
     const B = this.bubble, k = this.bubblePop;
     B.home = 'center';
@@ -761,7 +827,7 @@ export class BaseLevel extends Phaser.Scene {
       { scale: k.peak, duration: k.up, ease: 'Quad.out' }, { scale: k.rest, duration: k.down },
     ] });
     this.qHop = this.time.addEvent({ delay: 700, repeat: 1, callback: () => this.hop(B.q, 14, 300) });
-    this.time.delayedCall(1900, () => this.bubbleToCorner());
+    this.time.delayedCall(this.bubbleHold || 1900, () => this.bubbleToCorner());
   }
 
   bubbleToCorner() {
@@ -1213,6 +1279,7 @@ export class BaseLevel extends Phaser.Scene {
     if (this.beforeEnding) this.beforeEnding();
     if (this.glowTw) this.glowTw.stop();
     if (this.glow) (this.glowAt || this.sua).preFX.remove(this.glow);
+    this.catArrowOff(); // chạm mèo: tắt mũi tên chỉ mèo ngay
     this.sua.setAngle(0);
 
     const H = this.scale.height;
@@ -1281,11 +1348,15 @@ export class BaseLevel extends Phaser.Scene {
     this.sfx('sfx_win');
 
     const cx = this.scale.width / 2; // giữa màn thật
-    const face = this.img(this.catFace, cx, H * 0.38, D.end + 10, true).setOrigin(0.5, 0.5);
-    this.fitWidth(face, 300);
-    const fb = face.base;
-    face.setScale(0);
-    this.tweens.add({ targets: face, scale: fb, duration: 400, ease: 'Back.out' });
+    // Đầu mèo giữa màn thưởng; màn khai báo endFaces (L10, G10-16: Mun + Sữa) thì hiện các đầu cạnh nhau.
+    const faces = this.endFaces || [this.catFace], fw = faces.length > 1 ? 240 : 300;
+    faces.forEach((k, i) => {
+      const face = this.img(k, cx + (i - (faces.length - 1) / 2) * (fw + 20), H * 0.38, D.end + 10, true).setOrigin(0.5, 0.5);
+      this.fitWidth(face, fw);
+      const fb = face.base;
+      face.setScale(0);
+      this.tweens.add({ targets: face, scale: fb, duration: 400, ease: 'Back.out' });
+    });
 
     // Thanh ♥ góc trên trái nổi lên trên lớp tối; một trái tim bật ra ở mặt mèo, bay vào ô idx, đáp xuống thì nảy nhẹ.
     const HB = this.heartBar, sx = HB.x0 + HB.idx * HB.step;

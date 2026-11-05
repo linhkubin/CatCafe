@@ -70,7 +70,7 @@ const PTS = [[220, 978], [511, 586], [794, 722]]; // D5-19: A, B chỉnh theo so
 const PLACE_Y = [1040, 645, 760];                     // đáy đồ đặt ở A (đất), B (mặt bậu), C (miệng giỏ)
 const FRONT = [740, 1130];                           // G5-29: trên đất trước mép phải bóng gầm, chưa chạm bánh trước
 const LEDGE = { x: 388, y: 640, w: 232, h: 32 };       // bậu tường (vẽ trong nền hẻm), đồ đặt ở B đứng trên bậu
-const HIT = 110;                                      // thả đồ cách đốm sáng ≤ 110px là trúng
+const HIT = 170;                                      // G5-36: thả đồ cách điểm nối ≤ 170px là trúng (nới từ 110)
 // G5-29: bóng gầm dưới thùng xe ba gác (Mun nấp ở đây), đo phần tối trong ảnh `l5_cart`: x 530–720, y 1054–1091.
 // Bánh sau tới x ≈ 530, bánh trước từ x ≈ 793.
 const GAP = { x: 535, y: 1054, w: 180, h: 37 };
@@ -86,6 +86,7 @@ const PIN_SPOT_UP = 10;                               // lúc đè đốm sáng:
 const SHINY = { l5_mirror_small: 'l5_mirror_placed', l5_tin_lid: 'l5_tin_lid_placed', l5_cd_hanging: 'l5_cd_placed' };
 const SHINY_ROOM = { l5_mirror_small: YARD, l5_tin_lid: YARD, l5_cd_hanging: ALLEY };
 const ORDER = ['l5_tin_lid', 'l5_mirror_small', 'l5_cd_hanging']; // G5-12: A chỉ nhận nắp thiếc, B gương, C đĩa CD
+// G5-36: đặt theo thứ tự nào cũng được (B, C nhận đồ cả khi tia chưa tới); tia vẫn nối lần lượt A → B → C qua các món đã đặt.
 
 // ---------- khối có nhãn (canvas) ----------
 const C = { brown: '#6b4a3a', cream: '#fdf6e8', kraft: '#d9a86c', wood: '#d6a472', black: '#2a2626', dark: '#3d3838', gold: '#f7d23e',
@@ -337,7 +338,7 @@ export class Level5 extends RoomsLevel {
     const A = this.A;
     Object.assign(this, { room: YARD, moving: false, secrets: 0, taught: {}, arrowPulse: null, got: {},
       boxDone: false, metMun: false, step: 0, chased: false, trashDone: false, pipeDone: false, crowFar: false, slipDone: false, canDone: false, geckoUp: false,
-      eyesAway: false, munStage: 'eyes', pawOut: false, trail: [], chaseOn: false, rays: [], spotAt: null, spotAmp: 3, sunRay: null, flapK: 0,
+      eyesAway: false, munStage: 'eyes', pawOut: false, trail: [], chaseOn: false, rays: [], filled: [], landed: [], rayBusy: false, spotAt: null, spotAmp: 3, sunRay: null, flapK: 0,
       blinkEv: null, eyesEv: null, pawDone: null });
     this.debug = new URLSearchParams(location.search).get('debug') === '1';
     this.fixHeldAnchor('mun_held'); // neo nách cho cảnh bế (base.js)
@@ -802,39 +803,53 @@ export class Level5 extends RoomsLevel {
     if (!SHINY[it.key] || this.room !== ALLEY) return false;
     // Trượt đốm sáng, hoặc sai đồ (G5-12: A chỉ nhận nắp thiếc, B gương, C đĩa CD): đồ bay thẳng về ô trong túi rồi lắc,
     // "sai" (bagReturn chung, như G4-43); đốm sáng nháy 2 lần.
-    if (!this.spotAt || this.step >= 3 || it.key !== ORDER[this.step] || Math.hypot(x - this.spotAt[0], y - this.spotAt[1]) > HIT) {
+    // G5-36: điểm nối còn trống, đúng món của nó, thả trong vùng HIT quanh điểm (không cần đốm sáng đã tới).
+    const i = ORDER.indexOf(it.key), pt = i >= 0 && this.W(ALLEY, PTS[i]);
+    if (!pt || this.filled[i] || Math.hypot(x - pt[0], y - pt[1]) > HIT) {
       it.s.setAngle(0);
       this.bagReturn(it);
       this.tweens.add({ targets: [this.spot, this.halo], alpha: 0.2, duration: 110, yoyo: true, repeat: 1, onComplete: () => { this.spot.setAlpha(1); this.halo.setAlpha(1); } });
       return true;
     }
     this.bagRemove(it, false);
-    this.placeShiny(it.key);
+    this.placeShiny(i);
     return true;
   }
 
   // Đồ dựng nghiêng ở điểm hiện tại, tia phản chiếu vẽ dần 0,3 giây tới điểm kế, đốm sáng bật ra ở đó; Mun phản ứng.
-  placeShiny(key) {
-    const i = this.step, [px, py] = this.W(ALLEY, PTS[i]);
-    this.step++;
-    this.spotAt = null;
-    this.hideSpot();
-    const s = this.img(SHINY[key], px, py - 60, 21.1); // trên lớp xe: đĩa CD nằm trên nóc xe (G5-14)
-    this.placedS.push(s);
+  // G5-36: đồ đặt ở điểm nào cũng đứng chờ ở đó; tia chỉ bật ra khi đốm sáng đã tới món này (chainRay).
+  placeShiny(i) {
+    const [px, py] = this.W(ALLEY, PTS[i]);
+    this.filled[i] = true;
+    const s = this.img(SHINY[ORDER[i]], px, py - 60, 21.1); // trên lớp xe: đĩa CD nằm trên nóc xe (G5-14)
+    this.placedS[i] = s;
     this.tweens.add({ targets: s, y: PLACE_Y[i], duration: 200, ease: 'Quad.in', onComplete: () => {
       this.squash(s);
       this.sfx('l5_sfx_glass_ting');
-      const r = this.artRect(s), from = [r.centerX, r.centerY - 6], to = this.step < 3 ? this.W(ALLEY, PTS[this.step]) : this.W(ALLEY, FRONT);
-      this.flash(...from, 30);
-      const ray = { from, to, k: 0 };
-      this.rays.push(ray);
-      this.tweens.add({ targets: ray, k: 1, duration: 300, onUpdate: () => this.drawRays(), onComplete: () => {
-        this.drawRays();
-        this.showSpot(to);
-        this.munReact(this.step);
-      } });
+      this.landed[i] = true;
+      if (i === this.step && !this.rayBusy) this.chainRay();
     } });
     this.touch();
+  }
+
+  // Đốm sáng đang ở món đã đặt (this.step): tia vẽ dần 0,3 giây tới điểm kế; điểm kế đã có món thì nối tiếp luôn.
+  chainRay() {
+    const s = this.placedS[this.step];
+    this.step++;
+    this.spotAt = null;
+    this.hideSpot();
+    this.rayBusy = true;
+    const r = this.artRect(s), from = [r.centerX, r.centerY - 6], to = this.step < 3 ? this.W(ALLEY, PTS[this.step]) : this.W(ALLEY, FRONT);
+    this.flash(...from, 30);
+    const ray = { from, to, k: 0 };
+    this.rays.push(ray);
+    this.tweens.add({ targets: ray, k: 1, duration: 300, onUpdate: () => this.drawRays(), onComplete: () => {
+      this.rayBusy = false;
+      this.drawRays();
+      this.munReact(this.step);
+      if (this.step < 3 && this.landed[this.step]) this.time.delayedCall(250, () => this.chainRay());
+      else this.showSpot(to);
+    } });
   }
 
   // Tia nắng qua lỗ bạt và tia phản chiếu (code): ba nét chồng nhau cho có quầng sáng, cùng độ dày (G5-25).

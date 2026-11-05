@@ -10,7 +10,10 @@ const ROOT = new URL('../', location.href).href;          // gốc dự án (gam
 const ART_OUT = ROOT + 'art/out/';
 const PH = new URL('placeholders/', location.href).href;
 const SPECS = { 1: ROOT + 'art/design-art-level1.md', 2: ROOT + 'art/design-art-level2.md', 3: ROOT + 'art/design-art-level3.md',
-  4: ROOT + 'art/design-art-level4.md', 5: ROOT + 'art/design-art-level5.md', 6: ROOT + 'art/design-art-level6.md' }; // L6: chưa có file (bản khối, QUY-TRINH bước 2)
+  4: ROOT + 'art/design-art-level4.md', 5: ROOT + 'art/design-art-level5.md', 6: ROOT + 'art/design-art-level6.md',
+  7: ROOT + 'art/design-art-level7.md', 8: ROOT + 'art/design-art-level8.md',
+  9: ROOT + 'art/design-art-level9.md', // L9: chưa có file (bản khối); cần có mục ở đây để dò thư mục art/out/level9/
+  10: ROOT + 'art/design-art-level10.md' }; // L10: chưa có file (bản khối); cần có mục ở đây để dò thư mục art/out/level10/ // L6, L7: chưa có file (bản khối, QUY-TRINH bước 2)
 const LEVELS = Object.keys(SPECS).map(Number);
 
 // Dự phòng nếu không đọc được design-art level 1 (giá trị ở vòng 5). Level 2 có vị trí dự phòng trong level2.js.
@@ -33,7 +36,7 @@ export const KEYS = {
     ['player_hands_lift', 'player'],
     ['ui_speech_bubble', 'common'], ['ui_cat_head_dark', 'common'], ['ui_question_mark', 'common'], ['ui_question_mark_white', 'common'],
     ['ui_heart', 'common'], ['ui_hand_pointer', 'common'], ['ui_hint_paw', 'common'], ['ui_sparkle', 'common'],
-    ['ui_bulb_button', 'common'], ['ui_dried_fish', 'common'], ['fx_pop', 'common'],
+    ['ui_bulb_button', 'common'], ['ui_dried_fish', 'common'], ['fx_pop', 'common'], ['ui_room_arrow', 'common'], // mũi tên: chuyển phòng, chỉ mèo Lộ diện
     ['ui_pause_button', 'common'], ['ui_play_button', 'common'], ['ui_restart_button', 'common'], ['ui_home_button', 'common'],
   ],
   1: [
@@ -112,12 +115,86 @@ export const KEYS = {
     ['l6_bg_backyard', 'level6'], ['l5_wind_chime', 'level5'],
     ['l6_shed', 'level6'], ['l6_shed_chimney', 'level6'], ['l6_tree', 'level6'], ['l6_bird_nest', 'level6'], ['l6_dog_house', 'level6'],
     ['l6_veggie_bed', 'level6'], ['l6_watering_can', 'level6'], ['l6_table', 'level6'], ['l6_picnic_basket_closed', 'level6'],
-    ['l6_picnic_basket_open', 'level6'], ['l6_bone', 'level6'], ['l6_sausage', 'level6'], ['l6_barrel', 'level6'], ['l6_toolbox', 'level6'],
+    ['l6_picnic_basket_open', 'level6'], ['l6_bone', 'level6'], ['l6_grilled_fish', 'level6'], ['l6_plate', 'level6'], ['l6_barrel', 'level6'], ['l6_toolbox', 'level6'],
     ['l6_crate', 'level6'], ['l6_stool', 'level6'], ['l6_glove_black_idle', 'level6'], ['l6_glove_black_fallen', 'level6'],
     ['l6_dog_bark', 'level6'], ['l6_dog_run', 'level6'], ['l6_dog_run_bone', 'level6'], ['l6_dog_house_front', 'level6'], ['l6_dog_chew', 'level6'], ['l6_dog_beg', 'level6'], ['l6_dog_belly', 'level6'],
     ['mun_roof_crouch', 'cats'], ['mun_roof_crouch_ears_up', 'cats'], ['mun_roof_edge', 'cats'], ['mun_step_down', 'cats'], ['mun_jump_up', 'cats'], ['mun_eat', 'cats'], ['mun_sit_look', 'cats'],
     ['mun_run', 'cats'], ['mun_pounce', 'cats'], ['mun_hop_down', 'cats'], ['mun_land', 'cats'], ['mun_held', 'cats'], ['mun_face_icon', 'cats'],
     ...BAG_UI,
+  ],
+  // L7 bản khối (G7-1..5): nền hẻm, xe ba gác, thùng gỗ, hộp đồ L6 và các dáng Mun có sẵn dùng lại;
+  // còn lại là khối có nhãn (level7.js). Dáng Mun mới (ướt, gió, ngại ngùng…) chưa có ảnh thì dùng dáng cũ gần nhất.
+  7: [
+    ['l7_bg_alley', 'level7'], ['l5_cart', 'level5'], ['l5_wind_chime', 'level5'], ['l5_bike', 'level5'], ['l5_bike_wheel', 'level5'], ['l6_crate', 'level6'], ['l6_toolbox', 'level6'],
+    ['l7_bg_shop_street', 'level7'], ['l7_bg_house_front', 'level7'], ['l7_leaf', 'level7'], ['l7_twig', 'level7'],
+    ['l5_awning_down', 'level5'], ['l7_puddle', 'level7'], ['l7_branch_debris', 'level7'], ['l7_flood_strip', 'level7'],
+    ['l7_plank', 'level7'], ['l7_branch', 'level7'],
+    ['l7_tree_shop', 'level7'], ['l7_shop_table', 'level7'], ['l7_umbrella_closed', 'level7'], ['l7_umbrella_open', 'level7'],
+    ['l7_stray_dog_scared', 'level7'], ['l7_stray_dog_inbox', 'level7'], ['l7_box_carton_open', 'level7'], ['l7_box_carton_side', 'level7'],
+    ['l7_window_inside', 'level7'], ['l7_window_closed', 'level7'], ['l7_window_open', 'level7'], ['l7_window_hook', 'level7'],
+    ['l7_front_door', 'level7'],
+    ['mun_eyes_dark', 'cats'], ['mun_peek_out', 'cats'], ['mun_run', 'cats'], ['mun_pounce', 'cats'], ['mun_step_down', 'cats'],
+    ['mun_hop_down', 'cats'], ['mun_land', 'cats'], ['mun_sit_look', 'cats'], ['mun_held', 'cats'], ['mun_face_icon', 'cats'],
+    ['mun_run_b', 'cats'], ['mun_sit_wet', 'cats'], ['mun_paw_rain', 'cats'], ['mun_slip', 'cats'], ['mun_sneak', 'cats'],
+    ['mun_paw_glass', 'cats'], ['mun_paw_chime', 'cats'], ['mun_shy_sill', 'cats'], ['mun_held_towel', 'cats'],
+    ['player_face_icon', 'player'], ['player_back_tv', 'player'], ['player_turn_surprised', 'player'], ['player_arms_open', 'player'],
+    ...BAG_UI,
+  ],  // L8 Tắm cho Mun (ảnh thật A8-8): nền phòng tắm, đồ tắm, lá/bùn/ké, bọt và các dáng Mun tắm (đuôi, mí mắt là ảnh riêng).
+  8: [
+  ['l8_bg_bathroom', 'level8'], ['l8_mirror', 'level8'], ['l8_stool_plastic', 'level8'], ['l8_shower_hook', 'level8'], ['l8_shower_mixer', 'level8'],
+  ['l8_towel_rack', 'level8'], ['l8_floor_drain', 'level8'], ['l8_duck', 'level8'],
+  ['l8_leaf_a', 'level8'], ['l8_leaf_b', 'level8'], ['l8_leaf_c', 'level8'], ['l8_leaf_d', 'level8'], ['l8_twig_a', 'level8'],
+  ['l8_twig_b', 'level8'], ['l8_burr', 'level8'],
+  ['l8_mud_patch_a', 'level8'], ['l8_mud_patch_b', 'level8'], ['l8_mud_patch_c', 'level8'], ['l8_oil_drop', 'level8'],
+  ['l8_foam_bubble_a', 'level8'], ['l8_foam_bubble_b', 'level8'], ['l8_foam_bubble_c', 'level8'],
+  ['ui_bag_bar', 'common'], ['ui_bag_bar_2', 'common'], ['ui_bag_bar_1', 'common'], ['ui_bag_slot', 'common'], ['l8_tool_comb_wide', 'level8'], ['l8_tool_shower', 'level8'], ['l8_tool_shampoo', 'level8'],
+  ['l8_tool_sponge', 'level8'], ['l8_tool_facecloth', 'level8'], ['l8_tool_towel', 'level8'], ['l8_tool_dryer', 'level8'], ['l8_tool_brush', 'level8'], ['l8_tool_brush_down', 'level8'],
+  ['mun_bath_dirty', 'cats'], ['mun_bath_wet', 'cats'], ['mun_bath_foam', 'cats'], ['mun_bath_sneeze', 'cats'], ['mun_bath_towel', 'cats'],
+  ['mun_bath_fluffy', 'cats'], ['mun_bath_sleek', 'cats'],
+  ['mun_bath_lick', 'cats'], ['mun_bath_tongue', 'cats'], ['l8_icon_mun_clean', 'level8'],
+  ['mun_bath_tail_dirty', 'cats'], ['mun_bath_tail_wet', 'cats'], ['mun_bath_tail_fluffy', 'cats'], ['mun_bath_tail_sleek', 'cats'], ['mun_bath_blink', 'cats'],
+  ['mun_bath_blink_dirty', 'cats'], ['mun_bath_blink_wet', 'cats'], ['mun_bath_blink_fluffy', 'cats'], ['mun_bath_blink_sleek', 'cats'], ['mun_bath_blink_tongue', 'cats'],
+  ['ui_emote_mun_happy', 'common'], ['ui_emote_mun_no', 'common'],
+  ['mun_held', 'cats'], ['mun_face_icon', 'cats'],
+  ],
+  // L9 bản khối (Súp thưởng, 2026-11-02): mọi đồ và dáng mèo là khối có nhãn (level9.js), sau thay bằng ảnh cùng tên.
+  9: [
+    ['l9_bg_kitchen', 'level9'], ['l9_counter', 'level9'], ['l9_stove', 'level9'], ['l9_knob', 'level9'], ['l9_plate', 'level9'],
+    ['l9_basin', 'level9'], ['l9_chicken_raw', 'level9'], ['l9_chicken_peeled', 'level9'], ['l9_chicken_skin', 'level9'],
+    ['l9_chicken_piece', 'level9'], ['l9_board', 'level9'], ['l9_knife', 'level9'], ['l9_peeler', 'level9'], ['l9_pumpkin', 'level9'],
+    ['l9_pumpkin_rind', 'level9'], ['l9_pumpkin_dice', 'level9'], ['l9_pot', 'level9'], ['l9_ladle', 'level9'], ['l9_blender', 'level9'],
+    ['l9_blender_btn', 'level9'], ['l9_sieve', 'level9'], ['l9_tureen', 'level9'], ['l9_bowl', 'level9'], ['l9_paw_black', 'level9'],
+    ['l9_paw_white', 'level9'], ['l9_icon_soup', 'level9'],
+    ['l9_bg_end', 'level9'], ['l9_end_bowl', 'level9'], ['l9_tray', 'level9'], ['l9_tray_lid', 'level9'],
+    ['mun_soup_walk', 'cats'], ['mun_soup_surprise', 'cats'], ['mun_soup_eat', 'cats'],
+    ['sua_soup_walk', 'cats'], ['sua_soup_surprise', 'cats'], ['sua_soup_eat', 'cats'], ['mun_face_icon', 'cats'],
+    ['sua_face_icon', 'cats'],   // G9-12: màn thưởng hiện đầu Mun và Sữa
+    ['l9_pumpkin_stem', 'level9'],   // cuống bí (ảnh riêng, xoay theo quả)
+    ['l9_tray_ribbon', 'level9'], ['l9_tray_bow', 'level9'],   // ruy băng, nơ hộp (ảnh riêng; chưa có ảnh thì code vẽ)
+    ['l9_blender_lid', 'level9'],   // G9-14: nắp cối máy xay (chưa có ảnh: khối tạm)
+    // G9-14: ảnh mới của Art: bí đã gọt + 10 miếng vỏ, lửa 2 khung, chậu nước phẳng / gợn, mũi tên gợi ý, đầu và thân mèo tách riêng
+    ['l9_pumpkin_peeled', 'level9'], ['l9_pumpkin_rind_0', 'level9'], ['l9_pumpkin_rind_1', 'level9'], ['l9_pumpkin_rind_2', 'level9'], ['l9_pumpkin_rind_3', 'level9'], ['l9_pumpkin_rind_4', 'level9'], ['l9_pumpkin_rind_5', 'level9'], ['l9_pumpkin_rind_6', 'level9'], ['l9_pumpkin_rind_7', 'level9'], ['l9_pumpkin_rind_8', 'level9'], ['l9_pumpkin_rind_9', 'level9'],
+    ['l9_flame_a', 'level9'], ['l9_flame_b', 'level9'], ['l9_basin_full', 'level9'], ['l9_basin_ripple', 'level9'],
+    ['l9_hint_arrow_straight', 'level9'], ['l9_hint_arrow_curve', 'level9'], ['l9_hint_arrow_circle', 'level9'], ['l9_hint_tap', 'level9'],
+    ['mun_soup_surprise_head', 'cats'], ['mun_soup_surprise_body', 'cats'], ['mun_soup_eat_head', 'cats'], ['mun_soup_eat_body', 'cats'], ['sua_soup_surprise_head', 'cats'], ['sua_soup_surprise_body', 'cats'], ['sua_soup_eat_head', 'cats'], ['sua_soup_eat_body', 'cats'],
+    ['mun_soup_walk_0', 'cats'], ['mun_soup_walk_1', 'cats'], ['mun_soup_walk_2', 'cats'], ['mun_soup_walk_3', 'cats'], ['sua_soup_walk_0', 'cats'], ['sua_soup_walk_1', 'cats'], ['sua_soup_walk_2', 'cats'], ['sua_soup_walk_3', 'cats'],   // L9 cảnh kết: 4 khung bước đi
+  ],
+  // L10 bản khối (Đại chiến quái thú, 2026-11-02): mọi đồ và dáng mèo mặc đồ là khối có nhãn (level10.js); mèo thật dùng ảnh có sẵn.
+  10: [
+    ['l10_bg_living_kitchen', 'level10'], ['l10_shelf_left', 'level10'], ['l10_shelf_right', 'level10'], ['l10_scissors', 'level10'],
+    ['l10_soup_box', 'level10'], ['l10_soup_box_open', 'level10'], ['l10_book_stack', 'level10'], ['l10_plane_fly', 'level10'], ['l10_fish_smoke', 'level10'], ['l10_plant', 'level10'],
+    ['l10_sofa', 'level10'], ['l10_pillow', 'level10'], ['l10_remote', 'level10'], ['l10_remote_open', 'level10'], ['l10_table_arena', 'level10'],
+    ['l10_shelf_mid', 'level10'], ['l10_vase', 'level10'], ['l10_rug_loop', 'level10'], ['l10_blocks_a', 'level10'], ['l10_blocks_b', 'level10'],
+    ['l10_toy_firetruck', 'level10'],
+    ['l10_ball', 'level10'], ['l10_plane', 'level10'], ['l10_battery', 'level10'],
+    ['l10_fire', 'level10'],
+    ['mun_gorilla_idle', 'cats'], ['mun_gorilla_block', 'cats'], ['mun_gorilla_punch', 'cats'], ['mun_gorilla_chest', 'cats'],
+    ['mun_gorilla_reach', 'cats'], ['mun_gorilla_look', 'cats'], ['mun_gorilla_sniff', 'cats'], ['mun_gorilla_lick', 'cats'], ['mun_gorilla_roar', 'cats'],
+    ['sua_lizard_idle', 'cats'], ['sua_lizard_fire', 'cats'], ['sua_lizard_fire_up', 'cats'], ['sua_lizard_look', 'cats'], ['sua_lizard_dodge', 'cats'],
+    ['sua_lizard_roar', 'cats'], ['sua_lizard_sniff', 'cats'], ['sua_lizard_lick', 'cats'],
+    ['mun_l10_eat', 'cats'], ['sua_l10_eat', 'cats'], ['mun_l10_groom', 'cats'], ['sua_l10_groom', 'cats'],
+    ['mun_held', 'cats'], ['mun_face_icon', 'cats'], ['sua_face_icon', 'cats'],
+    ...BAG_UI, ['ui_room_arrow', 'common'],
   ],
 };
 export const ALL_KEYS = Object.values(KEYS).flat();

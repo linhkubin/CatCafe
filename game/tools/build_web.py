@@ -13,6 +13,7 @@
 - Sinh dist/index.html chỉ gồm phần thân (Artifact tự bọc doctype/head/body).
 - Đăng từng phần (GD chọn, không nén ảnh): so với bản đã đăng (game/dist_published.json), in và ghi game/dist_changes.txt
   danh sách file mới / đã đổi / đã bỏ. Mỗi lần đăng chỉ gửi file mới + đã đổi, xoá file đã bỏ.
+  Bản test mở khoá mọi màn: thêm --unlock.
   Đăng xong chạy:  python game/tools/build_web.py --mark-published   (lấy dist hiện tại làm mốc cho lần sau).
 """
 import hashlib
@@ -31,7 +32,7 @@ ART_OUT = ROOT / "art" / "out"
 DIST = GAME / "dist"
 PUBLISHED = GAME / "dist_published.json"   # mã băm từng file của bản đã đăng (mốc so sánh)
 CHANGES = GAME / "dist_changes.txt"
-SPECS = {n: ROOT / "art" / f"design-art-level{n}.md" for n in (1, 2, 3, 4, 5, 6)}  # màn chưa có design-art (bản khối): bỏ qua
+SPECS = {n: ROOT / "art" / f"design-art-level{n}.md" for n in (1, 2, 3, 4, 5, 6, 7, 8)}  # màn chưa có design-art (bản khối): bỏ qua
 PHASER = "https://cdnjs.cloudflare.com/ajax/libs/phaser/3.80.1/phaser.min.js"
 
 INDEX = f"""<title>Meo Đâu Rồi</title>
@@ -158,6 +159,9 @@ def main():
         if f.name == "assets.js":
             text, n = re.subn(r"export const BUILT = false;", "export const BUILT = true;", text)
             assert n == 1, "không thấy BUILT trong assets.js"
+        if f.name == "progress.js" and "--unlock" in sys.argv:  # bản test: mở khoá mọi màn, không cần ?unlock=1
+            text, n = re.subn(r"const UNLOCK_ALL = [^;]*;", "const UNLOCK_ALL = true;", text)
+            assert n == 1, "không thấy UNLOCK_ALL trong progress.js"
         (DIST / "src" / f.name).write_text(text, encoding="utf8")
 
     anchors = json.loads((ART_OUT / "anchors.json").read_text(encoding="utf8")) if (ART_OUT / "anchors.json").exists() else {}
@@ -172,7 +176,9 @@ def main():
         if src.exists():
             ext = "jpg" if is_solid_bg(key, src) else "png"
             (copy_jpg if ext == "jpg" else copy_png)(src, DIST / "assets" / folder / f"{key}.{ext}")
-            url = f"assets/{folder}/{key}.{ext}"
+            # Chuỗi phiên bản theo nội dung ảnh: ảnh đổi thì URL đổi, trình duyệt không giữ ảnh cũ trong bộ nhớ đệm.
+            ver = hashlib.sha1((DIST / "assets" / folder / f"{key}.{ext}").read_bytes()).hexdigest()[:8]
+            url = f"assets/{folder}/{key}.{ext}?v={ver}"
             a = anchors.get(key)
             entries[key] = ({"url": url, "real": True, "ax": a["ax"], "ay": a["ay"], "res": a.get("res", 1.5)} if a
                             else {"url": url, "real": True, "auto": True})
