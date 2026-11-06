@@ -280,10 +280,10 @@ Khung 0 = ảnh đi hiện có. Khung 1–3 Codex chỉnh sửa từ ảnh đi (
 
 | Tờ | Ô | Key | Thư mục | Nhóm | Neo | Hiển thị | Nét |
 |---|---|---|---|---|---|---|---|
-| l9src_mun_soup_walk | 0,0,1536,1024 | mun_soup_walk_0 | cats | mun_soup_walkc | 735,982 | rộng 253.49 | 5 |
-| l9src_mun_soup_walk_1 | 0,0,1536,1024 | mun_soup_walk_1 | cats | mun_soup_walkc | 735,982 |  | 5 |
-| l9src_mun_soup_walk_2 | 0,0,1536,1024 | mun_soup_walk_2 | cats | mun_soup_walkc | 735,982 |  | 5 |
-| l9src_mun_soup_walk_3 | 0,0,1536,1024 | mun_soup_walk_3 | cats | mun_soup_walkc | 735,982 |  | 5 |
+| l9src_mun_walk4b | 0,0,768,512 | mun_soup_walk_0 | cats | mun_soup_walkc | 404,477 | rộng 280.1 | 5 |
+| l9src_mun_walk4b | 768,0,768,512 | mun_soup_walk_1 | cats | mun_soup_walkc | 1172,477 |  | 5 |
+| l9src_mun_walk4b | 0,512,768,512 | mun_soup_walk_2 | cats | mun_soup_walkc | 404,989 |  | 5 |
+| l9src_mun_walk4b | 768,512,768,512 | mun_soup_walk_3 | cats | mun_soup_walkc | 1172,989 |  | 5 |
 | l9src_sua_soup_walk | 0,0,1536,1024 | sua_soup_walk_0 | cats | sua_soup_walkc | 858,998 | rộng 301.51 | 5 |
 | l9src_sua_soup_walk_1 | 0,0,1536,1024 | sua_soup_walk_1 | cats | sua_soup_walkc | 858,998 |  | 5 |
 | l9src_sua_soup_walk_2b | 0,0,1536,1024 | sua_soup_walk_2 | cats | sua_soup_walkc | 858,998 |  | 5 |

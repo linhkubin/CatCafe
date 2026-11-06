@@ -1388,6 +1388,8 @@ Khay dụng cụ chỉ chứa **đồ cầm tay**, **đổi theo chặng**, mỗ
 > **G9-15 (2026-11-05):** (1) Chân Sữa vỗ muôi: tay vừa rụt là **người chơi cầm muôi được ngay**, không chờ muôi về chỗ. (2) **Trả lại mũi tên vòng tròn do code vẽ** cho hướng dẫn khuấy như trước. (3) Hai mèo cảnh kết vẫn lỗi, Dev kiểm và sửa.
 >
 > **G9-16 (2026-11-05):** anim **mèo đi vào** ở cảnh kết còn xấu: 4 khung hiện tại gần như giống nhau, chân không theo nhịp đi (không có cặp chân chéo), thân không nhún, đuôi đứng yên. Vẽ lại **chu kỳ đi 4 khung đúng nhịp** cho Mun và Sữa (chung một tờ mỗi con), Dev khớp tốc độ trượt với bước chân. (2) Bước 11 (đổ máy xay vào rây): **súp dâng trong rây và tô đang quá mờ**, phải tô màu súp đặc, đậm rõ như súp trong cối.
+>
+> **G9-17 (2026-11-06):** thử làm anim **mèo đi vào** bằng **video**: Art viết mô tả, gửi ảnh mèo cho Codex làm **video 4 giây mèo đi bộ tại chỗ** (không trượt ngang, Dev lo phần di chuyển), chu kỳ bước **loop liền** (khung cuối nối khung đầu). **Làm Mun trước**, chủ dự án duyệt rồi mới làm Sữa.
 
 **Thưởng:** 30 Cá khô.
 
